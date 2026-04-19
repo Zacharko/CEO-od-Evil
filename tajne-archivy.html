@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAJNÉ ARCHÍVY :: OMEGA VAULT :: CEO ZLA</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+/* ══════════════════════════════════════
+   IDENTICAL TOKENS to omne.html
+══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --g:   #00ff41;
+  --g2:  #00cc33;
+  --g3:  #006622;
+  --g4:  #001a00;
+  --r:   #ff0033;
+  --y:   #cccc00;
+  --bdr: #0d300d;
+  --bgp: #020802;
+  --mono: 'Share Tech Mono', 'Courier New', monospace;
+  --vt:   'VT323', 'Courier New', monospace;
+}
+
+html, body { background: #000; }
+body {
+  color: var(--g);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.65;
+  cursor: crosshair;
+  overflow-x: hidden;
+}
+body::after {
+  content:''; position:fixed; inset:0;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(0,0,0,.10) 3px,rgba(0,0,0,.10) 4px);
+  pointer-events:none; z-index:9000;
+}
+a { color:var(--g2); text-decoration:none; border-bottom:1px dotted var(--g3); }
+a:hover { color:var(--y); border-color:var(--y); text-shadow:0 0 6px var(--y); }
+
+/* BACKGROUNDS */
+#cv-matrix,#cv-stars { position:fixed; inset:0; pointer-events:none; }
+#cv-matrix { z-index:0; opacity:.055; }
+#cv-stars  { z-index:1; opacity:.45; }
+
+/* PAGE */
+.page { position:relative; z-index:10; max-width:860px; margin:0 auto; padding:0 14px 40px; }
+
+/* TICKER */
+.ticker { background:var(--r); color:#000; font-family:var(--mono); font-size:.78em;
+  font-weight:bold; letter-spacing:2px; overflow:hidden; padding:4px 0;
+  position:sticky; top:0; z-index:800; white-space:nowrap; }
+.ticker__run { display:inline-block; animation:tick 35s linear infinite; }
+@keyframes tick { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+/* HEADER */
+.hdr { border:1px solid var(--bdr); border-top:4px solid var(--g3);
+  background:var(--bgp); text-align:center; padding:22px 20px 16px;
+  margin-top:14px; position:relative; overflow:hidden; }
+.hdr::before { content:''; position:absolute; top:0; left:-120%; width:60%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,255,65,.04),transparent);
+  animation:hdr-sweep 7s ease-in-out infinite; pointer-events:none; }
+@keyframes hdr-sweep { from{left:-120%} to{left:220%} }
+.hdr__eye { font-size:.7em; color:var(--g3); letter-spacing:3px; margin-bottom:6px; }
+.hdr__title { font-family:var(--vt); font-size:3.4em; letter-spacing:7px; color:var(--g);
+  text-shadow:0 0 8px var(--g),0 0 28px rgba(0,255,65,.3); line-height:1;
+  animation:flicker 8s infinite; }
+@keyframes flicker {
+  0%,90%,100%{opacity:1} 91%{opacity:.25} 92%{opacity:1} 95%{opacity:.1} 96%{opacity:1}
+}
+.hdr__sub { font-size:.76em; color:var(--r); letter-spacing:3px; margin-top:8px;
+  text-shadow:0 0 5px var(--r); }
+
+/* NAV */
+.nav { display:flex; justify-content:center; flex-wrap:wrap;
+  border:1px solid var(--bdr); border-top:none; background:#010901; margin-bottom:18px; }
+.nav a { display:inline-block; padding:7px 16px; font-size:.82em; letter-spacing:2px;
+  color:var(--g3); border-right:1px solid var(--bdr); border-bottom:none;
+  transition:background .15s,color .15s; }
+.nav a:last-child { border-right:none; }
+.nav a:hover,.nav a[aria-current] { background:rgba(0,255,65,.07); color:var(--g);
+  text-shadow:0 0 5px var(--g); border-bottom:none; }
+
+/* PANEL */
+.panel { border:1px solid var(--bdr); background:var(--bgp);
+  margin-bottom:16px; position:relative; overflow:hidden; }
+.panel--r { border-color:#3a0d0d; }
+.panel--y { border-color:#3a3a0d; }
+.panel::before { content:''; position:absolute; top:0; left:-100%; right:-100%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--g),transparent);
+  animation:p-scan 6s ease-in-out infinite; opacity:.4; }
+@keyframes p-scan { 0%,100%{left:-100%;opacity:.2} 50%{left:100%;opacity:.9} }
+.panel__hd { display:flex; align-items:center; gap:10px; background:#010d01;
+  border-bottom:1px solid var(--bdr); padding:6px 13px; }
+.panel__ico  { color:var(--r); font-size:.88em; flex-shrink:0; }
+.panel__name { font-family:var(--vt); font-size:1.42em; color:var(--g);
+  letter-spacing:3px; text-shadow:0 0 4px rgba(0,255,65,.35); flex:1; }
+.panel__badge { font-size:.63em; color:var(--r); border:1px solid var(--r); padding:1px 5px;
+  letter-spacing:1px; text-shadow:0 0 4px var(--r); animation:bdg 2.2s ease-in-out infinite;
+  white-space:nowrap; }
+@keyframes bdg { 0%,100%{opacity:.65} 50%{opacity:1} }
+.panel__bd { padding:14px; }
+.panel__bd p { color:#99cc99; font-size:.87em; line-height:1.8; margin-bottom:10px; }
+.panel__bd p:last-child { margin-bottom:0; }
+
+/* STAMP */
+.stamp { display:inline-block; font-family:var(--vt); font-size:1.7em; color:var(--r);
+  border:3px solid var(--r); padding:2px 12px; letter-spacing:4px; transform:rotate(-7deg);
+  text-shadow:0 0 7px var(--r);
+  box-shadow:0 0 10px rgba(255,0,51,.25),inset 0 0 6px rgba(255,0,51,.08);
+  animation:st-glow 2.5s ease-in-out infinite; }
+@keyframes st-glow {
+  0%,100%{box-shadow:0 0 8px rgba(255,0,51,.2),inset 0 0 5px rgba(255,0,51,.06)}
+  50%{box-shadow:0 0 20px rgba(255,0,51,.5),inset 0 0 12px rgba(255,0,51,.15)}
+}
+
+/* REDACTED */
+.rx { background:#000; color:#000; border-bottom:1px solid #2a2a2a;
+  padding:0 3px; cursor:not-allowed; user-select:none; }
+.rx:hover { color:var(--r); }
+
+/* QUOTE */
+.qb { border-left:3px solid var(--r); padding:9px 13px; margin:12px 0;
+  background:rgba(255,0,51,.03); font-style:italic; color:#ff8888;
+  font-size:.85em; line-height:1.75; }
+.qb cite { display:block; font-style:normal; color:var(--r); font-size:.8em;
+  margin-top:5px; text-align:right; }
+
+/* EVIDENCE LIST */
+.evl { list-style:none; }
+.evl li { position:relative; padding:5px 0 5px 18px;
+  border-bottom:1px dotted #0a200a; color:#99cc99; font-size:.83em; line-height:1.5; }
+.evl li:last-child { border-bottom:none; }
+.evl li::before { content:'▸'; position:absolute; left:0; color:var(--r); }
+.evl li:hover { background:rgba(0,255,65,.02); }
+
+/* 2-COL + 3-COL GRIDS */
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+.grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:16px; }
+@media(max-width:680px){ .grid2,.grid3 { grid-template-columns:1fr; } }
+
+/* FILE CARD */
+.fcard { border:1px solid var(--bdr); background:var(--bgp);
+  padding:13px; position:relative; overflow:hidden;
+  transition:border-color .2s; }
+.fcard:hover { border-color:var(--g); }
+.fcard::before { content:''; position:absolute; top:0; left:-100%; right:-100%;
+  height:1px; background:linear-gradient(90deg,transparent,var(--g),transparent);
+  animation:p-scan 5s ease-in-out infinite; opacity:.4; }
+.fcard__hd { font-family:var(--vt); font-size:1.38em; color:var(--g);
+  letter-spacing:3px; margin-bottom:6px;
+  text-shadow:0 0 5px rgba(0,255,65,.4); }
+.fcard:hover .fcard__hd { animation:glitch-hd .35s steps(2) infinite; }
+@keyframes glitch-hd {
+  0%  {text-shadow:0 0 5px var(--g), 2px 0 #f0f,-2px 0 #0ff}
+  50% {text-shadow:0 0 5px var(--g),-2px 0 #f0f, 2px 0 #0ff}
+  100%{text-shadow:0 0 5px var(--g)}
+}
+.fcard__meta { font-size:.7em; color:#446644; letter-spacing:1px; margin-bottom:8px;
+  border-bottom:1px dotted var(--bdr); padding-bottom:5px; }
+.fcard__body { color:#99cc99; font-size:.82em; line-height:1.7; }
+.fcard__stamp { font-family:var(--vt); font-size:1.6em; color:var(--r);
+  border:2px solid var(--r); display:inline-block; padding:1px 9px;
+  transform:rotate(-5deg); margin-top:10px; letter-spacing:3px;
+  text-shadow:0 0 6px var(--r);
+  box-shadow:0 0 7px rgba(255,0,51,.25); }
+
+/* PDF ROW */
+.pdf-row { display:flex; align-items:center; gap:12px; padding:9px 0;
+  border-bottom:1px dotted #0a200a; transition:background .15s; }
+.pdf-row:last-child { border-bottom:none; }
+.pdf-row:hover { background:rgba(0,255,65,.025); }
+.pdf-row__icon { font-size:1.6em; flex-shrink:0; filter:drop-shadow(0 0 4px var(--r)); }
+.pdf-row__info { flex:1; }
+.pdf-row__title { font-family:var(--vt); font-size:1.3em; color:var(--g);
+  letter-spacing:2px; text-shadow:0 0 4px rgba(0,255,65,.3); }
+.pdf-row__sub { font-size:.72em; color:#446644; letter-spacing:1px; margin-top:2px; }
+.pdf-row__btn { font-family:var(--mono); font-size:.72em; color:var(--r);
+  border:1px solid var(--r); padding:3px 9px; letter-spacing:1px;
+  text-shadow:0 0 4px var(--r);
+  box-shadow:0 0 5px rgba(255,0,51,.18);
+  cursor:pointer; white-space:nowrap;
+  background:rgba(255,0,51,.04);
+  animation:bdg 2.5s ease-in-out infinite; }
+.pdf-row__btn:hover { background:rgba(255,0,51,.12); }
+
+/* EVIDENCE PHOTOS STRIP */
+.ev-strip { display:flex; gap:10px; overflow-x:auto; padding:10px 0; margin-bottom:16px; }
+.ev-ph { flex:0 0 174px; height:124px; border:1px solid var(--bdr);
+  position:relative; overflow:hidden; background:var(--bgp); }
+.ev-ph canvas { width:100%; height:100%; }
+.ev-ph__cap { position:absolute; bottom:0; left:0; right:0;
+  background:rgba(0,0,0,.8); color:#446644;
+  font-size:.62em; letter-spacing:1px; padding:3px 5px; text-align:center; }
+
+/* TABLE */
+.arch-tbl { width:100%; border-collapse:collapse; font-size:.82em; margin-bottom:0; }
+.arch-tbl th { background:#010d01; color:var(--g); padding:7px 9px;
+  text-align:left; border:1px solid var(--bdr); font-family:var(--vt);
+  font-size:1.1em; letter-spacing:1px; }
+.arch-tbl td { padding:6px 9px; border:1px solid #0a1a0a; color:#88cc88; vertical-align:top; }
+.arch-tbl tr:hover td { background:rgba(0,255,65,.02); }
+.st-open   { color:var(--g);  text-shadow:0 0 4px var(--g); }
+.st-close  { color:var(--r); }
+.st-unkn   { color:var(--y); }
+
+/* TIMELINE */
+.tl { position:relative; padding-left:22px; }
+.tl::before { content:''; position:absolute; left:4px; top:8px; bottom:8px;
+  width:1px; background:var(--bdr); }
+.tl-row { position:relative; margin-bottom:13px; }
+.tl-row::before { content:''; position:absolute; left:-22px; top:4px;
+  width:9px; height:9px; border-radius:50%;
+  background:var(--g); box-shadow:0 0 5px var(--g);
+  animation:tl-dot 2s ease-in-out infinite; }
+@keyframes tl-dot { 0%,100%{box-shadow:0 0 3px var(--g)} 50%{box-shadow:0 0 9px var(--g)} }
+.tl-yr  { font-size:.72em; color:var(--r); letter-spacing:2px; margin-bottom:2px; }
+.tl-txt { font-size:.82em; color:#99cc99; line-height:1.55; }
+
+/* SIGNAL CANVAS */
+.sig-wrap { background:var(--bgp); border:1px solid var(--bdr); padding:8px; }
+
+/* RADAR */
+.radar-wrap { text-align:center; margin-bottom:16px; }
+
+/* SECTION DIVIDER */
+.section-hdr { font-family:var(--vt); font-size:1.7em; color:var(--g);
+  letter-spacing:5px; border:1px solid var(--bdr); border-left:4px solid var(--g3);
+  padding:7px 14px; margin-bottom:14px;
+  background:rgba(0,255,65,.025);
+  text-shadow:0 0 6px rgba(0,255,65,.35); }
+
+/* BLINK */
+.blink { animation:bl 1s step-start infinite; }
+@keyframes bl { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* FOOTER */
+.footer { border-top:1px solid var(--bdr); padding:12px 0; margin-top:8px;
+  text-align:center; font-size:.72em; color:var(--g3); letter-spacing:2px; }
+.footer .live { margin-top:4px; color:#1a3a1a; }
+.footer .live span { color:var(--g); }
+</style>
+</head>
+<body>
+
+<canvas id="cv-matrix"></canvas>
+<canvas id="cv-stars"></canvas>
+
+<!-- Ticker -->
+<div class="ticker" aria-hidden="true">
+  <span class="ticker__run">
+    ⬛ PRÍSNE TAJNÉ ⬛ OMEGA VAULT AKTÍVNY ⬛ NEOPRÁVNENÝ PRÍSTUP JE TRESTNÝ ⬛
+    SLEDOVANIE AKTÍVNE ⬛ VŠETKY PRÍSTUPY ZAZNAMENÁVANÉ ⬛ PROJEKT ████ :: FÁZA 7 ⬛
+    SIGNÁL ZACHYTENÝ: 47.N 18.E ⬛ UFO HLÁSENIE Č. ████ :: NEPOTVRDENÉ ÚRADMI ⬛
+    AGENT ████ ODHALENÝ ⬛ PRÍSNE TAJNÉ ⬛
+  </span>
+</div>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr__eye">// OMEGA VAULT v3.1 &nbsp;·&nbsp; PRÍSTUP: ČERVENÁ ÚROVEŇ &nbsp;·&nbsp; SPRÁVCA: doc. Ing. ZACHARKA, PHD //</div>
+    <h1 class="hdr__title">[ TAJNÉ&nbsp;ARCHÍVY ]</h1>
+    <div class="hdr__sub">⬛ KLASIFIKÁCIA: OMEGA-ČIERNA &nbsp;·&nbsp; NEOPRÁVNENÝ PRÍSTUP ZAKÁZANÝ &nbsp;·&nbsp; <span class="blink">▌</span> ⬛</div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="index.html">[ HLAVNÁ ]</a>
+    <a href="omne.html">[ O MNE ]</a>
+    <a href="tajne-archivy.html" aria-current="page">[ TAJNÉ ARCHÍVY ]</a>
+  </nav>
+
+  <!-- RADAR -->
+  <div class="radar-wrap" aria-hidden="true">
+    <canvas id="cv-radar" width="280" height="280"></canvas>
+    <div style="font-size:.68em; color:var(--g3); letter-spacing:3px; margin-top:4px;">
+      // AKTÍVNE SLEDOVANIE :: OMEGA PERIMETER :: <span class="blink" style="color:var(--r);">KONTAKT DETEKOVANÝ</span> //
+    </div>
+  </div>
+
+  <!-- INTRO DOC -->
+  <div class="panel">
+    <div class="panel__hd">
+      <span class="panel__ico">◈</span>
+      <span class="panel__name">OMEGA_VAULT :: UVOD.TXT</span>
+      <span class="panel__badge">OMEGA-ČIERNA</span>
+    </div>
+    <div class="panel__bd">
+      <div style="font-size:.78em; color:#2a5a2a; letter-spacing:1px; margin-bottom:12px; line-height:2;">
+        <span style="color:var(--g3);">001</span>&nbsp;&nbsp;KLASIFIKÁCIA: OMEGA-ČIERNA | DÁTUM: ██.██.████<br>
+        <span style="color:var(--g3);">002</span>&nbsp;&nbsp;AUTOR: doc. Ing. ZACHARKA, PHD | VYDANIE: █████<br>
+        <span style="color:var(--g3);">003</span>&nbsp;&nbsp;&nbsp;<br>
+        <span style="color:var(--g3);">004</span>&nbsp;&nbsp;<span style="color:#99cc99;">Tieto archívy obsahujú dokumenty, fotografie a správy, ktoré
+        <span class="rx">████████████████████████</span> nechcú aby ste videli.</span><br>
+        <span style="color:var(--g3);">005</span>&nbsp;&nbsp;<span style="color:#99cc99;">Pokiaľ po prečítaní týchto materiálov zistíte, že ste sledovaní — je neskoro.</span><br>
+        <span style="color:var(--g3);">006</span>&nbsp;&nbsp;<span style="color:#99cc99;">Vždy ste boli sledovaní. Vitajte v Archíve. <span class="blink">▌</span></span>
+      </div>
+      <span class="stamp">PRÍSNE TAJNÉ</span>
+    </div>
+  </div>
+
+  <!-- PHOTO EVIDENCE STRIP -->
+  <div class="section-hdr">▸ FOTOGRAFICKÁ DOKUMENTÁCIA</div>
+  <div class="ev-strip" aria-label="Fotografická dokumentácia">
+    <div class="ev-ph"><canvas class="ev-cnv" data-t="ufo"></canvas><div class="ev-ph__cap">NEIDENTIFIKOVANÝ OBJEKT · ████</div></div>
+    <div class="ev-ph"><canvas class="ev-cnv" data-t="signal"></canvas><div class="ev-ph__cap">SIGNÁL 432Hz · ██.██.2003</div></div>
+    <div class="ev-ph"><canvas class="ev-cnv" data-t="face"></canvas><div class="ev-ph__cap">SUBJEKT ████ · REPTILIÁN?</div></div>
+    <div class="ev-ph"><canvas class="ev-cnv" data-t="map"></canvas><div class="ev-ph__cap">MAPA TUNELOV · SR</div></div>
+    <div class="ev-ph"><canvas class="ev-cnv" data-t="crop"></canvas><div class="ev-ph__cap">KRUHOVÝ ÚTVAR · ZÁHORIE 2019</div></div>
+  </div>
+
+  <!-- CLASSIFIED FILES GRID -->
+  <div class="section-hdr">▸ KLASIFIKOVANÉ SPISY</div>
+  <div class="grid2">
+
+    <div class="fcard">
+      <div class="fcard__meta">SPIS: UFO-SR-001 | KLASIFIKÁCIA: ČIERNA | DÁTUM: 2001</div>
+      <div class="fcard__hd">◈ UFO NAD PRIEVIDZOU</div>
+      <div class="fcard__body">
+        Svedkovia zaznamenali trojuholníkový objekt pohybujúci sa tichom nad mestom. Emitoval <span class="rx">████████</span> žiarenie. Záznamy z bezpečnostných kamier zmizli. Moje vyšetrovanie trvalo 4 roky. Výsledky: <span class="rx">████████████████████████████████████████</span>.
+      </div>
+      <div class="fcard__stamp">TAJNÉ</div>
+    </div>
+
+    <div class="fcard">
+      <div class="fcard__meta">SPIS: CHEM-SR-007 | KLASIFIKÁCIA: ČERVENÁ | DÁTUM: 2003–2024</div>
+      <div class="fcard__hd">◈ CHEMTRAILS :: PROJEKT ████</div>
+      <div class="fcard__body">
+        Dlhodobá analýza kondenzačných stôp nad SR odhalila vzor nezlučiteľný s normálnou leteckou prevádzkou. Chemické zloženie zahŕňa <span class="rx">██████████████████</span>. Účel: behaviorálna modifikácia populácie.
+      </div>
+      <div class="fcard__stamp">OMEGA</div>
+    </div>
+
+    <div class="fcard">
+      <div class="fcard__meta">SPIS: MJ12-REP-044 | KLASIFIKÁCIA: OMEGA | DÁTUM: 1952–????</div>
+      <div class="fcard__hd">◈ PROJEKT MAJESTIC-12</div>
+      <div class="fcard__body">
+        Tajná komisia zriadená výnosom prezidenta Trumana. Slovenský prepis dokumentov: <span class="rx">████████████████████████████████████████████████████████</span>. Mám kópiu. Nie ste pripravení ju vidieť.
+      </div>
+      <div class="fcard__stamp">OMEGA</div>
+    </div>
+
+    <div class="fcard">
+      <div class="fcard__meta">SPIS: PSI-OPS-019 | KLASIFIKÁCIA: ČIERNA | DÁTUM: ????????</div>
+      <div class="fcard__hd">◈ PROJEKT MKUltra SK</div>
+      <div class="fcard__body">
+        Dokumenty dokazujú, že experimenty s kontrolou mysle sa uskutočnili aj na území Slovenska. Subjekty: <span class="rx">████████████████████████████████████████</span>. Niektoré z nich dodnes nič nevie. Možno ste jedným z nich.
+      </div>
+      <div class="fcard__stamp">VYMAZANÉ</div>
+    </div>
+
+    <div class="fcard">
+      <div class="fcard__meta">SPIS: REPT-001 | KLASIFIKÁCIA: ULTRA | DÁTUM: ??/??/????</div>
+      <div class="fcard__hd">◈ REPTILIÁNI V POLITIKE</div>
+      <div class="fcard__body">
+        8 rokov terénneho výskumu potvrdzujú prítomnosť <span class="rx">████████████████</span> v najvyšších poschodiach vládnych štruktúr. Identifikačné znaky zahŕňajú <span class="rx">████████████████████████████</span>.
+      </div>
+      <div class="fcard__stamp">ULTRA</div>
+    </div>
+
+    <div class="fcard">
+      <div class="fcard__meta">SPIS: WX-HAARP-011 | KLASIFIKÁCIA: ČERVENÁ | DÁTUM: 1997+</div>
+      <div class="fcard__hd">◈ HAARP :: RIADENIE POČASIA</div>
+      <div class="fcard__body">
+        Zariadenie na Aljaške používané na <span class="rx">██████████████████████████████████████████████████</span>. Posledný anomálny meteorologický jav nad SR v priamej korelácii s aktivitou zariadenia.
+      </div>
+      <div class="fcard__stamp">TAJNÉ</div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════
+       TEMNÉ KNIHY — PDF SEKCIA
+  ═══════════════════════════════════ -->
+  <div class="section-hdr">▸ TEMNÉ KNIHY :: ZAKÁZANÁ KNIŽNICA</div>
+  <div class="panel">
+    <div class="panel__hd">
+      <span class="panel__ico">📕</span>
+      <span class="panel__name">TEMNÉ KNIHY</span>
+      <span class="panel__badge">PDF :: PRÍSNE TAJNÉ</span>
+    </div>
+    <div class="panel__bd">
+      <p style="color:var(--g3); font-size:.78em; margin-bottom:14px; letter-spacing:1px;">
+        // Tieto dokumenty boli získané z <span class="rx">████████████████████████████████████████</span>.
+        Sťahovanie je na vlastné riziko. Niektoré súbory môžu obsahovať <span class="rx">████████████████</span>. //
+      </p>
+
+      <!-- TEMNÁ KNIHA 1 -->
+      <div class="pdf-row">
+        <div class="pdf-row__icon">📕</div>
+        <div class="pdf-row__info">
+          <div class="pdf-row__title">TEMNÁ KNIHA I</div>
+          <div class="pdf-row__sub">
+            KLASIFIKÁCIA: OMEGA · VEĽKOSŤ: ████ KB ·
+            HASH: <span class="rx">████████████████████████████████</span>
+          </div>
+        </div>
+        <a href="#" class="pdf-row__btn" title="PDF odkaz doplniť">[PDF]</a>
+      </div>
+
+      <!-- TEMNÁ KNIHA 2 -->
+      <div class="pdf-row">
+        <div class="pdf-row__icon">📕</div>
+        <div class="pdf-row__info">
+          <div class="pdf-row__title">TEMNÁ KNIHA II</div>
+          <div class="pdf-row__sub">
+            KLASIFIKÁCIA: ČIERNA · VEĽKOSŤ: ████ KB ·
+            HASH: <span class="rx">████████████████████████████████</span>
+          </div>
+        </div>
+        <a href="#" class="pdf-row__btn" title="PDF odkaz doplniť">[PDF]</a>
+      </div>
+
+      <!-- TEMNÁ KNIHA 3 -->
+      <div class="pdf-row">
+        <div class="pdf-row__icon">📕</div>
+        <div class="pdf-row__info">
+          <div class="pdf-row__title">TEMNÁ KNIHA III</div>
+          <div class="pdf-row__sub">
+            KLASIFIKÁCIA: ULTRA · VEĽKOSŤ: ████ KB ·
+            HASH: <span class="rx">████████████████████████████████</span>
+          </div>
+        </div>
+        <a href="#" class="pdf-row__btn" title="PDF odkaz doplniť">[PDF]</a>
+      </div>
+
+      <!-- TEMNÁ KNIHA 4 -->
+      <div class="pdf-row">
+        <div class="pdf-row__icon">📕</div>
+        <div class="pdf-row__info">
+          <div class="pdf-row__title">TEMNÁ KNIHA IV</div>
+          <div class="pdf-row__sub">
+            KLASIFIKÁCIA: OMEGA · VEĽKOSŤ: ████ KB ·
+            HASH: <span class="rx">████████████████████████████████</span>
+          </div>
+        </div>
+        <a href="#" class="pdf-row__btn" title="PDF odkaz doplniť">[PDF]</a>
+      </div>
+
+      <!-- TEMNÁ KNIHA 5 -->
+      <div class="pdf-row">
+        <div class="pdf-row__icon">📕</div>
+        <div class="pdf-row__info">
+          <div class="pdf-row__title">TEMNÁ KNIHA V</div>
+          <div class="pdf-row__sub">
+            KLASIFIKÁCIA: <span class="rx">████████████████</span> ·
+            VEĽKOSŤ: <span class="blink" style="color:var(--r);">∞</span> KB ·
+            STAV: ZAKÁZANÉ V 23 KRAJINÁCH
+          </div>
+        </div>
+        <a href="#" class="pdf-row__btn" title="PDF odkaz doplniť">[PDF]</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2-COL: TRANSMISSIONS + SIGNAL -->
+  <div class="grid2">
+
+    <div class="panel">
+      <div class="panel__hd">
+        <span class="panel__ico">◈</span>
+        <span class="panel__name">ZACHYTENÉ TRANSMISIE</span>
+      </div>
+      <div class="panel__bd">
+        <div class="qb">
+          „Ananás. Ananás. Päť. Osem. Deväťdesiattri. Nula. Ananás. Koniec prenosu."
+          <cite>— Zachytené na 6840 kHz, ██.██.2004</cite>
+        </div>
+        <ul class="evl">
+          <li>Prenos 001 :: 6840 kHz :: ██.██.2003 :: ZDROJ: <span class="rx">████████</span></li>
+          <li>Prenos 007 :: 4625 kHz :: UVB-76 kópia :: OBSAH: <span class="rx">████████████████</span></li>
+          <li>Prenos 019 :: 3333 kHz :: Opakujúci sa vzor :: DEK.: <span class="rx">████</span></li>
+          <li>Prenos <span class="rx">███</span> :: <span class="rx">████</span> kHz :: ZAKÓDOVANÝ HLAS</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel__hd">
+        <span class="panel__ico">◈</span>
+        <span class="panel__name">SIGNÁLNA ANALÝZA</span>
+      </div>
+      <div class="panel__bd">
+        <div class="sig-wrap" style="margin-bottom:10px;">
+          <canvas id="cv-signal" height="90" style="width:100%; display:block;"></canvas>
+        </div>
+        <div style="font-size:.7em; color:var(--g3); margin-bottom:8px; letter-spacing:1px;">
+          // FREKVENČNÁ ANALÝZA :: REÁLNY ČAS :: PROTOKOL OMEGA //
+        </div>
+        <ul class="evl">
+          <li>Anomálny signál: <span style="color:var(--g);">432.000 Hz</span></li>
+          <li>Pulzácia: <span style="color:var(--y);">11.2 / minútu</span></li>
+          <li>Kódovanie: <span class="rx">████████████████</span></li>
+          <li>Pôvod: <span class="blink" style="color:var(--r);">NEZNÁMY</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REGISTER TABLE -->
+  <div class="section-hdr">▸ REGISTER AKTÍVNYCH PRÍPADOV</div>
+  <div class="panel">
+    <div class="panel__bd" style="padding:0; overflow-x:auto;">
+      <table class="arch-tbl">
+        <tr>
+          <th>ID SPISU</th><th>POPIS</th><th>ROK</th>
+          <th>ZDROJ</th><th>STATUS</th>
+        </tr>
+        <tr><td>UFO-SR-001</td><td>Trojuholníkový objekt, Prievidza</td><td>2001</td><td>Osobné svedectvo</td><td class="st-open">AKTÍVNE</td></tr>
+        <tr><td>CHEM-SR-007</td><td>Chemtrails – dlhodobé monitorovanie</td><td>2003+</td><td>Terénny výskum</td><td class="st-open">AKTÍVNE</td></tr>
+        <tr><td>MJ12-REP-044</td><td>Majestic-12 prepisy</td><td>1952</td><td><span class="rx">████████</span></td><td class="st-unkn">NEPOTVRDENÉ</td></tr>
+        <tr><td>REPT-001</td><td>Reptiliáni v politike</td><td>????</td><td>Vizuálne pozorovanie</td><td class="st-open">KRITICKÉ</td></tr>
+        <tr><td>PSI-OPS-019</td><td>MKUltra SK experimenty</td><td><span class="rx">████</span></td><td>Uniknutý dokument</td><td class="st-close">VYMAZANÉ</td></tr>
+        <tr><td>WX-HAARP-011</td><td>Riadenie počasia HAARP</td><td>1997+</td><td><span class="rx">████████████████</span></td><td class="st-open">AKTÍVNE</td></tr>
+        <tr><td>MOON-SR-003</td><td>Lunárna základňa – fotodôkazy</td><td>2009</td><td>NASA + vlastná analýza</td><td class="st-unkn">PREBIEHA</td></tr>
+        <tr><td>OMEGA-000</td><td><span class="rx">████████████████████████████████████████████</span></td><td><span class="rx">████</span></td><td><span class="rx">████████</span></td><td class="st-close blink">ZNIČENÉ</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- GLOBAL TIMELINE -->
+  <div class="section-hdr">▸ GLOBÁLNA CHRONOLÓGIA</div>
+  <div class="panel">
+    <div class="panel__bd">
+      <div class="tl" id="js-tl"></div>
+    </div>
+  </div>
+
+  <!-- CLOSING NOTE -->
+  <div class="panel panel--r">
+    <div class="panel__hd" style="background:#0d0101; border-bottom-color:#3a0d0d;">
+      <span class="panel__ico" style="color:var(--r);">⚠</span>
+      <span class="panel__name" style="color:var(--r);">ZÁVEREČNÁ POZNÁMKA SPRÁVCU ARCHÍVU</span>
+    </div>
+    <div class="panel__bd">
+      <div class="qb" style="border-color:var(--y); color:#ffdd88;">
+        Ak čítate toto, boli ste identifikovaní ako potenciálny spolupracovník alebo hrozba.
+        Rozhodnutie, ktorou kategóriou ste, závisí od toho, čo urobíte ďalej.
+        <br><br>
+        Archív Omega obsahuje <span class="rx">████</span> dokumentov, <span class="rx">████</span> fotografií
+        a <span class="rx">████</span> audionahrávok.
+        Väčšina z nich by vás zbavila spánku na roky.
+        Niektoré z nich vás zbavia spánku natrvalo.
+        <br><br>
+        Nezverejním ich. Nie preto, že by som sa bál.
+        Ale preto, že svet nie je pripravený. <strong>Vy</strong> nie ste pripravení.
+        <cite>— doc. Ing. ZACHARKA, PHD</cite>
+      </div>
+      <div style="text-align:center; margin-top:12px;">
+        <span class="stamp" style="transform:rotate(3deg);">ARCHÍV OMEGA :: AKTÍVNY</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>© ZACHARKA INC. · OMEGA VAULT v3.1 · VŠETKY PRÁVA VYHRADENÉ</div>
+    <div class="live">
+      PRÍSTUPY: <span id="js-vc">██████</span> ·
+      ODMIETNUTÉ: <span style="color:var(--r);" id="js-den">████</span> ·
+      ČAS: <span id="js-time">--:--:--</span> ·
+      <span class="blink">▌</span>
+    </div>
+  </footer>
+
+</div><!-- /.page -->
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+"use strict";
+
+/* ── MATRIX RAIN ── */
+!function(){
+  var c=document.getElementById('cv-matrix');
+  var resize=function(){ c.width=window.innerWidth; c.height=window.innerHeight; };
+  resize(); window.addEventListener('resize',resize);
+  var ctx=c.getContext('2d');
+  var CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%ΩΑΒΓΔΘΣΠΛψ█▓▒░';
+  var SZ=14, drops=[];
+  function fill(){ drops=new Array(Math.floor(c.width/SZ)).fill(1); }
+  fill();
+  setInterval(function(){
+    if(drops.length!==Math.floor(c.width/SZ)) fill();
+    ctx.fillStyle='rgba(0,0,0,0.04)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ff41'; ctx.font=SZ+'px monospace';
+    drops.forEach(function(y,i){
+      ctx.fillText(CH[Math.floor(Math.random()*CH.length)],i*SZ,y*SZ);
+      if(y*SZ>c.height&&Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  },55);
+}();
+
+/* ── STARS ── */
+!function(){
+  var c=document.getElementById('cv-stars');
+  function resize(){ c.width=window.innerWidth; c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+  var ctx=c.getContext('2d');
+  var stars=Array.from({length:90},function(){
+    return{x:Math.random()*c.width,y:Math.random()*c.height,
+           r:Math.random()*1.3+.3,o:Math.random(),s:Math.random()*.01+.003};
+  });
+  !function loop(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(function(s){
+      s.o+=s.s; if(s.o>1||s.o<0) s.s*=-1;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,255,65,'+(s.o*.45)+')'; ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  }();
+}();
+
+/* ── RADAR ── */
+!function(){
+  var c=document.getElementById('cv-radar'), ctx=c.getContext('2d');
+  var angle=0, CX=140, CY=140, R=125;
+  /* generate blips */
+  var blips=Array.from({length:9},function(){
+    return{a:Math.random()*Math.PI*2, r:Math.random()*98+18, life:0, alive:false};
+  });
+
+  !function loop(){
+    /* fade trail */
+    ctx.fillStyle='rgba(0,4,0,0.18)';
+    ctx.fillRect(0,0,280,280);
+
+    /* grid rings */
+    ctx.strokeStyle='rgba(0,55,0,.45)'; ctx.lineWidth=.7;
+    [35,65,95,125].forEach(function(r){
+      ctx.beginPath(); ctx.arc(CX,CY,r,0,Math.PI*2); ctx.stroke();
+    });
+    /* grid lines */
+    for(var a=0;a<8;a++){
+      var aa=a*Math.PI/4;
+      ctx.beginPath();
+      ctx.moveTo(CX+18*Math.cos(aa),CY+18*Math.sin(aa));
+      ctx.lineTo(CX+R*Math.cos(aa),CY+R*Math.sin(aa));
+      ctx.stroke();
+    }
+
+    /* sweep wedge */
+    ctx.save(); ctx.translate(CX,CY);
+    for(var i=0;i<55;i++){
+      var a0=angle-i*.038;
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.arc(0,0,R,a0-.038,a0);
+      ctx.closePath();
+      ctx.fillStyle='rgba(0,255,65,'+(((55-i)/55)*.22)+')';
+      ctx.fill();
+    }
+    /* sweep line */
+    ctx.strokeStyle='rgba(0,255,65,.85)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(R,0); ctx.stroke();
+    ctx.restore();
+
+    /* blips */
+    blips.forEach(function(b){
+      var da=((angle-b.a)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+      if(da<.12){ b.alive=true; b.life=0; }
+      if(b.alive){
+        var alpha=Math.max(0,1-b.life/160);
+        b.life++;
+        var bx=CX+b.r*Math.cos(b.a), by=CY+b.r*Math.sin(b.a);
+        var eg=ctx.createRadialGradient(bx,by,0,bx,by,10);
+        eg.addColorStop(0,'rgba(0,255,65,'+alpha+')');
+        eg.addColorStop(1,'rgba(0,255,65,0)');
+        ctx.fillStyle=eg; ctx.beginPath(); ctx.arc(bx,by,10,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='rgba(0,255,65,'+(alpha+.1)+')';
+        ctx.beginPath(); ctx.arc(bx,by,3,0,Math.PI*2); ctx.fill();
+        if(b.life>160) b.alive=false;
+      }
+    });
+
+    /* center */
+    ctx.fillStyle='rgba(0,255,65,.7)';
+    ctx.beginPath(); ctx.arc(CX,CY,4,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(0,255,65,.3)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(CX,CY,9,0,Math.PI*2); ctx.stroke();
+
+    /* border */
+    ctx.strokeStyle='rgba(0,120,0,.7)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2); ctx.stroke();
+
+    /* HUD labels */
+    ctx.fillStyle='rgba(0,90,0,.8)'; ctx.font='10px monospace'; ctx.textAlign='center';
+    ctx.fillText('OMEGA PERIMETER RADAR',CX,16);
+    ctx.fillText('SWEEP: '+(angle*180/Math.PI|0)+'°',CX,270);
+    ctx.textAlign='left';
+
+    angle+=.022; requestAnimationFrame(loop);
+  }();
+}();
+
+/* ── EVIDENCE PHOTOS ── */
+document.querySelectorAll('.ev-cnv').forEach(function(c){
+  c.width=174; c.height=124;
+  var ctx=c.getContext('2d'), type=c.dataset.t, t=0;
+  !function frame(){
+    /* noise base */
+    ctx.fillStyle='#010901'; ctx.fillRect(0,0,174,124);
+    var id=ctx.getImageData(0,0,174,124);
+    for(var i=0;i<id.data.length;i+=4){
+      var v=Math.random()<.035?Math.floor(Math.random()*50):0;
+      id.data[i]=0; id.data[i+1]=v; id.data[i+2]=0; id.data[i+3]=255;
+    }
+    ctx.putImageData(id,0,0);
+
+    if(type==='ufo'){
+      var y=38+Math.sin(t)*7;
+      var bg=ctx.createLinearGradient(87,y+18,87,124);
+      bg.addColorStop(0,'rgba(0,255,65,'+(.06+.04*Math.sin(t*2))+')');
+      bg.addColorStop(1,'rgba(0,255,65,0)');
+      ctx.fillStyle=bg;
+      ctx.beginPath();ctx.moveTo(87,y+18);ctx.lineTo(60,124);ctx.lineTo(114,124);ctx.closePath();ctx.fill();
+      ctx.save();ctx.translate(87,y);
+      ctx.fillStyle='rgba(0,200,65,.75)';
+      ctx.beginPath();ctx.ellipse(0,0,32,11,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(0,255,120,.55)';
+      ctx.beginPath();ctx.ellipse(0,-5,16,9,0,Math.PI,0);ctx.fill();
+      [-18,-7,7,18].forEach(function(dx,ii){
+        var lp=.5+.5*Math.sin(t*3+ii);
+        ctx.fillStyle='rgba(255,255,0,'+lp+')';
+        ctx.beginPath();ctx.arc(dx,3,2.5,0,Math.PI*2);ctx.fill();
+      });
+      ctx.restore();
+    }
+    if(type==='signal'){
+      ctx.strokeStyle='rgba(0,255,65,.8)'; ctx.lineWidth=1.5;
+      ctx.beginPath();
+      for(var x=0;x<174;x++){
+        var sy=62+Math.sin((x/174*4*Math.PI)+t)*18*Math.sin(t*.3+x*.05)+Math.sin(x*.3+t*2)*5;
+        x===0?ctx.moveTo(x,sy):ctx.lineTo(x,sy);
+      }
+      ctx.stroke();
+      ctx.strokeStyle='rgba(0,70,0,.5)'; ctx.lineWidth=.5;
+      ctx.beginPath();ctx.moveTo(0,62);ctx.lineTo(174,62);ctx.stroke();
+    }
+    if(type==='face'){
+      var fx=Math.random()<.05?Math.floor(Math.random()*8-4):0;
+      var fg=ctx.createRadialGradient(87+fx,52,2,87+fx,52,36);
+      fg.addColorStop(0,'rgba(0,180,65,.2)'); fg.addColorStop(1,'rgba(0,180,65,0)');
+      ctx.fillStyle=fg; ctx.beginPath();ctx.ellipse(87+fx,52,32,42,0,0,Math.PI*2);ctx.fill();
+      var fg2=ctx.createRadialGradient(87+fx,95,2,87+fx,95,26);
+      fg2.addColorStop(0,'rgba(0,180,65,.18)'); fg2.addColorStop(1,'rgba(0,180,65,0)');
+      ctx.fillStyle=fg2; ctx.beginPath();ctx.ellipse(87+fx,96,20,26,0,0,Math.PI*2);ctx.fill();
+      var ep=.35+.35*Math.sin(t*2.5);
+      [[76,48],[98,48]].forEach(function(p){
+        var eg=ctx.createRadialGradient(p[0]+fx,p[1],0,p[0]+fx,p[1],12);
+        eg.addColorStop(0,'rgba(255,0,51,'+ep+')'); eg.addColorStop(1,'rgba(255,0,51,0)');
+        ctx.fillStyle=eg; ctx.beginPath();ctx.arc(p[0]+fx,p[1],12,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='rgba(255,0,51,'+(ep+.2)+')';
+        ctx.beginPath();ctx.arc(p[0]+fx,p[1],4,0,Math.PI*2);ctx.fill();
+      });
+      ctx.fillStyle='rgba(0,0,0,.92)'; ctx.fillRect(60+fx,41,55,16);
+    }
+    if(type==='map'){
+      ctx.strokeStyle='rgba(0,50,0,.55)'; ctx.lineWidth=.5;
+      for(var mx=0;mx<174;mx+=18){ ctx.beginPath();ctx.moveTo(mx,0);ctx.lineTo(mx,124);ctx.stroke(); }
+      for(var my=0;my<124;my+=14){ ctx.beginPath();ctx.moveTo(0,my);ctx.lineTo(174,my);ctx.stroke(); }
+      ctx.strokeStyle='rgba(0,255,65,.45)'; ctx.lineWidth=1.8; ctx.setLineDash([4,3]);
+      ctx.beginPath();ctx.moveTo(20,28);ctx.lineTo(87,62);ctx.lineTo(154,96);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(10,88);ctx.lineTo(87,62);ctx.lineTo(165,36);ctx.stroke();
+      ctx.setLineDash([]);
+      [[20,28],[87,62],[154,96],[10,88],[165,36]].forEach(function(p){
+        ctx.fillStyle='rgba(0,255,65,.8)';
+        ctx.beginPath();ctx.arc(p[0],p[1],4,0,Math.PI*2);ctx.fill();
+      });
+      ctx.fillStyle='rgba(255,0,51,.65)'; ctx.font='bold 12px monospace';
+      ctx.fillText('×',83,66); ctx.fillText('×',38,51); ctx.fillText('×',128,82);
+    }
+    if(type==='crop'){
+      var r=42+Math.sin(t)*.8;
+      ctx.strokeStyle='rgba(0,255,65,.45)'; ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(87,62,r,0,Math.PI*2);ctx.stroke();
+      [.6,.3,.15].forEach(function(f){
+        ctx.beginPath();ctx.arc(87,62,r*f,0,Math.PI*2);ctx.stroke();
+      });
+      for(var ai=0;ai<6;ai++){
+        var aa=ai*Math.PI/3;
+        ctx.beginPath();ctx.moveTo(87,62);
+        ctx.lineTo(87+r*Math.cos(aa),62+r*Math.sin(aa));ctx.stroke();
+        ctx.beginPath();ctx.arc(87+r*.75*Math.cos(aa),62+r*.75*Math.sin(aa),7,0,Math.PI*2);ctx.stroke();
+      }
+    }
+    /* scanlines */
+    ctx.fillStyle='rgba(0,0,0,.22)';
+    for(var sy2=0;sy2<124;sy2+=3) ctx.fillRect(0,sy2,174,1);
+    /* corner HUD */
+    ctx.fillStyle='rgba(0,90,0,.65)'; ctx.font='8px monospace';
+    ctx.fillText((Math.floor(t*10)%9999)+'ms',4,10);
+    ctx.fillText('REC',148,10);
+    t+=.04; requestAnimationFrame(frame);
+  }();
+});
+
+/* ── SIGNAL CANVAS ── */
+!function(){
+  var c=document.getElementById('cv-signal');
+  c.width=400; c.height=90;
+  var ctx=c.getContext('2d'), t=0;
+  !function loop(){
+    ctx.fillStyle='rgba(1,8,1,.3)'; ctx.fillRect(0,0,400,90);
+    ctx.strokeStyle='rgba(0,255,65,.8)'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for(var x=0;x<400;x++){
+      var y=45
+        +Math.sin((x/400*6*Math.PI)+t)*16
+        +Math.sin((x/400*12*Math.PI)+t*2.3)*6
+        +Math.sin((x/400*2*Math.PI)+t*.7)*10
+        +(Math.random()<.02?Math.random()*24-12:0);
+      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.strokeStyle='rgba(0,45,0,.45)'; ctx.lineWidth=.5;
+    ctx.beginPath();ctx.moveTo(0,45);ctx.lineTo(400,45);ctx.stroke();
+    t+=.04; requestAnimationFrame(loop);
+  }();
+}();
+
+/* ── TIMELINE ── */
+!function(){
+  var events=[
+    {y:'1947',t:'Roswell, Nové Mexiko. Haváriou UFO sa začína éra utajovania. MJ-12 zriadený.'},
+    {y:'1952',t:'Washington D.C. UFO prelet nad Kapitolom. Letectvo: „meteorologické balóny."'},
+    {y:'1968',t:'Projekt <span class="rx">████████</span>. Cieľ: mentálna kontrola pomocou <span class="rx">████████████████</span>.'},
+    {y:'1977',t:'Kecksburg. Objekt vo forme šišky transportovaný vládnymi vozidlami. Svedkovia upozornení.'},
+    {y:'1989',t:'Bob Lazar zverejňuje existenciu Oblasti S-4. Spätné inžinierstvo mimozemských lietadiel.'},
+    {y:'1993',t:'Projekt HAARP spustený. Ofic.: výskum ionosféry. Skutočnosť: <span class="rx">██████████████████████████</span>.'},
+    {y:'2001',t:'UFO nad Prievidzou. Osobné svedectvo správcu archívu. Incident potlačený políciou.'},
+    {y:'2003',t:'Začiatok monitorovania chemtrails nad SR. Prvé vzorky z <span class="rx">████████</span>.'},
+    {y:'2017',t:'Pentagón potvrdzuje program AATIP. Prvé officiálne uznané UFO záznamy.'},
+    {y:'2024',t:'Otvorenie Archívu Omega. Verejná fáza operácie ZLO-OMEGA. Vy čítate tieto riadky.'},
+  ];
+  document.getElementById('js-tl').innerHTML=
+    '<div class="tl">'+
+    events.map(function(e){
+      return '<div class="tl-row"><div class="tl-yr">'+e.y+'</div>'+
+             '<div class="tl-txt">'+e.t+'</div></div>';
+    }).join('')+
+    '</div>';
+}();
+
+/* ── LIVE ── */
+!function(){
+  document.getElementById('js-vc').textContent=Math.floor(Math.random()*900000+100000);
+  document.getElementById('js-den').textContent=Math.floor(Math.random()*9000+1000);
+  function tick(){
+    var s=new Date().toTimeString().slice(0,8);
+    var el=document.getElementById('js-time'); if(el) el.textContent=s;
+    setTimeout(tick,1000);
+  }
+  tick();
+}();
+</script>
+</body>
+</html>
