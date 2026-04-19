@@ -1433,6 +1433,221 @@ opacity: 0.4;
 .loc-placeholder::before { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
 .loc-placeholder::after  { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
 
+/* ══════════════════════════════════════════════════════
+MOBILE HAMBURGER MENU
+══════════════════════════════════════════════════════ */
+#mobile-menu-btn {
+display: none;
+background: transparent;
+border: 1px solid var(–border);
+color: var(–green);
+font-size: 18px;
+padding: 2px 8px;
+cursor: pointer;
+flex-shrink: 0;
+}
+
+#mobile-left-overlay {
+display: none;
+position: fixed;
+inset: 38px 0 0 0;
+background: var(–bg-panel);
+z-index: 600;
+overflow-y: auto;
+border-right: 1px solid var(–border);
+}
+#mobile-left-overlay.show { display: block; }
+
+#mobile-right-overlay {
+display: none;
+position: fixed;
+inset: 38px 0 0 0;
+background: var(–bg-panel);
+z-index: 600;
+overflow-y: auto;
+}
+#mobile-right-overlay.show { display: block; }
+
+/* ══════════════════════════════════════════════════════
+TABLET (≤900px) — 2 stĺpce, bez pravého panelu
+══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+#main {
+grid-template-columns: 200px 1fr;
+}
+#right-panel { display: none; }
+
+#topbar-tabs .tab-btn { font-size: 10px; padding: 0 7px; letter-spacing: 0; }
+#topbar-title { font-size: 10px; letter-spacing: 2px; }
+#topbar-clock { display: none; }
+#topbar-job   { display: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════
+MOBILNÉ ZARIADENIA (≤640px) — 1 stĺpec, overlay navigácia
+══════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+/* Topbar — kompaktný */
+#topbar {
+height: 46px;
+padding: 0 8px;
+gap: 6px;
+flex-wrap: nowrap;
+}
+#topbar-title { font-size: 9px; letter-spacing: 1px; flex-shrink: 1; min-width: 0; }
+#topbar-tabs  { display: none; }
+#topbar-right { gap: 6px; }
+#topbar-money { font-size: 11px; }
+#topbar-clock { display: none; }
+#topbar-job   { display: none !important; }
+.top-micro-btn { font-size: 9px; padding: 2px 5px; }
+#mobile-menu-btn { display: block; }
+
+/* Skryť save/load/new tlačidlá na mobile — presunúť do menu */
+.top-micro-btn { display: none; }
+
+/* Hlavný layout — 1 stĺpec, len center panel */
+#main {
+grid-template-columns: 1fr;
+padding-top: 46px;
+}
+#left-panel  { display: none; }
+#right-panel { display: none; }
+
+/* Center panel — full screen */
+#center-panel {
+height: calc(100vh - 46px);
+border: none;
+}
+
+/* Väčší obrázok scény */
+#scene-img-wrap { height: 130px; }
+
+/* Väčší text scény */
+:root {
+–scene-fs: 14px;
+–choice-fs: 14px;
+}
+
+#scene-text-wrap {
+padding: 10px 12px;
+font-size: var(–scene-fs);
+}
+
+/* Väčšie choice tlačidlá pre dotyk */
+.choice-btn {
+padding: 11px 12px;
+margin-bottom: 6px;
+font-size: 13px;
+min-height: 44px;
+}
+
+/* Log — menší */
+#log-wrap { max-height: 60px; }
+
+/* Notifikácia — centrovane dole */
+#notif {
+bottom: 10px;
+right: 10px;
+left: 10px;
+max-width: none;
+transform: translateY(120%);
+transition: transform 0.22s;
+}
+#notif.show { transform: translateY(0); }
+
+/* Overlaye — full screen */
+#uni-overlay, #gym-overlay, #boats-overlay {
+inset: 46px 0 0 0;
+padding: 14px 12px;
+}
+
+#hq-overlay { inset: 46px 0 0 0; }
+
+.hq-top {
+flex-direction: column;
+height: auto;
+}
+.hq-left {
+width: 100%;
+border-right: none;
+border-bottom: 1px solid var(–border);
+}
+#hq-svg-wrap { padding: 10px; }
+.hq-right { padding: 12px; }
+
+/* Training grid — 1 stĺpec */
+.training-grid { grid-template-columns: 1fr; gap: 10px; }
+.boat-grid { grid-template-columns: 1fr; gap: 10px; }
+
+/* Job overlay */
+.job-cards {
+grid-template-columns: 1fr;
+gap: 10px;
+}
+.job-title { font-size: 18px; letter-spacing: 3px; }
+.job-screen { padding: 0 8px; }
+
+/* Fishing panel */
+#fishing-panel { width: 95vw; }
+
+/* Endgame box */
+.endgame-box { padding: 24px 20px; }
+
+/* Mobile nav bar dole — rýchle taby */
+#mobile-bottom-nav {
+display: flex;
+position: fixed;
+bottom: 0; left: 0; right: 0;
+z-index: 900;
+background: linear-gradient(180deg, var(–bg2), var(–bg));
+border-top: 1px solid var(–border);
+height: 52px;
+}
+#mobile-bottom-nav .mob-tab {
+flex: 1;
+background: transparent;
+border: none;
+color: var(–text-dim);
+font-size: 10px;
+font-family: var(–font-body);
+font-weight: 600;
+letter-spacing: 0.5px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 2px;
+cursor: pointer;
+padding: 4px 2px;
+transition: color 0.12s, background 0.12s;
+border-top: 2px solid transparent;
+}
+#mobile-bottom-nav .mob-tab .mob-icon { font-size: 18px; }
+#mobile-bottom-nav .mob-tab.active {
+color: var(–green);
+border-top-color: var(–green);
+background: rgba(57,255,20,0.04);
+}
+#mobile-bottom-nav .mob-tab:active { background: rgba(57,255,20,0.08); }
+
+/* Choices wrap — padding na spodok pre nav bar */
+#choices-wrap { padding-bottom: 60px; }
+
+/* Smooth scroll */
+#scene-text-wrap { scroll-behavior: smooth; }
+}
+
+/* ══════════════════════════════════════════════════════
+VERY SMALL PHONES (≤380px)
+══════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+#topbar-title { display: none; }
+.choice-btn { font-size: 12px; padding: 10px 10px; }
+#mobile-bottom-nav .mob-tab .mob-icon { font-size: 16px; }
+#mobile-bottom-nav .mob-tab { font-size: 9px; }
+}
+
 </style>
 </head>
 
@@ -1443,6 +1658,7 @@ opacity: 0.4;
 ═════════════════════════════════════════════ -->
 
 <div id="topbar">
+  <button id="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
   <span id="topbar-title">⚔ CEO ZLA // LAZARUS</span>
 
   <div id="topbar-tabs">
@@ -1477,8 +1693,8 @@ opacity: 0.4;
   <div id="left-panel">
     <div id="left-scroll">
 
-```
   <!-- ŠTATISTIKY AGENTA -->
+
   <div class="panel-section">
     <div class="panel-header" onclick="toggleSection('sec-stats')">
       <span class="panel-header-title">Agent // Štatistiky</span>
@@ -1510,31 +1726,35 @@ opacity: 0.4;
         <span class="stat-val" style="color:var(--cyan)" id="val-level">1</span>
       </div>
 
-      <div class="stat-divider"></div>
+```
+  <div class="stat-divider"></div>
 
-      <!-- Sekundárne atribúty -->
-      <div class="stat-row">
-        <span class="stat-icon" style="color:#f97316">⚔️</span>
-        <span class="stat-label">SIL</span>
-        <div class="stat-bar-wrap"><div class="stat-bar str" id="bar-str" style="width:10%"></div></div>
-        <span class="stat-val str" id="val-str">10</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-icon" style="color:#a78bfa">🤸</span>
-        <span class="stat-label">OHY</span>
-        <div class="stat-bar-wrap"><div class="stat-bar flex-s" id="bar-flex" style="width:10%"></div></div>
-        <span class="stat-val flex-s" id="val-flex">10</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-icon" style="color:#00d4ff">💾</span>
-        <span class="stat-label">HCK</span>
-        <div class="stat-bar-wrap"><div class="stat-bar hack-s" id="bar-hack" style="width:10%"></div></div>
-        <span class="stat-val hack-s" id="val-hack">10</span>
-      </div>
-    </div>
+  <!-- Sekundárne atribúty -->
+  <div class="stat-row">
+    <span class="stat-icon" style="color:#f97316">⚔️</span>
+    <span class="stat-label">SIL</span>
+    <div class="stat-bar-wrap"><div class="stat-bar str" id="bar-str" style="width:10%"></div></div>
+    <span class="stat-val str" id="val-str">10</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-icon" style="color:#a78bfa">🤸</span>
+    <span class="stat-label">OHY</span>
+    <div class="stat-bar-wrap"><div class="stat-bar flex-s" id="bar-flex" style="width:10%"></div></div>
+    <span class="stat-val flex-s" id="val-flex">10</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-icon" style="color:#00d4ff">💾</span>
+    <span class="stat-label">HCK</span>
+    <div class="stat-bar-wrap"><div class="stat-bar hack-s" id="bar-hack" style="width:10%"></div></div>
+    <span class="stat-val hack-s" id="val-hack">10</span>
+  </div>
+</div>
+```
+
   </div>
 
   <!-- PASÍVNY PRÍJEM -->
+
   <div class="panel-section">
     <div class="panel-header" onclick="toggleSection('sec-income')">
       <span class="panel-header-title">Pasívny príjem</span>
@@ -1569,6 +1789,7 @@ opacity: 0.4;
   </div>
 
   <!-- QUESTY -->
+
   <div class="panel-section">
     <div class="panel-header" onclick="toggleSection('sec-ops')">
       <span class="panel-header-title">Operačné ciele</span>
@@ -1595,6 +1816,7 @@ opacity: 0.4;
   </div>
 
   <!-- MAPA -->
+
   <div class="panel-section">
     <div class="panel-header" onclick="toggleSection('sec-map')">
       <span class="panel-header-title">Mapa // Prievidza</span>
@@ -1602,7 +1824,6 @@ opacity: 0.4;
     </div>
     <div class="panel-body" id="sec-map">
       <pre class="minimap-grid">
-```
 
 ○ <span class="node" onclick="enterLocation('miki')">🍺 Miki bar</span>
 │
@@ -1616,12 +1837,11 @@ opacity: 0.4;
 │
 ○ <span class="node" onclick="enterLocation('domov')">🏠 Domov</span>
 </pre>
+
 </div>
 </div>
 
-```
 </div><!-- /left-scroll -->
-```
 
   </div><!-- /left-panel -->
 
@@ -1644,16 +1864,17 @@ opacity: 0.4;
       <div id="scene-loc-badge"></div>
     </div>
 
-```
 <!-- Príbehový text (typewriter efekt) -->
+
 <div id="scene-text-wrap"></div>
 
 <!-- Možnosti volieb -->
+
 <div id="choices-wrap"></div>
 
 <!-- Log posledných udalostí -->
+
 <div id="log-wrap"></div>
-```
 
   </div>
 
@@ -1667,68 +1888,72 @@ opacity: 0.4;
       <button class="inv-tab"        onclick="switchInvTab('shop')">🛒 Obchod</button>
     </div>
 
-```
 <!-- Inventár predmetov -->
+
 <div class="inv-pane active" id="inv-pane-items">
   <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
 </div>
 
 <!-- VÝSTROJ — Paperdoll -->
+
 <div class="inv-pane" id="inv-pane-equip">
   <div class="paperdoll-wrap">
 
-    <!-- Ľavý stĺpec slotov -->
-    <div class="equip-col">
-      <div class="eq-slot-wrap">
-        <label>Hlava</label>
-        <div class="eq-slot" id="eqslot-head" onclick="unequipSlot('head')" title="Klikni pre zloženie"></div>
-        <div class="eq-slot-name" id="eqslot-head-name">—</div>
-      </div>
-      <div class="eq-slot-wrap">
-        <label>Telo</label>
-        <div class="eq-slot" id="eqslot-body" onclick="unequipSlot('body')" title="Klikni pre zloženie"></div>
-        <div class="eq-slot-name" id="eqslot-body-name">—</div>
-      </div>
-      <div class="eq-slot-wrap">
-        <label>Nohavice</label>
-        <div class="eq-slot" id="eqslot-pants" onclick="unequipSlot('pants')" title="Klikni pre zloženie"></div>
-        <div class="eq-slot-name" id="eqslot-pants-name">—</div>
-      </div>
-    </div>
+```
+<!-- Ľavý stĺpec slotov -->
+<div class="equip-col">
+  <div class="eq-slot-wrap">
+    <label>Hlava</label>
+    <div class="eq-slot" id="eqslot-head" onclick="unequipSlot('head')" title="Klikni pre zloženie"></div>
+    <div class="eq-slot-name" id="eqslot-head-name">—</div>
+  </div>
+  <div class="eq-slot-wrap">
+    <label>Telo</label>
+    <div class="eq-slot" id="eqslot-body" onclick="unequipSlot('body')" title="Klikni pre zloženie"></div>
+    <div class="eq-slot-name" id="eqslot-body-name">—</div>
+  </div>
+  <div class="eq-slot-wrap">
+    <label>Nohavice</label>
+    <div class="eq-slot" id="eqslot-pants" onclick="unequipSlot('pants')" title="Klikni pre zloženie"></div>
+    <div class="eq-slot-name" id="eqslot-pants-name">—</div>
+  </div>
+</div>
 
-    <!-- Stredná postava -->
-    <div class="paperdoll-center">
-      <img src="JCDenton.png" alt="Agent"
-           onerror="this.style.display='none';document.getElementById('pd-fallback').style.display='flex'">
-      <div id="pd-fallback" style="display:none;width:72px;height:200px;border-left:1px solid var(--border);border-right:1px solid var(--border);background:linear-gradient(180deg,#050a05,#080d08);flex-direction:column;align-items:center;justify-content:center;gap:6px">
-        <span style="font-size:40px;opacity:0.15">🕵️</span>
-        <span style="font-size:7px;color:var(--green3);letter-spacing:2px;font-family:var(--font-hud)">AGENT</span>
-      </div>
-      <div class="pd-label">J.C.DENTON</div>
-    </div>
+<!-- Stredná postava -->
+<div class="paperdoll-center">
+  <img src="JCDenton.png" alt="Agent"
+       onerror="this.style.display='none';document.getElementById('pd-fallback').style.display='flex'">
+  <div id="pd-fallback" style="display:none;width:72px;height:200px;border-left:1px solid var(--border);border-right:1px solid var(--border);background:linear-gradient(180deg,#050a05,#080d08);flex-direction:column;align-items:center;justify-content:center;gap:6px">
+    <span style="font-size:40px;opacity:0.15">🕵️</span>
+    <span style="font-size:7px;color:var(--green3);letter-spacing:2px;font-family:var(--font-hud)">AGENT</span>
+  </div>
+  <div class="pd-label">J.C.DENTON</div>
+</div>
 
-    <!-- Pravý stĺpec slotov -->
-    <div class="equip-col">
-      <div class="eq-slot-wrap">
-        <label>Zbraň</label>
-        <div class="eq-slot" id="eqslot-weapon" onclick="unequipSlot('weapon')" title="Klikni pre zloženie"></div>
-        <div class="eq-slot-name" id="eqslot-weapon-name">—</div>
-      </div>
-      <div class="eq-slot-wrap">
-        <label>Špeciál</label>
-        <div class="eq-slot" id="eqslot-special" onclick="unequipSlot('special')" title="Klikni pre zloženie"></div>
-        <div class="eq-slot-name" id="eqslot-special-name">—</div>
-      </div>
-      <div class="eq-slot-wrap">
-        <label>Topánky</label>
-        <div class="eq-slot" id="eqslot-feet" onclick="unequipSlot('feet')" title="Klikni pre zloženie"></div>
-        <div class="eq-slot-name" id="eqslot-feet-name">—</div>
-      </div>
-    </div>
+<!-- Pravý stĺpec slotov -->
+<div class="equip-col">
+  <div class="eq-slot-wrap">
+    <label>Zbraň</label>
+    <div class="eq-slot" id="eqslot-weapon" onclick="unequipSlot('weapon')" title="Klikni pre zloženie"></div>
+    <div class="eq-slot-name" id="eqslot-weapon-name">—</div>
+  </div>
+  <div class="eq-slot-wrap">
+    <label>Špeciál</label>
+    <div class="eq-slot" id="eqslot-special" onclick="unequipSlot('special')" title="Klikni pre zloženie"></div>
+    <div class="eq-slot-name" id="eqslot-special-name">—</div>
+  </div>
+  <div class="eq-slot-wrap">
+    <label>Topánky</label>
+    <div class="eq-slot" id="eqslot-feet" onclick="unequipSlot('feet')" title="Klikni pre zloženie"></div>
+    <div class="eq-slot-name" id="eqslot-feet-name">—</div>
+  </div>
+</div>
+```
 
   </div>
 
   <!-- Bonusy z výstroja -->
+
   <div class="equip-stats-box" id="equip-bonuses-box">
     <div class="equip-stats-title">⚡ Bonusy z výstroja</div>
     <div id="equip-bonuses-list">
@@ -1737,21 +1962,23 @@ opacity: 0.4;
   </div>
 
   <!-- Inventár na nasadenie -->
+
   <div class="equip-stats-title" style="padding:8px 0 4px;margin-top:8px">🎒 Výbava na nasadenie</div>
   <div id="equip-available-list"></div>
   <div class="equip-hint">// Klikni na predmet v zozname pre nasadenie //</div>
 </div>
 
 <!-- Inventár rýb -->
+
 <div class="inv-pane" id="inv-pane-fish">
   <div id="inv-fish-body"><div class="inv-empty">// žiadne ryby //</div></div>
 </div>
 
 <!-- Obchod -->
+
 <div class="inv-pane" id="inv-pane-shop">
   <div id="shop-body"></div>
 </div>
-```
 
   </div>
 
@@ -1792,71 +2019,74 @@ opacity: 0.4;
           <rect width="380" height="340" fill="url(#grid)"/>
 
 ```
-      <!-- CHODBA (vždy viditeľná) -->
-      <g class="hq-room-svg" id="svg-room-chodba" onclick="selectHQRoom('chodba')">
-        <rect class="room-bg" x="140" y="130" width="100" height="80" fill="#0a130a" stroke="#1a3a1a" stroke-width="1"/>
-        <text x="190" y="162" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">CHODBA</text>
-        <text x="190" y="180" text-anchor="middle" font-size="16">🚪</text>
-        <!-- Dvere hore -->
-        <line x1="175" y1="130" x2="205" y2="130" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
-        <!-- Dvere dole -->
-        <line x1="175" y1="210" x2="205" y2="210" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
-      </g>
+  <!-- CHODBA (vždy viditeľná) -->
+  <g class="hq-room-svg" id="svg-room-chodba" onclick="selectHQRoom('chodba')">
+    <rect class="room-bg" x="140" y="130" width="100" height="80" fill="#0a130a" stroke="#1a3a1a" stroke-width="1"/>
+    <text x="190" y="162" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">CHODBA</text>
+    <text x="190" y="180" text-anchor="middle" font-size="16">🚪</text>
+    <!-- Dvere hore -->
+    <line x1="175" y1="130" x2="205" y2="130" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
+    <!-- Dvere dole -->
+    <line x1="175" y1="210" x2="205" y2="210" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
+  </g>
 
-      <!-- SPÁLŇA -->
-      <g class="hq-room-svg" id="svg-room-spalna" onclick="selectHQRoom('spalna')">
-        <rect class="room-bg" x="10" y="10" width="130" height="120" fill="#0a100f" stroke="#1a3a1a" stroke-width="1"/>
-        <text x="75" y="35" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">SPÁLŇA</text>
-        <text x="75" y="75" text-anchor="middle" font-size="28" opacity="0.7">🛏️</text>
-        <text x="75" y="110" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a3a1a" id="svg-label-spalna">Základná</text>
-        <!-- Dvere vpravo -->
-        <line x1="140" y1="55" x2="140" y2="85" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
-      </g>
+  <!-- SPÁLŇA -->
+  <g class="hq-room-svg" id="svg-room-spalna" onclick="selectHQRoom('spalna')">
+    <rect class="room-bg" x="10" y="10" width="130" height="120" fill="#0a100f" stroke="#1a3a1a" stroke-width="1"/>
+    <text x="75" y="35" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">SPÁLŇA</text>
+    <text x="75" y="75" text-anchor="middle" font-size="28" opacity="0.7">🛏️</text>
+    <text x="75" y="110" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a3a1a" id="svg-label-spalna">Základná</text>
+    <!-- Dvere vpravo -->
+    <line x1="140" y1="55" x2="140" y2="85" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
+  </g>
 
-      <!-- KANCELÁRIA / HACKROOM -->
-      <g class="hq-room-svg" id="svg-room-kancelaria" onclick="selectHQRoom('kancelaria')">
-        <rect class="room-bg" x="240" y="10" width="130" height="120" fill="#080d10" stroke="#1a3a1a" stroke-width="1"/>
-        <text x="305" y="35" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">KANCELÁRIA</text>
-        <text x="305" y="75" text-anchor="middle" font-size="28" opacity="0.7">💻</text>
-        <text x="305" y="110" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a3a1a" id="svg-label-kancelaria">Základná</text>
-        <!-- Dvere vlavo -->
-        <line x1="240" y1="55" x2="240" y2="85" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
-      </g>
+  <!-- KANCELÁRIA / HACKROOM -->
+  <g class="hq-room-svg" id="svg-room-kancelaria" onclick="selectHQRoom('kancelaria')">
+    <rect class="room-bg" x="240" y="10" width="130" height="120" fill="#080d10" stroke="#1a3a1a" stroke-width="1"/>
+    <text x="305" y="35" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">KANCELÁRIA</text>
+    <text x="305" y="75" text-anchor="middle" font-size="28" opacity="0.7">💻</text>
+    <text x="305" y="110" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a3a1a" id="svg-label-kancelaria">Základná</text>
+    <!-- Dvere vlavo -->
+    <line x1="240" y1="55" x2="240" y2="85" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
+  </g>
 
-      <!-- KUCHYŇA -->
-      <g class="hq-room-svg" id="svg-room-kuchyna" onclick="selectHQRoom('kuchyna')">
-        <rect class="room-bg" x="10" y="210" width="130" height="120" fill="#0d0f09" stroke="#1a3a1a" stroke-width="1"/>
-        <text x="75" y="235" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">KUCHYŇA</text>
-        <text x="75" y="270" text-anchor="middle" font-size="28" opacity="0.7">🍳</text>
-        <text x="75" y="310" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a3a1a" id="svg-label-kuchyna">Základná</text>
-        <!-- Dvere vpravo -->
-        <line x1="140" y1="255" x2="140" y2="285" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
-      </g>
+  <!-- KUCHYŇA -->
+  <g class="hq-room-svg" id="svg-room-kuchyna" onclick="selectHQRoom('kuchyna')">
+    <rect class="room-bg" x="10" y="210" width="130" height="120" fill="#0d0f09" stroke="#1a3a1a" stroke-width="1"/>
+    <text x="75" y="235" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#2d5a2d" letter-spacing="1">KUCHYŇA</text>
+    <text x="75" y="270" text-anchor="middle" font-size="28" opacity="0.7">🍳</text>
+    <text x="75" y="310" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a3a1a" id="svg-label-kuchyna">Základná</text>
+    <!-- Dvere vpravo -->
+    <line x1="140" y1="255" x2="140" y2="285" stroke="#39ff14" stroke-width="1.5" opacity="0.6"/>
+  </g>
 
-      <!-- TRÉNINGOVÁ MIESTNOSŤ (zamknutá na začiatku) -->
-      <g class="hq-room-svg" id="svg-room-trenazer" onclick="selectHQRoom('trenazer')">
-        <rect class="room-bg" x="240" y="210" width="130" height="120" fill="#0d0a08" stroke="#1a3a1a" stroke-width="1" opacity="0.5"/>
-        <text x="305" y="235" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#1a3a1a" letter-spacing="1">TRÉNING</text>
-        <text x="305" y="270" text-anchor="middle" font-size="28" opacity="0.3" id="svg-icon-trenazer">🔒</text>
-        <text x="305" y="310" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a2a1a" id="svg-label-trenazer">Zamknuté</text>
-        <!-- Dvere vlavo -->
-        <line x1="240" y1="255" x2="240" y2="285" stroke="#1a3a1a" stroke-width="1.5" opacity="0.4" id="svg-door-trenazer"/>
-      </g>
+  <!-- TRÉNINGOVÁ MIESTNOSŤ (zamknutá na začiatku) -->
+  <g class="hq-room-svg" id="svg-room-trenazer" onclick="selectHQRoom('trenazer')">
+    <rect class="room-bg" x="240" y="210" width="130" height="120" fill="#0d0a08" stroke="#1a3a1a" stroke-width="1" opacity="0.5"/>
+    <text x="305" y="235" text-anchor="middle" font-family="Share Tech Mono" font-size="9" fill="#1a3a1a" letter-spacing="1">TRÉNING</text>
+    <text x="305" y="270" text-anchor="middle" font-size="28" opacity="0.3" id="svg-icon-trenazer">🔒</text>
+    <text x="305" y="310" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="#1a2a1a" id="svg-label-trenazer">Zamknuté</text>
+    <!-- Dvere vlavo -->
+    <line x1="240" y1="255" x2="240" y2="285" stroke="#1a3a1a" stroke-width="1.5" opacity="0.4" id="svg-door-trenazer"/>
+  </g>
 
-      <!-- Rohové ornamenty -->
-      <rect x="2" y="2" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="2" y="2" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="366" y="2" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="376" y="2" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="2" y="326" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="2" y="326" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="366" y="326" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
-      <rect x="376" y="326" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
-    </svg>
+  <!-- Rohové ornamenty -->
+  <rect x="2" y="2" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="2" y="2" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="366" y="2" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="376" y="2" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="2" y="326" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="2" y="326" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="366" y="326" width="12" height="2" fill="#1a3a1a" opacity="0.6"/>
+  <rect x="376" y="326" width="2" height="12" fill="#1a3a1a" opacity="0.6"/>
+</svg>
+```
+
   </div>
 </div>
 
 <!-- Detail miestnosti -->
+
 <div class="hq-right" id="hq-room-detail">
   <!-- Vypĺňa sa JS -->
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;opacity:0.3;gap:12px">
@@ -1864,7 +2094,6 @@ opacity: 0.4;
     <span style="font-family:var(--font-hud);font-size:10px;letter-spacing:3px;color:var(--green3)">// VYBER MIESTNOSŤ //</span>
   </div>
 </div>
-```
 
   </div>
 </div>
@@ -1961,7 +2190,6 @@ opacity: 0.4;
     <div class="job-sub">Vyber si svoju rolu — Operácia Lazarus</div>
     <div class="job-cards">
 
-```
   <div class="job-card" onclick="selectJob('thug')">
     <div class="job-card-icon">🥊</div>
     <div class="job-card-name">THUG</div>
@@ -2008,7 +2236,6 @@ opacity: 0.4;
   </div>
 
 </div>
-```
 
   </div>
 </div>
@@ -6164,7 +6391,104 @@ updateStats();
 renderShop();
 // Job overlay sa zobrazí automaticky — hráč si musí vybrať profesiu
 
+// ══════════════════════════════════════════════════════════════════
+//  ► MOBILNÁ NAVIGÁCIA
+// ══════════════════════════════════════════════════════════════════
+var mobileMenuOpen = false;
+var mobileMenuEl   = null; // lazy-created
+
+function toggleMobileMenu() {
+  if (!mobileMenuEl) {
+    mobileMenuEl = document.createElement('div');
+    mobileMenuEl.id = 'mobile-side-menu';
+    mobileMenuEl.style.cssText = [
+      'position:fixed;inset:46px 0 0 0;background:var(--bg-panel);',
+      'z-index:1500;overflow-y:auto;padding:12px;',
+      'border-right:1px solid var(--border);',
+      'transform:translateX(-100%);transition:transform 0.2s;',
+      'max-width:280px;'
+    ].join('');
+
+    // Menu obsah
+    mobileMenuEl.innerHTML = [
+      '<div style="font-family:var(--font-hud);font-size:9px;letter-spacing:3px;color:var(--green3);padding:6px 0 12px;border-bottom:1px solid var(--border2);margin-bottom:12px;">NAVIGÁCIA</div>',
+
+      // Štatistiky skopírované z left-panelu
+      '<div id="mobile-stats-clone" style="margin-bottom:16px;"></div>',
+
+      '<div style="font-family:var(--font-hud);font-size:9px;letter-spacing:2px;color:var(--green3);margin-bottom:8px;">AKCIE</div>',
+      '<button onclick="saveGame();toggleMobileMenu()" style="display:block;width:100%;margin-bottom:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text-dim);font-family:var(--font-body);font-size:12px;font-weight:600;padding:8px;letter-spacing:1px;cursor:pointer;text-align:left;">💾 Uložiť hru</button>',
+      '<button onclick="loadGame();toggleMobileMenu()" style="display:block;width:100%;margin-bottom:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text-dim);font-family:var(--font-body);font-size:12px;font-weight:600;padding:8px;letter-spacing:1px;cursor:pointer;text-align:left;">📂 Načítať hru</button>',
+      '<button onclick="if(confirm(\'Nová hra? Stratíš postup.\'))newGame();toggleMobileMenu();" style="display:block;width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--danger);font-family:var(--font-body);font-size:12px;font-weight:600;padding:8px;letter-spacing:1px;cursor:pointer;text-align:left;">🔄 Nová hra</button>',
+
+      '<div style="font-family:var(--font-hud);font-size:9px;letter-spacing:2px;color:var(--green3);margin:16px 0 8px;">MAPA</div>',
+      '<div id="mobile-map-clone" style="font-size:12px;line-height:2;color:var(--dim);font-family:var(--font-mono);"></div>'
+    ].join('');
+
+    document.body.appendChild(mobileMenuEl);
+
+    // Kopíruj mapu
+    var origMap = document.querySelector('#sec-map pre');
+    if (origMap) {
+      document.getElementById('mobile-map-clone').innerHTML = origMap.innerHTML;
+    }
+
+    // Overlay na zatvorenie kliknutím mimo
+    var overlay = document.createElement('div');
+    overlay.id = 'mobile-menu-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1499;display:none;';
+    overlay.onclick = toggleMobileMenu;
+    document.body.appendChild(overlay);
+  }
+
+  mobileMenuOpen = !mobileMenuOpen;
+  mobileMenuEl.style.transform = mobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)';
+  document.getElementById('mobile-menu-overlay').style.display = mobileMenuOpen ? 'block' : 'none';
+  document.getElementById('mobile-menu-btn').textContent = mobileMenuOpen ? '✕' : '☰';
+
+  // Sync štatistiky
+  if (mobileMenuOpen) {
+    var statsClone = document.getElementById('mobile-stats-clone');
+    var origStats  = document.getElementById('sec-stats');
+    if (statsClone && origStats) statsClone.innerHTML = origStats.innerHTML;
+  }
+}
+
+// Aktualizuj aktívny tab v mobile bottom nav
+var _origSwitchView = switchView;
+switchView = function(v) {
+  _origSwitchView(v);
+  document.querySelectorAll('#mobile-bottom-nav .mob-tab').forEach(function(btn){
+    btn.classList.remove('active');
+  });
+  var mMap = { game:0, fish:1, uni:2, gym:3, hq:4 };
+  var mTabs = document.querySelectorAll('#mobile-bottom-nav .mob-tab');
+  if (mMap[v] !== undefined && mTabs[mMap[v]]) mTabs[mMap[v]].classList.add('active');
+};
+
 </script>
+
+<!-- ═════════════════════════════════════════════
+     MOBILNÁ SPODNÁ NAVIGÁCIA
+═════════════════════════════════════════════ -->
+
+<div id="mobile-bottom-nav" style="display:none;">
+  <button class="mob-tab active" onclick="switchView('game')">
+    <span class="mob-icon">⚡</span>Operácia
+  </button>
+  <button class="mob-tab" onclick="switchView('fish')">
+    <span class="mob-icon">🎣</span>Rybolov
+  </button>
+  <button class="mob-tab" onclick="switchView('uni')">
+    <span class="mob-icon">🎓</span>Uni
+  </button>
+  <button class="mob-tab" onclick="switchView('gym')">
+    <span class="mob-icon">💪</span>Gym
+  </button>
+  <button class="mob-tab" onclick="switchView('hq')">
+    <span class="mob-icon">🏠</span>HQ
+  </button>
+</div>
 
 </body>
 </html>
