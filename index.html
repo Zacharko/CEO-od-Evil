@@ -44,94 +44,6 @@ img{border:0}
 
 
 
-/* Styl pro kontejner oka */
-        #eye-container {
-            /* Umístění: absolutní, v pravém horním rohu, s odsazením */
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            /* Velikost: nastavena na malou (50px šířka) */
-            width: 50px;
-            height: 50px;
-            z-index: 1000; /* Zajistí, že bude navrchu */
-            cursor: pointer; /* Změní kurzor na ruku při najetí */
-            opacity: 0.8; /* Mírná průhlednost pro splynutí s pozadím */
-            transition: opacity 0.3s ease; /* Plynulý přechod průhlednosti */
-        }
-
-        #eye-container:hover {
-            opacity: 1; /* Při najetí myší bude plně viditelné */
-        }
-
-        /* Styl pro pozadí (symbol) */
-        #eye-background {
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="black" d="M50 0 L100 100 L0 100 Z M50 15 A35 35 0 1 1 50 85 A35 35 0 1 1 50 15 Z" /><circle cx="50" cy="50" r="10" fill="none" stroke="black" stroke-width="2"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        /* POZNÁMKA k url v background-image:
-           Pro zjednodušení jsem použil zakódované SVG.
-           Ty můžeš nahrát svůj obrázek (eye_0.png) do svého repozitáře a změnit URL na:
-           background-image: url('tvoje/cesta/k/obrazku/eye_0.png');
-           Ujisti se, že obrázek je ve stejné složce jako HTML file, nebo uprav cestu.
-           Pokud použiješ svůj obrázek, oční bulva se nebude pohybovat 'uvnitř' něho,
-           ale celé oko se bude natáčet. To je jiný efekt.
-           Níže uvedené řešení se zornicí (pupil) vytváří 'sledovací' efekt.
-        */
-
-        /* Styl pro zornici (zřítelnici) */
-        #eye-pupil {
-            position: absolute;
-            width: 10px; /* Velikost zornice */
-            height: 10px;
-            background-color: black; /* Barva zornice */
-            border-radius: 50%; /* Udělá ji kulatou */
-            top: 50%; /* Vycentrování vertikálně */
-            left: 50%; /* Vycentrování horizontálně */
-            transform: translate(-50%, -50%); /* Přesné vycentrování */
-            /* Výchozí poloha pro pohyb */
-            transform-origin: center center;
-            /* Omezení pohybu uvnitř oka */
-            will-change: transform;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="eye-container">
-        <div id="eye-background"></div>
-        <div id="eye-pupil"></div>
-    </div>
-
-    <script>
-        document.addEventListener('mousemove', function(e) {
-            const eye = document.getElementById('eye-pupil');
-            const container = document.getElementById('eye-container');
-
-            // Získání souřadnic středu kontejneru oka
-            const containerRect = container.getBoundingClientRect();
-            const containerCenterX = containerRect.left + containerRect.width / 2;
-            const containerCenterY = containerRect.top + containerRect.height / 2;
-
-            // Výpočet úhlu a vzdálenosti myši od středu oka
-            const deltaX = e.clientX - containerCenterX;
-            const deltaY = e.clientY - containerCenterY;
-            const angle = Math.atan2(deltaY, deltaX);
-
-            // Nastavení maximálního posunu zornice (poloměr pohybu)
-            const maxOffset = 6; // Uprav pro větší/menší rozsah pohybu
-
-            // Výpočet nové polohy zornice
-            const offsetX = Math.cos(angle) * maxOffset;
-            const offsetY = Math.sin(angle) * maxOffset;
-
-            // Aplikace transformace na zornici
-            eye.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-        });
-    </script>
 
 
 
@@ -894,6 +806,94 @@ audio id="bgMusic" loop>
                 <br>
 
 
+/* Styl pro kontejner oka */
+        #eye-container {
+            /* Umístění: absolutní, v pravém horním rohu, s odsazením */
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            /* Velikost: nastavena na malou (50px šířka) */
+            width: 50px;
+            height: 50px;
+            z-index: 1000; /* Zajistí, že bude navrchu */
+            cursor: pointer; /* Změní kurzor na ruku při najetí */
+            opacity: 0.8; /* Mírná průhlednost pro splynutí s pozadím */
+            transition: opacity 0.3s ease; /* Plynulý přechod průhlednosti */
+        }
+
+        #eye-container:hover {
+            opacity: 1; /* Při najetí myší bude plně viditelné */
+        }
+
+        /* Styl pro pozadí (symbol) */
+        #eye-background {
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="black" d="M50 0 L100 100 L0 100 Z M50 15 A35 35 0 1 1 50 85 A35 35 0 1 1 50 15 Z" /><circle cx="50" cy="50" r="10" fill="none" stroke="black" stroke-width="2"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        /* POZNÁMKA k url v background-image:
+           Pro zjednodušení jsem použil zakódované SVG.
+           Ty můžeš nahrát svůj obrázek (eye_0.png) do svého repozitáře a změnit URL na:
+           background-image: url('tvoje/cesta/k/obrazku/eye_0.png');
+           Ujisti se, že obrázek je ve stejné složce jako HTML file, nebo uprav cestu.
+           Pokud použiješ svůj obrázek, oční bulva se nebude pohybovat 'uvnitř' něho,
+           ale celé oko se bude natáčet. To je jiný efekt.
+           Níže uvedené řešení se zornicí (pupil) vytváří 'sledovací' efekt.
+        */
+
+        /* Styl pro zornici (zřítelnici) */
+        #eye-pupil {
+            position: absolute;
+            width: 10px; /* Velikost zornice */
+            height: 10px;
+            background-color: black; /* Barva zornice */
+            border-radius: 50%; /* Udělá ji kulatou */
+            top: 50%; /* Vycentrování vertikálně */
+            left: 50%; /* Vycentrování horizontálně */
+            transform: translate(-50%, -50%); /* Přesné vycentrování */
+            /* Výchozí poloha pro pohyb */
+            transform-origin: center center;
+            /* Omezení pohybu uvnitř oka */
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="eye-container">
+        <div id="eye-background"></div>
+        <div id="eye-pupil"></div>
+    </div>
+
+    <script>
+        document.addEventListener('mousemove', function(e) {
+            const eye = document.getElementById('eye-pupil');
+            const container = document.getElementById('eye-container');
+
+            // Získání souřadnic středu kontejneru oka
+            const containerRect = container.getBoundingClientRect();
+            const containerCenterX = containerRect.left + containerRect.width / 2;
+            const containerCenterY = containerRect.top + containerRect.height / 2;
+
+            // Výpočet úhlu a vzdálenosti myši od středu oka
+            const deltaX = e.clientX - containerCenterX;
+            const deltaY = e.clientY - containerCenterY;
+            const angle = Math.atan2(deltaY, deltaX);
+
+            // Nastavení maximálního posunu zornice (poloměr pohybu)
+            const maxOffset = 6; // Uprav pro větší/menší rozsah pohybu
+
+            // Výpočet nové polohy zornice
+            const offsetX = Math.cos(angle) * maxOffset;
+            const offsetY = Math.sin(angle) * maxOffset;
+
+            // Aplikace transformace na zornici
+            eye.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
+        });
+    </script>
 
      
                 <img src="./public/images/ufon1.gif" style="max-width:400px;width:100%;height:auto;display:block;margin:auto;">
