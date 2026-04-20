@@ -1,0 +1,314 @@
+<HTML>
+<head>
+<title>CEO Zla | Dead Drop</title>
+<link rel="shortcut icon" href="https://files.catbox.moe/m5tyiv.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{background:#0C1912 url(https://files.catbox.moe/7zggqg.webp);margin:0;padding:0}
+table{font-family:"Goldman","Courier New",monospace;font-size:11px;line-height:15px;letter-spacing:1px;color:#458c3a}
+b{color:#00FF00;font-weight:normal}
+a:link,a:visited,a:active{color:green;text-decoration:none}
+a:hover{color:#00FF00}
+img{border:0}
+::-webkit-scrollbar-thumb{background-color:green;border-radius:3px}
+::-webkit-scrollbar{width:5px;height:0px;background:transparent}
+.title{display:inline-block;background:#051105;color:#7dc87d;font-family:'Orbitron',monospace;font-size:9px;text-transform:uppercase;line-height:10px;letter-spacing:2px;border-radius:2px 2px 0 0;border:1px solid #1a4a1a;border-bottom:1px dotted #123E12;padding:3px 7px}
+.box{background:#030d03;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;padding:6px 8px 8px 8px;margin-bottom:8px;position:relative;overflow:hidden}
+.box::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,20,0,0.15) 3px,rgba(0,20,0,0.15) 4px);pointer-events:none}
+.top{background:#000;border:1px solid #1a4a1a;border-bottom:0;border-radius:6px 6px 0 0}
+.navigation{background:linear-gradient(180deg,#0a1e0a,#051105);border-bottom:2px solid #030f03;border-left:1px solid #1a4a1a;border-right:1px solid #030f03}
+.navigation a{display:inline-block;padding:3px 10px;font:9px 'Orbitron',monospace;text-transform:uppercase;font-weight:bold;line-height:14px;color:#7dc87d;letter-spacing:1px;border-right:1px solid #0d2e0d}
+.navigation a:last-child{border-right:none}
+.navigation a:hover{color:#00FF00;background:rgba(0,255,0,0.06)}
+.active-page{color:#00FF00!important;border-bottom:1px solid #00FF00}
+.sitename{background:#050f05;width:90%;font-family:'Orbitron',monospace;font-size:28px;letter-spacing:10px;color:#00FF00;line-height:22px;border-radius:4px;text-shadow:0 0 12px rgba(0,255,0,0.5);border:1px solid #1a4a1a;padding:6px 0}
+.left{background:#000;border-right:1px dotted #0d2e0d;border-left:2px solid #1a4a1a}
+.right{background:#000;border-right:2px solid #030f03}
+.footer{background:#000;border:1px solid #0d2e0d;border-top:2px solid #030f03;border-radius:0 0 6px 6px;line-height:28px}
+.nekron-bar{height:10px;background:repeating-linear-gradient(90deg,transparent 0,transparent 4px,#0d2e0d 4px,#0d2e0d 5px,transparent 5px,transparent 10px,#1a4a1a 10px,#1a4a1a 12px,transparent 12px,transparent 18px,#123E12 18px,#123E12 19px,transparent 19px,transparent 24px);border-left:2px solid #1a4a1a;border-right:2px solid #030f03}
+.scanlines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px)}
+#illuminati-eye{position:fixed;top:10px;left:50%;transform:translateX(-50%);width:54px;opacity:0.55;z-index:100;filter:drop-shadow(0 0 6px #00ff00);animation:eyepulse 3s ease-in-out infinite;pointer-events:none}
+@keyframes eyepulse{0%,100%{opacity:0.45;filter:drop-shadow(0 0 4px #00ff00)}50%{opacity:0.85;filter:drop-shadow(0 0 14px #00ff00)}}
+
+.redacted{background:#000;color:#000;cursor:pointer;transition:all 0.3s;padding:0 2px;border-radius:1px}
+.redacted:hover{background:transparent;color:#00FF00}
+
+.doc-wrap{background:#020902;border-top:2px solid #1a4a1a;border-left:2px solid #1a4a1a;border-right:2px solid #030f03;border-bottom:2px solid #030f03;margin-bottom:12px;position:relative}
+.doc-header{background:linear-gradient(180deg,#0a2a0a,#051105);border-bottom:1px solid #1a4a1a;padding:6px 10px;display:flex;justify-content:space-between;align-items:flex-start}
+.doc-classification{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:3px;padding:3px 8px;border:1px solid currentColor}
+.cls-ts{color:#ff4444;border-color:#550000;background:#1a0000}
+.cls-s{color:#ffaa00;border-color:#553300;background:#1a0a00}
+.cls-u{color:#458c3a;border-color:#1a4a1a;background:#020902}
+.doc-id{font-family:'Orbitron',monospace;font-size:8px;color:#2a5a2a;letter-spacing:2px;text-align:right;line-height:16px}
+.doc-body{padding:10px 12px;font-size:11px;line-height:18px;color:#458c3a}
+
+/* DEAD DROP METHOD CARDS */
+.method-card{background:#020902;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;padding:8px 10px;margin-bottom:6px;position:relative}
+.method-num{font-family:'Orbitron',monospace;font-size:8px;color:#2a5a2a;letter-spacing:2px;margin-bottom:4px}
+.method-title{font-family:'Orbitron',monospace;font-size:10px;color:#7dc87d;letter-spacing:2px;margin-bottom:6px}
+.method-body{font-size:10px;line-height:17px;color:#458c3a}
+.method-card.preferred{border-left:2px solid #00FF00}
+.method-card.preferred .method-title{color:#00FF00}
+.method-card.danger{border-left:2px solid #ff4444;opacity:0.6}
+.method-card.danger .method-num::after{content:' // NEBEZPECNE';color:#ff4444}
+
+/* PGP BLOCK */
+.pgp-block{background:#000;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;padding:8px;font-family:'Courier New',monospace;font-size:9px;color:#2a5a2a;line-height:14px;letter-spacing:0;word-break:break-all}
+
+/* WARNING BOX */
+.warn-box{background:#1a0000;border:1px solid #550000;border-left:3px solid #ff4444;padding:8px 10px;margin-bottom:8px;font-size:10px;color:#aa4444;line-height:17px}
+.warn-box b{color:#ff4444}
+
+/* EMAIL DISPLAY */
+.email-terminal{background:#000;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;padding:10px;font-family:'Courier New',monospace;font-size:10px;color:#458c3a;line-height:16px;position:relative;overflow:hidden}
+.email-terminal::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,20,0,0.2) 2px,rgba(0,20,0,0.2) 3px);pointer-events:none}
+.email-from{color:#00FF00}
+.email-subject{color:#7dc87d}
+.email-body{color:#458c3a;margin-top:8px;padding-top:8px;border-top:1px dotted #0d2e0d}
+
+/* COUNTER */
+#visitor-counter{font-family:'Orbitron',monospace;font-size:8px;color:#ff4444;letter-spacing:2px;animation:counterblink 1.5s ease-in-out infinite}
+@keyframes counterblink{0%,100%{opacity:1}50%{opacity:0.4}}
+</style>
+
+<script>
+// fake visitor counter
+var baseCount = 1337;
+function updateCounter(){
+  var c = baseCount + Math.floor(Math.random()*3);
+  document.getElementById('live-count').textContent = c;
+}
+window.addEventListener('load', function(){
+  updateCounter();
+  setInterval(function(){
+    if(Math.random()>0.7) updateCounter();
+  }, 3000);
+});
+</script>
+</head>
+<body>
+<div class="scanlines"></div>
+<img id="illuminati-eye" src="oko.jpg" alt="oko">
+<br><br><br>
+<center>
+
+<table width="780" cellpadding="8" cellspacing="0">
+<tr><td class="top" height="80">
+<center><div class="sitename">_ CEO ZLA _</div></center>
+</td></tr>
+</table>
+
+<table width="780" cellpadding="0" cellspacing="0">
+<tr><td class="navigation" height="22">
+<center>
+<a href="index.html">hlavna</a>
+<a href="omne.html">o mne</a>
+<a href="archivy.html">tajne archivy</a>
+<a href="komiksy.html">komiksy</a>
+<a href="teorie.html">teorie</a>
+<a href="kontakt.html" class="active-page">dead drop</a>
+<a href="https://zacharko.github.io/Stranka/" target="_blank">zacharkova stranka</a>
+</center>
+</td></tr>
+</table>
+
+<div class="nekron-bar" style="width:780px;"></div>
+
+<table width="780" cellpadding="10" cellspacing="0">
+<tr>
+
+<!-- LEFT -->
+<td class="left" width="210" valign="top">
+
+<div class="title">status spojenia</div>
+<div class="box" style="text-align:center;padding:10px 6px;">
+<div style="font-family:'Orbitron',monospace;font-size:8px;color:#00FF00;letter-spacing:2px;animation:eyepulse 2s infinite">● ACTIVE</div>
+<br>
+<small style="color:#2a5a2a;font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1px;line-height:16px;">
+ENCRYPTION: ON<br>
+VPN: <span class="redacted">██████</span><br>
+TOR: RECOMMENDED<br>
+SIGNAL: PREFERRED<br>
+</small>
+</div>
+
+<div class="title">live monitoring</div>
+<div class="box" style="text-align:center">
+<div id="visitor-counter">
+  SLEDUJE NAS:<br>
+  <span id="live-count" style="font-size:18px;color:#ff4444">...</span><br>
+  <small style="font-size:7px;color:#550000">ENTIT // PRAVE TERAZ</small>
+</div>
+<br>
+<small style="color:#2a5a2a;font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1px;line-height:14px;">
+Toto nie je vtip.<br>
+Sleduju nas vzdy.
+</small>
+</div>
+
+<div class="title">bezpecnostne pravidla</div>
+<div class="box" style="font-size:10px;line-height:17px;">
+[!] Nikdy nepis moje meno<br>
+[!] Pouzivaj kod ak vies<br>
+[!] Prvy kontakt = overenie<br>
+[!] Ziadne osobne udaje<br>
+[!] Delete po precitani<br>
+[!] <span style="color:#ff4444">NIKDY telefon</span><br>
+[!] <span style="color:#ff4444">NIKDY facebook</span>
+</div>
+
+<div class="title">fyzicke dead drops</div>
+<div class="box" style="font-size:10px;line-height:18px;">
+<b>Prievidza:</b><br>
+<span class="redacted">Lipa pri vstupe do parku Fatra, 3. strom zlava, dutina vo vyske 1.4m</span><br><br>
+<b>Banovce n/B:</b><br>
+<span class="redacted">Pod druhym lavicovym sedadlom, autobusova zastavka smer Partizanske</span><br><br>
+<b>Bojnice:</b><br>
+<span class="redacted">Zamok -- vitrina c. 7, za exponatom</span><br><br>
+<small style="color:#1a3a1a;font-family:'Orbitron',monospace;font-size:7px;">// hover to reveal //</small>
+</div>
+
+</td>
+
+<!-- RIGHT main -->
+<td class="right" valign="top" style="background:#000;border-right:2px solid #030f03;">
+
+<div class="doc-wrap">
+  <div class="doc-header">
+    <div><div class="doc-classification cls-ts">TOP SECRET // KONTAKT PROTOKOL</div></div>
+    <div class="doc-id">DEAD DROP MANUAL<br>DDM-2026-<span class="redacted">███</span></div>
+  </div>
+  <div class="doc-body">
+    <div style="font-family:'Orbitron',monospace;font-size:14px;color:#00FF00;letter-spacing:4px;margin-bottom:12px;text-shadow:0 0 6px rgba(0,255,0,0.4)">
+      // CONTACT PROTOCOL //
+    </div>
+
+    <div class="warn-box">
+      <b>[UPOZORNENIE]</b> Tato stranka je sledovana <span class="redacted">████████████████</span> a pravdepodobne aj inymi entitami. Ak mas citlive informacie, nepouzivaj ziadne z nizzsie uvedenych kanalov bez predchadzajuceho overenia. Prvy kontakt by mal obsahovat heslo: <span class="redacted">████████████████████████</span>
+    </div>
+
+    <!-- METHOD 1 - EMAIL -->
+    <div class="method-card preferred">
+      <div class="method-num">METODA 001 // ODPORUCANE</div>
+      <div class="method-title">// ELEKTRONICKA POSIELACKA ZPRAV //</div>
+      <div class="method-body">
+        Pre bezpecnu komunikaciu pouzivaj nasledovnu adresu. Poznamka: tato adresa existuje a funguje napriek tomu co si mozes mysliet.<br><br>
+        <!-- VTIPNY EMAIL -->
+        <div class="email-terminal">
+          <span class="email-from">TO: </span>lizard.hunter.prievidza@proton.me<br>
+          <span class="email-from">SUBJECT: </span>[pouzivaj sifru -- vid nizsie]<br>
+          <div class="email-body">
+            Priklad spravneho emailu:<br><br>
+            <span style="color:#2a5a2a">FROM: informator_007@tutanota.com<br>
+            TO: lizard.hunter.prievidza@proton.me<br>
+            SUBJECT: MOJA SUSEDA MA TRIEVOR ZELENU SKORU<br><br>
+            Zdravim,<br>
+            vcera som v Banovcich videl suseda ako konzumoval nieco co rozhodne nebolo z Lidlu. Oplacalo sa zahrat golf s niekym z mestskej rady? Prikladam GPS.<br><br>
+            -- anonymny informator<br>
+            [zmazat po precitani]</span>
+          </div>
+        </div>
+        <br>
+        <small style="color:#2a5a2a;font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;">
+          // protonmail alebo tutanota only -- gmail cita NSA //<br>
+          // response time: 24-72h alebo nikdy -- zalezi na operacnom tempe //
+        </small>
+      </div>
+    </div>
+
+    <!-- METHOD 2 - NEWSPAPER -->
+    <div class="method-card">
+      <div class="method-num">METODA 002 // KLASICKA</div>
+      <div class="method-title">// NOVINY -- DEAD DROP KLASIKA //</div>
+      <div class="method-body">
+        Zanechaj spra v komentaroch pod clankmi v <b>Prievidzkych novinach</b>. Pouzivaj pseudonym a nasledovny format:<br><br>
+        <span style="color:#7dc87d">
+        "Predám [KOD-SLOVO]: [tvoja sprava zakodovana].<br>
+        Cena dohodou. Tel: [GPS suradnice ako telefon]"
+        </span><br><br>
+        Priklad: <span style="color:#2a5a2a">"Predám drevenú skrinu: OMEGA-7 aktivny, Partizanske, piatok. Cena: 4821N 1834E"</span><br><br>
+        Citujem klasiku CIA tradecraft: <i>"The best dead drop is the one nobody recognizes as a dead drop."</i> Inzeraty v miestnych novinach nikto nechyti.
+      </div>
+    </div>
+
+    <!-- METHOD 3 - PHYSICAL -->
+    <div class="method-card">
+      <div class="method-num">METODA 003 // FYZICKA</div>
+      <div class="method-title">// POSTOVA SCHRANKA //</div>
+      <div class="method-body">
+        Fyzicka korespondencia. Adresa:<br><br>
+        <span style="color:#7dc87d">
+        [REDACTED]<br>
+        Schránka c. <span class="redacted">███</span><br>
+        Hlavna posta, Prievidza<br>
+        971 01
+        </span><br><br>
+        Pouzivaj rukopis. Nie tlaceniny -- tlaciarene su sledovatelne cez <span class="redacted">████████</span> od roku 2004. Obalkau namoci vodou pred zalepenim -- slina = DNA. Odosli z inej obce -- Partizanske alebo Banovce idealne.
+      </div>
+    </div>
+
+    <!-- METHOD 4 - NEVER USE -->
+    <div class="method-card danger">
+      <div class="method-num">METODA 004</div>
+      <div class="method-title">// TELEFON / FACEBOOK / INSTAGRAM //</div>
+      <div class="method-body" style="color:#550000">
+        NIKDY. Telefony su kompromitovane od roku 1998. Facebook je front organizacie <span class="redacted">████████████████████</span>. Instagram je vlastneny <span style="color:#aa2222">Zuckerbergom</span> -- ktoreho reptilianske afiliácie su zdokumentovane inde na tejto stranke. Ak ma kontaktujes cez tieto kanaly, budem predpokladat ze si cutout alebo honeypot.
+      </div>
+    </div>
+
+    <!-- PGP KEY -->
+    <div class="title">pgp klic</div>
+    <div class="pgp-block">
+-----BEGIN PGP PUBLIC KEY BLOCK-----<br>
+Version: GnuPG v2.0.22 // CEO-ZLA-PRIEVIDZA<br>
+<br>
+mQENBF<span class="redacted">████████████████</span>BCAD<span class="redacted">████████</span>LZ3v<br>
+P8mK<span class="redacted">████████████████████████████</span>9xQw<br>
+<span class="redacted">████████████████████████████████</span>7zRt<br>
+NqA<span class="redacted">████████████████████████████████</span>==<br>
+=<span class="redacted">████</span><br>
+-----END PGP PUBLIC KEY BLOCK-----<br>
+<br>
+<span style="color:#1a3a1a">// fingerprint: <span class="redacted">████ ████ ████ ████ ████ &nbsp; ████ ████ ████ ████ ████</span> //</span>
+    </div>
+
+    <!-- FINAL NOTE -->
+    <div class="doc-wrap" style="margin-top:12px;margin-bottom:0">
+      <div class="doc-header">
+        <div><div class="doc-classification cls-u">UNCLASSIFIED // PERSONAL NOTE</div></div>
+        <div class="doc-id">NOTE-2026-001</div>
+      </div>
+      <div class="doc-body" style="color:#7dc87d">
+        Ak citas toto a si z organizacie: vies preco som odisiel. Vies co som videl v <span class="redacted">████████</span> v roku 201█. Offer stale plati -- vymenim co viem za to co viem ze viete vy.<br><br>
+        Ak citas toto a si obycajny clovek z Prievidze, Banoviec, Partizanskeho alebo okolia: sleduj oci ludia okolo teba. Nie vsetky su take ako tvoje. A jeskyne pri <span style="color:#458c3a">Bojniciach</span> navstevuj iba cez den. S niekym.<br><br>
+        Ostatnym: vitajte. Pozrite sa okolo.<br><br>
+        <span style="color:#2a5a2a;font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;">-- [REDACTED] // PRIEVIDZA STATION // 2026</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</td>
+</tr>
+</table>
+
+<div class="nekron-bar" style="width:780px;"></div>
+
+<table width="780" height="30" cellpadding="4" cellspacing="0">
+<tr><td class="footer" valign="top">
+<center>
+Layout: <a target="_blank" href="https://itinerae.neocities.org/">Itinerae.</a> //
+Fonts: "Orbitron" "Goldman" from Google Fonts. //
+WAKE UP SHEEPLE // THIS PAGE IS MONITORED
+</center>
+</td></tr>
+</table>
+
+</center>
+</body>
+</HTML>
