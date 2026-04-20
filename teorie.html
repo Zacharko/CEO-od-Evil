@@ -1,0 +1,280 @@
+<HTML>
+<head>
+<title>CEO Zla | Threat Database</title>
+<link rel="shortcut icon" href="https://files.catbox.moe/m5tyiv.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{background:#0C1912 url(https://files.catbox.moe/7zggqg.webp);margin:0;padding:0}
+table{font-family:"Goldman","Courier New",monospace;font-size:11px;line-height:14px;letter-spacing:1px;color:#458c3a}
+b{color:#00FF00;font-weight:normal}
+a:link,a:visited,a:active{color:green;text-decoration:none}
+a:hover{color:#00FF00;text-decoration:underline}
+img{border:0}
+::-webkit-scrollbar-thumb{background-color:green;border-radius:3px}
+::-webkit-scrollbar{width:5px;height:0px;background:transparent}
+.title{display:inline-block;background:#051105;color:#7dc87d;font-family:'Orbitron',monospace;font-size:9px;text-transform:uppercase;line-height:10px;letter-spacing:2px;border:1px solid #1a4a1a;border-bottom:1px dotted #123E12;padding:3px 7px}
+.box{background:#030d03;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;padding:6px 8px 8px 8px;margin-bottom:6px;position:relative;overflow:hidden}
+.box::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,20,0,0.13) 3px,rgba(0,20,0,0.13) 4px);pointer-events:none}
+.sitename{background:#050f05;width:90%;font-family:'Orbitron',monospace;font-size:28px;letter-spacing:10px;color:#00FF00;line-height:22px;text-shadow:0 0 12px rgba(0,255,0,0.5);border:1px solid #1a4a1a;padding:6px 0}
+.top{background:#000;border:1px solid #1a4a1a;border-bottom:0}
+.navigation{background:#0B250B;border-top:1px solid #1a4a1a;border-bottom:2px solid #030f03;border-left:1px solid #1a4a1a;border-right:1px solid #030f03}
+.navigation a{display:inline-block;padding:3px 9px;font:9px 'Orbitron',monospace;text-transform:uppercase;font-weight:bold;line-height:16px;color:#7dc87d;letter-spacing:1px;border-right:1px dotted #1a4a1a}
+.navigation a:last-child{border-right:none}
+.navigation a:hover{color:#00FF00;text-decoration:none;background:rgba(0,255,0,0.05)}
+.active-page{color:#00FF00!important}
+.left{background:#000;border-right:1px dotted #0d2e0d;border-left:1px solid #1a4a1a}
+.middle{background:#000;border-right:1px dotted #0d2e0d}
+.right{background:#000;border-right:1px solid #030f03}
+.footer{background:#000;border:1px solid #0d2e0d;border-top:1px dotted #123E12;line-height:26px}
+.nekron-bar{height:8px;background:repeating-linear-gradient(90deg,transparent 0,transparent 4px,#0d2e0d 4px,#0d2e0d 5px,transparent 5px,transparent 10px,#1a4a1a 10px,#1a4a1a 12px,transparent 12px,transparent 18px,#123E12 18px,#123E12 19px,transparent 19px,transparent 24px);border-left:1px solid #1a4a1a;border-right:1px solid #030f03}
+.page-title{font-family:'Orbitron',monospace;font-size:16px;color:#00FF00;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;text-shadow:0 0 8px rgba(0,255,0,0.4)}
+.r{background:#000;color:#000;cursor:pointer}.r:hover{background:transparent;color:#00FF00}
+#illuminati-eye{position:fixed;top:10px;left:50%;transform:translateX(-50%);width:54px;opacity:0.55;z-index:100;filter:drop-shadow(0 0 6px #00ff00);animation:eyepulse 3s ease-in-out infinite;pointer-events:none}
+@keyframes eyepulse{0%,100%{opacity:0.45;filter:drop-shadow(0 0 4px #00ff00)}50%{opacity:0.85;filter:drop-shadow(0 0 14px #00ff00)}}
+.scanlines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px)}
+
+/* THREAT LEVELS */
+.tl{display:inline-block;padding:1px 5px;font-size:8px;font-family:'Orbitron',monospace;letter-spacing:1px;vertical-align:middle}
+.tl-low{background:#001a00;color:#00aa00;border:1px solid #005500}
+.tl-mid{background:#1a1000;color:#aaaa00;border:1px solid #555500}
+.tl-high{background:#1a0000;color:#ff4444;border:1px solid #550000}
+.tl-unk{background:#0a0a1a;color:#8888ff;border:1px solid #333388}
+
+/* ENTRY */
+.entry{border:1px solid #0d2e0d;border-left:2px solid #1a4a1a;margin-bottom:10px;background:#020a02;position:relative;overflow:hidden;transition:border-color 0.15s}
+.entry:hover{border-color:#1f6f1f;border-left-color:#00FF00}
+.entry-header{display:flex;align-items:center;gap:7px;background:#051105;border-bottom:1px dotted #0d2e0d;padding:4px 7px;flex-wrap:wrap}
+.entry-name{font-family:'Orbitron',monospace;font-size:11px;color:#00FF00;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 5px rgba(0,255,0,0.3)}
+.entry-latin{font-size:9px;color:#2a5a2a;letter-spacing:1px;font-style:italic;flex:1}
+.entry-body{display:flex}
+.entry-glyph{width:74px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:7px;border-right:1px dotted #0d2e0d;opacity:0.75}
+.entry-glyph svg{width:60px;height:60px}
+.entry-text{padding:7px 9px;font-size:10px;line-height:16px;color:#458c3a;flex:1}
+.entry-stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;padding-top:4px;border-top:1px dotted #0d2e0d}
+.stat{font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;letter-spacing:1px}
+.stat b{color:#3a7a3a}
+
+/* FILTER */
+.filter-row{display:flex;gap:3px;margin-bottom:8px;flex-wrap:wrap}
+.ftab{font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;border:1px solid #0d2e0d;padding:2px 6px;cursor:pointer;letter-spacing:1px;background:#020a02}
+.ftab:hover,.ftab.active{color:#00FF00;border-color:#1f6f1f;background:#051105}
+
+/* SIDEBAR */
+.sidebar{padding:7px;vertical-align:top;width:170px;border-right:1px dotted #123E12;background:#000}
+.bestiar-main{padding:8px 12px;vertical-align:top;background:#000;border-right:1px solid #030f03}
+</style>
+<script>
+function filterEntries(cat,el){
+  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  document.querySelectorAll('.entry').forEach(function(e){
+    e.style.display=(cat==='all'||e.dataset.cat===cat)?'':'none';
+  });
+}
+</script>
+</head>
+<body>
+<div class="scanlines"></div>
+<img id="illuminati-eye" src="oko.jpg" alt="oko">
+<br><br><br>
+<center>
+
+<table width="780" cellpadding="8" cellspacing="0">
+<tr><td class="top" height="80">
+<center><div class="sitename">_ CEO ZLA _</div></center>
+</td></tr>
+</table>
+
+<table width="780" cellpadding="0" cellspacing="0">
+<tr><td class="navigation" height="22">
+<center>
+<a href="index.html">hlavna</a>
+<a href="omne.html">personnel file</a>
+<a href="archivy.html">tajne archivy</a>
+<a href="komiksy.html">field reports</a>
+<a href="teorie.html" class="active-page">threat db</a>
+<a href="kontakt.html">dead drop</a>
+<a href="https://zacharko.github.io/Stranka/" target="_blank">zacharkova stranka</a>
+</center>
+</td></tr>
+</table>
+
+<div class="nekron-bar" style="width:780px;"></div>
+
+<table width="780" cellpadding="0" cellspacing="0">
+<tr>
+<td class="sidebar">
+
+<div class="title">threat levels</div>
+<div class="box">
+<span class="tl tl-low">NIZKA</span> zaujimave<br><br>
+<span class="tl tl-mid">STREDNA</span> znepokojive<br><br>
+<span class="tl tl-high">VYSOKA</span> prebudenie<br><br>
+<span class="tl tl-unk">NEZNAMA</span> mimo cas
+</div>
+
+<div class="title">kategorie</div>
+<div class="box" style="font-size:10px;line-height:18px;">
+» Stredoveke<br>
+» Lesy &amp; divocina<br>
+» Morske hlbiny<br>
+» Mimozemske<br>
+» Mestske legendy<br>
+» Entity
+</div>
+
+<div class="title">statistiky db</div>
+<div class="box" style="font-size:10px;line-height:17px;">
+Celkom: <b>12</b><br>
+Potvrdene: <b>0</b><br>
+Nepotvrdene: <b>12</b><br>
+Utajene: <b>???</b><br><br>
+<span style="color:#2a5a2a;font-size:9px;">posledna aktualizacia:<br>2026-03-22</span>
+</div>
+
+<div class="title">lokalne hrozby</div>
+<div class="box" style="font-size:10px;line-height:18px;">
+<span style="color:#ff4444">» Bojnice</span> -- jaskyne<br>
+<span style="color:#ffaa00">» Prievidza</span> -- 5G<br>
+<span style="color:#ffaa00">» Banovce n/B</span><br>
+<span style="color:#ffaa00">» Partizanske</span><br>
+» Nitra corridor<br><br>
+<span style="color:#2a5a2a;font-size:9px;font-family:'Orbitron',monospace;">// hover = decensor //</span>
+</div>
+
+<div class="title">poznamka</div>
+<div class="box" style="font-size:9px;color:#2a5a2a;line-height:14px;">
+Zaznamy zozbierane z overených zdrojov a terrennych operacii.<br><br>
+Kazdy kto neveril bol uz <span class="r">neutralizovany</span>.<br><br>
+<span style="color:#1a3a1a">// WAKE UP //</span>
+</div>
+
+</td>
+
+<td class="bestiar-main">
+
+<div class="page-title">// THREAT DATABASE -- BESTIAR //</div>
+<p style="font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;letter-spacing:2px;margin-bottom:8px;">// KOMPLETNY KATALOG ENTIT -- VERZIA 3.7 -- PRISNE TAJNE //</p>
+
+<div class="filter-row">
+  <span class="ftab active" onclick="filterEntries('all',this)">VSETKO</span>
+  <span class="ftab" onclick="filterEntries('stredovek',this)">STREDOVEKE</span>
+  <span class="ftab" onclick="filterEntries('les',this)">LESY</span>
+  <span class="ftab" onclick="filterEntries('more',this)">MORE</span>
+  <span class="ftab" onclick="filterEntries('mimoz',this)">MIMOZ.</span>
+  <span class="ftab" onclick="filterEntries('mestske',this)">MESTSKE</span>
+  <span class="ftab" onclick="filterEntries('entita',this)">ENTITY</span>
+</div>
+
+<!-- DRAK -->
+<div class="entry" data-cat="stredovek">
+<div class="entry-header"><span class="entry-name">Drak</span><span class="entry-latin">Draco Occidentalis Magnus</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M10,50 Q20,30 32,20 Q44,10 55,15" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M32,20 Q28,10 20,8 Q24,16 22,22" fill="none" stroke="#00ff00" stroke-width="1"/><path d="M32,20 Q36,10 44,8 Q40,16 42,22" fill="none" stroke="#00ff00" stroke-width="1"/><ellipse cx="55" cy="15" rx="6" ry="4" fill="none" stroke="#00ff00" stroke-width="1"/><line x1="52" y1="12" x2="48" y2="8" stroke="#00ff00" stroke-width="0.8"/><line x1="58" y1="12" x2="62" y2="8" stroke="#00ff00" stroke-width="0.8"/><path d="M10,50 L5,56 L12,54 L8,60 L16,56 L14,62" fill="none" stroke="#00ff00" stroke-width="1"/><path d="M20,38 Q15,32 8,34 Q14,36 16,42" fill="none" stroke="#00ff00" stroke-width="0.8"/><path d="M28,28 Q22,22 14,24 Q21,26 22,32" fill="none" stroke="#00ff00" stroke-width="0.8"/></svg></div>
+<div class="entry-text">Okridlena plaziva bytost zachytena v stredovekych kronikach od Cech po Britske ostrovy. Nikdy nespi -- iba predstiera spanok. Termalny zaznam z Nizkotatranskeho regionu (2019) odovzdany MV SR. Odpoved: automaticky odpis.<br><br><i style="color:#2a5a2a;">// posledny kontakt: Branisko 2019 // sprava utajena //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Europa/Azia</b></span><span class="stat">VELKOST <b>8-40m</b></span><span class="stat">HROZBA <b>Spalovanie</b></span></div></div></div></div>
+
+<!-- MORSKA PANNA -->
+<div class="entry" data-cat="more">
+<div class="entry-header"><span class="entry-name">Morska panna</span><span class="entry-latin">Siren Profundis</span><span class="tl tl-mid">STREDNA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="18" rx="8" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M24,26 Q20,35 18,44 Q24,40 32,42 Q40,40 46,44 Q44,35 40,26" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M18,44 Q14,52 10,56 Q16,54 20,58" fill="none" stroke="#00ff00" stroke-width="1"/><path d="M46,44 Q50,52 54,56 Q48,54 44,58" fill="none" stroke="#00ff00" stroke-width="1"/><line x1="28" y1="14" x2="24" y2="8" stroke="#00ff00" stroke-width="0.7"/><line x1="32" y1="12" x2="32" y2="6" stroke="#00ff00" stroke-width="0.7"/><line x1="36" y1="14" x2="40" y2="8" stroke="#00ff00" stroke-width="0.7"/><path d="M22,32 Q27,29 32,32 Q37,29 42,32" fill="none" stroke="#00ff00" stroke-width="0.5"/></svg></div>
+<div class="entry-text">NATO audio 1997: biologicky zvuk z hlbky 11km v Tichom oceane -- "The Bloop." Oficialny prepis pridany 4 roky po incidente. Povodne audio: ciastocne utajene. Babylon 1000 pred n.l.: prvy zdokumentovany pripad. 340+ sprav namornikov o strate pamati.<br><br><i style="color:#2a5a2a;">// Bloop spisy: ciastocne odtajnene 2012 // zvysok: embargo //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Vsetky oceany</b></span><span class="stat">HLBKA <b>200-11000m</b></span><span class="stat">HROZBA <b>Hypnoza</b></span></div></div></div></div>
+
+<!-- BIGFOOT -->
+<div class="entry" data-cat="les">
+<div class="entry-header"><span class="entry-name">Bigfoot / Sasquatch</span><span class="entry-latin">Gigantopithecus Modernus</span><span class="tl tl-mid">STREDNA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="14" rx="9" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M23,22 L18,48 L24,46 L28,56 L32,46 L36,56 L40,46 L46,48 L41,22" fill="none" stroke="#00ff00" stroke-width="1.2"/><line x1="23" y1="26" x2="12" y2="38" stroke="#00ff00" stroke-width="1.2"/><line x1="41" y1="26" x2="52" y2="38" stroke="#00ff00" stroke-width="1.2"/><path d="M24,24 L20,28 M27,23 L23,28 M30,22 L27,27 M33,22 L30,27 M36,23 L33,28" stroke="#00ff00" stroke-width="0.4" fill="none"/><ellipse cx="29" cy="12" rx="2" ry="2" fill="none" stroke="#00ff00" stroke-width="0.8"/><ellipse cx="35" cy="12" rx="2" ry="2" fill="none" stroke="#00ff00" stroke-width="0.8"/></svg></div>
+<div class="entry-text">10 000+ zaznamov od 1840. DNA z Oregonu (2012): nezname. Smithsonian: zatvorene bez komentara. Yellowstone: interna smernica NHP-7 pre kontakt s neznamu velkou primatu -- potvrdena cez FOIA 2018. Slovensky variant: Polana, spravy od 1954.<br><br><i style="color:#2a5a2a;">// NHP-7 // FOIA 2018 // potvrdene //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Sev. Amerika, Karpaty</b></span><span class="stat">VYSKA <b>2.1-3.2m</b></span><span class="stat">HROZBA <b>Nizka -- zatial</b></span></div></div></div></div>
+
+<!-- MOTHMAN -->
+<div class="entry" data-cat="mestske">
+<div class="entry-header"><span class="entry-name">Mothman</span><span class="entry-latin">Praecursor Calamitatis</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="22" rx="7" ry="8" fill="none" stroke="#00ff00" stroke-width="1.2"/><circle cx="29" cy="20" r="2" fill="none" stroke="#ff4444" stroke-width="1"/><circle cx="35" cy="20" r="2" fill="none" stroke="#ff4444" stroke-width="1"/><circle cx="29" cy="20" r="0.8" fill="#ff4444"/><circle cx="35" cy="20" r="0.8" fill="#ff4444"/><path d="M25,28 L22,48 L32,38 L42,48 L39,28" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M25,30 Q10,20 4,30 Q10,34 20,36" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M39,30 Q54,20 60,30 Q54,34 44,36" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M10,26 L18,34 M6,29 L14,35" stroke="#00ff00" stroke-width="0.4" fill="none"/><path d="M54,26 L46,34 M58,29 L50,35" stroke="#00ff00" stroke-width="0.4" fill="none"/></svg></div>
+<div class="entry-text">Point Pleasant 1966-1967: 13 mesiacov pred zrutenim mosta Silver Bridge (46 mrtvych). Zaznamenany pred: Cernobyhlom (1986), 9/11 (2001), cunami 2004, Fukusimou (2011). FBI: 4 zaznamy -- "neidentifikovany lietajuci objekt biologickeho povodu." Chicago 2017-2023: 55 svedkov.<br><br><i style="color:#2a5a2a;">// ak ho vidas: evakuuj oblast 50km. ihned. //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>USA, pred katastrofami</b></span><span class="stat">ROZPATIA <b>3-4.5m</b></span><span class="stat">HROZBA <b>Prorocka</b></span></div></div></div></div>
+
+<!-- WENDIGO -->
+<div class="entry" data-cat="les">
+<div class="entry-header"><span class="entry-name">Wendigo</span><span class="entry-latin">Algonquinus Cannibal Spiritus</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32,8 L28,16 L20,14 L26,22 L18,24 L28,28" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M32,8 L36,16 L44,14 L38,22 L46,24 L36,28" fill="none" stroke="#00ff00" stroke-width="1.2"/><ellipse cx="32" cy="34" rx="8" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M24,42 L16,58" stroke="#00ff00" stroke-width="1.2"/><path d="M40,42 L48,58" stroke="#00ff00" stroke-width="1.2"/><ellipse cx="29" cy="31" rx="2.5" ry="3" fill="none" stroke="#00ff00" stroke-width="0.8"/><ellipse cx="35" cy="31" rx="2.5" ry="3" fill="none" stroke="#00ff00" stroke-width="0.8"/><path d="M26,16 Q22,10 18,8 M22,14 Q20,8 22,4" fill="none" stroke="#00ff00" stroke-width="0.8"/><path d="M38,16 Q42,10 46,8 M42,14 Q44,8 42,4" fill="none" stroke="#00ff00" stroke-width="0.8"/></svg></div>
+<div class="entry-text">Vznika z cloveka ktory konzumoval ludske maso. Psychiatria: "Wendigo psyychoza" -- skutocny klinicky syndrom. Kanada: 2200 zmiznutych rocne v lesnych oblastiach. RCMP interni kod <b>W-7</b>. Pozorovania v karpatskych lesoch (Partizanske-Banovce koridor): 3 neoverne pripady, 2019-2022.<br><br><i style="color:#2a5a2a;">// NIKDY sam v lese v zime. Toto nie je varovanie. Toto je fakt. //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Kanada, Karpaty</b></span><span class="stat">VYSKA <b>3-5m (rastie)</b></span><span class="stat">HROZBA <b>Smrtelna</b></span></div></div></div></div>
+
+<!-- GREYS -->
+<div class="entry" data-cat="mimoz">
+<div class="entry-header"><span class="entry-name">Sedi / Greys</span><span class="entry-latin">Zeta Reticulani Visitans</span><span class="tl tl-unk">NEZNAMA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="20" rx="16" ry="18" fill="none" stroke="#00ff00" stroke-width="1.2"/><ellipse cx="26" cy="20" rx="6" ry="4" fill="none" stroke="#00ff00" stroke-width="1"/><ellipse cx="38" cy="20" rx="6" ry="4" fill="none" stroke="#00ff00" stroke-width="1"/><ellipse cx="26" cy="20" rx="3" ry="2" fill="#051105" stroke="#00ff00" stroke-width="0.5"/><ellipse cx="38" cy="20" rx="3" ry="2" fill="#051105" stroke="#00ff00" stroke-width="0.5"/><path d="M31,28 L31,30 L33,30 L33,28" fill="none" stroke="#00ff00" stroke-width="0.7"/><line x1="28" y1="33" x2="36" y2="33" stroke="#00ff00" stroke-width="0.7"/><path d="M24,36 L20,56" stroke="#00ff00" stroke-width="1"/><path d="M40,36 L44,56" stroke="#00ff00" stroke-width="1"/><path d="M24,36 L40,36" stroke="#00ff00" stroke-width="1"/><path d="M26,40 L14,48" stroke="#00ff00" stroke-width="1"/><path d="M38,40 L50,48" stroke="#00ff00" stroke-width="1"/></svg></div>
+<div class="entry-text">Roswell 1947: dve protichodne vyhlasenia US Army v priebehu 24 hodin. Bob Lazar (Area 51, 1989): 9 typov plavidiel, popis predchadza popularnym zobrazeniam. COMETA (FR, 1999): odporuca oficialny kontakt. Kongres USA 2023: <b>"non-human biologics"</b> v recovered craft. Nie teoria -- zaznamy z Kongresu.<br><br><i style="color:#2a5a2a;">// Skinwalker Ranch, Hessdalen -- aktivne kontaktne zony //</i>
+<div class="entry-stats"><span class="stat">POVOD <b>Zeta Reticuli (39 sv. r.)</b></span><span class="stat">VYSKA <b>0.9-1.5m</b></span><span class="stat">ZAMER <b>Sledovanie</b></span></div></div></div></div>
+
+<!-- MIB -->
+<div class="entry" data-cat="entita">
+<div class="entry-header"><span class="entry-name">Muzi v ciernom</span><span class="entry-latin">Agents Memoriae Deletores</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="12" width="24" height="4" fill="none" stroke="#00ff00" stroke-width="1"/><rect x="24" y="4" width="16" height="10" fill="none" stroke="#00ff00" stroke-width="1"/><rect x="24" y="16" width="16" height="12" fill="#020a02" stroke="#00ff00" stroke-width="0.8"/><circle cx="29" cy="21" r="1.5" fill="#00ff00"/><circle cx="35" cy="21" r="1.5" fill="#00ff00"/><path d="M20,28 L16,56 L48,56 L44,28" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M32,28 L30,36 L32,44 L34,36 L32,28" fill="none" stroke="#00ff00" stroke-width="0.8"/><path d="M28,28 L24,36" stroke="#00ff00" stroke-width="0.8"/><path d="M36,28 L40,36" stroke="#00ff00" stroke-width="0.8"/><rect x="44" y="40" width="12" height="9" fill="none" stroke="#00ff00" stroke-width="0.8"/></svg></div>
+<div class="entry-text">Albert K. Bender 1953: zastavil UFO bulletin po navsteve troch muzov. Nepiju, nejedia. SPZ ich vozidiel neexistuju v ziadnej databaze. FOIA: 14 pripadov kde FBI kontaktovala svedkov UFO do 48 hodin. Osobna poznamka: <span class="r">kontaktovany 2x. druhykrat uz bez slov.</span><br><br><i style="color:#2a5a2a;">// ak ta navstiviu: nekontaktuj nikoho 72 hodin //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Po UFO incidentoch</b></span><span class="stat">HROZBA <b>Vymazanie pamati</b></span><span class="stat">IDENTITA <b>Nelud./vladna/oboje</b></span></div></div></div></div>
+
+<!-- SKINWALKER -->
+<div class="entry" data-cat="entita">
+<div class="entry-header"><span class="entry-name">Skinwalker</span><span class="entry-latin">Yee Naaldlooshii</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M32,12 Q38,8 40,16 Q44,14 42,22 Q40,28 32,30" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M32,12 Q26,6 22,14 Q18,12 20,22 Q22,30 32,30" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M22,12 L18,4 L26,10" fill="none" stroke="#00ff00" stroke-width="1"/><path d="M32,30 L28,54" stroke="#00ff00" stroke-width="1.2"/><path d="M32,30 L36,54" stroke="#00ff00" stroke-width="1.2"/><path d="M28,36 L14,44 Q10,48 12,52" stroke="#00ff00" stroke-width="1"/><path d="M36,36 L50,44 Q54,48 52,52" stroke="#00ff00" stroke-width="1"/><ellipse cx="28" cy="19" rx="2.5" ry="2" fill="none" stroke="#00ff00" stroke-width="0.8"/><ellipse cx="36" cy="20" rx="2" ry="1.5" fill="none" stroke="#ff4444" stroke-width="0.8"/></svg></div>
+<div class="entry-text">Skinwalker Ranch Utah: poltergeist, zmiznutia dobytka, svetelne gule. Bigelow (NASA dodavatel) kutil ranch 1996 za 200000$ pre vyskum. NIDS zaznamy utajene. Aztecke zaznamy: "tych ktori chodia na styri" -- realita, nie myt. Navajo: odmietaju diskutovat. <span class="r">Samotna zmienka ich pritica.</span><br><br><i style="color:#2a5a2a;">// nevyzeral do oci. nikdy. //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Utah, juhozapad USA</b></span><span class="stat">SCHOPNOSTI <b>Tvaromena</b></span><span class="stat">HROZBA <b>Extremna</b></span></div></div></div></div>
+
+<!-- SHADOW PEOPLE -->
+<div class="entry" data-cat="entita">
+<div class="entry-header"><span class="entry-name">Tienove bytosti</span><span class="entry-latin">Umbra Observans Paralyticus</span><span class="tl tl-unk">NEZNAMA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="8" ry="9" fill="#020a02" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,2"/><path d="M24,10 Q32,2 40,10" fill="none" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,2"/><path d="M26,10 L26,8 L38,8 L38,10" fill="none" stroke="#2a4a2a" stroke-width="0.8" stroke-dasharray="2,2"/><circle cx="29" cy="15" r="2" fill="#ff4444" opacity="0.9"/><circle cx="35" cy="15" r="2" fill="#ff4444" opacity="0.9"/><path d="M25,24 L20,54" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/><path d="M39,24 L44,54" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/><path d="M25,24 L39,24" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/><path d="M25,30 L14,42" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,3"/><path d="M39,30 L50,42" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,3"/></svg></div>
+<div class="entry-text">Fenomen napriec kulturami bez vzajomneho kontaktu: islamsky dzin, japonsky Kage-Otoko, europsky "Hat Man." Vzdy: silueta bez tvare, cervene oci, spanкova paralysza. Neuroveda nevie vysvetlit preco 30% populacie ma identicke halalucinacie. Persinger (1983): vonkajsie EM polia indukuju "pritomnost." Tieto frekvencie su pri 5G vysielacoch.<br><br><i style="color:#2a5a2a;">// ak ich vidas: nehyb sa. spomal dych. //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Globalne</b></span><span class="stat">FORMA <b>2D tien, bez hmoty</b></span><span class="stat">HROZBA <b>Paralysza, trauma</b></span></div></div></div></div>
+
+<!-- KRAKEN -->
+<div class="entry" data-cat="more">
+<div class="entry-header"><span class="entry-name">Kraken</span><span class="entry-latin">Architeuthis Colossus Verus</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="26" rx="12" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/><ellipse cx="29" cy="23" rx="2" ry="2.5" fill="none" stroke="#00ff00" stroke-width="0.8"/><ellipse cx="35" cy="23" rx="2" ry="2.5" fill="none" stroke="#00ff00" stroke-width="0.8"/><path d="M22,34 Q14,40 8,52 Q10,46 6,60" fill="none" stroke="#00ff00" stroke-width="1.2"/><path d="M26,36 Q20,44 16,58" fill="none" stroke="#00ff00" stroke-width="1.1"/><path d="M30,38 Q28,48 24,62" fill="none" stroke="#00ff00" stroke-width="1"/><path d="M34,38 Q36,48 40,62" fill="none" stroke="#00ff00" stroke-width="1"/><path d="M38,36 Q44,44 48,58" fill="none" stroke="#00ff00" stroke-width="1.1"/><path d="M42,34 Q50,40 56,52 Q54,46 58,60" fill="none" stroke="#00ff00" stroke-width="1.2"/></svg></div>
+<div class="entry-text">13. storocie Norsko: ostrov ktory sa potapal. Prvy vedecky potvrdeny exemplar: 1857. Prva fotografia ziveho: 2004 -- 147 rokov "mytologicka bytost." US Navy sonary: pohyby objektov >20m v Tichom oceane. Zaznamy klasifikovane. Preskumane morske dno: <b>20%</b>. Zvysok: neznamy.<br><br><i style="color:#2a5a2a;">// Navy zaznam XB-119, Tichy ocean, 2009 -- pristup: stupen 5 //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Vsetky oceany, 500m+</b></span><span class="stat">VELKOST <b>odhadovana 60-200m</b></span><span class="stat">HROZBA <b>Potopenie lode</b></span></div></div></div></div>
+
+<!-- BAZILISEK -->
+<div class="entry" data-cat="stredovek">
+<div class="entry-header"><span class="entry-name">Bazilisek</span><span class="entry-latin">Rex Serpentium Gaze Mortis</span><span class="tl tl-high">VYSOKA</span></div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M8,56 Q16,40 24,36 Q32,32 36,24 Q40,16 48,14 Q56,12 60,18" fill="none" stroke="#00ff00" stroke-width="1.5"/><path d="M56,10 L52,4 L56,8 L60,4 L58,8 L62,6 L60,12" fill="none" stroke="#00ff00" stroke-width="1"/><ellipse cx="58" cy="18" rx="5" ry="4" fill="none" stroke="#00ff00" stroke-width="1.2"/><circle cx="60" cy="16" r="1.5" fill="#ff4444" stroke="#ff4444" stroke-width="0.5"/><path d="M61,15 L64,12 M62,14 L66,12 M62,16 L66,14" stroke="#ff4444" stroke-width="0.6" fill="none"/><text x="2" y="62" font-size="6" fill="#00ff00" opacity="0.6" font-family="serif">†</text><text x="12" y="60" font-size="5" fill="#00ff00" opacity="0.4" font-family="serif">†</text></svg></div>
+<div class="entry-text">Plinius Starsí, 77 n.l.: "Kral hadov -- jeho pohlad zabija." Praha 1210: mestska kronika, autenticita overena historikmi. MITI institut Japonsko (1987): biologicky emitovane UV ziarenie, neznama plaziva bytost, Indonézia. Dokumenty ciastocne odtajnene 2019. Sprave stredovekych mastrov: zrkadlo ako obrana.<br><br><i style="color:#2a5a2a;">// zrkadlo v kazdom dome -- preco myslite? //</i>
+<div class="entry-stats"><span class="stat">VYSKYT <b>Stredomer, Indonézia</b></span><span class="stat">HROZBA <b>Smrtiaci pohlad</b></span><span class="stat">ZDROJ <b>Plinius, MITI 1987</b></span></div></div></div></div>
+
+</td>
+</tr>
+</table>
+
+<div class="nekron-bar" style="width:780px;"></div>
+
+<table width="780" height="26" cellpadding="4" cellspacing="0">
+<tr><td class="footer" valign="top">
+<center>
+Layout: <a target="_blank" href="https://itinerae.neocities.org/">Itinerae.</a> //
+Fonts: "Orbitron" "Goldman" from Google Fonts. //
+[REDACTED], PHD // WAKE UP SHEEPLE // EST. 2003
+</center>
+</td></tr>
+</table>
+
+</center>
+</body>
+</HTML>
