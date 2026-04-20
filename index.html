@@ -199,6 +199,15 @@ img{border:0}
 #vcounter{font-family:'Courier New',monospace;font-size:9px;color:#ff4444;animation:blink 2s step-end infinite}
 
 /* Zvukovy banner     Opravit */
+.sound-banner{position:relative;cursor:pointer;overflow:hidden;display:block;margin-bottom:6px;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a}
+.sound-banner img{display:block;width:100%;height:auto;opacity:0.8;filter:sepia(0.1) hue-rotate(80deg) saturate(1.2);transition:opacity 0.2s,filter 0.2s}
+.sound-banner:hover img{opacity:1;filter:none}
+.sound-banner-label{background:rgba(0,5,0,0.88);font-family:'Orbitron',monospace;font-size:7px;color:#458c3a;letter-spacing:2px;text-transform:uppercase;padding:3px 5px;border-top:1px dotted #0d2e0d;display:flex;justify-content:space-between;align-items:center}
+.sound-banner .play-ind{color:#00FF00;font-size:8px;animation:blink 1.4s step-end infinite;display:none}
+.sound-banner.playing .play-ind{display:inline}
+.sound-banner.playing img{opacity:1;filter:brightness(1.15) saturate(2)}
+.sound-banner-overlay{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-family:'Orbitron',monospace;font-size:22px;color:#00FF00;text-shadow:0 0 12px #00ff00;opacity:0;transition:opacity 0.15s;pointer-events:none}
+.sound-banner:hover .sound-banner-overlay{opacity:1}
 
 
 
@@ -348,199 +357,72 @@ function bannerPlay(id) {
         
         
         
+        //Clipppy !!!!!!!!!        
+        
+        
+        
+        <script type="module">
+      import { initAgent } from "https://cdn.jsdelivr.net/npm/clippyjs/dist/index.mjs";
+      import * as agents from "https://cdn.jsdelivr.net/npm/clippyjs/dist/agents/index.mjs";
+      const agent = await initAgent(agents.Merlin);
+      agent.show();
+      agent.speak("Ahoj Priatelu,! Ja som Merlin, mag a tvoj virtualny asistent. Ako ti dnes pomozem ?");
+      
+    
+      
+      // Play a specific animation
+agent.play("Searching");
 
-<!-- ===== MERLIN ASISTENT ===== -->
-<style>
-#merlin-chat-panel{
-  position:fixed;bottom:20px;right:20px;width:300px;
-  background:rgba(3,13,3,0.97);
-  border-top:1px solid #1a4a1a;border-left:1px solid #1a4a1a;
-  border-right:1px solid #030f03;border-bottom:1px solid #030f03;
-  z-index:10000;font-family:'Goldman','Courier New',monospace;
-  display:none;
-}
-#merlin-chat-title{
-  background:linear-gradient(180deg,#0a2a0a,#051105);
-  padding:3px 8px;font-family:'Orbitron',monospace;font-size:8px;
-  color:#7dc87d;letter-spacing:2px;text-transform:uppercase;
-  display:flex;justify-content:space-between;align-items:center;
-  border-bottom:1px dotted #1a4a1a;
-}
-#merlin-chat-close{cursor:pointer;color:#458c3a;font-size:10px}
-#merlin-chat-close:hover{color:#00FF00}
-#merlin-messages{height:180px;overflow-y:auto;padding:5px 7px;display:flex;flex-direction:column;gap:4px;}
-#merlin-messages::-webkit-scrollbar{width:3px}
-#merlin-messages::-webkit-scrollbar-thumb{background:green}
-.merlin-msg{padding:4px 7px;font-size:9px;line-height:14px;letter-spacing:0.5px;max-width:90%}
-.merlin-msg.user{background:#0a2a0a;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;align-self:flex-end;color:#458c3a;}
-.merlin-msg.bot{background:#020902;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;align-self:flex-start;color:#7dc87d;}
-#merlin-quick{display:flex;flex-wrap:wrap;gap:3px;padding:4px 7px;border-top:1px dotted #0d2e0d}
-.merlin-qbtn{padding:2px 6px;background:transparent;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;color:#2a5a2a;font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;}
-.merlin-qbtn:hover{color:#00FF00;background:#020902}
-#merlin-input-row{display:flex;gap:3px;padding:5px 7px;border-top:1px dotted #0d2e0d}
-#merlin-input{flex:1;padding:3px 6px;background:#000;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;color:#7dc87d;font-family:'Goldman',monospace;font-size:9px;outline:none;letter-spacing:1px;}
-#merlin-input:focus{border-color:#1a4a1a}
-#merlin-send{padding:3px 8px;background:#0a1e0a;border-top:1px solid #1a4a1a;border-left:1px solid #1a4a1a;border-right:1px solid #030f03;border-bottom:1px solid #030f03;color:#7dc87d;font-family:'Orbitron',monospace;font-size:7px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;}
-#merlin-send:hover{color:#00FF00}
-#merlin-api-setup{padding:5px 7px;border-top:1px dotted #0d2e0d;font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;letter-spacing:1px;}
-#merlin-api-input{width:100%;padding:2px 5px;background:#000;margin:3px 0;border-top:1px solid #030f03;border-left:1px solid #030f03;border-right:1px solid #1a4a1a;border-bottom:1px solid #1a4a1a;color:#7dc87d;font-family:'Goldman',monospace;font-size:8px;outline:none;box-sizing:border-box;}
-#merlin-api-save{padding:2px 7px;background:#0a1e0a;border-top:1px solid #1a4a1a;border-left:1px solid #1a4a1a;border-right:1px solid #030f03;border-bottom:1px solid #030f03;color:#7dc87d;font-family:'Orbitron',monospace;font-size:7px;cursor:pointer;letter-spacing:1px;}
-#merlin-api-save:hover{color:#00FF00}
-#merlin-api-status{color:#458c3a;font-size:7px;margin-top:2px}
-</style>
+// Play a random animation
+agent.animate();
 
-<div id="merlin-chat-panel">
-  <div id="merlin-chat-title">
-    <span>// MERLIN // MAGICKY ASISTENT //</span>
-    <span id="merlin-chat-close" onclick="merlinToggleChat()">[X]</span>
-  </div>
-  <div id="merlin-messages">
-    <div class="merlin-msg bot">Ahoj priatelu. Som Merlin. Klikni na mna alebo sa opytaj cokoliek.</div>
-  </div>
-  <div id="merlin-quick">
-    <button class="merlin-qbtn" onclick="merlinQuick('Povedz mi vtip')">VTIP</button>
-    <button class="merlin-qbtn" onclick="merlinQuick('Urob kuzlo slovami')">KUZLO</button>
-    <button class="merlin-qbtn" onclick="merlinQuick('Daj mi mudry citat')">CITAT</button>
-    <button class="merlin-qbtn" onclick="merlinQuick('Predpovedz mi buducnost')">VESTBA</button>
-    <button class="merlin-qbtn" onclick="merlinQuick('Co vies o reptilianoch?')">REPTILI</button>
-    <button class="merlin-qbtn" onclick="merlinQuick('Ktore konspiracie su pravdive?')">ZLO</button>
-  </div>
-  <div id="merlin-input-row">
-    <input id="merlin-input" type="text" placeholder="opytaj sa..." onkeydown="if(event.key==='Enter')merlinSend()"/>
-    <button id="merlin-send" onclick="merlinSend()">POSLI</button>
-  </div>
-  <div id="merlin-api-setup">
-    <span>// ANTHROPIC API KLUC //</span><br>
-    <input id="merlin-api-input" type="password" placeholder="sk-ant-..."/>
-    <button id="merlin-api-save" onclick="merlinSaveKey()">ULOZIT</button>
-    <div id="merlin-api-status"></div>
-  </div>
-</div>
+// List all available animations
+agent.animations();
+// => ["MoveLeft", "Congratulate", "Hide", "Pleased", "Acknowledge", ...]
 
-<script>
-var _merlinApiKey = localStorage.getItem('merlin_api_key') || '';
-var _merlinBusy = false;
+// Show a speech balloon
+agent.speak("When all else fails, bind some paper together. My name is Clippy.");
 
-window.addEventListener('load', function(){
-  if(_merlinApiKey){ var s=document.getElementById('merlin-api-status'); if(s) s.textContent='// KLUC ULOZENY //'; }
-});
+// Speak with text-to-speech (uses Web Speech API)
+agent.speak("Hello! I'm here to help.", { tts: true });
 
-function merlinSaveKey(){
-  var val=document.getElementById('merlin-api-input').value.trim();
-  if(!val.startsWith('sk-')){ document.getElementById('merlin-api-status').textContent='// NEPLATNY KLUC //'; return; }
-  _merlinApiKey=val;
-  localStorage.setItem('merlin_api_key',val);
-  document.getElementById('merlin-api-status').textContent='// ULOZENE // PRISTUP POVOLENY //';
-}
+// Keep the balloon open until manually closed
+agent.speak("Read this carefully.", { hold: true });
 
-function merlinToggleChat(forceOpen){
-  var panel=document.getElementById('merlin-chat-panel');
-  if(!panel) return;
-  if(forceOpen===true){ panel.style.display='block'; }
-  else { panel.style.display=(panel.style.display==='none'||panel.style.display==='')?'block':'none'; }
-}
+// Move to a given point, using animation if available
+agent.moveTo(100, 100);
 
-function merlinAddMsg(text,role){
-  var msgs=document.getElementById('merlin-messages');
-  var div=document.createElement('div');
-  div.className='merlin-msg '+role;
-  div.textContent=text;
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
-  return div;
-}
+// Gesture at a given point (if a gesture animation is available)
+agent.gestureAt(200, 200);
 
-function merlinQuick(q){ document.getElementById('merlin-input').value=q; merlinSend(); }
+// Stream text into the speech balloon from an async iterable (e.g. LLM response)
+await agent.speakStream(asyncIterableOfChunks);
+await agent.speakStream(asyncIterableOfChunks, { tts: true });
 
-function merlinSend(){
-  var input=document.getElementById('merlin-input');
-  var text=input.value.trim();
-  if(!text) return;
-  input.value='';
-  merlinAddMsg(text,'user');
-  if(!_merlinApiKey){
-    merlinAddMsg('// CHYBA: Zadaj Anthropic API kluc do policka nizsie //','bot');
-    if(window._merlinAgent) window._merlinAgent.speak('Nemam API kluc!');
-    return;
-  }
-  var thinking=merlinAddMsg('// MERLIN PREMYSLA... //','bot');
-  if(window._merlinAgent && !_merlinBusy){ _merlinBusy=true; window._merlinAgent.play('Searching'); }
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':_merlinApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:300,
-      system:'Si Merlin, magicky carodejnik asistent na stranke CEO Zla -- paranoidnej slovenskej osobnej stranke o konspiraciach, reptilianoch, NWO. Hovoris po slovensky BEZ diakritiky. Odpovede su kratke (2-3 vety), mysticke, paranoidne a vtipne. Spominas: Prievidza, Bojnice, chemtraily, reptiliani, NWO, Cigelsky pes, Lazarus protokol.',
-      messages:[{role:'user',content:text}]
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if(data.error){ thinking.textContent='// CHYBA: '+data.error.message+' //'; _merlinBusy=false; return; }
-    var reply=(data.content&&data.content[0]&&data.content[0].text)?data.content[0].text:'// KUZLO ZLYHALO... SKUS ZNOVA //';
-    thinking.textContent=reply;
-    if(window._merlinAgent){
-      var short=reply.length>180?reply.substring(0,177)+'...':reply;
-      window._merlinAgent.speak(short);
-      setTimeout(function(){ _merlinBusy=false; },short.length*45+1500);
-    } else { _merlinBusy=false; }
-  })
-  .catch(function(){ thinking.textContent='// SPOJENIE PRERUSENE. DEEPSTATE BLOKUJE SIGNAL. //'; _merlinBusy=false; });
-}
-</script>
+// Stop the current action in the queue
+agent.stopCurrent();
 
-<script type="module">
-import { initAgent } from "https://cdn.jsdelivr.net/npm/clippyjs/dist/index.mjs";
-import * as agents from "https://cdn.jsdelivr.net/npm/clippyjs/dist/agents/index.mjs";
+// Stop all actions and return to idle
+agent.stop();
 
-const agent = await initAgent(agents.Merlin);
-agent.show();
-agent.moveTo(window.innerWidth - 130, window.innerHeight - 280);
-window._merlinAgent = agent;
+// Hide the agent
+agent.hide();
 
-setTimeout(function(){
-  agent.play("Wave");
-  setTimeout(function(){ agent.speak("Ahoj priatelu! Klikni na mna pre chat."); }, 600);
-}, 800);
+// Pause and resume animations
+agent.pause();
+agent.resume();
 
-agent.el.addEventListener("click", function(){
-  var msgs=[
-    "Co ta trapi, priatelu?",
-    "Moje kuzla su k tvojim sluzbam!",
-    "Citim reptilianske vlny v oblasti Bojnic...",
-    "Opytaj sa ma cokoliek!",
-    "Moj krystal hovori ze mas otazku...",
-    "NWO sleduje kazdy tvoj krok. Ja ta chranim.",
-    "Chemtraily nad Prievidzou su dnes silne. Nechod von.",
-    "Cigelsky pes bol videny znova pri rybnikoch. Bud opatrny.",
-    "Reptiliani maju schadzku v Bojnickom zamku. Uz viem o tom.",
-    "Protokol Lazarus bol aktivovany. Cosi sa chysta.",
-    "Vedci z bunkra pod Brezianskym polom ma kontaktovali. Mam nove informacie.",
-    "5G signaly z Vendeline su dnes anomalne. Citis to?",
-    "Druid Frantisek mi poslal varovanie. Entovia su nepokojni.",
-    "Deepstate ma sleduje. Ale mna nemozu zastavit.",
-    "Zacharko mi pisal. Veci sa davaju do pohybu."
-  ];
-  var anims=["Wave","Acknowledge","Pleased","Alert","LookRight","Congratulate"];
-  var msg=msgs[Math.floor(Math.random()*msgs.length)];
-  var anim=anims[Math.floor(Math.random()*anims.length)];
-  agent.play(anim);
-  setTimeout(function(){ agent.speak(msg); },400);
-  window.merlinToggleChat(true);
-});
+// Remove the agent from the DOM
+agent.dispose();
 
-var lastGesture=0;
-document.addEventListener("mousemove",function(e){
-  var now=Date.now();
-  if(now-lastGesture>4000){ lastGesture=now; agent.gestureAt(e.clientX,e.clientY); }
-});
+agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
 
-var idleAnims=["LookRight","LookLeft","Blink","LookUp","LookDownRight"];
-setInterval(function(){
-  if(!window._merlinBusy){ agent.play(idleAnims[Math.floor(Math.random()*idleAnims.length)]); }
-},12000);
-</script>
+
+      
+      
+      
+      
+    </script>
         
         
         
@@ -582,15 +464,10 @@ setInterval(function(){
                 <dl>
                   <dt><b><u><a href="index.html" class="active-page">Hlavna
                           stranka</a> <a href="omne.html">O mne</a> <span style="color: #7dc87d;"><span
-                          <a href="tajne-archivy.html">Archiv</a>
 
-                        <td style="width: 100px; height: 32px; text-align: center;">
-  <a href="https://zacharko.github.io/CEO-od-Evil/tajny-archiv.html" 
-     target="_blank" 
-     style="font-family: 'Orbitron', sans-serif; font-weight: 700; color: #ff0000; text-decoration: none;">
-     ZAKÁZANÝ ARCHÍV
-  </a>
-</td>
+                            style="font-family: &quot;Orbitron&quot;,monospace;">ZAKAZANY
+                            !!! ARCHIV</span></span> <span style="color: #7dc87d;"><span
+
                             style="font-family: &quot;Orbitron&quot;,monospace;">Obrazky</span></span>
                         <a href="teorie.html">Bestiar&nbsp;</a> <a href="kontakt.html">Kontakt
                           na N.W.O.</a> <a href="komentare.html">komentare
@@ -705,12 +582,12 @@ setInterval(function(){
                 <span style="color:#550000">prievidza-underground // <span class="r">████████</span></span>
               </div>
               <div class="title">006. svedkovia</div>
-              <div class="box"> <img src="./public/images/alien.png" class="side-img" alt="Gray alien"
+              <div class="box"> <img src="alien.png" class="side-img" alt="Gray alien"
 
                   onclick="openLightbox(7)"> <small style="color:#2a4a2a;font-size:9px;">fotodokumentacia
                   -- gray alien</small><br>
                 <br>
-                <img src="./public/images/jezis.png" class="side-img" alt="Jezis" onclick="openLightbox(8)">
+                <img src="jezis.png" class="side-img" alt="Jezis" onclick="openLightbox(8)">
                 <small style="color:#2a4a2a;font-size:9px;">vesmirni ludia --
                   kontakt</small><small style="color:#2a4a2a;font-size:9px;"><img
 
@@ -730,7 +607,7 @@ setInterval(function(){
                 Frantisek hlasi na poplach:,,Do kedy to takto este pojde ?
                 Musime mysliet na miestne stromy,, <a href="archivy.html">Spominany
                   je aj v spise #4 o miestnych Entoch</a><br>
-                <div class="obrazky-clanok-wrap"> <img src="./public/images/chemtrail.jpg" alt="chemtrail"
+                <div class="obrazky-clanok-wrap"> <img src="chemtrail.jpg" alt="chemtrail"
 
                     class="obrazky-clanok"> </div>
                 [2] <b>Reptiliani vo vlade a peco je to dobra vec, Vedecka
@@ -739,7 +616,7 @@ setInterval(function(){
                 nahradeny jasterimi klonmy ktore nosia ludsku maska vyrobenu z
                 umelo chovanych ludi z inkubatorov. Problem ale je ze z hladiska
                 strukturalnej stability masky nemozu mat pupky.
-                <div class="obrazky-clanok-wrap"> <img src="./public/images/reptilian2.jpg" alt="reptilian2">
+                <div class="obrazky-clanok-wrap"> <img src="reptilian2.jpg" alt="reptilian2">
                 </div>
                 <a href="teorie.html">Odkaz na odborny clanoch o jasterych
                   ludoch</a><br>
@@ -753,7 +630,7 @@ setInterval(function(){
                 [4] <b>Zem je Plocha:</b> NASA klame od roku 1958, bolo zistene
                 ze plavame vesmirom na obrovskej korytnacke. Vedecka data o tom
                 hovoria jasne<br>
-                <img class="obrazky-clanok" src="./public/images/turtle.jpg" alt="turtle"> [5] <b>Bojnicka
+                <img class="obrazky-clanok" src="turtle.jpg" alt="turtle"> [5] <b>Bojnicka
                   jaskyna:</b>Rozmrazeny neandrtalec tam zacal po 8000 rokov
                 znova stvarat neplechu. Odporucame sa Bojniciam vyhybat, nie ale
                 preto ze by sme mali problem s Neandrtalcov, Bojnicania su
@@ -847,7 +724,7 @@ setInterval(function(){
                   v krvi. Obyvatelia hlasia: <span class="r">necakana
                     zatazenos, dezorientacia, kratke vypadky pamati</span>.<br>
                   <br>
-                  <img class="obrazky-clanok" src="/public/images/5g.jpg" alt="5g">
+                  <img class="obrazky-clanok" src="5g.jpg" alt="5g">
                   Telekomunikacny urad SR odmietol komentovat. <span class="r">Odpovedal
                     automaticky odpis</span> z roku 2019.
                   <div class="dex-byline"> <span class="dex-tag">5G</span><span
@@ -1154,12 +1031,12 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
                 </center>
               </div>
               <div class="title">005. dokumentacia</div>
-              <div class="box"> <img src="./public/images/astan.png" class="side-img " alt="Astan Seran"
+              <div class="box"> <img src="astan.png" class="side-img " alt="Astan Seran"
 
                   onclick="openLightbox(3)"> <small style="color:#2a4a2a;font-size:9px;">Astan
                   Seran -- nas spasitel</small><br>
                 <br>
-                <img src="./public/images/andele.png" class="side-img" alt="Vesmirni ludia" onclick="openLightbox(4)">
+                <img src="andele.png" class="side-img" alt="Vesmirni ludia" onclick="openLightbox(4)">
                 <small style="color:#2a4a2a;font-size:9px;">vesmirni ludia --
                   poster</small> </div>
               <!-- DOOM -->
@@ -1177,7 +1054,7 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
               <!-- SOUND BANNER: LEGALIZE NUCLEAR BOMBS -->
               <div class="title">007. legalize nuclear</div>
               <div class="sound-banner" id="banner-nuke" onclick="bannerPlay('banner-nuke')">
-                <img src="./public/images/legalize.png" alt="Legalize Nuclear Bombs">
+                <img src="legalize.png" alt="Legalize Nuclear Bombs">
                 <div class="sound-banner-overlay">▶</div>
                 <div class="sound-banner-label"> <span>// LEGALIZE NUCLEAR
                     BOMBS //</span><span></span><img id="play-button" src="https://transparentpng.com"
@@ -1215,7 +1092,7 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
   var hIdx = 0;
   var handEl = document.createElement('img');
   handEl.id = 'alien-hand-deco';
-  handEl.style.cssText = 'position:fixed;bottom:0;left:0;width:96px;height:96px;z-index:9990;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 8px #00ff00) drop-shadow(0 0 20px rgba(0,255,0,0.5));opacity:0.85';
+  handEl.style.cssText = 'position:fixed;bottom:0;left:0;width:192px;height:192px;z-index:9990;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 8px #00ff00) drop-shadow(0 0 20px rgba(0,255,0,0.5));opacity:0.85';
   document.body.appendChild(handEl);
   function updateHand(){
     handEl.src = 'data:image/png;base64,' + handFrames[hIdx % handFrames.length];
@@ -1229,7 +1106,7 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
   gbWrap.href = 'https://ceo-of-evil.atabook.org/';
   gbWrap.target = '_blank';
   gbWrap.title = 'SIGN MY GUESTBOOK';
-  gbWrap.style.cssText = 'position:fixed;bottom:100px;left:8px;z-index:9991;display:block;opacity:0.92;transition:opacity 0.2s';
+  gbWrap.style.cssText = 'position:fixed;bottom:196px;left:8px;z-index:9991;display:block;opacity:0.92;transition:opacity 0.2s';
   gbWrap.onmouseover = function(){ this.style.opacity='1'; };
   gbWrap.onmouseout  = function(){ this.style.opacity='0.92'; };
   var gbImg = document.createElement('img');
