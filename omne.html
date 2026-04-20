@@ -1,928 +1,137 @@
-<!DOCTYPE html>
-<html lang="sk">
+<HTML>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>O MNE :: CEO ZLA :: doc. Ing. ZACHARKA, PHD</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
-
-/* ══════════════════════════════════════
-   RESET & TOKENS
-══════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --g:   #00ff41;
-  --g2:  #00cc33;
-  --g3:  #006622;
-  --g4:  #001a00;
-  --r:   #ff0033;
-  --y:   #cccc00;
-  --bdr: #0d300d;
-  --bgp: #020802;
-  --mono: 'Share Tech Mono', 'Courier New', monospace;
-  --vt:   'VT323', 'Courier New', monospace;
-}
-
-/* ══════════════════════════════════════
-   BASE
-══════════════════════════════════════ */
-html, body { background: #000; }
-
-body {
-  color: var(--g);
-  font-family: var(--mono);
-  font-size: 14px;
-  line-height: 1.65;
-  cursor: crosshair;
-  overflow-x: hidden;
-}
-
-/* CRT scanline overlay */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background: repeating-linear-gradient(
-    0deg, transparent 0, transparent 3px,
-    rgba(0,0,0,0.10) 3px, rgba(0,0,0,0.10) 4px
-  );
-  pointer-events: none;
-  z-index: 9000;
-}
-
-a { color: var(--g2); text-decoration: none; border-bottom: 1px dotted var(--g3); }
-a:hover { color: var(--y); border-color: var(--y); text-shadow: 0 0 6px var(--y); }
-
-/* ══════════════════════════════════════
-   BACKGROUND LAYERS
-══════════════════════════════════════ */
-#cv-matrix, #cv-stars {
-  position: fixed; inset: 0;
-  pointer-events: none;
-}
-#cv-matrix { z-index: 0; opacity: .055; }
-#cv-stars  { z-index: 1; opacity: .45; }
-
-/* ══════════════════════════════════════
-   PAGE SHELL
-══════════════════════════════════════ */
-.page {
-  position: relative;
-  z-index: 10;
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 14px 40px;
-}
-
-/* ══════════════════════════════════════
-   TICKER
-══════════════════════════════════════ */
-.ticker {
-  background: var(--r);
-  color: #000;
-  font-family: var(--mono);
-  font-size: .78em;
-  font-weight: bold;
-  letter-spacing: 2px;
-  overflow: hidden;
-  padding: 4px 0;
-  position: sticky; top: 0;
-  z-index: 800;
-  white-space: nowrap;
-}
-.ticker__run {
-  display: inline-block;
-  animation: tick 35s linear infinite;
-}
-@keyframes tick { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
-
-/* ══════════════════════════════════════
-   SITE HEADER
-══════════════════════════════════════ */
-.hdr {
-  border: 1px solid var(--bdr);
-  border-top: 4px solid var(--g3);
-  background: var(--bgp);
-  text-align: center;
-  padding: 22px 20px 16px;
-  margin-top: 14px;
-  position: relative;
-  overflow: hidden;
-}
-/* sweeping highlight */
-.hdr::before {
-  content: '';
-  position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0,255,65,.04), transparent);
-  animation: hdr-sweep 7s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes hdr-sweep { from{left:-120%} to{left:220%} }
-
-.hdr__eye {
-  font-size: .7em; color: var(--g3); letter-spacing: 3px; margin-bottom: 6px;
-}
-.hdr__title {
-  font-family: var(--vt);
-  font-size: 3.4em;
-  letter-spacing: 7px;
-  color: var(--g);
-  text-shadow: 0 0 8px var(--g), 0 0 28px rgba(0,255,65,.3);
-  line-height: 1;
-  animation: flicker 8s infinite;
-}
-@keyframes flicker {
-  0%,90%,100%{opacity:1} 91%{opacity:.25} 92%{opacity:1} 95%{opacity:.1} 96%{opacity:1}
-}
-.hdr__sub {
-  font-size: .76em; color: var(--r); letter-spacing: 3px; margin-top: 8px;
-  text-shadow: 0 0 5px var(--r);
-}
-
-/* ══════════════════════════════════════
-   NAV
-══════════════════════════════════════ */
-.nav {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  border: 1px solid var(--bdr);
-  border-top: none;
-  background: #010901;
-  margin-bottom: 18px;
-}
-.nav a {
-  display: inline-block;
-  padding: 7px 16px;
-  font-size: .82em;
-  letter-spacing: 2px;
-  color: var(--g3);
-  border-right: 1px solid var(--bdr);
-  border-bottom: none;
-  transition: background .15s, color .15s;
-}
-.nav a:last-child { border-right: none; }
-.nav a:hover, .nav a[aria-current] {
-  background: rgba(0,255,65,.07);
-  color: var(--g);
-  text-shadow: 0 0 5px var(--g);
-  border-bottom: none;
-}
-
-/* ══════════════════════════════════════
-   UFO FLYOVER STRIP
-══════════════════════════════════════ */
-.ufo-strip {
-  height: 60px;
-  border: 1px solid #0a1a0a;
-  background: #010601;
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 18px;
-}
-.ufo-strip__label {
-  position: absolute; bottom: 5px; left: 8px;
-  font-size: .62em; color: #1a3a1a; letter-spacing: 2px;
-}
-.ufo-emoji {
-  position: absolute; top: 11px;
-  font-size: 1.3em;
-  filter: drop-shadow(0 0 5px var(--g));
-  animation: ufo 12s linear infinite;
-}
-.ufo-beam {
-  position: absolute; top: 30px;
-  width: 26px; height: 30px;
-  background: linear-gradient(180deg, rgba(0,255,65,.28) 0%, transparent 100%);
-  clip-path: polygon(22% 0%, 78% 0%, 100% 100%, 0% 100%);
-  animation: ufo 12s linear infinite;
-}
-@keyframes ufo { from{left:-80px} to{left:calc(100% + 80px)} }
-
-/* ══════════════════════════════════════
-   2-COL LAYOUT
-══════════════════════════════════════ */
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 228px;
-  gap: 16px;
-  align-items: start;
-}
-@media(max-width:660px){
-  .layout { grid-template-columns: 1fr; }
-  .layout > aside { order: -1; }
-}
-
-/* ══════════════════════════════════════
-   PANEL — core component
-══════════════════════════════════════ */
-.panel {
-  border: 1px solid var(--bdr);
-  background: var(--bgp);
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.panel--r { border-color: #3a0d0d; }
-
-/* top-edge sweep */
-.panel::before {
-  content: '';
-  position: absolute; top: 0; left: -100%; right: -100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--g), transparent);
-  animation: p-scan 6s ease-in-out infinite;
-  opacity: .4;
-}
-@keyframes p-scan {
-  0%,100%{ left:-100%; opacity:.2 }
-  50%    { left: 100%; opacity:.9 }
-}
-
-.panel__hd {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #010d01;
-  border-bottom: 1px solid var(--bdr);
-  padding: 6px 13px;
-}
-.panel__ico  { color: var(--r); font-size: .88em; flex-shrink: 0; }
-.panel__name {
-  font-family: var(--vt);
-  font-size: 1.42em;
-  color: var(--g);
-  letter-spacing: 3px;
-  text-shadow: 0 0 4px rgba(0,255,65,.35);
-  flex: 1;
-}
-.panel__badge {
-  font-size: .63em;
-  color: var(--r);
-  border: 1px solid var(--r);
-  padding: 1px 5px;
-  letter-spacing: 1px;
-  text-shadow: 0 0 4px var(--r);
-  animation: bdg 2.2s ease-in-out infinite;
-  white-space: nowrap;
-}
-@keyframes bdg { 0%,100%{opacity:.65} 50%{opacity:1} }
-
-.panel__bd {
-  padding: 14px;
-}
-.panel__bd p {
-  color: #99cc99;
-  font-size: .87em;
-  line-height: 1.8;
-  margin-bottom: 10px;
-}
-.panel__bd p:last-child { margin-bottom: 0; }
-
-/* ══════════════════════════════════════
-   REDACTED
-══════════════════════════════════════ */
-.rx {
-  background: #000;
-  color: #000;
-  border-bottom: 1px solid #2a2a2a;
-  padding: 0 3px;
-  cursor: not-allowed;
-  user-select: none;
-}
-.rx:hover { color: var(--r); }
-
-/* ══════════════════════════════════════
-   STAMP
-══════════════════════════════════════ */
-.stamp {
-  display: inline-block;
-  font-family: var(--vt);
-  font-size: 1.7em;
-  color: var(--r);
-  border: 3px solid var(--r);
-  padding: 2px 12px;
-  letter-spacing: 4px;
-  transform: rotate(-7deg);
-  text-shadow: 0 0 7px var(--r);
-  box-shadow: 0 0 10px rgba(255,0,51,.25), inset 0 0 6px rgba(255,0,51,.08);
-  animation: st-glow 2.5s ease-in-out infinite;
-}
-@keyframes st-glow {
-  0%,100%{ box-shadow:0 0 8px rgba(255,0,51,.2),inset 0 0 5px rgba(255,0,51,.06); }
-  50%    { box-shadow:0 0 20px rgba(255,0,51,.5),inset 0 0 12px rgba(255,0,51,.15); }
-}
-
-/* ══════════════════════════════════════
-   QUOTE
-══════════════════════════════════════ */
-.qb {
-  border-left: 3px solid var(--r);
-  padding: 9px 13px;
-  margin: 12px 0;
-  background: rgba(255,0,51,.03);
-  font-style: italic;
-  color: #ff8888;
-  font-size: .85em;
-  line-height: 1.75;
-}
-.qb cite {
-  display: block;
-  font-style: normal;
-  color: var(--r);
-  font-size: .8em;
-  margin-top: 5px;
-  text-align: right;
-}
-
-/* ══════════════════════════════════════
-   EVIDENCE LIST
-══════════════════════════════════════ */
-.evl { list-style: none; }
-.evl li {
-  position: relative;
-  padding: 5px 0 5px 18px;
-  border-bottom: 1px dotted #0a200a;
-  color: #99cc99;
-  font-size: .83em;
-  line-height: 1.5;
-}
-.evl li:last-child { border-bottom: none; }
-.evl li::before { content:'▸'; position:absolute; left:0; color:var(--r); }
-.evl li:hover { background: rgba(0,255,65,.02); }
-
-/* ══════════════════════════════════════
-   TIMELINE
-══════════════════════════════════════ */
-.tl { position: relative; padding-left: 22px; }
-.tl::before {
-  content:''; position:absolute;
-  left:4px; top:8px; bottom:8px;
-  width:1px; background: var(--bdr);
-}
-.tl-row { position:relative; margin-bottom:13px; }
-.tl-row::before {
-  content:''; position:absolute;
-  left:-22px; top:4px;
-  width:9px; height:9px;
-  border-radius:50%;
-  background:var(--g);
-  box-shadow: 0 0 5px var(--g);
-  animation: tl-dot 2s ease-in-out infinite;
-}
-@keyframes tl-dot {
-  0%,100%{box-shadow:0 0 3px var(--g)} 50%{box-shadow:0 0 9px var(--g)}
-}
-.tl-yr  { font-size:.72em; color:var(--r); letter-spacing:2px; margin-bottom:2px; }
-.tl-txt { font-size:.82em; color:#99cc99; line-height:1.55; }
-
-/* ══════════════════════════════════════
-   STAT BARS
-══════════════════════════════════════ */
-.srow { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:.78em; }
-.srow__lbl { flex:0 0 100px; color:var(--g3); letter-spacing:1px; text-transform:uppercase; font-size:.88em; }
-.srow__trk { flex:1; height:7px; background:#050f05; border:1px solid var(--bdr); }
-.srow__fill{ height:100%; background:var(--g); box-shadow:0 0 4px var(--g); animation:bar 3s ease-in-out infinite; }
-.srow__fill--r { background:var(--r); box-shadow:0 0 4px var(--r); }
-.srow__fill--y { background:var(--y); box-shadow:0 0 4px var(--y); }
-.srow__fill--c { background:#00ffff; box-shadow:0 0 4px #00ffff; }
-@keyframes bar { 0%,100%{opacity:.75} 50%{opacity:1} }
-
-/* ══════════════════════════════════════
-   STATUS DOTS
-══════════════════════════════════════ */
-.srow-s { display:flex; align-items:center; gap:7px; margin-bottom:5px; font-size:.78em; color:#668866; }
-.dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-.dot-g { background:var(--g);  box-shadow:0 0 5px var(--g);  animation:d 1.4s step-start infinite; }
-.dot-r { background:var(--r);  box-shadow:0 0 5px var(--r);  animation:d 0.9s step-start infinite; animation-delay:.2s; }
-.dot-y { background:var(--y);  box-shadow:0 0 5px var(--y);  animation:d 1.8s step-start infinite; animation-delay:.6s; }
-@keyframes d { 0%,100%{opacity:1} 50%{opacity:.1} }
-
-/* ══════════════════════════════════════
-   DATA READOUT
-══════════════════════════════════════ */
-.dread { font-size:.78em; line-height:2; color:#336633; letter-spacing:1px; }
-.dread .v  { color:var(--g); }
-.dread .vr { color:var(--r); }
-.dread .vy { color:var(--y); }
-
-/* ══════════════════════════════════════
-   BLINK
-══════════════════════════════════════ */
-.blink { animation: bl 1s step-start infinite; }
-@keyframes bl { 0%,100%{opacity:1} 50%{opacity:0} }
-
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
-.footer {
-  border-top: 1px solid var(--bdr);
-  padding: 12px 0;
-  margin-top: 8px;
-  text-align: center;
-  font-size: .72em;
-  color: var(--g3);
-  letter-spacing: 2px;
-}
-.footer .live { margin-top:4px; color:#1a3a1a; }
-.footer .live span { color:var(--g); }
+<title>CEO Zla | O mne</title>
+<link rel="shortcut icon" href="https://files.catbox.moe/m5tyiv.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+<style type="text/css">
+body { background:#0C1912 url(https://files.catbox.moe/7zggqg.webp);}
+table { font-family:"Goldman", courier new; font-size:11px; line-height:13px; letter-spacing: 1px; color:#458c3a;}
+b {color:#00FF00;font-weight:normal;}
+a:link, a:visited, a:active { color:green;text-decoration:none;}
+a:hover {color:#00FF00;}
+img {border:0;}
+::-webkit-scrollbar-thumb { background-color: green; border-radius: 3px;}
+::-webkit-scrollbar { width: 5px; height: 0px; background: transparent;}
+.title { display:inline-block; background:#051105; color:green; font-family:'orbitron'; font-size:10px; text-transform:uppercase; line-height:10px; letter-spacing:3px; border-top-left-radius:3px;border-top-right-radius:3px; border:1px solid #113711; border-bottom:1px dotted green; padding:4px;}
+.navigation a { display:inline-block; padding-left:10px; padding-right:10px; font:9px 'orbitron'; text-transform:uppercase; font-weight:bold; line-height:12px; color:green;}
+.navigation a:hover { color:#00FF00;}
+.active-page { color:#00FF00 !important; border-bottom:1px solid #00FF00; }
+.sitename {background:#111;width:90%;font-family:'orbitron';font-size:30px;letter-spacing:10px;color:green;line-height:20px;border-radius:15px;}
+.top {background: #000; border: 1px solid #123E12;border-bottom: 0px;border-top-left-radius:15px;border-top-right-radius:15px;}
+.navigation {background:#0B250B;border-bottom: 1px dotted #123E12;}
+.left {background: #000; border-right: 1px dotted #123E12;border-left: 1px solid #123E12;}
+.middle {background: #000;border-right:1px dotted #113711;}
+.right {background: #000;border-right: 1px solid #113711;}
+.footer {background: #000; border: 1px solid #123E12; border-top: 1px dotted #123E12;line-height:30px;}
+.box {background:#051105;border:1px solid #113711;border-top:2px solid #111;border-radius:3px; border-top-left-radius:0px;padding:4px;padding-left:8px;padding-top:8px;margin-bottom:8px;}
+.page-title {font-family:'orbitron';font-size:18px;color:#00FF00;letter-spacing:4px;text-transform:uppercase;margin-bottom:12px;text-shadow:0 0 8px rgba(0,255,0,0.4);}
+#illuminati-eye {position:fixed;top:10px;left:50%;transform:translateX(-50%);width:54px;opacity:0.55;z-index:100;filter:drop-shadow(0 0 6px #00ff00);animation:eyepulse 3s ease-in-out infinite;pointer-events:none;}
+@keyframes eyepulse{0%,100%{opacity:0.45;filter:drop-shadow(0 0 4px #00ff00);}50%{opacity:0.85;filter:drop-shadow(0 0 14px #00ff00);}}
 </style>
 </head>
 <body>
+<img id="illuminati-eye" src="oko.jpg" alt="oko">
+<br><br><br>
+<center>
 
-<canvas id="cv-matrix"></canvas>
-<canvas id="cv-stars"></canvas>
+<table width="700" cellpadding="8" cellspacing="0">
+<tr><td class="top" height="80">
+<center>
+<div class="sitename">_ CEO ZLA _</div>
+</center>
+</td></tr>
+</table>
 
-<!-- Ticker -->
-<div class="ticker" aria-hidden="true">
-  <span class="ticker__run">
-    ⚠ VAROVANIE: TÁTO STRÁNKA JE SLEDOVANÁ &nbsp;|&nbsp;
-    STUPEŇ OHROZENIA: OMEGA-7 &nbsp;|&nbsp;
-    PRÍSTUP ZAZNAMENANÝ &nbsp;|&nbsp;
-    NEZABUDNITE: VERIA VÁM PRESNE TOĽKO KOĽKO IM DOVOLÍTE &nbsp;|&nbsp;
-    POSIELANIE LINKU JE TRESTNÝ ČIN V 14 KRAJINÁCH &nbsp;|&nbsp;
-    ⚠ VAROVANIE: TÁTO STRÁNKA JE SLEDOVANÁ &nbsp;|&nbsp;
-  </span>
+<table width="700" cellpadding="4" cellspacing="0">
+<tr><td class="navigation" height="20">
+<center>
+<a href="index.html">hlavna</a> |
+<a href="omne.html" class="active-page">o mne</a> |
+<a href="archivy.html">tajne archivy</a> |
+<a href="komiksy.html">komiksy</a> |
+<a href="teorie.html">teorie</a> |
+<a href="https://zacharko.github.io/Stranka/" target="_blank">zacharkova stranka</a>
+</center>
+</td></tr>
+</table>
+
+<table width="700" cellpadding="8" cellspacing="0">
+<tr>
+
+<td class="left" width="220" valign="top">
+<div class="title">identita </div>
+<div class="box">
+Meno: <b>[REDACTED]</b><br><br>
+Titul: <b>doc. Ing. Zacharka, PHD</b><br><br>
+Poloha: <b>Neznama</b><br><br>
+Nebezpecnost: <b>EXTREMNA</b><br><br>
+Stupen utajenia: <b>OMEGA</b>
 </div>
 
-<div class="page">
+<div class="title">status </div>
+<div class="box">
+● <b>Sledovany</b> agentmi<br><br>
+● Vyskum prebieha<br><br>
+● Pravda sa siri
+</div>
+</td>
 
-  <!-- Header -->
-  <header class="hdr">
-    <div class="hdr__eye">// OSOBNÝ SPIS Č. OMN-███-Ω &nbsp;·&nbsp; KLASIFIKÁCIA: PRÍSNE TAJNÉ //</div>
-    <h1 class="hdr__title">[ O&nbsp;MNE ]</h1>
-    <div class="hdr__sub">⬛ doc. Ing. ZACHARKA, PHD &nbsp;·&nbsp; CEO ZLA &nbsp;·&nbsp; PRÍSTUP: ČERVENÁ ÚROVEŇ ⬛</div>
-  </header>
+<td class="middle" width="280" valign="top">
+<div class="page-title">// O MNE //</div>
 
-  <!-- Nav -->
-  <nav class="nav">
-    <a href="index.html">[ HLAVNÁ ]</a>
-    <a href="omne.html" aria-current="page">[ O MNE ]</a>
-    <a href="tajne-archivy.html">[ TAJNÉ ARCHÍVY ]</a>
-  </nav>
+<div class="title">001. kto som </div>
+<div class="box">
+Sem napis nieco o sebe. Kto si, preco si zacal skumat konspiracne teorie, co ta priviedlo k pravde.<br><br>
+Mozes sem dat aj pseudonym alebo prezyvku.
+</div>
 
-  <!-- UFO strip -->
-  <div class="ufo-strip" aria-hidden="true">
-    <div class="ufo-emoji">🛸</div>
-    <div class="ufo-beam"></div>
-    <div class="ufo-strip__label">// MONITOROVANIE VZDUŠNÉHO PRIESTORU :: PROTOKOL OMEGA :: NEIDENTIFIKOVANÝ SIGNÁL DETEKOVANÝ //</div>
-  </div>
+<div class="title">002. moja misia </div>
+<div class="box">
+Tuto stranku som vytvoril aby som odhalil pravdy ktore <b>NECHCU</b> aby si vedel.<br><br>
+Kazdý den sa pozeram na svet inak. Vidim veci ktore ostatni nevidia.<br><br>
+Sem napis svoju "misiu" alebo dovod preco existuje tato stranka.
+</div>
 
-  <!-- 2-col layout -->
-  <div class="layout">
+<div class="title">003. zaujmy </div>
+<div class="box">
+Sem mozes napisat co ta zaujima okrem konspiracii -- hudba, filmy, knihy, hry... co chces.
+</div>
+</td>
 
-    <!-- ╔═══ MAIN ═══╗ -->
-    <main>
+<td class="right" width="200" valign="top">
+<div class="title">oblubene teorie </div>
+<div class="box">
+» Reptiliani<br><br>
+» Plocha zem<br><br>
+» Chemtrails<br><br>
+» Illuminati<br><br>
+» [dopis sem svoje]
+</div>
 
-      <!-- WHO AM I -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">KTO JE CEO ZLA</span>
-          <span class="panel__badge">PRÍSNE TAJNÉ</span>
-        </div>
-        <div class="panel__bd">
-          <span class="stamp">UTAJENÉ</span>
-          <p style="margin-top:14px;">
-            Volám sa <strong style="color:var(--g);">doc. Ing. Zacharka, PHD</strong> —
-            architekt chaosu, teoretik temnoty a jediný živý človek
-            s plným prístupom k Archívu Omega.
-            Moje pôsobisko: neznáme.
-            Moja skutočná identita: <span class="rx">████████████████</span>.
-          </p>
-          <p>
-            Zasvätil som svoj život odhaľovaniu pravdy, ktorú tzv. „vládnuce štruktúry"
-            systematicky mazali z verejného povedomia od roku <span class="rx">████</span>.
-            Nie som terorista. Som <em style="color:var(--g);">odborník na znepríjemňovanie
-            existencie mocným</em>.
-          </p>
-          <div class="qb">
-            „Pravda nie je vec, ktorú nájdeš v novinách.
-            Pravdu nájdeš tam, kde ti zakazujú hľadať."
-            <cite>— doc. Ing. Zacharka, PHD · nepublikované zápisky, vol. XII</cite>
-          </div>
-          <p>
-            Moje akademické tituly boli získané na inštitúcii,
-            ktorá <span class="rx">████████████████████████████</span>
-            a preto ich pravosť nemožno overiť bežnými prostriedkami.
-            Verte mi, alebo neverte — výsledok bude rovnaký.
-          </p>
-        </div>
-      </div>
+<div class="title">kontakt </div>
+<div class="box">
+Nekontaktuj ma.<br><br>
+Ak mas naozaj dovod, vies kde ma najst.<br><br>
+<b>[alebo sem das email]</b>
+</div>
+</td>
 
-      <!-- PORTRAIT -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">VIZUÁLNA DOKUMENTÁCIA</span>
-          <span class="panel__badge">REDAKCIA-9</span>
-        </div>
-        <div class="panel__bd" style="text-align:center; padding-top:10px;">
-          <canvas id="cv-portrait"
-            style="border:1px solid var(--bdr); box-shadow:0 0 18px rgba(0,255,65,.14);"></canvas>
-          <p style="font-size:.7em; color:var(--g3); margin-top:7px; margin-bottom:0;
-                    letter-spacing:2px;">
-            SNÍMKA ████ · FLUORESCENČNÁ ANALÝZA · PROTOKOL Ω-9 · IDENTITA UTAJENÁ
-          </p>
-        </div>
-      </div>
+</tr>
+</table>
 
-      <!-- ABILITIES -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">ZAZNAMENANÉ SCHOPNOSTI</span>
-        </div>
-        <div class="panel__bd">
-          <ul class="evl">
-            <li>Schopnosť detekovať vládnych agentov v rade v supermarkete (95.7 % úspešnosť)</li>
-            <li>Certifikovaný odborník na analýzu chemtrails (samoučenie, 2003 – dodnes)</li>
-            <li>Prečítal som <em>všetky</em> dokumenty MJ-12 — dvakrát, v origináli</li>
-            <li>Ovládam jazyk Šumerov do tej miery, že mi to prináša problémy</li>
-            <li>Schopnosť zostať hore 72 hodín pri sledovaní anomálií v satelitných snímkach</li>
-            <li>Priamy telepatický kontakt s entitami kódom <span class="rx">████</span> (neoverené)</li>
-            <li>Varím výborné muffiny (overené)</li>
-            <li>Vyhrávam každú hádku s ľuďmi, ktorí ma nepoznajú</li>
-            <li>Moja nenávisť k ľudstvu presahuje 387 miliónov míľ tlačených spojov</li>
-          </ul>
-        </div>
-      </div>
+<table width="700" height="30" cellpadding="4" cellspacing="0">
+<tr><td class="footer" valign="top">
+<center>
+Layout: <a target="_blank" href="https://itinerae.neocities.org/">Itinerae.</a> //
+Fonts: "Orbitron" "Goldman" from Google Fonts. //
+doc. Ing. Zacharka, PHD // WAKE UP SHEEPLE
+</center>
+</td></tr>
+</table>
 
-      <!-- TIMELINE -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">CHRONOLÓGIA PREBUDENIA</span>
-        </div>
-        <div class="panel__bd">
-          <div class="tl" id="js-tl"></div>
-        </div>
-      </div>
-
-      <!-- ENEMIES -->
-      <div class="panel panel--r">
-        <div class="panel__hd" style="background:#0d0101; border-bottom-color:#3a0d0d;">
-          <span class="panel__ico" style="color:var(--r);">⚠</span>
-          <span class="panel__name" style="color:var(--r);">EVIDENCIA NEPRIATEĽOV</span>
-          <span class="panel__badge">AKTUALIZOVANÉ: TERAZ</span>
-        </div>
-        <div class="panel__bd">
-          <ul class="evl">
-            <li>Vláda (všetky vlády, bez výnimky, vrátane tej vašej)</li>
-            <li>Médiá hlavného prúdu (kontrolované Bilderbergom od r. 1954)</li>
-            <li>Susedia, ktorí parkujú pred mojimi dverami</li>
-            <li>Entita: <span class="rx" title="hover">REPTILIÁN Č. 7-GAMMA</span></li>
-            <li>Vy — áno, vy, čo čítate toto</li>
-            <li>Tí, čo neodpísali na môj email o UFO z roku 2019</li>
-            <li><span class="rx">████████████████ (STÁLE AKTÍVNI)</span></li>
-          </ul>
-        </div>
-      </div>
-
-    </main>
-
-    <!-- ╔═══ SIDEBAR ═══╗ -->
-    <aside>
-
-      <!-- Profile -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">IDENTITA</span>
-        </div>
-        <div class="panel__bd" style="text-align:center; padding-top:10px;">
-          <canvas id="cv-avatar" width="120" height="120"
-            style="border:2px solid var(--bdr); box-shadow:0 0 12px rgba(0,255,65,.22);"></canvas>
-          <div style="font-family:var(--vt); font-size:1.5em; color:var(--g);
-                      text-shadow:0 0 6px var(--g); margin-top:8px; letter-spacing:3px;">
-            ZACHARKA
-          </div>
-          <div style="font-size:.7em; color:var(--r); letter-spacing:1px; margin-top:3px;">
-            CEO ZLA · DOC. ING. · PHD
-          </div>
-          <div style="margin-top:10px;">
-            <div class="srow-s"><div class="dot dot-g"></div>ONLINE :: AKTÍVNY</div>
-            <div class="srow-s"><div class="dot dot-r"></div>SLEDOVANÝ</div>
-            <div class="srow-s"><div class="dot dot-y"></div>NEBEZPEČNÝ</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">PARAMETRE</span>
-        </div>
-        <div class="panel__bd">
-          <div class="srow">
-            <span class="srow__lbl">Hrozba</span>
-            <div class="srow__trk"><div class="srow__fill" style="width:92%"></div></div>
-          </div>
-          <div class="srow">
-            <span class="srow__lbl">Nenávisť</span>
-            <div class="srow__trk"><div class="srow__fill srow__fill--r" style="width:99%"></div></div>
-          </div>
-          <div class="srow">
-            <span class="srow__lbl">Tajomstvá</span>
-            <div class="srow__trk"><div class="srow__fill srow__fill--y" style="width:86%"></div></div>
-          </div>
-          <div class="srow">
-            <span class="srow__lbl">Muffiny</span>
-            <div class="srow__trk"><div class="srow__fill srow__fill--c" style="width:100%"></div></div>
-          </div>
-          <div class="srow">
-            <span class="srow__lbl">Dôveryhodnosť</span>
-            <div class="srow__trk"><div class="srow__fill" style="width:8%"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Location -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">POLOHA</span>
-        </div>
-        <div class="panel__bd">
-          <div class="dread">
-            LAT: <span class="v">██.████° N</span><br>
-            LON: <span class="v">██.████° E</span><br>
-            ALT: <span class="v">████ m n.m.</span><br>
-            STATUS: <span class="vr blink">NEZNÁMY</span><br>
-            SIEŤ: <span class="v">ŠIFROVANÁ</span><br>
-            IP: <span class="v" id="js-ip">▒▒▒.▒▒▒.▒▒▒.▒▒▒</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Threat gauge -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">STUPEŇ HROZBY</span>
-        </div>
-        <div class="panel__bd" style="text-align:center;">
-          <canvas id="cv-threat" width="200" height="115" style="max-width:100%;"></canvas>
-        </div>
-      </div>
-
-      <!-- Monitoring -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">MONITORUJEM</span>
-        </div>
-        <div class="panel__bd">
-          <div style="font-size:.78em; color:#556655; line-height:2.1;">
-            📡 <span style="color:#99cc99;">Frekvencia: 432 Hz</span><br>
-            🔭 <span style="color:#99cc99;">Objekt: Komet C/2026-X</span><br>
-            📻 <span style="color:#99cc99;">Signál: <span class="blink">████████</span></span><br>
-            🛰 <span style="color:#99cc99;">Prelet: KH-13</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Visitor counter -->
-      <div class="panel">
-        <div class="panel__hd">
-          <span class="panel__ico">◈</span>
-          <span class="panel__name">PRÍSTUPY</span>
-        </div>
-        <div class="panel__bd" style="text-align:center;">
-          <div style="font-family:var(--vt); font-size:2.4em; color:var(--g);
-                      text-shadow:0 0 8px var(--g); margin-bottom:3px;"
-               id="js-vc">██████</div>
-          <div style="font-size:.72em; color:var(--g3); letter-spacing:2px;">CELKOVÉ NÁVŠTEVY</div>
-          <hr style="border:none;border-top:1px dotted var(--bdr);margin:8px 0;">
-          <div class="dread">ČAS: <span class="v" id="js-time">--:--:--</span></div>
-        </div>
-      </div>
-
-    </aside>
-  </div>
-
-  <footer class="footer">
-    <div>© ZACHARKA INC. · VŠETKY PRÁVA VYHRADENÉ · KOPÍROVANIE TRESTANÉ PODĽA KÓDEXU ZLA §47</div>
-    <div class="live">
-      NÁVŠTEVNÍK Č. <span id="js-vc2">██████</span> ·
-      <span id="js-time2">--:--:--</span> ·
-      <span class="blink">▌</span>
-    </div>
-  </footer>
-
-</div><!-- /.page -->
-
-<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
-<script>
-"use strict";
-
-/* MATRIX RAIN */
-!function(){
-  var c=document.getElementById('cv-matrix');
-  var resize=function(){ c.width=window.innerWidth; c.height=window.innerHeight; };
-  resize(); window.addEventListener('resize',resize);
-  var ctx=c.getContext('2d');
-  var CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%ΩΑΒΓΔΘΣΠΛψ█▓▒░';
-  var SZ=14, drops=[];
-  function fill(){ drops=new Array(Math.floor(c.width/SZ)).fill(1); }
-  fill();
-  setInterval(function(){
-    if(drops.length!==Math.floor(c.width/SZ)) fill();
-    ctx.fillStyle='rgba(0,0,0,0.04)';
-    ctx.fillRect(0,0,c.width,c.height);
-    ctx.fillStyle='#00ff41'; ctx.font=SZ+'px monospace';
-    drops.forEach(function(y,i){
-      ctx.fillText(CH[Math.floor(Math.random()*CH.length)],i*SZ,y*SZ);
-      if(y*SZ>c.height&&Math.random()>.975) drops[i]=0;
-      drops[i]++;
-    });
-  },55);
-}();
-
-/* STARS */
-!function(){
-  var c=document.getElementById('cv-stars');
-  function resize(){ c.width=window.innerWidth; c.height=window.innerHeight; }
-  resize(); window.addEventListener('resize',resize);
-  var ctx=c.getContext('2d');
-  var stars=Array.from({length:90},function(){
-    return{x:Math.random()*c.width,y:Math.random()*c.height,
-           r:Math.random()*1.3+.3,o:Math.random(),s:Math.random()*.01+.003};
-  });
-  !function loop(){
-    ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(function(s){
-      s.o+=s.s; if(s.o>1||s.o<0) s.s*=-1;
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,255,65,'+(s.o*.45)+')'; ctx.fill();
-    });
-    requestAnimationFrame(loop);
-  }();
-}();
-
-/* PORTRAIT */
-!function(){
-  var c=document.getElementById('cv-portrait');
-  c.width=320; c.height=220;
-  var ctx=c.getContext('2d'), t=0;
-  !function frame(){
-    ctx.fillStyle='#010901'; ctx.fillRect(0,0,320,220);
-    ctx.strokeStyle='rgba(0,38,0,.45)'; ctx.lineWidth=.5;
-    for(var x=0;x<320;x+=20){ ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,220);ctx.stroke(); }
-    for(var y=0;y<220;y+=20){ ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(320,y);ctx.stroke(); }
-
-    var gx=Math.sin(t*.6)*1.5, gy2=Math.cos(t*.4)*.8;
-
-    /* body glow */
-    var bg=ctx.createRadialGradient(160+gx,148,8,160+gx,148,80);
-    bg.addColorStop(0,'rgba(0,255,65,.18)'); bg.addColorStop(1,'rgba(0,255,65,0)');
-    ctx.fillStyle=bg; ctx.beginPath();ctx.ellipse(160+gx,148+gy2,62,72,0,0,Math.PI*2);ctx.fill();
-
-    /* head glow */
-    var hg=ctx.createRadialGradient(160+gx,72+gy2,4,160+gx,72+gy2,52);
-    hg.addColorStop(0,'rgba(0,255,65,.22)'); hg.addColorStop(1,'rgba(0,255,65,0)');
-    ctx.fillStyle=hg; ctx.beginPath();ctx.ellipse(160+gx,72+gy2,42,48,0,0,Math.PI*2);ctx.fill();
-
-    /* scanlines over figure area */
-    ctx.fillStyle='rgba(0,255,65,.1)';
-    for(var sy=0;sy<220;sy+=3) ctx.fillRect(100+gx,sy,122,1);
-
-    /* eyes */
-    var ep=.4+.4*Math.sin(t*2.8);
-    [[146,68],[174,68]].forEach(function(p){
-      var eg=ctx.createRadialGradient(p[0]+gx,p[1]+gy2,0,p[0]+gx,p[1]+gy2,14);
-      eg.addColorStop(0,'rgba(255,0,51,'+ep+')');
-      eg.addColorStop(1,'rgba(255,0,51,0)');
-      ctx.fillStyle=eg; ctx.beginPath();ctx.arc(p[0]+gx,p[1]+gy2,14,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='rgba(255,0,51,'+(ep+.25)+')';
-      ctx.beginPath();ctx.arc(p[0]+gx,p[1]+gy2,4.5,0,Math.PI*2);ctx.fill();
-    });
-
-    /* redaction bar */
-    ctx.fillStyle='rgba(0,0,0,.92)';
-    ctx.fillRect(116+gx,57+gy2,88,20);
-
-    /* glitch blocks */
-    if(Math.random()<.07){
-      var gy3=Math.random()*190+10;
-      ctx.fillStyle='rgba(0,'+Math.floor(Math.random()*160)+',65,.22)';
-      ctx.fillRect(88+gx,gy3,148,3+Math.random()*6);
-    }
-    if(Math.random()<.025){
-      var gy4=Math.random()*200;
-      ctx.drawImage(c,0,gy4,320,4,Math.random()*6-3,gy4,320,4);
-    }
-
-    /* HUD */
-    ctx.fillStyle='rgba(0,170,45,.5)'; ctx.font='9px monospace';
-    ctx.fillText('ID: ZACHARKA-'+(Math.floor(t*8)%9999),6,15);
-    ctx.fillText('SCAN: '+(Math.floor(t*38)%100)+'%',6,28);
-    ctx.fillText('CLEARANCE: OMEGA',6,41);
-    ctx.fillStyle='rgba(255,0,51,.42)'; ctx.font='bold 10px monospace';
-    ctx.textAlign='center';
-    ctx.fillText('▓ IDENTITA UTAJENÁ ▓',160,213);
-    ctx.textAlign='left';
-
-    t+=.03; requestAnimationFrame(frame);
-  }();
-}();
-
-/* AVATAR */
-!function(){
-  var c=document.getElementById('cv-avatar'), ctx=c.getContext('2d'), t=0;
-  !function loop(){
-    ctx.fillStyle='#010901'; ctx.fillRect(0,0,120,120);
-    ctx.strokeStyle='rgba(0,28,0,.55)'; ctx.lineWidth=.5;
-    for(var i=0;i<120;i+=12){
-      ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,120);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(120,i);ctx.stroke();
-    }
-    var bg=ctx.createRadialGradient(60,84,3,60,84,32);
-    bg.addColorStop(0,'rgba(0,255,65,.25)'); bg.addColorStop(1,'rgba(0,255,65,0)');
-    ctx.fillStyle=bg; ctx.beginPath();ctx.ellipse(60,86,24,28,0,0,Math.PI*2);ctx.fill();
-    var hg=ctx.createRadialGradient(60,40,2,60,40,22);
-    hg.addColorStop(0,'rgba(0,255,65,.28)'); hg.addColorStop(1,'rgba(0,255,65,0)');
-    ctx.fillStyle=hg; ctx.beginPath();ctx.ellipse(60,40,18,22,0,0,Math.PI*2);ctx.fill();
-    var ep=.4+.4*Math.sin(t*3);
-    [[52,38],[68,38]].forEach(function(p){
-      ctx.fillStyle='rgba(255,0,51,'+ep+')';
-      ctx.beginPath();ctx.arc(p[0],p[1],3.5,0,Math.PI*2);ctx.fill();
-    });
-    ctx.fillStyle='rgba(0,0,0,.25)';
-    for(var y=0;y<120;y+=3) ctx.fillRect(0,y,120,1);
-    t+=.06; requestAnimationFrame(loop);
-  }();
-}();
-
-/* THREAT GAUGE */
-!function(){
-  var c=document.getElementById('cv-threat'), ctx=c.getContext('2d');
-  var val=.88, dir=.004, CX=100, CY=98, R=72;
-  !function loop(){
-    ctx.clearRect(0,0,200,115);
-    ctx.beginPath();ctx.arc(CX,CY,R,Math.PI,0);
-    ctx.lineWidth=13; ctx.strokeStyle='#050f05'; ctx.stroke();
-    var g=ctx.createLinearGradient(CX-R,CY,CX+R,CY);
-    g.addColorStop(0,'#00ff41'); g.addColorStop(.5,'#cccc00'); g.addColorStop(1,'#ff0033');
-    ctx.beginPath();ctx.arc(CX,CY,R,Math.PI,Math.PI+val*Math.PI);
-    ctx.lineWidth=13; ctx.strokeStyle=g; ctx.stroke();
-    var a=Math.PI+val*Math.PI;
-    ctx.save();ctx.translate(CX,CY);ctx.rotate(a);
-    ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=2;
-    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(58,0);ctx.stroke();
-    ctx.restore();
-    ctx.fillStyle='rgba(255,255,255,.8)';
-    ctx.beginPath();ctx.arc(CX,CY,5,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='rgba(255,0,51,.85)'; ctx.font='bold 10px monospace'; ctx.textAlign='center';
-    ctx.fillText('STUPEŇ: OMEGA',CX,CY-12);
-    ctx.fillStyle='rgba(0,80,0,.7)'; ctx.font='9px monospace';
-    ctx.fillText('NÍZKY',28,112); ctx.fillText('KRITICKÝ',170,112);
-    val+=dir; if(val>.96||val<.72) dir*=-1;
-    requestAnimationFrame(loop);
-  }();
-}();
-
-/* TIMELINE */
-!function(){
-  var events=[
-    {y:'199█',t:'Narodenie subjektu ZACHARKA. Okolnosti: <span class="rx">████████████████</span>'},
-    {y:'200█',t:'Prvý kontakt s entitami z Archívu Omega. Miesto: záhrada.'},
-    {y:'2003',t:'Objavenie chemtrails nad rodným mestom. Začiatok dokumentácie.'},
-    {y:'2007',t:'Preniknutie do databázy <span class="rx">███████</span>. Dôkaz Projektu ████.'},
-    {y:'2011',t:'Získanie titulov na inštitúcii <span class="rx">████████████████████</span>.'},
-    {y:'2015',t:'Prvý telepatický kontakt. Trvanie 4.7 s. Posolstvo: <span class="rx">████████</span>.'},
-    {y:'2019',t:'Odoslanie e-mailu všetkým vládam sveta. Žiadna odpoveď. Príznačné.'},
-    {y:'2024',t:'Otvorenie tejto stránky. Začiatok verejnej fázy operácie ZLO-OMEGA.'},
-  ];
-  document.getElementById('js-tl').innerHTML =
-    '<div class="tl">' +
-    events.map(function(e){
-      return '<div class="tl-row"><div class="tl-yr">'+e.y+'</div>'+
-             '<div class="tl-txt">'+e.t+'</div></div>';
-    }).join('') +
-    '</div>';
-}();
-
-/* LIVE COUNTERS */
-!function(){
-  var vc=Math.floor(Math.random()*900000+100000);
-  ['js-vc','js-vc2'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.textContent=vc;
-  });
-  document.getElementById('js-ip').textContent=
-    [1,2,3,4].map(function(){return Math.floor(Math.random()*256);}).join('.');
-  function tick(){
-    var s=new Date().toTimeString().slice(0,8);
-    ['js-time','js-time2'].forEach(function(id){
-      var el=document.getElementById(id); if(el) el.textContent=s;
-    });
-    setTimeout(tick,1000);
-  }
-  tick();
-}();
-</script>
+</center>
 </body>
-</html>
+</HTML>
