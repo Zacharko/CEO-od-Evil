@@ -644,6 +644,30 @@ agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
                 centrum. Nikto z okolitych miest si samozrejme nestazoval aj ked
                 dlhodobe efekty tohto objektu nemozno zatial pre nedostatok dat
                 posudit<br>
+
+
+
+
+audio id="bgMusic" loop>
+    <source src="public/sounds/homebase.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // Funkcia, ktorá spustí hudbu a následne sa sama odstráni
+    function startAudio() {
+        var audio = document.getElementById("bgMusic");
+        audio.play();
+        // Po prvom úspešnom spustení odstránime sledovanie kliknutí
+        document.removeEventListener('click', startAudio);
+    }
+
+    // Sledujeme kliknutie na celej stránke
+    document.addEventListener('click', startAudio);
+</script>
+
+
+
+                
                 <img class="obrazky-clanok" src="mobiletower.jpg" alt="mobiletower">
                 [4] <b>Zem je Plocha:</b> NASA klame od roku 1958, bolo zistene
                 ze plavame vesmirom na obrovskej korytnacke. Vedecka data o tom
