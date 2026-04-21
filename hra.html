@@ -572,6 +572,16 @@ a:hover { color: #fff; }
   font-size: 24px;
   line-height: 1;
   filter: drop-shadow(0 0 6px rgba(57,255,20,0.4));
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border-radius: 50%;
+}
+.dialog-npc-bubble .npc-avatar img {
+  width: 36px; height: 36px;
+  object-fit: cover; border-radius: 50%;
+  border: 1px solid var(--green3);
+  filter: sepia(0.2) hue-rotate(80deg) saturate(1.3) brightness(0.95);
+  display: block;
 }
 .dialog-npc-bubble b {
   color: var(--green);
@@ -2819,6 +2829,8 @@ var SCENES = {
   // ── POŠTA ────────────────────────────────────────────────────
   posta: {
     name: 'Hlavná pošta // Dead Drop',
+    npcName: 'Druid František',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/frantisek.png',
     art: '📮',
     text: [
       'Šero a vôňa starého papiera. Za prepážkou sedí starý muž — <b>Druid František</b>.',
@@ -2837,6 +2849,8 @@ var SCENES = {
 
   posta_spis: {
     name: 'Hlavná pošta // Spis OMEGA',
+    npcName: 'Druid František',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/frantisek.png',
     art: '📁',
     text: [
       'František zasúva obálku cez okienko.',
@@ -2856,6 +2870,8 @@ var SCENES = {
 
   posta_viac: {
     name: 'Hlavná pošta // Rozhovor',
+    npcName: 'Druid František',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/frantisek.png',
     art: '🌀',
     text: [
       '"Kto stojí za LAZARUSOM?" pýtaš sa.',
@@ -2878,6 +2894,8 @@ var SCENES = {
 
   posta_mapa: {
     name: 'Hlavná pošta // Mapa',
+    npcName: 'Druid František',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/frantisek.png',
     art: '🗺️',
     text: [
       'František váhavo vytiahne <b>mapu jaskýň</b>.',
@@ -3153,6 +3171,8 @@ var SCENES = {
   // ── BUNKER ───────────────────────────────────────────────────
   bunker: {
     name: 'OMEGA VAULT // Bunker LAZARUS',
+    npcName: 'Koordinátor LAZARUS',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/koordinator.png',
     art: '🔐',
     text: [
       'Podzemný vstup. Keycard svieti zeleným.',
@@ -3175,6 +3195,8 @@ var SCENES = {
 
   bunker_dna: {
     name: 'OMEGA VAULT // Konfrontácia — DNA',
+    npcName: 'Koordinátor LAZARUS',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/koordinator.png',
     art: '🧬',
     text: [
       'Položíš vzorku na stôl.',
@@ -3198,6 +3220,8 @@ var SCENES = {
 
   bunker_spis: {
     name: 'OMEGA VAULT // Konfrontácia — Spis',
+    npcName: 'Koordinátor LAZARUS',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/koordinator.png',
     art: '📋',
     text: [
       'Spis rozprestrieš pred koordinátorom.',
@@ -3219,6 +3243,8 @@ var SCENES = {
 
   bunker_boj: {
     name: 'OMEGA VAULT // Boj naslepo',
+    npcName: 'Koordinátor LAZARUS',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/koordinator.png',
     art: '💥',
     text: [
       'Bez slov. Bez dôkazov. Len akcia.',
@@ -3246,6 +3272,8 @@ var SCENES = {
   // ── PRIEVIDZSKÉ NÁMESTIE ─────────────────────────────────────────
   loc_namestie: {
     name: 'Prievidzské námestie // Centrum',
+    npcName: 'Marek Kováč',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/marek.png',
     art: '🏛️',
     text: [
       'Dlažba mokrá od nočného dažďa. Fontána neteče — mestský rozpočet.',
@@ -3266,6 +3294,8 @@ var SCENES = {
 
   loc_namestie_deje: {
     name: 'Námestie // Rozhovor — Udalosti',
+    npcName: 'Marek Kováč',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/marek.png',
     art: '🏛️',
     text: [
       '"Deje?" Marek sa krátko zasmeje — bez humoru.',
@@ -3288,6 +3318,8 @@ var SCENES = {
 
   loc_namestie_moc: {
     name: 'Námestie // Rozhovor — Moc',
+    npcName: 'Marek Kováč',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/marek.png',
     art: '🏛️',
     text: [
       'Marek sa rozhliadne. Námestie je prázdne — no aj tak zníži hlas.',
@@ -3311,6 +3343,8 @@ var SCENES = {
 
   loc_namestie_lazarus: {
     name: 'Námestie // LAZARUS — Reakcia',
+    npcName: 'Marek Kováč',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/marek.png',
     art: '⚠️',
     text: [
       'Mareka akoby udrel elektrický prúd. Noviny mu vypadnú z kabáta.',
@@ -3334,6 +3368,8 @@ var SCENES = {
 
   loc_namestie_jaskyne: {
     name: 'Námestie // Jaskyne — Varovanie',
+    npcName: 'Marek Kováč',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/marek.png',
     art: '🦇',
     text: [
       '"Jaskyne?" Marek sa zastaví.',
@@ -3357,6 +3393,8 @@ var SCENES = {
   // ── MIKI BAR ─────────────────────────────────────────────────────
   loc_miki: {
     name: 'Miki Bar // Vnútri',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🍺',
     text: [
       'Zadymená miestnosť. Štyri stoly, z toho jeden rovný.',
@@ -3380,6 +3418,8 @@ var SCENES = {
 
   loc_miki_cakat: {
     name: 'Miki Bar // Čakanie',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🍺',
     text: [
       'Sadneš si. Igor pokračuje v utieraní.',
@@ -3398,6 +3438,8 @@ var SCENES = {
 
   loc_miki_drink: {
     name: 'Miki Bar // Drink',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🥃',
     text: [
       'Igor sa konečne otočí. Pozrie na teba. Pozrie na pult.',
@@ -3421,6 +3463,8 @@ var SCENES = {
 
   loc_miki_otvor: {
     name: 'Miki Bar // Marek Ťa Poslal',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🗝️',
     text: [
       'Igor sa zastaví. Pomaly sa otočí.',
@@ -3442,6 +3486,8 @@ var SCENES = {
 
   loc_miki_noc: {
     name: 'Miki Bar // Nočné Udalosti',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🌙',
     text: [
       '"Noc?" Igor si dá lokol. "V noci sa tu deje veľa."',
@@ -3464,6 +3510,8 @@ var SCENES = {
 
   loc_miki_viktor: {
     name: 'Miki Bar // Viktor Neon',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '👤',
     text: [
       '"Viktor." Igor sa zamyslí. Nepríjemne dlho.',
@@ -3485,6 +3533,8 @@ var SCENES = {
 
   loc_miki_jaskyne: {
     name: 'Miki Bar // Jaskyne Pod Vtáčnikom',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🕯️',
     text: [
       '"Svetlá pod zemou." Igor si poklepe na stôl.',
@@ -3507,6 +3557,8 @@ var SCENES = {
 
   loc_miki_lazarus: {
     name: 'Miki Bar // LAZARUS',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '☠️',
     text: [
       'Igor vstane. Otočí rádio hlasnejšie.',
@@ -3532,6 +3584,8 @@ var SCENES = {
 
   loc_miki_detektor: {
     name: 'Miki Bar // EMF Detektor',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '📡',
     text: [
       '"Detektor." Igor sa zdvihne a odíde do zadnej miestnosti.',
@@ -3554,6 +3608,8 @@ var SCENES = {
 
   loc_miki_reptil: {
     name: 'Miki Bar // Červené Oči',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '👁️',
     text: [
       '"Čo si myslím?" Igor si sadne. Pozrie do pohára.',
@@ -3579,6 +3635,8 @@ var SCENES = {
 
   loc_miki_spz: {
     name: 'Miki Bar // Autá Bez ŠPZ',
+    npcName: 'Igor „Miki" Hronec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/igor.png',
     art: '🚗',
     text: [
       '"ŠPZ?" Igor sa zasmeje horkosladko.',
@@ -3604,6 +3662,8 @@ var SCENES = {
   // ── JANTAR NIGHT CLUB ────────────────────────────────────────────
   loc_jantar: {
     name: 'Jantar Night Club // Vstup',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🎵',
     text: [
       'Basová linka tluče cez dvere ešte pred vchodom.',
@@ -3625,6 +3685,8 @@ var SCENES = {
 
   loc_jantar_pocuvat: {
     name: 'Jantar // Odpočúvanie',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '👂',
     text: [
       'Miešaš sa do davu. Pohár v ruke, oči hore.',
@@ -3645,6 +3707,8 @@ var SCENES = {
 
   loc_jantar_disk: {
     name: 'Jantar // Kovový Disk',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '💿',
     text: [
       'Disk je veľký ako minca. Na povrchu gravíra — symbol, čo si nikdy predtým nevidel.',
@@ -3664,6 +3728,8 @@ var SCENES = {
 
   loc_jantar_viktor: {
     name: 'Jantar // Viktor Neon',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🕴️',
     text: [
       '"Hostia sú tu všetci vítaní," hovorí Viktor, bez toho aby sa otočil.',
@@ -3688,6 +3754,8 @@ var SCENES = {
 
   loc_jantar_noc: {
     name: 'Jantar // Nočný Program',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🌙',
     text: [
       '"Noc je na oddych," hovorí Viktor. "Alebo na prácu. Záleží od človeka."',
@@ -3711,6 +3779,8 @@ var SCENES = {
 
   loc_jantar_brat: {
     name: 'Jantar // Bratislava',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🏙️',
     text: [
       '"Bratislava." Viktor sa trochu uvoľní. Ako keby tá otázka bola bezpečná.',
@@ -3731,6 +3801,8 @@ var SCENES = {
 
   loc_jantar_dodavka: {
     name: 'Jantar // Dodávka',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🚚',
     text: [
       'Viktor sa neusmeje.',
@@ -3753,6 +3825,8 @@ var SCENES = {
 
   loc_jantar_konfrontacia: {
     name: 'Jantar // Konfrontácia',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '⚡',
     text: [
       '"LAZARUS."',
@@ -3778,6 +3852,8 @@ var SCENES = {
 
   loc_jantar_unik: {
     name: 'Jantar // Únik',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🚪',
     text: [
       'Viktuorov muži sa pohybujú.',
@@ -3799,6 +3875,8 @@ var SCENES = {
 
   loc_jantar_boj: {
     name: 'Jantar // Boj vo Bare',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '💥',
     text: [
       'Traja na jedného. Neideálne.',
@@ -3821,6 +3899,8 @@ var SCENES = {
 
   loc_jantar_zadne: {
     name: 'Jantar // Zadné Schodisko',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '🪜',
     text: [
       'Dvierka v stene sú nezamknuté.',
@@ -3843,6 +3923,8 @@ var SCENES = {
 
   loc_jantar_hack: {
     name: 'Jantar // Hacknutie Konzol',
+    npcName: 'Viktor Neon',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/viktor.png',
     art: '💻',
     text: [
       'Systém je starší. Ochrana slabšia ako si čakal.',
@@ -4013,6 +4095,8 @@ var SCENES = {
   // ── SQUASH REŠTAURÁCIA ───────────────────────────────────────────
   loc_squash: {
     name: 'Squash Restaurant // Vstup',
+    npcName: 'Roman Čierny',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/roman.png',
     art: '🍽️',
     text: [
       'Reštaurácia, čo slúži ako neutrálne územie.',
@@ -4035,6 +4119,8 @@ var SCENES = {
 
   loc_squash_jest: {
     name: 'Squash // Jedlo',
+    npcName: 'Roman Čierny',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/roman.png',
     art: '🥣',
     text: [
       'Roman zavolá čašníčku. Bez menu. Vie čo objednáš.',
@@ -4055,6 +4141,8 @@ var SCENES = {
 
   loc_squash_info: {
     name: 'Squash // Informácie',
+    npcName: 'Roman Čierny',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/roman.png',
     art: '📰',
     text: [
       '"Informácie." Roman zloží noviny.',
@@ -4076,6 +4164,8 @@ var SCENES = {
 
   loc_squash_vtacnik: {
     name: 'Squash // Vtáčnik',
+    npcName: 'Roman Čierny',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/roman.png',
     art: '🌄',
     text: [
       '"Vtáčnik." Roman si poklepe na stôl.',
@@ -4098,6 +4188,8 @@ var SCENES = {
 
   loc_squash_fri: {
     name: 'Squash // FRI',
+    npcName: 'Roman Čierny',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/roman.png',
     art: '🎓',
     text: [
       '"FRI." Roman sa nadýchne.',
@@ -4119,6 +4211,8 @@ var SCENES = {
 
   loc_squash_zmiznuty: {
     name: 'Squash // Zmiznutí',
+    npcName: 'Roman Čierny',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/roman.png',
     art: '👤',
     text: [
       '"Mená?" Roman colí pohár.',
@@ -4144,6 +4238,8 @@ var SCENES = {
   // ── FRI ──────────────────────────────────────────────────────────
   loc_fri: {
     name: 'FRI // Fakulta Riadenia a Informatiky',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '🖥️',
     text: [
       'Budova inštitútu. Cez deň plná študentov.',
@@ -4164,6 +4260,8 @@ var SCENES = {
 
   loc_fri_sledovat: {
     name: 'FRI // Sledovanie',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '🔭',
     text: [
       'Schovávam sa za auto. Pozorujem.',
@@ -4185,6 +4283,8 @@ var SCENES = {
 
   loc_fri_dvere: {
     name: 'FRI // Zaklopanie',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '🚪',
     text: [
       'Zaklope trikrát. Ticho.',
@@ -4206,6 +4306,8 @@ var SCENES = {
 
   loc_fri_suteren: {
     name: 'FRI // Suterén',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '⚗️',
     text: [
       'Suterén. Nie bežné laboratórium.',
@@ -4231,6 +4333,8 @@ var SCENES = {
 
   loc_fri_lazarus: {
     name: 'FRI // Oravec o LAZARUS',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '🧠',
     text: [
       'Oravec si sadne. Dlhá pauza.',
@@ -4256,6 +4360,8 @@ var SCENES = {
 
   loc_fri_bunker_info: {
     name: 'FRI // Koordináty Bunkra',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '📍',
     text: [
       'Oravec vytlačí výpis z konzoly.',
@@ -4278,6 +4384,8 @@ var SCENES = {
 
   loc_fri_stop: {
     name: 'FRI // Ako Zastaviť LAZARUS',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '⛔',
     text: [
       '"Ako?" Oravec vstane a chodí po miestnosti.',
@@ -4301,6 +4409,8 @@ var SCENES = {
 
   loc_fri_keycard: {
     name: 'FRI // Žiadosť o Keycard',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '💳',
     text: [
       '"Keycard." Oravec sa zastaví.',
@@ -4322,6 +4432,8 @@ var SCENES = {
 
   loc_fri_hack: {
     name: 'FRI // Hacknutie Systému',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '💾',
     text: [
       'Oravec ťa nechá — prekvapivo — pri konzole.',
@@ -4344,6 +4456,8 @@ var SCENES = {
 
   loc_fri_bioecho: {
     name: 'FRI // BIO-ECHO',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '🧬',
     text: [
       '"BIO-ECHO?" Oravec zbladne.',
@@ -4369,6 +4483,8 @@ var SCENES = {
 
   loc_fri_konfrontacia: {
     name: 'FRI // Konfrontácia s Oravcom',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '⚡',
     text: [
       '"Pracuješ pre nich?"',
@@ -4390,6 +4506,8 @@ var SCENES = {
 
   loc_fri_inspekcia: {
     name: 'FRI // Inšpekcia',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '🪪',
     text: [
       '"Inšpekcia." Oravec sa naňho pozrie dlho.',
@@ -4409,6 +4527,8 @@ var SCENES = {
 
   loc_fri_boj: {
     name: 'FRI // Boj',
+    npcName: 'Dr. Pavel Oravec',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/oravec.png',
     art: '💥',
     text: [
       'Oravec — napriek vzhľadu akademika — nie je bezbranný.',
@@ -4516,6 +4636,8 @@ var SCENES = {
   // ── LUCIA V MIKI BARE ──────────────────────────────────────────────
   loc_miki_lucia: {
     name: 'Miki Bar // Lucia',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🥃',
     text: [
       '<b>Lucia Horáková</b>. Barmanka.',
@@ -4538,6 +4660,8 @@ var SCENES = {
 
   loc_miki_lucia_slivo: {
     name: 'Miki Bar // Lucia — Slivovica',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🥃',
     text: [
       'Naleje bez toho, aby sa pozrela na pohár. Vie kde je.',
@@ -4564,6 +4688,8 @@ var SCENES = {
 
   loc_miki_lucia_kto: {
     name: 'Miki Bar // Lucia — Kto si',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🌑',
     text: [
       'Zastaví sa. Položí utierku.',
@@ -4587,6 +4713,8 @@ var SCENES = {
 
   loc_miki_lucia_dlho: {
     name: 'Miki Bar // Lucia — Dĺžka',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🕰️',
     text: [
       '"Tri roky." Ani sa nad tým nezamyslí.',
@@ -4612,6 +4740,8 @@ var SCENES = {
 
   loc_miki_lucia_pacient: {
     name: 'Miki Bar // Lucia — Pacient',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🚑',
     text: [
       'Dlhá pauza. Nie preto, že nechce povedať.',
@@ -4639,6 +4769,8 @@ var SCENES = {
 
   loc_miki_lucia_nahlasila: {
     name: 'Miki Bar // Lucia — Nahlásenie',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '📋',
     text: [
       '"Nahlásila." Krátky smiech — bez humoru.',
@@ -4665,6 +4797,8 @@ var SCENES = {
 
   loc_miki_lucia_obleceny: {
     name: 'Miki Bar // Lucia — Muž v Obleku',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🕵️',
     text: [
       '"Pamätám si každého, koho stretnem. Profesionálna deformácia."',
@@ -4686,6 +4820,8 @@ var SCENES = {
 
   loc_miki_lucia_preco: {
     name: 'Miki Bar // Lucia — Prečo Sem',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🌧️',
     text: [
       '"Prečo sem." Zopakuje otázku ako keby ju skúšala na váhu.',
@@ -4712,6 +4848,8 @@ var SCENES = {
 
   loc_miki_lucia_co_hladam: {
     name: 'Miki Bar // Lucia — Čo Hľadáš',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🔍',
     text: [
       'Odvrátila sa. Utiera pohár — ten istý pohár, tretíkrát.',
@@ -4738,6 +4876,8 @@ var SCENES = {
 
   loc_miki_lucia_pomoc: {
     name: 'Miki Bar // Lucia — Pomoc',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🤝',
     text: [
       'Dlhá pauza.',
@@ -4761,6 +4901,8 @@ var SCENES = {
 
   loc_miki_lucia_vtacnik: {
     name: 'Miki Bar // Lucia — Vtáčnik',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '⛰️',
     text: [
       '"Vtáčnik." Pohár siahol na policu a zastal tam.',
@@ -4786,6 +4928,8 @@ var SCENES = {
 
   loc_miki_lucia_kedy: {
     name: 'Miki Bar // Lucia — Kedy',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '📅',
     text: [
       '"Kedy." Zamyslí sa. "Trinásty október. Štvrtok."',
@@ -4809,6 +4953,8 @@ var SCENES = {
 
   loc_miki_lucia_obalka_otvor: {
     name: 'Miki Bar // Tibora Obálka',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '📬',
     text: [
       'Vytrhne obálku zo šuflíka. Neotvorenú.',
@@ -4833,6 +4979,8 @@ var SCENES = {
 
   loc_miki_lucia_preco_mlcala: {
     name: 'Miki Bar // Lucia — Prečo Mlčala',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🤐',
     text: [
       'Nezamkne pohľad. Neodvracia sa.',
@@ -4856,6 +5004,8 @@ var SCENES = {
 
   loc_miki_lucia_lazarus: {
     name: 'Miki Bar // Lucia — LAZARUS',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '⚠️',
     text: [
       'Utierka padne na bar.',
@@ -4885,6 +5035,8 @@ var SCENES = {
 
   loc_miki_lucia_zakaznik: {
     name: 'Miki Bar // Lucia — Zákazník',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '👤',
     text: [
       '"Zákazník." Premýšľa.',
@@ -4908,6 +5060,8 @@ var SCENES = {
 
   loc_miki_lucia_info_noc: {
     name: 'Miki Bar // Lucia — Nočné Informácie',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🌙',
     text: [
       '"Aké informácie." Tón: nie otázka. Registrácia.',
@@ -4931,6 +5085,8 @@ var SCENES = {
 
   loc_miki_lucia_rola: {
     name: 'Miki Bar // Lucia — Jej Rola',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🎭',
     text: [
       '"Dávam im čo chcú?" Krátky pohľad. "Niekedy."',
@@ -4955,6 +5111,8 @@ var SCENES = {
 
   loc_miki_lucia_pravda: {
     name: 'Miki Bar // Lucia — Pravda',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '💡',
     text: [
       'Povedáš jej. Nie všetko. Dosť.',
@@ -4976,6 +5134,8 @@ var SCENES = {
 
   loc_miki_lucia_klamstvo: {
     name: 'Miki Bar // Lucia — Klamstvo',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '😶',
     text: [
       '"Len zákazník." Opakuje pomaly.',
@@ -4994,6 +5154,8 @@ var SCENES = {
 
   loc_miki_lucia_dovody: {
     name: 'Miki Bar // Lucia — Dôvody',
+    npcName: 'Lucia Horáková',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '🌑',
     text: [
       '"Dôvody." Naleje si sama. Malý lok.',
@@ -5090,6 +5252,8 @@ var SCENES = {
   // ── ŽELEZNIČNÁ STANICA ──────────────────────────────────────────────
   loc_stanica: {
     name: 'Železničná stanica Prievidza // Noc',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '🚉',
     text: [
       'Stanica. 03:52.',
@@ -5113,6 +5277,8 @@ var SCENES = {
 
   loc_stanica_autobus: {
     name: 'Stanica // Autobus do Bánoviec',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '🚌',
     text: [
       '"Autobus." Dušan sa na teba pozrie cez sklo.',
@@ -5138,6 +5304,8 @@ var SCENES = {
 
   loc_stanica_mercedes: {
     name: 'Stanica // Čierny Mercedes',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '🚗',
     text: [
       '"Mercedes." Dušan sa odvrátil. "To som nepovedal."',
@@ -5161,6 +5329,8 @@ var SCENES = {
 
   loc_stanica_dusal: {
     name: 'Stanica // Dušan — Čo Čítal',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '📄',
     text: [
       '"Čo som čítal? Nič."',
@@ -5189,6 +5359,8 @@ var SCENES = {
 
   loc_stanica_zoznam_ukaz: {
     name: 'Stanica // Zoznam LAZARUS',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '📋',
     text: [
       'Váha. Potom papier prichádza cez prepážku.',
@@ -5213,6 +5385,8 @@ var SCENES = {
 
   loc_stanica_delta: {
     name: 'Stanica // Agent Delta',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '⚠️',
     text: [
       '"Agent Delta?" Dušan si pozrie ruky.',
@@ -5236,6 +5410,8 @@ var SCENES = {
 
   loc_stanica_dusal_meno: {
     name: 'Stanica // Dušan — Jeho Meno',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '😰',
     text: [
       'Dlhé ticho.',
@@ -5262,6 +5438,8 @@ var SCENES = {
 
   loc_stanica_cakaren: {
     name: 'Stanica // Čakáreň',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '🪑',
     text: [
       'Štyri stoličky. Tri z nich rozbité. Žlté svetlo.',
@@ -5285,6 +5463,8 @@ var SCENES = {
 
   loc_stanica_zapisnik: {
     name: 'Stanica // Zápisník',
+    npcName: 'Dušan Kováľ',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/dusan.png',
     art: '📓',
     text: [
       'Zápisník. Jemné písmo. Dátumy a časy.',
@@ -5724,13 +5904,24 @@ function renderDialogLines(el, text) {
     } else if (frag.type === 'npc') {
       var div = document.createElement('div');
       div.className = 'dialog-npc-bubble';
-      // Get current scene art for avatar
+      // Get current scene art and npc info for avatar
       var sc = SCENES[S.scene];
       var art = sc ? (sc.art || '💬') : '💬';
-      div.setAttribute('data-speaker', sc ? (sc.name || 'NPC') : 'NPC');
+      var npcName = sc ? (sc.npcName || sc.name || 'NPC') : 'NPC';
+      var npcImg  = sc ? (sc.npcImg || null) : null;
+      div.setAttribute('data-speaker', npcName);
       var avatarSpan = document.createElement('span');
       avatarSpan.className = 'npc-avatar';
-      avatarSpan.textContent = art;
+      if (npcImg) {
+        var img = document.createElement('img');
+        img.src = npcImg;
+        img.alt = npcName;
+        img.style.cssText = 'width:32px;height:32px;object-fit:cover;border-radius:50%;border:1px solid var(--green3);filter:sepia(0.3) hue-rotate(80deg) saturate(1.2);';
+        img.onerror = function(){ this.style.display='none'; avatarSpan.textContent = art; };
+        avatarSpan.appendChild(img);
+      } else {
+        avatarSpan.textContent = art;
+      }
       div.appendChild(avatarSpan);
       var textDiv = document.createElement('div');
       textDiv.innerHTML = safeHtml(frag.data.lines.join('<br>'));
