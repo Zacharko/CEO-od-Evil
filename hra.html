@@ -240,6 +240,15 @@ a:hover { color: #fff; }
   display: grid;
   grid-template-columns: 230px 1fr 210px;
   height: 100vh;
+  height: 100dvh;
+}
+
+/* center panel always takes full height */
+#center-panel {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 38px);
+  overflow: hidden;
 }
 
 /* ══════════════════════════════════════════════════════
@@ -443,7 +452,7 @@ a:hover { color: #fff; }
 
 #scene-photo {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; opacity: 0; transition: opacity 0.8s;
+  object-fit: cover; opacity: 1;
   filter: sepia(0.4) hue-rotate(200deg) saturate(1.2) brightness(0.5);
   z-index: 0;
 }
@@ -514,75 +523,332 @@ a:hover { color: #fff; }
   opacity: 0.4; pointer-events: none;
 }
 
-/* — Text scény — */
+/* ══════════════════════════════════════════════════════
+   FALLOUT 3 DIALOG STYLE
+══════════════════════════════════════════════════════ */
+
+/* — Text scény — Fallout terminal box — */
 #scene-text-wrap {
   flex: 1; overflow-y: auto;
-  padding: 16px 20px;
-  font-size: var(--scene-fs);
-  line-height: 1.8;
-  color: #c2f0cc;
+  -webkit-overflow-scrolling: touch;
+  padding: 0;
   min-height: 0;
-  font-family: var(--font-mono);
-  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-bottom: 4px;
 }
-#scene-text-wrap b {
+
+/* NPC speech bubble */
+.dialog-npc-bubble {
+  margin: 12px 16px 6px 16px;
+  padding: 12px 16px 12px 52px;
+  background: rgba(0,15,0,0.7);
+  border: 1px solid var(--green3);
+  border-left: 3px solid var(--green);
+  position: relative;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #c2f0cc;
+  font-family: var(--font-mono);
+}
+.dialog-npc-bubble::before {
+  content: attr(data-speaker);
+  position: absolute;
+  top: -10px; left: 12px;
+  background: var(--bg);
+  padding: 0 8px;
+  font-family: var(--font-hud);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--green);
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(57,255,20,0.5);
+}
+.dialog-npc-bubble .npc-avatar {
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(57,255,20,0.4));
+}
+.dialog-npc-bubble b {
   color: var(--green);
   font-weight: normal;
   text-shadow: 0 0 6px rgba(57,255,20,0.35);
 }
-#scene-text-wrap i {
+.dialog-npc-bubble i {
   color: var(--text-dim);
-  font-style: normal; font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  display: block;
+  margin-top: 4px;
+  border-top: 1px solid var(--border2);
+  padding-top: 4px;
+}
+
+/* Narration / environment text — no bubble */
+.dialog-narration {
+  margin: 8px 16px 4px 16px;
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #7ab87a;
+  font-family: var(--font-mono);
+  border-left: 2px solid var(--dimmer);
+  background: rgba(0,8,0,0.4);
+}
+.dialog-narration b {
+  color: var(--green4);
+  font-weight: normal;
+}
+.dialog-narration i {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 11px;
 }
 
 /* Dekoratívny deleč pred choices */
-#scene-text-wrap::after {
-  content: '';
-  display: block;
-  margin-top: 14px;
+.dialog-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 8px 16px 0;
+  background: linear-gradient(90deg, transparent, var(--green3), transparent);
+  opacity: 0.4;
 }
 
-/* — Možnosti (choices) — */
+/* — Možnosti (choices) — Fallout dialogue wheel style — */
 #choices-wrap {
-  padding: 10px 16px 12px;
+  padding: 6px 12px 10px;
   border-top: 1px solid var(--border2);
   flex-shrink: 0;
-  background: linear-gradient(180deg, var(--bg), var(--bg-panel));
+  background: linear-gradient(180deg, rgba(0,8,0,0.9), var(--bg-panel));
+}
+
+#choices-label {
+  font-family: var(--font-hud);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--green3);
+  padding: 4px 4px 6px;
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 
 .choice-btn {
   display: flex; width: 100%; text-align: left;
-  align-items: flex-start; gap: 10px;
+  align-items: flex-start; gap: 0;
   background: transparent;
   border: none;
-  border-left: 2px solid var(--border);
-  color: var(--dim);
+  border-bottom: 1px solid var(--border2);
+  color: #7ab87a;
   font-family: var(--font-mono);
-  font-size: var(--choice-fs);
+  font-size: 13px;
   font-weight: normal;
-  letter-spacing: 0.3px; line-height: 1.5;
-  padding: 7px 14px; margin-bottom: 4px;
-  cursor: pointer; transition: all 0.15s;
+  letter-spacing: 0.2px; line-height: 1.5;
+  padding: 9px 6px;
+  margin-bottom: 0;
+  cursor: pointer;
+  transition: background 0.08s, color 0.08s, border-color 0.08s;
+  position: relative;
 }
+.choice-btn:last-child { border-bottom: none; }
+
+/* Choice number badge */
+.choice-btn .choice-num {
+  display: inline-block;
+  min-width: 22px;
+  font-family: var(--font-hud);
+  font-size: 10px;
+  color: var(--green3);
+  flex-shrink: 0;
+  padding-top: 1px;
+  text-shadow: 0 0 6px rgba(57,255,20,0.3);
+}
+
+.choice-btn .choice-text {
+  flex: 1;
+  line-height: 1.5;
+}
+
+/* Karma/stat indicator strip on left */
 .choice-btn::before {
-  content: '›';
-  color: var(--text-muted); font-size: 18px; line-height: 1.2;
-  flex-shrink: 0; transition: color 0.15s;
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: transparent;
+  transition: background 0.08s;
 }
-.choice-btn:last-child { margin-bottom: 0; }
+
 .choice-btn:hover {
-  border-left-color: var(--green);
-  color: var(--green);
-  background: rgba(57,255,20,0.04);
+  color: #d4ffd4;
+  background: rgba(57,255,20,0.06);
 }
-.choice-btn:hover::before { color: var(--green); }
+.choice-btn:hover::before {
+  background: var(--green);
+}
+.choice-btn:hover .choice-num {
+  color: var(--green);
+  text-shadow: 0 0 10px rgba(57,255,20,0.6);
+}
+
+.choice-btn:active {
+  background: rgba(57,255,20,0.12);
+}
+
 .choice-btn:disabled {
-  color: var(--text-muted); border-left-color: var(--border2); cursor: not-allowed;
-  opacity: 0.5;
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 .choice-btn:disabled:hover { background: transparent; }
+.choice-btn:disabled:hover::before { background: transparent; }
+
+/* Condition fail hint */
+.choice-fail-hint {
+  display: block;
+  font-size: 10px;
+  color: var(--danger);
+  opacity: 0.7;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    --scene-fs: 14px;
+    --choice-fs: 13px;
+  }
+
+  #main {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto 1fr auto;
+    height: 100dvh;
+  }
+
+  #left-panel {
+    display: none;
+  }
+
+  #right-panel {
+    display: none;
+  }
+
+  #center-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  #scene-img-wrap {
+    height: 140px !important;
+    min-height: 140px;
+    flex-shrink: 0;
+  }
+
+  #topbar {
+    height: 44px;
+    padding: 0 10px;
+    gap: 6px;
+  }
+  #topbar-title { font-size: 11px; letter-spacing: 2px; }
+  #topbar-tabs { display: none; }
+  #topbar-right { gap: 6px; }
+  #topbar-money { font-size: 12px; }
+  #topbar-clock { display: none; }
+  .top-micro-btn { font-size: 10px; padding: 2px 7px; }
+
+  /* Mobile bottom nav bar */
+  #mobile-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 48px;
+    background: var(--bg-panel);
+    border-top: 1px solid var(--border);
+    z-index: 900;
+  }
+
+  #center-panel {
+    padding-bottom: 48px;
+  }
+
+  .dialog-npc-bubble {
+    margin: 8px 10px 4px 10px;
+    padding: 10px 12px 10px 46px;
+    font-size: 13px;
+  }
+  .dialog-npc-bubble .npc-avatar { font-size: 20px; left: 10px; }
+  .dialog-narration { margin: 6px 10px 2px 10px; font-size: 12px; }
+
+  #choices-wrap { padding: 4px 8px 8px; }
+  .choice-btn { font-size: 13px; padding: 10px 6px; }
+  .choice-btn .choice-num { min-width: 20px; font-size: 10px; }
+
+  #log-wrap { max-height: 52px; }
+}
+
+#mobile-nav { display: none; }
+
+.mobile-nav-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border2);
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: background 0.1s;
+}
+.mobile-nav-btn:last-child { border-right: none; }
+.mobile-nav-btn span {
+  font-size: 8px;
+  font-family: var(--font-hud);
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.mobile-nav-btn:hover, .mobile-nav-btn:active {
+  background: rgba(57,255,20,0.06);
+  color: var(--green);
+}
+
+/* Mobile overlay panels (stats, map, inv) */
+.mobile-overlay-panel {
+  display: none;
+  position: fixed;
+  inset: 44px 0 48px 0;
+  background: var(--bg);
+  z-index: 800;
+  overflow-y: auto;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+.mobile-overlay-panel.open { display: block; }
+.mobile-panel-close {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font-hud);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.mobile-panel-close:hover { color: var(--green); border-color: var(--green3); }
 
 /* — Log — */
 #log-wrap {
@@ -1120,49 +1386,167 @@ a:hover { color: #fff; }
 .equip-hint { font-size:9px; color:var(--text-muted); text-align:center; padding:6px 0 2px; letter-spacing:1px; font-family:var(--font-body); }
 
 /* ══════════════════════════════════════════════════════
-   ZÁKLADŇA (HQ) OVERLAY
+   ZÁKLADŇA (HQ) OVERLAY — Punch Club štýl
 ══════════════════════════════════════════════════════ */
-#hq-overlay { display:none; position:fixed; inset:38px 0 0 0; background:var(--bg); z-index:700; overflow-y:auto; padding:0; }
+#hq-overlay { display:none; position:fixed; inset:38px 0 0 0; background:#06080a; z-index:700; overflow:hidden; }
 #hq-overlay.show { display:flex; flex-direction:column; }
-.hq-top { display:flex; gap:0; flex:1; min-height:0; height:calc(100vh - 38px); }
-.hq-left { width:420px; flex-shrink:0; border-right:1px solid var(--border); display:flex; flex-direction:column; background:linear-gradient(180deg, #060b06 0%, var(--bg) 100%); }
-.hq-map-header { padding:12px 16px 8px; border-bottom:1px solid var(--border2); display:flex; align-items:center; justify-content:space-between; }
-.hq-map-title { font-family:var(--font-hud); font-size:11px; letter-spacing:3px; color:var(--green3); text-transform:uppercase; }
-.hq-map-level { font-family:var(--font-hud); font-size:10px; color:var(--gold); letter-spacing:1px; }
-#hq-svg-wrap { padding:16px; flex:1; display:flex; align-items:center; justify-content:center; }
-#hq-floor-svg { width:100%; max-width:380px; filter:drop-shadow(0 0 20px rgba(57,255,20,0.08)); }
-.hq-right { flex:1; overflow-y:auto; padding:20px 24px; background:var(--bg); }
-.hq-room-header { margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border2); }
-.hq-room-icon { font-size:32px; margin-bottom:6px; }
-.hq-room-name { font-family:var(--font-hud); font-size:16px; color:var(--green); letter-spacing:3px; margin-bottom:4px; }
-.hq-room-desc { font-size:12px; color:var(--text-dim); font-family:var(--font-body); line-height:1.6; }
-.hq-section-label { font-family:var(--font-hud); font-size:9px; letter-spacing:2px; color:var(--green3); text-transform:uppercase; padding:10px 0 6px; border-bottom:1px solid var(--border2); margin-bottom:10px; }
-.hq-activity-card { border:1px solid var(--border2); border-top:1px solid rgba(255,255,255,0.04); background:linear-gradient(180deg,var(--bg3),var(--bg2)); padding:10px 12px; margin-bottom:8px; transition:all 0.12s; position:relative; }
-.hq-activity-card:hover { border-color:var(--border-hi); }
-.hq-activity-header { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+
+/* ── HQ Horná lišta ── */
+.hq-topbar {
+  display:flex; align-items:center; gap:0;
+  border-bottom:2px solid #1a3a1a;
+  background:linear-gradient(180deg, #080e08, #060a06);
+  flex-shrink:0;
+}
+.hq-tab-btn {
+  background:transparent; border:none; border-bottom:2px solid transparent;
+  margin-bottom:-2px;
+  color:#2d5a2d; font-family:'Orbitron',monospace; font-size:10px;
+  font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  padding:10px 20px; cursor:pointer; transition:all 0.15s;
+  display:flex; align-items:center; gap:8px;
+}
+.hq-tab-btn:hover { color:#4ade80; }
+.hq-tab-btn.active { color:#39ff14; border-bottom-color:#39ff14; text-shadow:0 0 10px rgba(57,255,20,0.5); }
+.hq-tab-icon { font-size:16px; }
+
+/* ── HQ Content area ── */
+.hq-content { flex:1; overflow:hidden; position:relative; }
+.hq-view { display:none; width:100%; height:100%; }
+.hq-view.active { display:flex; }
+
+/* ═══════════════════════════════════
+   PUNCH CLUB ISOMETRIC ROOM VIEWS
+═══════════════════════════════════ */
+
+/* ── Shared room layout ── */
+.hq-room-layout {
+  display:flex; width:100%; height:100%;
+}
+.hq-room-visual {
+  flex:1; position:relative; overflow:hidden;
+  background:#06080a;
+  cursor:default;
+}
+.hq-room-panel {
+  width:320px; flex-shrink:0; border-left:1px solid #1a3a1a;
+  background:linear-gradient(180deg,#08100a,#060a06);
+  display:flex; flex-direction:column; overflow-y:auto;
+}
+.hq-room-panel-header {
+  padding:14px 16px 10px; border-bottom:1px solid #1a3a1a;
+  flex-shrink:0;
+}
+.hq-room-panel-title { font-family:'Orbitron',monospace; font-size:13px; color:#39ff14; letter-spacing:3px; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:4px; }
+.hq-room-panel-desc { font-size:11px; color:#2d5a2d; font-family:'Share Tech Mono',monospace; line-height:1.5; }
+.hq-panel-body { padding:12px 14px; flex:1; }
+.hq-section-label { font-family:'Orbitron',monospace; font-size:8px; letter-spacing:2px; color:#16a34a; text-transform:uppercase; padding:8px 0 5px; border-bottom:1px solid #0e200e; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.hq-section-label::before { content:'◆'; font-size:6px; }
+
+/* ── Activity cards ── */
+.hq-activity-card {
+  border:1px solid #0e200e; border-top:1px solid rgba(255,255,255,0.03);
+  background:linear-gradient(180deg,#0b130b,#090d09);
+  padding:10px 12px; margin-bottom:7px; transition:all 0.12s; position:relative;
+}
+.hq-activity-card:hover { border-color:#1a3a1a; background:linear-gradient(180deg,#0f1a0f,#0b120b); }
+.hq-activity-header { display:flex; align-items:center; gap:8px; margin-bottom:3px; }
 .hq-activity-icon { font-size:18px; }
-.hq-activity-name { font-size:12px; color:var(--green4); font-family:var(--font-mono); flex:1; }
-.hq-activity-cost { font-size:11px; color:var(--warn); font-family:var(--font-hud); }
-.hq-activity-desc { font-size:11px; color:var(--text-dim); font-family:var(--font-body); line-height:1.4; margin-bottom:8px; }
-.hq-activity-btn { width:100%; background:linear-gradient(180deg,var(--bg4),var(--bg3)); border:1px solid var(--border); color:var(--text-dim); font-family:var(--font-body); font-weight:600; font-size:11px; padding:5px; cursor:pointer; transition:all 0.12s; letter-spacing:1px; text-transform:uppercase; }
-.hq-activity-btn:hover:not(:disabled) { border-color:var(--green3); color:var(--green); background:rgba(57,255,20,0.04); }
-.hq-activity-btn:disabled { opacity:0.35; cursor:not-allowed; }
-.hq-upgrade-card { border:1px solid var(--border2); background:linear-gradient(180deg,var(--bg3),var(--bg2)); padding:10px 12px; margin-bottom:8px; transition:all 0.12s; }
-.hq-upgrade-card.owned { border-color:var(--green3); background:rgba(57,255,20,0.02); }
-.hq-upgrade-header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:4px; }
-.hq-upgrade-name { font-size:12px; color:var(--cyan); font-family:var(--font-mono); }
-.hq-upgrade-price { font-size:11px; color:var(--warn); font-family:var(--font-hud); white-space:nowrap; }
-.hq-upgrade-desc { font-size:11px; color:var(--text-dim); font-family:var(--font-body); line-height:1.4; margin-bottom:8px; }
-.hq-upgrade-btn { width:100%; background:linear-gradient(180deg,var(--bg4),var(--bg3)); border:1px solid var(--border); color:var(--text-dim); font-family:var(--font-body); font-weight:600; font-size:11px; padding:4px; cursor:pointer; transition:all 0.12s; letter-spacing:1px; text-transform:uppercase; }
-.hq-upgrade-btn:hover:not(:disabled) { border-color:var(--blue3); color:var(--blue); background:rgba(34,211,238,0.04); }
-.hq-upgrade-btn:disabled { opacity:0.4; cursor:not-allowed; }
-.hq-upgrade-owned-badge { font-size:9px; color:var(--green3); letter-spacing:1px; font-family:var(--font-mono); padding:3px 0; }
-.hq-room-svg { cursor:pointer; transition:opacity 0.15s; }
-.hq-room-svg:hover rect.room-bg { filter:brightness(1.4); }
-.hq-room-svg.active-room rect.room-bg { stroke:#39ff14 !important; stroke-width:2 !important; }
-.hq-stats-row { display:flex; gap:12px; flex-wrap:wrap; padding:10px 16px; border-bottom:1px solid var(--border2); background:rgba(57,255,20,0.02); }
-.hq-stat-chip { font-size:10px; color:var(--text-dim); font-family:var(--font-body); letter-spacing:0.5px; display:flex; align-items:center; gap:4px; }
-.hq-stat-chip span { color:var(--green4); font-family:var(--font-hud); font-size:11px; }
+.hq-activity-name { font-size:12px; color:#4ade80; font-family:'Share Tech Mono',monospace; flex:1; }
+.hq-activity-cost { font-size:11px; color:#f59e0b; font-family:'Orbitron',monospace; }
+.hq-activity-desc { font-size:11px; color:#2d5a2d; font-family:'Share Tech Mono',monospace; line-height:1.4; margin-bottom:8px; }
+.hq-activity-btn {
+  width:100%; background:linear-gradient(180deg,#0f180f,#0b120b);
+  border:1px solid #1a3a1a; color:#2d5a2d; font-family:'Share Tech Mono',monospace;
+  font-weight:600; font-size:11px; padding:6px; cursor:pointer;
+  transition:all 0.12s; letter-spacing:1px; text-transform:uppercase;
+}
+.hq-activity-btn:hover:not(:disabled) { border-color:#22c55e; color:#39ff14; background:rgba(57,255,20,0.05); box-shadow:0 0 8px rgba(57,255,20,0.1); }
+.hq-activity-btn:disabled { opacity:0.3; cursor:not-allowed; }
+.hq-cd-bar { height:3px; background:#0e200e; margin-top:5px; border-radius:1px; overflow:hidden; }
+.hq-cd-bar-fill { height:100%; background:linear-gradient(90deg,#16a34a,#39ff14); width:0%; transition:width 0.5s; }
+
+/* ── Upgrade cards ── */
+.hq-upgrade-card { border:1px solid #0e200e; background:linear-gradient(180deg,#0b130b,#090d09); padding:10px 12px; margin-bottom:7px; transition:all 0.12s; }
+.hq-upgrade-card.owned { border-color:#16a34a; background:rgba(57,255,20,0.02); }
+.hq-upgrade-header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:3px; }
+.hq-upgrade-name { font-size:12px; color:#22d3ee; font-family:'Share Tech Mono',monospace; }
+.hq-upgrade-price { font-size:11px; color:#f59e0b; font-family:'Orbitron',monospace; white-space:nowrap; }
+.hq-upgrade-desc { font-size:11px; color:#2d5a2d; font-family:'Share Tech Mono',monospace; line-height:1.4; margin-bottom:8px; }
+.hq-upgrade-btn { width:100%; background:linear-gradient(180deg,#0f180f,#0b120b); border:1px solid #1a3a1a; color:#2d5a2d; font-family:'Share Tech Mono',monospace; font-weight:600; font-size:11px; padding:4px; cursor:pointer; transition:all 0.12s; letter-spacing:1px; text-transform:uppercase; }
+.hq-upgrade-btn:hover:not(:disabled) { border-color:#0891b2; color:#22d3ee; background:rgba(34,211,238,0.04); }
+.hq-upgrade-btn:disabled { opacity:0.35; cursor:not-allowed; }
+.hq-upgrade-owned-badge { font-size:9px; color:#16a34a; letter-spacing:1px; font-family:'Share Tech Mono',monospace; padding:3px 0; display:flex; align-items:center; gap:4px; }
+
+/* ═══════════════════════════════════
+   PUNCH CLUB CANVAS ROOMS
+═══════════════════════════════════ */
+#hq-main-canvas, #hq-train-canvas, #hq-garden-canvas {
+  display:block; width:100%; height:100%;
+  image-rendering:pixelated;
+}
+
+/* ═══════════════════════════════════
+   ZÁHRADKA — SEED PLOTS
+═══════════════════════════════════ */
+.garden-plots-overlay {
+  position:absolute; inset:0; pointer-events:none;
+}
+.plot-slot {
+  position:absolute; pointer-events:all; cursor:pointer;
+  transition:transform 0.1s;
+}
+.plot-slot:hover { transform:scale(1.05); }
+.plot-slot:active { transform:scale(0.97); }
+.plot-bubble {
+  position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%);
+  background:#080d08; border:1px solid #22c55e; padding:4px 8px;
+  font-family:'Share Tech Mono',monospace; font-size:10px; color:#39ff14;
+  white-space:nowrap; pointer-events:none;
+  box-shadow:0 0 10px rgba(57,255,20,0.2);
+  display:none;
+}
+.plot-slot:hover .plot-bubble { display:block; }
+
+/* Shop — semienka */
+.seed-shop-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.seed-card {
+  border:1px solid #0e200e; background:linear-gradient(180deg,#0b130b,#090d09);
+  padding:8px; cursor:pointer; transition:all 0.12s; text-align:center;
+}
+.seed-card:hover { border-color:#22c55e; background:rgba(57,255,20,0.03); }
+.seed-card-icon { font-size:22px; margin-bottom:4px; }
+.seed-card-name { font-size:10px; color:#4ade80; font-family:'Share Tech Mono',monospace; margin-bottom:2px; }
+.seed-card-time { font-size:9px; color:#2d5a2d; font-family:'Share Tech Mono',monospace; margin-bottom:4px; }
+.seed-card-price { font-size:11px; color:#f59e0b; font-family:'Orbitron',monospace; }
+
+/* Inventory semienok v záhradnom paneli */
+.seed-inv-grid { display:flex; flex-wrap:wrap; gap:6px; padding:4px 0 8px; }
+.seed-inv-chip {
+  background:#0b130b; border:1px solid #16a34a; padding:4px 10px;
+  font-family:'Share Tech Mono',monospace; font-size:11px; color:#4ade80;
+  display:flex; align-items:center; gap:5px; cursor:pointer; transition:all 0.12s;
+}
+.seed-inv-chip:hover { border-color:#39ff14; color:#39ff14; background:rgba(57,255,20,0.05); }
+.seed-inv-chip.selected { border-color:#39ff14; box-shadow:0 0 8px rgba(57,255,20,0.3); background:rgba(57,255,20,0.07); }
+
+/* Plot detail */
+.plot-detail-box {
+  border:1px solid #16a34a; background:linear-gradient(180deg,#091209,#06080a);
+  padding:10px 12px; margin-bottom:8px;
+}
+.plot-detail-name { font-family:'Orbitron',monospace; font-size:10px; color:#39ff14; letter-spacing:2px; margin-bottom:4px; }
+.plot-progress-bar { height:6px; background:#0e200e; border-radius:2px; overflow:hidden; margin:4px 0; }
+.plot-progress-fill { height:100%; background:linear-gradient(90deg,#16a34a,#4ade80,#39ff14); transition:width 0.5s; }
+.plot-progress-label { font-size:9px; color:#2d5a2d; font-family:'Share Tech Mono',monospace; }
+
+/* HQ Stats strip */
+.hq-stats-strip {
+  display:flex; gap:16px; padding:8px 16px; border-bottom:1px solid #0e200e;
+  background:rgba(57,255,20,0.015); flex-shrink:0; flex-wrap:wrap;
+}
+.hq-stat-chip { font-size:10px; color:#2d5a2d; font-family:'Share Tech Mono',monospace; display:flex; align-items:center; gap:4px; }
+.hq-stat-chip span { color:#4ade80; font-family:'Orbitron',monospace; font-size:11px; }
 
 </style>
 </head>
@@ -1340,6 +1724,8 @@ a:hover { color: #fff; }
   ✦ <span class="node" onclick="enterLocation('fri')">🎓 FRI</span>
   │
   ○ <span class="node" onclick="enterLocation('domov')">🏠 Domov</span>
+  │
+  🚉 <span class="node" onclick="enterLocation('stanica')">Železničná stanica</span>
           </pre>
         </div>
       </div>
@@ -1492,78 +1878,145 @@ a:hover { color: #fff; }
   <div id="boats-fleet-grid" class="boat-grid"></div>
 </div>
 
-<!-- ZÁKLADŇA (HQ) OVERLAY -->
+<!-- ZÁKLADŇA (HQ) OVERLAY — Punch Club štýl -->
 <div id="hq-overlay">
-  <div class="hq-top">
-    <!-- Ľavý panel — SVG mapa bytu -->
-    <div class="hq-left">
-      <div class="hq-map-header">
-        <span class="hq-map-title">🏠 Základňa // HQ</span>
-        <span class="hq-map-level" id="hq-map-level-label">HQ Úroveň 1</span>
-      </div>
-      <!-- Štatistiky základne -->
-      <div class="hq-stats-row">
-        <div class="hq-stat-chip">Úroveň: <span id="hq-stat-level">1</span></div>
-        <div class="hq-stat-chip">Izby: <span id="hq-stat-rooms">3</span></div>
-        <div class="hq-stat-chip">HP regen: <span id="hq-stat-hpregen">+0/s</span></div>
-        <div class="hq-stat-chip">SAN regen: <span id="hq-stat-sanregen">+0/s</span></div>
-        <div class="hq-stat-chip">HCK bonus: <span id="hq-stat-hckbonus">+0</span></div>
-        <div class="hq-stat-chip">Bonus: <span id="hq-stat-income">+0₿/s</span></div>
-      </div>
-      <div id="hq-svg-wrap">
-        <svg id="hq-floor-svg" viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg">
-          <!-- Pozadie bytu -->
-          <rect x="0" y="0" width="380" height="320" fill="#080d08" stroke="#1a3a1a" stroke-width="2"/>
-          <!-- Chodba -->
-          <rect x="160" y="130" width="60" height="60" fill="#0a100a" stroke="#1a3a1a" stroke-width="1"/>
-          <text x="190" y="158" fill="#1a3a1a" font-size="8" text-anchor="middle" font-family="Share Tech Mono">CHODBA</text>
-          <!-- Spálňa (ľavý hore) -->
-          <g id="svg-room-spalna" class="hq-room-svg" onclick="selectHQRoom('spalna')">
-            <rect class="room-bg" x="10" y="10" width="140" height="110" fill="#080f08" stroke="#1a3a1a" stroke-width="1.5" rx="2"/>
-            <text x="80" y="35" fill="#2d5a2d" font-size="8" text-anchor="middle" font-family="Share Tech Mono" letter-spacing="1">SPÁLŇA</text>
-            <text id="svg-icon-spalna" x="80" y="70" font-size="28" text-anchor="middle" style="opacity:0.7">🛏️</text>
-            <text id="svg-label-spalna" x="80" y="100" fill="#2d5a2d" font-size="9" text-anchor="middle" font-family="Share Tech Mono">Lvl 1</text>
-            <line id="svg-door-spalna" x1="140" y1="65" x2="140" y2="85" stroke="#1a3a1a" stroke-width="3" opacity="0.6"/>
-          </g>
-          <!-- Kancelária (pravý hore) -->
-          <g id="svg-room-kancelaria" class="hq-room-svg" onclick="selectHQRoom('kancelaria')">
-            <rect class="room-bg" x="230" y="10" width="140" height="110" fill="#080f0f" stroke="#1a3a1a" stroke-width="1.5" rx="2"/>
-            <text x="300" y="35" fill="#2d5a2d" font-size="8" text-anchor="middle" font-family="Share Tech Mono" letter-spacing="1">KANCELÁRIA</text>
-            <text id="svg-icon-kancelaria" x="300" y="70" font-size="28" text-anchor="middle" style="opacity:0.7">💻</text>
-            <text id="svg-label-kancelaria" x="300" y="100" fill="#2d5a2d" font-size="9" text-anchor="middle" font-family="Share Tech Mono">Lvl 1</text>
-            <line id="svg-door-kancelaria" x1="230" y1="65" x2="230" y2="85" stroke="#1a3a1a" stroke-width="3" opacity="0.6"/>
-          </g>
-          <!-- Kuchyňa (ľavý dole) -->
-          <g id="svg-room-kuchyna" class="hq-room-svg" onclick="selectHQRoom('kuchyna')">
-            <rect class="room-bg" x="10" y="200" width="140" height="110" fill="#0a0e08" stroke="#1a3a1a" stroke-width="1.5" rx="2"/>
-            <text x="80" y="222" fill="#2d5a2d" font-size="8" text-anchor="middle" font-family="Share Tech Mono" letter-spacing="1">KUCHYŇA</text>
-            <text id="svg-icon-kuchyna" x="80" y="255" font-size="28" text-anchor="middle" style="opacity:0.7">🍳</text>
-            <text id="svg-label-kuchyna" x="80" y="290" fill="#2d5a2d" font-size="9" text-anchor="middle" font-family="Share Tech Mono">Lvl 1</text>
-            <line id="svg-door-kuchyna" x1="140" y1="235" x2="140" y2="255" stroke="#1a3a1a" stroke-width="3" opacity="0.6"/>
-          </g>
-          <!-- Tréningová miestnosť (pravý dole) — zamknutá -->
-          <g id="svg-room-trenazer" class="hq-room-svg" onclick="selectHQRoom('trenazer')">
-            <rect class="room-bg" x="230" y="200" width="140" height="110" fill="#0a0808" stroke="#1a3a1a" stroke-width="1.5" stroke-dasharray="4,4" rx="2" opacity="0.5"/>
-            <text x="300" y="222" fill="#1a3a1a" font-size="8" text-anchor="middle" font-family="Share Tech Mono" letter-spacing="1">TRÉNING</text>
-            <text id="svg-icon-trenazer" x="300" y="255" font-size="28" text-anchor="middle" style="opacity:0.3">🔒</text>
-            <text id="svg-label-trenazer" x="300" y="290" fill="#1a2a1a" font-size="9" text-anchor="middle" font-family="Share Tech Mono">Zamknuté</text>
-            <line id="svg-door-trenazer" x1="230" y1="235" x2="230" y2="255" stroke="#1a3a1a" stroke-width="3" opacity="0.3"/>
-          </g>
-          <!-- Stred — logo HQ -->
-          <circle cx="190" cy="160" r="15" fill="none" stroke="#1a3a1a" stroke-width="1" opacity="0.5"/>
-          <text x="190" y="165" fill="#1a3a1a" font-size="10" text-anchor="middle" font-family="Share Tech Mono" opacity="0.6">HQ</text>
-        </svg>
-      </div>
+
+  <!-- HQ Tab navigation -->
+  <div class="hq-topbar">
+    <button class="hq-tab-btn active" id="hq-tab-main" onclick="hqSwitchTab('main')">
+      <span class="hq-tab-icon">🏠</span> Hlavná izba
+    </button>
+    <button class="hq-tab-btn" id="hq-tab-train" onclick="hqSwitchTab('train')">
+      <span class="hq-tab-icon">🥊</span> Tréningová miestnosť
+    </button>
+    <button class="hq-tab-btn" id="hq-tab-garden" onclick="hqSwitchTab('garden')">
+      <span class="hq-tab-icon">🌿</span> Záhradka
+    </button>
+    <!-- HQ Stats strip -->
+    <div class="hq-stats-strip" style="border-bottom:none;margin-left:auto">
+      <div class="hq-stat-chip">HP/s: <span id="hq-stat-hpregen">+0</span></div>
+      <div class="hq-stat-chip">SAN/s: <span id="hq-stat-sanregen">+0</span></div>
+      <div class="hq-stat-chip">HCK: <span id="hq-stat-hckbonus">+0</span></div>
+      <div class="hq-stat-chip">₿/s: <span id="hq-stat-income">+0</span></div>
     </div>
-    <!-- Pravý panel — detail izby -->
-    <div class="hq-right">
-      <div id="hq-room-detail">
-        <div style="text-align:center;padding:40px 0;color:var(--text-dim);font-family:var(--font-hud);font-size:11px;letter-spacing:2px">
-          // KLIKNI NA IZBU V PLÁNE //
+  </div>
+
+  <div class="hq-content">
+
+    <!-- ═══════════════════════════════════
+         VIEW 1: HLAVNÁ IZBA (spálňa + kuchyňa + kancelária)
+    ═══════════════════════════════════ -->
+    <div class="hq-view active" id="hq-view-main">
+      <div class="hq-room-layout">
+
+        <!-- Canvas: Punch Club štýl izometrická miestnosť -->
+        <div class="hq-room-visual" style="position:relative;">
+          <canvas id="hq-main-canvas"></canvas>
+          <!-- Clickable room overlays -->
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:0;pointer-events:none">
+            <div id="main-room-spalna" onclick="hqSelectSubRoom('spalna')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Spálňa"></div>
+            <div id="main-room-kancelaria" onclick="hqSelectSubRoom('kancelaria')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Kancelária"></div>
+            <div id="main-room-kuchyna" onclick="hqSelectSubRoom('kuchyna')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Kuchyňa"></div>
+            <div style="pointer-events:none"></div>
+          </div>
+          <!-- Room labels overlay -->
+          <div style="position:absolute;inset:0;pointer-events:none;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px">
+              <div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">🛏️ SPÁLŇA</div>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px">
+              <div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">💻 KANCELÁRIA</div>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px">
+              <div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">🍳 KUCHYŇA</div>
+            </div>
+            <div style="display:flex;flex-direction:column;justify-content:center;align-items:center">
+              <div style="font-family:'Orbitron',monospace;font-size:10px;color:#1a3a1a;letter-spacing:2px;opacity:0.5">// HQ //</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right panel: room activities -->
+        <div class="hq-room-panel">
+          <div class="hq-room-panel-header">
+            <div class="hq-room-panel-title" id="main-room-title">🏠 ZÁKLADŇA</div>
+            <div class="hq-room-panel-desc" id="main-room-desc">Klikni na izbu v priestore vľavo pre aktivity a vylepšenia.</div>
+          </div>
+          <div class="hq-panel-body" id="main-room-detail">
+            <div style="text-align:center;padding:40px 0;color:#1a3a1a;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;line-height:2">
+              ◆ SPÁLŇA<br>◆ KANCELÁRIA<br>◆ KUCHYŇA<br><br>
+              <span style="font-size:8px;opacity:0.5">// Klikni na izbu //</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- ═══════════════════════════════════
+         VIEW 2: TRÉNINGOVÁ MIESTNOSŤ
+    ═══════════════════════════════════ -->
+    <div class="hq-view" id="hq-view-train">
+      <div class="hq-room-layout">
+        <div class="hq-room-visual">
+          <canvas id="hq-train-canvas"></canvas>
+        </div>
+        <div class="hq-room-panel">
+          <div class="hq-room-panel-header">
+            <div class="hq-room-panel-title">🥊 TRÉNINGOVÁ MIESTNOSŤ</div>
+            <div class="hq-room-panel-desc" id="train-unlock-status">Uzamknutá miestnosť. Vyžaduje rekonštrukciu.</div>
+          </div>
+          <div class="hq-panel-body" id="train-room-detail"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════
+         VIEW 3: ZÁHRADKA
+    ═══════════════════════════════════ -->
+    <div class="hq-view" id="hq-view-garden">
+      <div class="hq-room-layout">
+        <!-- Garden visual + plot interaction -->
+        <div class="hq-room-visual" id="garden-visual-wrap" style="position:relative">
+          <canvas id="hq-garden-canvas"></canvas>
+          <!-- Plot clickable areas — injected by JS -->
+          <div id="garden-plots-overlay" class="garden-plots-overlay"></div>
+        </div>
+        <!-- Garden right panel -->
+        <div class="hq-room-panel">
+          <div class="hq-room-panel-header">
+            <div class="hq-room-panel-title">🌿 ZÁHRADKA</div>
+            <div class="hq-room-panel-desc">Sadi semienka, čakaj kým vyrastú a zober úrodu za kredity.</div>
+          </div>
+          <div class="hq-panel-body">
+
+            <!-- Selected plot info -->
+            <div id="garden-plot-info" style="display:none">
+              <div class="hq-section-label">🌱 VYBRANÝ ZÁHON</div>
+              <div id="garden-plot-detail" class="plot-detail-box"></div>
+            </div>
+
+            <!-- Seed inventory -->
+            <div class="hq-section-label">🎒 SEMIENKA V INVENTÁRI</div>
+            <div id="garden-seed-inv" class="seed-inv-grid">
+              <div style="color:#1a3a1a;font-size:10px;font-family:'Share Tech Mono',monospace">// Žiadne semienka — kúp v Obchode //</div>
+            </div>
+
+            <!-- Active plots summary -->
+            <div class="hq-section-label" style="margin-top:8px">🌿 STAV ZÁHONOV</div>
+            <div id="garden-plots-summary"></div>
+
+            <!-- Harvest all btn -->
+            <button class="hq-activity-btn" style="margin-top:10px" onclick="gardenHarvestAll()">🌾 Zozbierať všetky zrelé</button>
+
+            <!-- Shop — buy seeds -->
+            <div class="hq-section-label" style="margin-top:12px">🛒 KÚPIŤ SEMIENKA</div>
+            <div class="seed-shop-grid" id="garden-seed-shop"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /hq-content -->
 </div>
 
 <!-- RYBÁRSKY OVERLAY -->
@@ -1608,6 +2061,31 @@ a:hover { color: #fff; }
      NOTIFIKÁCIA
 ═════════════════════════════════════════════ -->
 <div id="notif"></div>
+
+<!-- ═════════════════════════════════════════════
+     MOBILE BOTTOM NAV
+═════════════════════════════════════════════ -->
+<div id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="mobilePanel('stats')">📊<span>Štatistiky</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel('map')">🗺️<span>Mapa</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel('inv')">🎒<span>Inventár</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel('log')">📋<span>Log</span></button>
+</div>
+
+<!-- Mobile overlay panels -->
+<div id="mobile-stats-panel" class="mobile-overlay-panel">
+  <button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>
+  <!-- Stats content injected here from left panel -->
+</div>
+<div id="mobile-map-panel" class="mobile-overlay-panel">
+  <button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>
+</div>
+<div id="mobile-inv-panel" class="mobile-overlay-panel">
+  <button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>
+</div>
+<div id="mobile-log-panel" class="mobile-overlay-panel">
+  <button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>
+</div>
 
 <!-- ═════════════════════════════════════════════
      VÝBER PROFESIE (zobrazí sa ako prvé)
@@ -1705,6 +2183,12 @@ var ITEMS = {
   bitcoin:    { name:'Fyzický Bitcoin',     desc:'Mince s vyrytým kódom. Predaj za 500₿.',  icon:'🪙', usable:true,
     onUse: function(){ S.money+=500; updateMoneyDisplay(); addLog('Bitcoin predaný: +500₿','ok'); removeItem('bitcoin'); } },
   cargo_pants:{ name:'Kapsáče',             desc:'+5 slotov v inventári.',                  icon:'👖', usable:false },
+  // Semienka (záhradka)
+  seed_rajcina: { name:'Rajčinové semienka', desc:'Rast: 2min → 80₿',  icon:'🍅', usable:false },
+  seed_paprika: { name:'Paprikové semienka', desc:'Rast: 5min → 220₿', icon:'🌶️', usable:false },
+  seed_uhorka:  { name:'Uhorkové semienka',  desc:'Rast: 8min → 400₿', icon:'🥒', usable:false },
+  seed_dyna:    { name:'Dynamitová dyňa',    desc:'Rast: 15min → 900₿',icon:'🍉', usable:false },
+  seed_cannabis:{ name:'Tajomná bylina',     desc:'Rast: 30min → 2000₿',icon:'🌿',usable:false },
   // Equip predmety z obchodu
   kevlar_vest: { name:'Kevlar Vesta',       desc:'+20 HP ochrana. Odolná voči čepeliam.',    icon:'🦺', usable:false },
   trench_coat: { name:'Agentský plášť',     desc:'+10 SAN. Vyzerá impozantne.',              icon:'🥼', usable:false },
@@ -1741,6 +2225,13 @@ var FISH_TYPES = [
 //  Kategórie: 'head' | 'pants' | 'weapon' | 'items' | 'special' | 'boats'
 // ══════════════════════════════════════════════════════════════════
 var SHOP_ITEMS = [
+  // — Semienka —
+  { id:'seed_rajcina', name:'Rajčinové semienka', price:30,   icon:'🍅', category:'seeds', desc:'Rast 2 min → +80₿ pri zbere.' },
+  { id:'seed_paprika', name:'Paprikové semienka',  price:80,   icon:'🌶️', category:'seeds', desc:'Rast 5 min → +220₿ pri zbere.' },
+  { id:'seed_uhorka',  name:'Uhorkové semienka',   price:160,  icon:'🥒', category:'seeds', desc:'Rast 8 min → +400₿ pri zbere.' },
+  { id:'seed_dyna',    name:'Dynamitová dyňa',     price:350,  icon:'🍉', category:'seeds', desc:'Rast 15 min → +900₿ pri zbere.' },
+  { id:'seed_cannabis',name:'Tajomná bylina',      price:800,  icon:'🌿', category:'seeds', desc:'Rast 30 min → +2000₿ pri zbere.' },
+
   // — Hlava —
   { id:'cap_alobal',    name:'Alobalový klobúk (Pro)',price:45,    icon:'🛡️', category:'head',
     desc:'+5 SAN. Ochrana pred 5G a kontrolou mysle.' },
@@ -2296,8 +2787,10 @@ var SCENES = {
     ],
     choices: [
       { text:'[A] Vojdeš do pošty hľadať Druida',      next:'posta',         xp:5 },
-      { text:'[B] Ideš priamo k 5G veži v Bánovciach', next:'banovce_cesta', san:-10 },
+      { text:'[B] Ideš k 5G veži v Bánovciach',        next:'banovce_cesta', san:-10,
+        cond:function(){ return S.flags && S.flags['stanica_visited']; }, condFail:'Posledný autobus do Bánoviec si zmeškal. Treba ísť na stanicu zistiť rozvrh — alebo nájsť iný spôsob.' },
       { text:'[C] Preskúmaš okolie centra',             next:'centrum_noc',   xp:5 },
+      { text:'[D] Zájdeš do Miki baru',                 next:'loc_miki' },
       { text:'[F] Ideš rybáriť na Nitricu',             action:'openFishing' },
     ]
   },
@@ -2869,7 +3362,9 @@ var SCENES = {
       'Zadymená miestnosť. Štyri stoly, z toho jeden rovný.',
       'Za barom stojí <b>Igor „Miki" Hronec</b> — veľký muž s malými očami, ktoré však nič neprehliadnu.',
       '',
-      'Otočí sa chrbtom, keď vchádzaš. Utiera pohár, čo bol čistý.',
+      'Vedľa Igora: <b>Lucia Horáková</b>. Barmanka. Pohybuje sa ticho. Pozerá viac ako hovorí.',
+      '',
+      'Igor sa otočí chrbtom, keď vchádzaš. Utiera pohár, čo bol čistý.',
       '',
       '"Zatvorené," hovorí, bez toho aby sa pozrel.',
     ],
@@ -2878,7 +3373,8 @@ var SCENES = {
         cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Igor ťa ignoruje. Potrebuješ odporúčanie.' },
       { text:'[B] Sadnúť si a čakať',                next:'loc_miki_cakat' },
       { text:'[C] Objednať si drink',                 next:'loc_miki_drink' },
-      { text:'[D] Odísť',                            next:'loc_namestie' },
+      { text:'[D] Osloviť barmanku Luciu',            next:'loc_miki_lucia' },
+      { text:'[E] Odísť',                            next:'loc_namestie' },
     ]
   },
 
@@ -4017,6 +4513,801 @@ var SCENES = {
     ]
   },
 
+  // ── LUCIA V MIKI BARE ──────────────────────────────────────────────
+  loc_miki_lucia: {
+    name: 'Miki Bar // Lucia',
+    art: '🥃',
+    text: [
+      '<b>Lucia Horáková</b>. Barmanka.',
+      'Pohybuje sa za barom ako keby bar patril jej — nie Igorovi.',
+      'Keď sa pozrieš, neutečie ti pohľadom. Drží ho.',
+      '',
+      '"Čo dáš?" — Nie pozdrav. Nie otázka. Rozsudok.',
+      '',
+      '<i>// ELEKTROMORÁLKA: Táto žena videla veľa. A zabudla ešte viac. //',
+    ],
+    choices: [
+      { text:'[A] „Slivovicu."',                               next:'loc_miki_lucia_slivo' },
+      { text:'[B] „Nič. Len chcem vedieť — čo si ty za človek?"', next:'loc_miki_lucia_kto' },
+      { text:'[C] „Pracuješ tu dlho?"',                        next:'loc_miki_lucia_dlho' },
+      { text:'[D] „Počul si o LAZARUS protokole?"',            next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Ešte na to nie si pripravený.' },
+      { text:'[E] Odísť',                                      next:'loc_miki' },
+    ]
+  },
+
+  loc_miki_lucia_slivo: {
+    name: 'Miki Bar // Lucia — Slivovica',
+    art: '🥃',
+    text: [
+      'Naleje bez toho, aby sa pozrela na pohár. Vie kde je.',
+      '"Päťdesiat." Pohár pristane pred tebou bez rozpláchnutia.',
+      '',
+      'Slivovica je dobrá. Príliš dobrá na to, aby bola od Igora.',
+      '"Tvoja?" spýtaš sa.',
+      '',
+      'Prvý raz sa usmiala. Nie priateľsky — skôr ako keby si povedal niečo správne.',
+      '"Domáca. Z dediny pri Zliechove."',
+      '"Môj otec robil. Teraz robím ja."',
+      '"On prestal. Z iných dôvodov ako ja začala."',
+    ],
+    onEnter: function(){
+      if(S.money>=50){ S.money-=50; S.san=Math.min(100,S.san+10); updateMoneyDisplay(); updateStats(); addLog('Luciina slivovica: -50₿, SAN +10.','ok'); gainXP(8); S.flags['lucia_slivo']=true; }
+      else { addLog('Nemáš dosť.','warn'); }
+    },
+    choices: [
+      { text:'[A] „Z akých dôvodov si začala ty?"',    next:'loc_miki_lucia_dovody' },
+      { text:'[B] „Tvoj otec — čo mu je?"',            next:'loc_miki_lucia_otec' },
+      { text:'[C] Mlčíš a piješ',                      next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_kto: {
+    name: 'Miki Bar // Lucia — Kto si',
+    art: '🌑',
+    text: [
+      'Zastaví sa. Položí utierku.',
+      '"Zaujímavá otázka. Zvyčajne pýtajú čo mám, nie kto som."',
+      '',
+      'Opiera sa o bar. Pozerá na teba — nie ako na zákazníka.',
+      '"Lucia. Horáková. Barmanka, ak musíš mať titul."',
+      '"Predtým: záchranárka na záchranke v Bojniciach. Tri roky."',
+      '"Potom — jeden večer, jeden pacient, jeden prípad čo sa uzavrel príliš rýchlo."',
+      '"A tu som."',
+      '',
+      '<i>// EMPATHY: Za poslednou vetou je niekoľko rokov hniezda. //',
+    ],
+    onEnter: function(){ gainXP(12); S.flags['lucia_historia']=true; },
+    choices: [
+      { text:'[A] „Čo sa stalo s tým pacientom?"', next:'loc_miki_lucia_pacient' },
+      { text:'[B] „Prečo bar? Prečo práve sem?"',  next:'loc_miki_lucia_preco' },
+      { text:'[C] Objednáš slivovicu',             next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_dlho: {
+    name: 'Miki Bar // Lucia — Dĺžka',
+    art: '🕰️',
+    text: [
+      '"Tri roky." Ani sa nad tým nezamyslí.',
+      '"Igor ma zobral keď som potrebovala prácu a on potreboval niekoho,',
+      'kto sa nebojí nočných zákazníkov."',
+      '',
+      '"Nočných?" opýtaš sa.',
+      '',
+      '"Tých čo prichádzajú po jednej."',
+      '"Nie za drinkom."',
+      'Pohľad na dvere — rýchly, zvykový.',
+      '"Za informáciami."',
+      '',
+      '<i>// Lucia vie viac ako hovorí. Čo nepovie Igorovi — povie poháriku. //',
+    ],
+    onEnter: function(){ gainXP(10); S.flags['lucia_noc_hint']=true; },
+    choices: [
+      { text:'[A] „Aké informácie?"',                next:'loc_miki_lucia_info_noc' },
+      { text:'[B] „A ty — dávaš im čo chcú?"',      next:'loc_miki_lucia_rola' },
+      { text:'[C] Objednáš slivovicu',               next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_pacient: {
+    name: 'Miki Bar // Lucia — Pacient',
+    art: '🚑',
+    text: [
+      'Dlhá pauza. Nie preto, že nechce povedať.',
+      'Preto, že ešte vždy hľadá správne slová.',
+      '',
+      '"Muž. Päťdesiat rokov. Priviezli ho z Vtáčnika."',
+      '"Elektromagnetická expozícia — tak to napísali."',
+      '"Hovoril o zvukoch. O frekvenciách čo necítil uchami."',
+      '"O tom, že vidí siete — nie pavúčie — niečo iné. V ľuďoch."',
+      '',
+      '"Diagnóza: akútna psychóza. Liečba: medikamenty a mlčanie."',
+      '"O týždeň prepustený. Za mesiac mŕtvy — mozgová príhoda."',
+      '"Päťdesiatjeden rokov."',
+      '',
+      '<i>// LOGIC: To isté ako Evin otec. Rovnaký vek. Rovnaké miesto. //',
+    ],
+    onEnter: function(){ gainXP(20); S.san=Math.max(0,S.san-8); updateStats(); S.flags['lucia_pacient_vtacnik']=true; addLog('SAN -8. Vzorec: Vtáčnik — expozícia — smrť.','warn'); },
+    choices: [
+      { text:'[A] „Nahlásila si to?"',               next:'loc_miki_lucia_nahlasila' },
+      { text:'[B] „Prečo si prišla sem?"',           next:'loc_miki_lucia_preco' },
+      { text:'[C] „Vieš o LAZARUS?"',                next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && (S.flags['marek_kod'] || S.flags['lucia_pacient_vtacnik']); }, condFail:'...' },
+    ]
+  },
+
+  loc_miki_lucia_nahlasila: {
+    name: 'Miki Bar // Lucia — Nahlásenie',
+    art: '📋',
+    text: [
+      '"Nahlásila." Krátky smiech — bez humoru.',
+      '"Primárovi. Riaditeľovi. Hygienickej stanici."',
+      '"A potom ma povolali do kancelárie."',
+      '"Muž v obleku. Nie lekár. Nie z nemocnice."',
+      '"Povedal mi, že som unavená. Že pracujem príliš tvrdo."',
+      '"Že by som si mala vziať dovolenku."',
+      '"A že môj pracovný kontrakt — sa dá prehodnotiť."',
+      '',
+      '"Na druhý deň mi povedali, že záchranársky post bol zrušený."',
+      '"Rozpočtové škrty."',
+      '"Samozrejme."',
+      '',
+      '<i>// AUTHORITY: Systém niekedy nepotrebuje pohroziť. Stačí naznačiť. //',
+    ],
+    onEnter: function(){ gainXP(18); S.san=Math.max(0,S.san-5); updateStats(); S.flags['lucia_vyhodena']=true; addLog('Lucia bola umlčaná. Stopa Vtáčnik-nemocnica.','ok'); },
+    choices: [
+      { text:'[A] „Ten muž v obleku — pamätáš si ho?"', next:'loc_miki_lucia_obleceny' },
+      { text:'[B] „Čo vieš o LAZARUS?"',               next:'loc_miki_lucia_lazarus' },
+      { text:'[C] Mlčíš. Dosť si počul.',               next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_obleceny: {
+    name: 'Miki Bar // Lucia — Muž v Obleku',
+    art: '🕵️',
+    text: [
+      '"Pamätám si každého, koho stretnem. Profesionálna deformácia."',
+      '"Vysoký. Šedivý. Hovoril bez prízvuku — čo je samo o sebe prízvuk."',
+      '"A mal — tu."',
+      'Ukazuje za ľavé ucho.',
+      '"Jemná jazva. Operačná. Nie úraz."',
+      '"Implantát?"',
+      '"Možno." Pozrie na teba. "Ty tiež sleduješ uši ľudí?"',
+      '',
+      '<i>// PERCEPTION: Koordinátor LAZARUS. Alebo niekto z jeho tímu. //',
+    ],
+    onEnter: function(){ gainXP(25); S.flags['lucia_jazva']=true; addLog('Stopa: jazva za uchom = implantát. Koordinátor?','ok'); showNotif('Nová stopa: jazva za uchom — implantát LAZARUS?'); },
+    choices: [
+      { text:'[A] „Vieš kde ten muž pracuje?"',  next:'loc_miki_lucia_lazarus' },
+      { text:'[B] „Ďakujem. Toto je dôležité."', next:'loc_miki_lucia_dakujem' },
+    ]
+  },
+
+  loc_miki_lucia_preco: {
+    name: 'Miki Bar // Lucia — Prečo Sem',
+    art: '🌧️',
+    text: [
+      '"Prečo sem." Zopakuje otázku ako keby ju skúšala na váhu.',
+      '',
+      '"Prievidza je dosť malá na to, aby si vždy vedel čo sa deje."',
+      '"A dosť veľká na to, aby ti nikto neveril keď to povieš."',
+      '"Ideálna kombinácia pre niekoho ako som ja."',
+      '',
+      '"Igor nepýta otázky. Bar zavrie o štvrtej."',
+      '"A každý, kto sem príde — príde z dôvodu. Nie zo zvyku."',
+      '"Zákazníci zo zvyku chodia domov."',
+      '"Tí čo sem chodia — hľadajú niečo."',
+      '',
+      '"Ty tiež."',
+      'Nie otázka.',
+    ],
+    onEnter: function(){ gainXP(10); },
+    choices: [
+      { text:'[A] „Čo hľadám podľa teba?"',       next:'loc_miki_lucia_co_hladam' },
+      { text:'[B] Objednáš slivovicu',             next:'loc_miki_lucia_slivo' },
+      { text:'[C] „Čo vieš o noci na Vtáčniku?"', next:'loc_miki_lucia_vtacnik' },
+    ]
+  },
+
+  loc_miki_lucia_co_hladam: {
+    name: 'Miki Bar // Lucia — Čo Hľadáš',
+    art: '🔍',
+    text: [
+      'Odvrátila sa. Utiera pohár — ten istý pohár, tretíkrát.',
+      '"Niekto — alebo niečo."',
+      '"Možno oboje."',
+      '"Ľudia čo hľadajú odpovede majú taký pohľad."',
+      '"Unavený. Ale nie od spánku."',
+      '',
+      '"Videla som takýchto ľudí v záchranke."',
+      '"Raz. Pred trom rokmi."',
+      '"Hovoril divné veci. O signáloch. O frekvenciách."',
+      '"Pol roka nato — nekrológ v novinách."',
+      '',
+      'Otočí sa. Pozrie na teba priamo.',
+      '"Dávaj si pozor čo hľadáš. Niekedy to nájdeš."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-5); updateStats(); gainXP(15); S.flags['lucia_varovanie']=true; },
+    choices: [
+      { text:'[A] „Ten muž — čo si zistila?"',      next:'loc_miki_lucia_pacient' },
+      { text:'[B] „Nájdem to aj tak. Pomôžeš?"',    next:'loc_miki_lucia_pomoc' },
+      { text:'[C] Objednáš ďalšiu slivovicu',       next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_pomoc: {
+    name: 'Miki Bar // Lucia — Pomoc',
+    art: '🤝',
+    text: [
+      'Dlhá pauza.',
+      '"Pomôcť." Opakuje slovo ako keby ho skúšala.',
+      '',
+      '"Viem jedno miesto. Kde tí zákazníci čo prichádzajú po jednej — kde idú potom."',
+      '"Nie domov. Smerom na Vtáčnik."',
+      '"Chodník pri cintoríne vedie ku starému lesníkovi."',
+      '"Za posledné dva mesiace som videla tri autá bez ŠPZ ísť tou cestou."',
+      '"Vracali sa vždy. Ľudia čo išli s nimi — nie vždy."',
+      '',
+      '"To je všetko čo viem." Pohľad ku dverám. "To je všetko čo ti poviem."',
+    ],
+    onEnter: function(){ gainXP(22); S.flags['lucia_cesta_vtacnik']=true; addLog('Stopa od Lucie: cesta cez cintorín na Vtáčnik.','ok'); showNotif('Lucia: cesta ku Vtáčniku cez cintorín'); },
+    choices: [
+      { text:'[A] Ísť do jaskýň (Vtáčnik)',         next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Potrebuješ baterku.' },
+      { text:'[B] „Ďakujem. Naozaj."',              next:'loc_miki_lucia_dakujem' },
+    ]
+  },
+
+  loc_miki_lucia_vtacnik: {
+    name: 'Miki Bar // Lucia — Vtáčnik',
+    art: '⛰️',
+    text: [
+      '"Vtáčnik." Pohár siahol na policu a zastal tam.',
+      '',
+      '"Chodím tam behať. Chodila som. Prestala som pred rokom."',
+      '"Nie preto, že by som bola lenivá."',
+      '"Preto, že raz ráno — pri východe slnka —"',
+      '"— zazrela som na vrchole skupinu ľudí."',
+      '"Stáli v kruhu. Ticho. Nikto sa nehýbal."',
+      '"Jeden sa otočil a pozrel dolu. Na mňa."',
+      '"Príliš ďaleko na to, aby som videla tvár."',
+      '"Dosť blízko na to, aby som vedela — nebol tam náhodou."',
+      '',
+      '<i>// ENCYCLOPEDIA: Kruhové zhromaždenia pri uzlových bodoch. LAZARUS aktivácie? //',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['lucia_vtacnik_kruh']=true; S.san=Math.max(0,S.san-8); updateStats(); addLog('SAN -8. Lucia videla ceremóniu na Vtáčniku.','warn'); },
+    choices: [
+      { text:'[A] „Vieš o LAZARUS protokole?"',     next:'loc_miki_lucia_lazarus' },
+      { text:'[B] „Kedy presne si to videla?"',     next:'loc_miki_lucia_kedy' },
+      { text:'[C] „Nahlásila si to?"',              next:'loc_miki_lucia_nahlasila' },
+    ]
+  },
+
+  loc_miki_lucia_kedy: {
+    name: 'Miki Bar // Lucia — Kedy',
+    art: '📅',
+    text: [
+      '"Kedy." Zamyslí sa. "Trinásty október. Štvrtok."',
+      '"Ráno. Piata hodina — ešte šero."',
+      '"Presne o mesiac neskôr — zmizol Tibor Mach."',
+      '"Elektrikár. Pracoval na Vtáčniku."',
+      '"Poznala som ho — chodil sem raz za týždeň."',
+      '"Vždy sám. Vždy rovnaký stôl."',
+      '"Posledný raz tu sedel tri dni pred tým ako zmizol."',
+      '"Povedal: \'Lucia, ak sa stratím — v šuflíku za barom je obálka.\'"',
+      '',
+      'Odmlčí sa.',
+      '"Obálka tam stále je."',
+    ],
+    onEnter: function(){ gainXP(25); S.flags['lucia_obalka']=true; addLog('Stopa: obálka od Tibora Macha za barom!','ok'); showNotif('Tibor Mach zanechal obálku Lucii!'); },
+    choices: [
+      { text:'[A] „Môžem vidieť tú obálku?"', next:'loc_miki_lucia_obalka_otvor' },
+      { text:'[B] „Prečo si to nepovedala skôr?"', next:'loc_miki_lucia_preco_mlcala' },
+    ]
+  },
+
+  loc_miki_lucia_obalka_otvor: {
+    name: 'Miki Bar // Tibora Obálka',
+    art: '📬',
+    text: [
+      'Vytrhne obálku zo šuflíka. Neotvorenú.',
+      '"Nechcela som vedieť čo v nej je."',
+      '"Ak viem — som zapojená. Ak neviem — som len barmanka."',
+      '',
+      'Podá ti ju.',
+      '"Teraz ty rozhoduj."',
+      '',
+      'Otvoríš. Vnútri — ručne písaná stránka a kľúč.',
+      '"UZOL 7 — VTÁČNIK OMEGA CORE. Prístupový kód: <b>DELTA-9-ECHO</b>."',
+      '"Záložný vstup — bočné dvere bunkra. Ak sa niečo stane."',
+      '<i>// Získal si kód DELTA-9-ECHO a kľúč záložného vstupu. //',
+    ],
+    onEnter: function(){ gainXP(35); addItem('keycard'); S.flags['delta9echo']=true; addLog('Záložný kód DELTA-9-ECHO. Keycard záložný vstup.','ok'); showNotif('Tibor Mach: kód DELTA-9-ECHO + keycard bočného vstupu!'); },
+    choices: [
+      { text:'[A] „Ďakujem, Lucia. Toto zachráni životy."', next:'loc_miki_lucia_dakujem' },
+      { text:'[B] Ísť do bunkra',                          next:'bunker',
+        cond:function(){ return hasItem('spis'); }, condFail:'Potrebuješ aj spis OMEGA.' },
+    ]
+  },
+
+  loc_miki_lucia_preco_mlcala: {
+    name: 'Miki Bar // Lucia — Prečo Mlčala',
+    art: '🤐',
+    text: [
+      'Nezamkne pohľad. Neodvracia sa.',
+      '"Preto, že som sa bála."',
+      '"Nie za seba. Za Tibora som sa bála pred mesiacom."',
+      '"Teraz je Tibor preč. A báť sa za mŕtveho nemá zmysel."',
+      '"Zostávam báť sa za živých."',
+      '',
+      'Pozrie na teba.',
+      '"Ty si živý. Zatiaľ."',
+      '"A môžeš ísť tam kde ja nemôžem."',
+      '"Tak choď."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-5); updateStats(); gainXP(10); },
+    choices: [
+      { text:'[A] Ísť do jaskýň',  next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky sa nevrátiš.' },
+      { text:'[B] Zostávaš chvíľu', next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_lazarus: {
+    name: 'Miki Bar // Lucia — LAZARUS',
+    art: '⚠️',
+    text: [
+      'Utierka padne na bar.',
+      '"LAZARUS." Tichšie ako čokoľvek predtým.',
+      '',
+      '"Ten muž z nemocnice — pred tým ako ho prepustili —"',
+      '"— šeptal to slovo. Znova a znova."',
+      '"Myslela som, že blúzni."',
+      '',
+      '"Potom som to počula ešte raz. Tu. Zákazník po jednej ráno."',
+      '"Hovoril do telefónu. Myslel, že nič nepočujem."',
+      '"\'LAZARUS uzol aktívny. Štvrtá hodina potvrdzuje.\'",',
+      '',
+      '"Neviem čo je LAZARUS."',
+      '"Ale viem, že ľudia čo ho spomínajú — miznú, alebo zomierajú."',
+      '"Takže tebe — tebe to poviem iba raz:"',
+      '"Ak chceš žiť — zabudni na to slovo."',
+      '"Ak nechceš —" Pohľad dolu na bar. "— obálka je tam."',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['lucia_lazarus_vie']=true; addLog('Lucia potvrdila LAZARUS. Uzol. Štvrtá hodina.','ok'); if(!S.flags['lucia_obalka']) S.flags['lucia_obalka']=true; },
+    choices: [
+      { text:'[A] „Obálka — ukáž mi ju."',              next:'loc_miki_lucia_kedy' },
+      { text:'[B] „Čo si videla na Vtáčniku?"',         next:'loc_miki_lucia_vtacnik' },
+      { text:'[C] „Kto bol ten zákazník po jednej?"',   next:'loc_miki_lucia_zakaznik' },
+    ]
+  },
+
+  loc_miki_lucia_zakaznik: {
+    name: 'Miki Bar // Lucia — Zákazník',
+    art: '👤',
+    text: [
+      '"Zákazník." Premýšľa.',
+      '"Nevidela som ho predtým. Ani potom."',
+      '"Vysoký. Šedivý. Hovoril bez prízvuku."',
+      '"A mal tu —"',
+      'Ukazuje za ľavé ucho.',
+      '"Jazvu. Operačnú."',
+      '"Vtedy som si myslela — implantát pre sluch."',
+      '"Teraz si myslím niečo iné."',
+      '',
+      '<i>// Ten istý muž ako z nemocnice. Koordinátor. //',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['lucia_jazva']=true; S.flags['koordinator_jazva']=true; addLog('Koordinátor LAZARUS: jazva za uchom. Implantát.','ok'); showNotif('Koordinátor identifikovaný: jazva, sivý, bez prízvuku'); },
+    choices: [
+      { text:'[A] Ísť do bunkra',                next:'bunker',
+        cond:function(){ return hasItem('keycard') && hasItem('spis'); }, condFail:'Potrebuješ keycard + spis.' },
+      { text:'[B] „Ďakujem. Toto je kľúčové."',  next:'loc_miki_lucia_dakujem' },
+    ]
+  },
+
+  loc_miki_lucia_info_noc: {
+    name: 'Miki Bar // Lucia — Nočné Informácie',
+    art: '🌙',
+    text: [
+      '"Aké informácie." Tón: nie otázka. Registrácia.',
+      '"Závisí čo potrebujú."',
+      '"Niektorí chcú vedieť či niekto tu sedel. Kedy odišiel."',
+      '"Iní chcú vedieť — čo povedal."',
+      '"Barmanka je neviditeľná. Ľudia zabudnú, že tu som."',
+      '"A ja nezabúdam."',
+      '',
+      'Utiera pohár. Ten istý pohár.',
+      '"Čo chceš vedieť ty?"',
+    ],
+    onEnter: function(){ gainXP(8); },
+    choices: [
+      { text:'[A] „Čo vieš o zákazníkoch po jednej ráno?"', next:'loc_miki_lucia_zakaznik' },
+      { text:'[B] „Čo vieš o Vtáčniku?"',                   next:'loc_miki_lucia_vtacnik' },
+      { text:'[C] „Vieš o LAZARUS?"',                        next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Toto slovo tu nespomínaj nadarmo.' },
+    ]
+  },
+
+  loc_miki_lucia_rola: {
+    name: 'Miki Bar // Lucia — Jej Rola',
+    art: '🎭',
+    text: [
+      '"Dávam im čo chcú?" Krátky pohľad. "Niekedy."',
+      '"Drink — áno. Informáciu — závisí od toho, komu."',
+      '"Naposledy som dala \'informáciu\' chlapovi čo mi klamal do očí."',
+      '"Povedal, že hľadá stratenú priateľku."',
+      '"Mal prsteň na prste."',
+      '"Dostal fľašu minerálky a adresu záchranky."',
+      '',
+      '"Kto si ty?"',
+      'Priamy pohľad. Čaká.',
+      '<i>// COMPOSURE: Táto žena číta klamstvo ako text. //',
+    ],
+    onEnter: function(){ gainXP(10); },
+    choices: [
+      { text:'[A] Povedať pravdu',              next:'loc_miki_lucia_pravda' },
+      { text:'[B] „Som len zákazník."',         next:'loc_miki_lucia_klamstvo' },
+      { text:'[C] „Som ten, kto zastaví LAZARUS."', next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Nie si ešte pripravený.' },
+    ]
+  },
+
+  loc_miki_lucia_pravda: {
+    name: 'Miki Bar // Lucia — Pravda',
+    art: '💡',
+    text: [
+      'Povedáš jej. Nie všetko. Dosť.',
+      '',
+      'Keď skončíš — mlčí.',
+      '"Tak." Vydýchne. "Nakoniec niekto."',
+      '"Vedela som, že raz niekto príde a spýta sa správne otázky."',
+      '"Len som nevedela — kedy."',
+      '"A dúfala som, že to bude skôr."',
+      '',
+      '"Tibor mal pravdu. Existuje obálka."',
+      '"A ja ti ju dám."',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['lucia_dovera']=true; addLog('Lucia ti dôveruje. Prístup k obálke.','ok'); },
+    choices: [
+      { text:'[A] „Obálka — kde je?"', next:'loc_miki_lucia_obalka_otvor' },
+    ]
+  },
+
+  loc_miki_lucia_klamstvo: {
+    name: 'Miki Bar // Lucia — Klamstvo',
+    art: '😶',
+    text: [
+      '"Len zákazník." Opakuje pomaly.',
+      'Pohár ide na policu. Utierka na pult.',
+      '"Iste."',
+      '',
+      'Otočí sa chrbtom.',
+      '"Ďalší drink bude sto kreditov."',
+    ],
+    onEnter: function(){ addLog('Lucia ti neverí. Cena zdvojnásobená.','warn'); },
+    choices: [
+      { text:'[A] Povedať pravdu',           next:'loc_miki_lucia_pravda' },
+      { text:'[B] Odísť',                   next:'loc_miki' },
+    ]
+  },
+
+  loc_miki_lucia_dovody: {
+    name: 'Miki Bar // Lucia — Dôvody',
+    art: '🌑',
+    text: [
+      '"Dôvody." Naleje si sama. Malý lok.',
+      '"Záchranárka vidí ľudí na najhoršom mieste ich života."',
+      '"Tri roky. Každý deň. Potom jeden deň — nemôžeš zastaviť."',
+      '"Len stojíš a pozeráš."',
+      '"A systém ti povie, že si urobila čo si mohla."',
+      '',
+      '"Bar je jednoduchší." Pohľad na pohár.',
+      '"Tu si sám zodpovedný za to čo dáš."',
+      '"Nie za to čo nevezmeš."',
+      '',
+      '<i>// EMPATHY: Hanba a úľava v rovnakom pohári. //',
+    ],
+    onEnter: function(){ gainXP(12); S.flags['lucia_burnout']=true; },
+    choices: [
+      { text:'[A] „Čo si nemohla zastaviť?"',    next:'loc_miki_lucia_pacient' },
+      { text:'[B] Mlčíš. Rozumieš.',             next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_otec: {
+    name: 'Miki Bar // Lucia — Otec',
+    art: '🌲',
+    text: [
+      '"Otec." Krátka pauza.',
+      '"Je živý. V Zliechove. Robí slivovicu a číta noviny."',
+      '"Hovorí, že noviny klamú."',
+      '"A slivovica nikdy."',
+      '"Asi má pravdu v oboch prípadoch."',
+      '',
+      'Malý úsmev. Prvý skutočný úsmev od začiatku rozhovoru.',
+      '"Chodím k nemu raz za mesiac."',
+      '"On pýta: \'Kedy prestaneš robiť v bare?\'"',
+      '"Ja pýtam: \'Kedy prestaneš robiť slivovicu?\'"',
+      '"Nikto z nás neodpovie."',
+      '"Tak si dáme pohár a pozrieme sa na lúku."',
+    ],
+    onEnter: function(){ S.san=Math.min(100,S.san+5); updateStats(); gainXP(8); },
+    choices: [
+      { text:'[A] „Daj mi ďalšiu slivovicu."',    next:'loc_miki_lucia_slivo' },
+      { text:'[B] Vrátiť sa k témam',              next:'loc_miki_lucia_preco' },
+    ]
+  },
+
+  loc_miki_lucia_mlcanie: {
+    name: 'Miki Bar // Lucia — Mlčanie',
+    art: '🕯️',
+    text: [
+      'Mlčíte.',
+      'Bar je takmer prázdny. Igor niekde vzadu.',
+      '',
+      'Lucia utiera ten istý pohár. Ty piješ.',
+      '',
+      'Po chvíli: "Je doskoré, alebo neskoro?"',
+      '"Závisí od toho, odkiaľ idieš," odpovieš.',
+      '',
+      '"To je múdra odpoveď," hovorí.',
+      '"Alebo zbabelá."',
+      '"Závisí od toho, odkiaľ idieš," zopakuje tvoje slová.',
+      '"Rovnaká odpoveď. Iný problém."',
+    ],
+    onEnter: function(){ S.san=Math.min(100,S.san+8); updateStats(); gainXP(5); addLog('SAN +8. Chvíľa ticha v bare.','ok'); },
+    choices: [
+      { text:'[A] Odísť',                next:'loc_miki' },
+      { text:'[B] „Ešte jedno."',        next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_dakujem: {
+    name: 'Miki Bar // Lucia — Rozlúčenie',
+    art: '🚪',
+    text: [
+      '"Ďakujem."',
+      '',
+      'Lucia si vezme pohár — ten čo utierala celý večer.',
+      'Konečne ho odloží na policu.',
+      '"Vráť sa," hovorí.',
+      '"Ak budeš môcť."',
+      '',
+      'Nie: "Veľa šťastia."',
+      'Nie: "Daj si pozor."',
+      'Len: "Vráť sa."',
+      '',
+      '<i>// Niekedy je to dostatok. //',
+    ],
+    onEnter: function(){ S.san=Math.min(100,S.san+6); updateStats(); gainXP(10); },
+    choices: [
+      { text:'[A] Ísť na operáciu', next:'start' },
+      { text:'[B] Zostať v bare',   next:'loc_miki' },
+    ]
+  },
+
+  // ── ŽELEZNIČNÁ STANICA ──────────────────────────────────────────────
+  loc_stanica: {
+    name: 'Železničná stanica Prievidza // Noc',
+    art: '🚉',
+    text: [
+      'Stanica. 03:52.',
+      'Štyri koľaje. Jeden vlak — stojí, nevie kam.',
+      '',
+      'Informačná tabuľa bliká. Niektoré spoje zrušené. Niektoré — bez dôvodu oneskorené.',
+      '',
+      '<b>Dušan Kováľ</b> — výpravca — sedí za sklom.',
+      'Číta niečo. Keď ťa uvidí — skryje to pod pult.',
+      '"Stanica je zatvorená," hovorí cez mikrofón.',
+      '"Pre verejnosť."',
+    ],
+    onEnter: function(){ gainXP(5); S.flags['stanica_visited']=true; addLog('Prišiel si na stanicu. Prepojenie do Bánoviec teraz aktívne.','ok'); showNotif('Stanica navštívená — autobusy do Bánoviec preskúmané'); },
+    choices: [
+      { text:'[A] „Kedy ide autobus do Bánoviec?"',    next:'loc_stanica_autobus' },
+      { text:'[B] Pýtaš sa čo čítal',                 next:'loc_stanica_dusal' },
+      { text:'[C] Prezrieš čakáreň',                  next:'loc_stanica_cakaren' },
+      { text:'[D] Odísť',                             next:'start' },
+    ]
+  },
+
+  loc_stanica_autobus: {
+    name: 'Stanica // Autobus do Bánoviec',
+    art: '🚌',
+    text: [
+      '"Autobus." Dušan sa na teba pozrie cez sklo.',
+      '"Posledný odišiel o 23:40."',
+      '"Ďalší je o 05:15."',
+      '"Hodinu a pol máš."',
+      '',
+      'Odmlčí sa. Potom nižšie:',
+      '"Ale pri výjazde z mesta stojí Janošík — čierny mercedes."',
+      '"Chodí tam a späť celú noc."',
+      '"Neberú zákazníkov."',
+      '"Alebo berú. Závisí od toho, či ťa poznajú."',
+      '',
+      '<i>// Autobus 05:15 do Bánoviec. Alebo — iná cesta. //',
+    ],
+    onEnter: function(){ gainXP(10); S.flags['stanica_autobus_info']=true; addLog('Autobus 05:15 do Bánoviec. Čierny mercedes — iná možnosť.','ok'); },
+    choices: [
+      { text:'[A] Počkáš na autobus (Bánovce)',         next:'banovce_cesta' },
+      { text:'[B] Pýtaš sa na čierny mercedes',         next:'loc_stanica_mercedes' },
+      { text:'[C] Vrátiš sa do centra',                 next:'start' },
+    ]
+  },
+
+  loc_stanica_mercedes: {
+    name: 'Stanica // Čierny Mercedes',
+    art: '🚗',
+    text: [
+      '"Mercedes." Dušan sa odvrátil. "To som nepovedal."',
+      '"Aspoň nie oficiálne."',
+      '',
+      'Pauza.',
+      '"Každú noc tam stojí. Príde o jednej. Odíde o štvrtej."',
+      '"Raz som išiel von — fajčiť. Bol som dosť blízko."',
+      '"Vodič mal za uchom niečo. Malé. Blikajúce."',
+      '"Myslel som — bluetooth."',
+      '"Teraz si nie som istý."',
+      '',
+      '<i>// Implantát. Znova. LAZARUS terén. //',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['mercedes_jazva']=true; addLog('Čierny mercedes — vodič s implantátom. LAZARUS spojenie.','ok'); if(!S.flags['lucia_jazva']) S.flags['jazva_stopa']=true; },
+    choices: [
+      { text:'[A] Ísť do Bánoviec (autobus alebo pešo)', next:'banovce_cesta' },
+      { text:'[B] Vrátiť sa a prezrieť čakáreň',        next:'loc_stanica_cakaren' },
+    ]
+  },
+
+  loc_stanica_dusal: {
+    name: 'Stanica // Dušan — Čo Čítal',
+    art: '📄',
+    text: [
+      '"Čo som čítal? Nič."',
+      '"Rozvrh."',
+      '"Servisný plán."',
+      '',
+      'Tri rôzne výhovory za päť sekúnd.',
+      'Pod pultom — papier, A4, hustý text.',
+      '"To nie je rozvrh."',
+      '',
+      'Dlhé ticho.',
+      '"Dostal som to v pondelok. V schránke. Anonymne."',
+      '"Neadresovane. Len vnútri —"',
+      '"— zoznam mien. A dátumy."',
+      '"Niektorých tých ľudí poznám."',
+      '"Všetci zmizli. Pred dátumami vedľa mien."',
+      '',
+      '<i>// LOGIC: Zoznam obetí LAZARUS — vopred plánovaný. //',
+    ],
+    onEnter: function(){ gainXP(25); S.san=Math.max(0,S.san-10); updateStats(); S.flags['stanica_zoznam']=true; addLog('SAN -10. Zoznam obetí — LAZARUS vopred plánuje zmiznutia.','warn'); },
+    choices: [
+      { text:'[A] „Môžem vidieť zoznam?"',           next:'loc_stanica_zoznam_ukaz' },
+      { text:'[B] „Si na tom zozname ty?"',           next:'loc_stanica_dusal_meno' },
+    ]
+  },
+
+  loc_stanica_zoznam_ukaz: {
+    name: 'Stanica // Zoznam LAZARUS',
+    art: '📋',
+    text: [
+      'Váha. Potom papier prichádza cez prepážku.',
+      '',
+      'Dvadsaťtri mien. Dátumy. Niektoré v budúcnosti.',
+      'Tibor Mach — predminulý mesiac. ✓',
+      'Jana Krížová — minulý mesiac. ✓',
+      'Ľuboš Varga — predminulý mesiac. ✓',
+      '',
+      'A dolu: bez dátumu.',
+      'Prázdny riadok s poznámkou: "<b>AGENT DELTA — NEUTRALIZÁCIA PRIORITNÁ</b>".',
+      '',
+      '<i>// Si ty Agent Delta? Alebo niekto iný? //',
+    ],
+    onEnter: function(){ gainXP(30); S.flags['lazarus_zoznam']=true; addItem('spis'); addLog('Zoznam LAZARUS = Spis OMEGA (iná verzia). Získané.','ok'); showNotif('Zoznam obetí LAZARUS — a tajomný Agent Delta'); },
+    choices: [
+      { text:'[A] „Kto je Agent Delta?"',              next:'loc_stanica_delta' },
+      { text:'[B] Ísť do Bánoviec so znalosťou',       next:'banovce_cesta' },
+      { text:'[C] Ísť za Druidom s týmto zoznamom',   next:'posta' },
+    ]
+  },
+
+  loc_stanica_delta: {
+    name: 'Stanica // Agent Delta',
+    art: '⚠️',
+    text: [
+      '"Agent Delta?" Dušan si pozrie ruky.',
+      '"Neviem. Naozaj neviem."',
+      '"Ale — keď som dostal ten papier —"',
+      '"— bol som na nástupišti. Sám."',
+      '"A za päť minút zavolal niekto na stanicu."',
+      '"Na pevnú linku. Pýtal sa: \'Dostal ste balík?\'"',
+      '"Keď som povedal áno, zavesil."',
+      '"Hlas — bez prízvuku. Unavený."',
+      '"Hlas niekoho, kto robí niečo dlho a vie, že to musí skončiť."',
+      '',
+      '<i>// Agent Delta možno sám spolupracuje na zastavení LAZARUS. //',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['delta_spojenec']=true; addLog('Agent Delta možno spojenec — zaslal zoznam.','ok'); },
+    choices: [
+      { text:'[A] Ísť za Druidom',                    next:'posta' },
+      { text:'[B] Ísť do Bánoviec',                   next:'banovce_cesta' },
+    ]
+  },
+
+  loc_stanica_dusal_meno: {
+    name: 'Stanica // Dušan — Jeho Meno',
+    art: '😰',
+    text: [
+      'Dlhé ticho.',
+      '"Nie." Hlasnejšie ako chcel.',
+      '"Nie som na tom zozname."',
+      '"Ešte."',
+      '',
+      '"Ale viem, že kto dostane takýto papier —"',
+      '"— je buď nasledujúci na rade."',
+      '"Alebo niekto chce, aby si o tom vedel."',
+      '"Neviem ktoré je horšie."',
+      '',
+      'Pozrie von oknom na prázdne nástupište.',
+      '"Ráno dám výpoveď. Presťahujem sa k bratovi do Trenčína."',
+      '"Dnes v noci — zostávam tu."',
+      '"Čo mám robiť — odísť? Kto by dal ráno semafór?"',
+    ],
+    onEnter: function(){ gainXP(12); S.san=Math.max(0,S.san-5); updateStats(); },
+    choices: [
+      { text:'[A] „Môžem vidieť zoznam?"',  next:'loc_stanica_zoznam_ukaz' },
+      { text:'[B] „Buď opatrný, Dušan."',  next:'loc_stanica_autobus' },
+    ]
+  },
+
+  loc_stanica_cakaren: {
+    name: 'Stanica // Čakáreň',
+    art: '🪑',
+    text: [
+      'Štyri stoličky. Tri z nich rozbité. Žlté svetlo.',
+      '',
+      'Na stene: mapy regionálnych spojov. Plagát: "PRIEVIDZA — BRÁNA HORNEJ NITRY".',
+      'Niekto ceruzkou dopísal: "A ZÁPAD."',
+      '',
+      'Na jednej stoličke — zabudnutý batoh.',
+      'Malý. Modrý. Zips otvorený.',
+      '',
+      'Vnútri: zápisník, pero, polotučné sušienky a — prázdna injekčná striekačka.',
+      '<i>// PERCEPTION: Nie drogy. Injekcia má etiketu: BIO-MARKER SER-7. //',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['stanica_batoh']=true; addLog('Batoh v čakárni: BIO-MARKER SER-7. LAZARUS biologická stopa.','ok'); showNotif('Nájdený: BIO-MARKER SER-7 — LAZARUS biologický marker?'); },
+    choices: [
+      { text:'[A] Vziať zápisník a preskúmať ho',     next:'loc_stanica_zapisnik' },
+      { text:'[B] Ísť sa opýtať Dušana na batoh',     next:'loc_stanica_dusal' },
+      { text:'[C] Ignorovať a odísť',                 next:'start' },
+    ]
+  },
+
+  loc_stanica_zapisnik: {
+    name: 'Stanica // Zápisník',
+    art: '📓',
+    text: [
+      'Zápisník. Jemné písmo. Dátumy a časy.',
+      '',
+      '"03:47 — signál čistý. Uzol 4 aktívny."',
+      '"04:01 — pulz anomálie. Oravec potvrdzuje."',
+      '"04:15 — vlastná expozícia. Dozimetrické kontroly."',
+      '',
+      'Posledný záznam — dnes. Pred hodinou:',
+      '"BIO-MARKER aplikovaný. Ak zmiznem — zápisník a striekačka sú dôkaz."',
+      '"Moje meno: <b>Tomáš Dravecký</b>. Technik FRI. Agent Delta."',
+      '',
+      '<i>// Agent Delta je TU. V čakárni. Alebo bol. //',
+    ],
+    onEnter: function(){ gainXP(35); S.flags['agent_delta_tomas']=true; addItem('spis'); addLog('Agent Delta = Tomáš Dravecký, technik FRI. Zápisník = Spis OMEGA.','ok'); showNotif('Agent Delta nájdený: Tomáš Dravecký — technik FRI!'); },
+    choices: [
+      { text:'[A] Hľadať Tomáša Draveckého na FRI',   next:'loc_fri' },
+      { text:'[B] Ísť za Druidom s touto informáciou', next:'posta' },
+      { text:'[C] Ísť priamo do bunkra',              next:'bunker',
+        cond:function(){ return hasItem('keycard'); }, condFail:'Potrebuješ keycard.' },
+    ]
+  },
+
 }; // koniec SCENES
 
 // ══════════════════════════════════════════════════════════════════
@@ -4348,9 +5639,9 @@ function goTo(sceneId) {
     // Skry placeholder keď je foto
     var ph = document.getElementById('scene-placeholder');
     if (ph) ph.style.display = 'none';
-    photoEl.classList.remove('loaded');
+    
     photoEl.style.display = 'block';
-    photoEl.onload  = function(){ this.classList.add('loaded'); };
+    
     photoEl.onerror = function(){
       this.style.display='none';
       var ph2 = document.getElementById('scene-placeholder');
@@ -4378,28 +5669,90 @@ function goTo(sceneId) {
 
 function typeText(el, text, cb) {
   if (typingTimer) clearTimeout(typingTimer);
+  // Fallout 3 style: parse lines into NPC bubbles vs narration
+  renderDialogLines(el, text);
+  if (cb) cb();
+}
+
+function renderDialogLines(el, text) {
   el.innerHTML = '';
+  var lines = text.split('\n');
 
-  // Parser pre <b> a <i> tagy
-  var parsed = [];
-  var re = /<b>(.*?)<\/b>|<i>(.*?)<\/i>|([\s\S])/g, m;
-  while ((m = re.exec(text)) !== null) {
-    if (m[1] !== undefined)      parsed.push({ t:'b', v:m[1] });
-    else if (m[2] !== undefined) parsed.push({ t:'i', v:m[2] });
-    else                          parsed.push({ t:'c', v:m[3] });
-  }
+  // Group consecutive quoted/speech lines vs narration
+  var currentNarr = [];
+  var currentNPC  = null; // { speaker, art, lines[] }
+  var fragments   = [];   // { type:'npc'|'narr', ... }
 
-  var SPEED = 18, i = 0;
-  function tick() {
-    if (i >= parsed.length) {
-      el.innerHTML = renderParsed(parsed) + '<span class="cursor"></span>';
-      if (cb) cb(); return;
+  function flushNarr() {
+    if (currentNarr.length) {
+      fragments.push({ type:'narr', lines: currentNarr.slice() });
+      currentNarr = [];
     }
-    i++;
-    el.innerHTML = renderParsed(parsed.slice(0,i)) + '<span class="cursor"></span>';
-    typingTimer  = setTimeout(tick, parsed[i-1].t === 'c' ? SPEED : 0);
   }
-  tick();
+  function flushNPC() {
+    if (currentNPC) {
+      fragments.push({ type:'npc', data: currentNPC });
+      currentNPC = null;
+    }
+  }
+
+  lines.forEach(function(line) {
+    var trimmed = line.trim();
+    // Detect direct speech: line starts with " or contains <b>Name</b>
+    var isSpeech = trimmed.startsWith('"') || (trimmed.startsWith("'") && trimmed.length > 2);
+    var isSystem = trimmed.startsWith('<i>//') || trimmed.startsWith('// ');
+
+    if (isSpeech || isSystem) {
+      flushNarr();
+      if (!currentNPC) currentNPC = { lines: [] };
+      currentNPC.lines.push(trimmed);
+    } else {
+      flushNPC();
+      if (trimmed !== '') currentNarr.push(trimmed);
+      else if (currentNarr.length) currentNarr.push('__BLANK__');
+    }
+  });
+  flushNarr(); flushNPC();
+
+  fragments.forEach(function(frag) {
+    if (frag.type === 'narr') {
+      var div = document.createElement('div');
+      div.className = 'dialog-narration';
+      var html = frag.lines.filter(function(l){ return l !== '__BLANK__'; }).join('<br>');
+      div.innerHTML = safeHtml(html);
+      el.appendChild(div);
+    } else if (frag.type === 'npc') {
+      var div = document.createElement('div');
+      div.className = 'dialog-npc-bubble';
+      // Get current scene art for avatar
+      var sc = SCENES[S.scene];
+      var art = sc ? (sc.art || '💬') : '💬';
+      div.setAttribute('data-speaker', sc ? (sc.name || 'NPC') : 'NPC');
+      var avatarSpan = document.createElement('span');
+      avatarSpan.className = 'npc-avatar';
+      avatarSpan.textContent = art;
+      div.appendChild(avatarSpan);
+      var textDiv = document.createElement('div');
+      textDiv.innerHTML = safeHtml(frag.data.lines.join('<br>'));
+      div.appendChild(textDiv);
+      el.appendChild(div);
+    }
+  });
+
+  // divider before choices
+  var div2 = document.createElement('div');
+  div2.className = 'dialog-divider';
+  el.appendChild(div2);
+}
+
+function safeHtml(s) {
+  return s
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'\x01')
+    .replace(/>/g,'\x02')
+    .replace(/\x01b\x02([\s\S]*?)\x01\/b\x02/g,'<b>$1</b>')
+    .replace(/\x01i\x02([\s\S]*?)\x01\/i\x02/g,'<i>$1</i>')
+    .replace(/\x01/g,'&lt;').replace(/\x02/g,'&gt;');
 }
 
 function renderParsed(chunks) {
@@ -4417,26 +5770,42 @@ function escH(s) {
 
 function renderChoices(choices) {
   var wrap = document.getElementById('choices-wrap');
-  wrap.innerHTML = '';
+  wrap.innerHTML = '<div id="choices-label">// VOĽBY //</div>';
   if (!choices || !choices.length) return;
 
-  choices.forEach(function(ch) {
+  choices.forEach(function(ch, idx) {
     var btn = document.createElement('button');
     btn.className = 'choice-btn';
 
+    // Number badge
+    var numSpan = document.createElement('span');
+    numSpan.className = 'choice-num';
+    numSpan.textContent = (idx + 1) + '.';
+
+    var textSpan = document.createElement('span');
+    textSpan.className = 'choice-text';
+
     if (ch.action) {
-      btn.textContent = ch.text;
+      textSpan.textContent = ch.text;
+      btn.appendChild(numSpan);
+      btn.appendChild(textSpan);
       btn.onclick = function() { handleChoiceAction(ch); };
       wrap.appendChild(btn); return;
     }
 
     var ok = !ch.cond || ch.cond(S);
+    // Strip leading [X] letter prefix from text since we use numbers now
+    var displayText = ch.text.replace(/^\[[A-Z]\]\s*/, '');
+
     if (!ok) {
-      btn.textContent = ch.text + '  [nedostupné]';
+      textSpan.innerHTML = displayText + (ch.condFail ? '<span class="choice-fail-hint">⚠ ' + ch.condFail + '</span>' : '');
+      btn.appendChild(numSpan);
+      btn.appendChild(textSpan);
       btn.disabled = true;
-      btn.title    = ch.condFail || 'Podmienka nesplnená';
     } else {
-      btn.textContent = ch.text;
+      textSpan.textContent = displayText;
+      btn.appendChild(numSpan);
+      btn.appendChild(textSpan);
       btn.onclick = function() {
         if (ch.hp)  { S.hp  = Math.max(0, S.hp  + ch.hp);  updateStats(); }
         if (ch.san) { S.san = Math.max(0, S.san + ch.san); updateStats(); }
@@ -5210,33 +6579,39 @@ var HQ_ROOMS = {
   }
 };
 
+// ══════════════════════════════════════════════════════════════════
+//  ► NOVÝ HQ SYSTÉM — Punch Club štýl (3 taby + záhradka)
+// ══════════════════════════════════════════════════════════════════
+
+var HQ_activeTab = 'main';
+var HQ_selectedSubRoom = null;
+var HQ_selectedPlot = null;
+var HQ_selectedSeed = null;
+
+// ── Základné HQ helpers ──────────────────────────────────────
 function HQ_getRoomLevel(roomId) {
   if (!S.hqUpgrades) return 0;
   return (S.hqUpgrades[roomId] || []).length;
 }
-
 function HQ_hasUpgrade(roomId, upgradeId) {
   if (!S.hqUpgrades) return false;
   return (S.hqUpgrades[roomId] || []).indexOf(upgradeId) > -1;
 }
-
 function HQ_isRoomUnlocked(roomId) {
-  var room = HQ_ROOMS[roomId];
+  var room = HQ_ROOMS[roomId]; if (!room) return false;
   if (!room.locked) return true;
   return S.hqUnlocked && S.hqUnlocked[roomId];
 }
-
 function HQ_unlockRoom(roomId) {
-  var room = HQ_ROOMS[roomId]; if (!room.locked) return;
+  var room = HQ_ROOMS[roomId]; if (!room || !room.locked) return;
   if (S.money < room.unlockPrice) { showNotif('Nedostatok kreditov! Treba ₿' + room.unlockPrice); return; }
   S.money -= room.unlockPrice; updateMoneyDisplay();
   if (!S.hqUnlocked) S.hqUnlocked = {};
   S.hqUnlocked[roomId] = true;
   addLog('🔓 Miestnosť odomknutá: ' + room.name + '!', 'ok');
   showNotif('🔓 ' + room.name + ' odomknutá!');
-  renderHQMap(); selectHQRoom(roomId);
+  renderTrainRoomPanel(); drawTrainRoom();
 }
-
 function HQ_buyUpgrade(roomId, upgradeId) {
   var room = HQ_ROOMS[roomId]; if (!room) return;
   var upg = room.upgrades.filter(function(u){ return u.id === upgradeId; })[0]; if (!upg) return;
@@ -5249,17 +6624,15 @@ function HQ_buyUpgrade(roomId, upgradeId) {
   if (upg.effect) upg.effect();
   addLog('✓ Upgrade: ' + upg.name + ' zakúpený!', 'ok');
   showNotif('✓ ' + (upg.icon||'⚙') + ' ' + upg.name);
-  renderHQStats(); renderHQMap(); selectHQRoom(roomId);
+  renderHQStats(); hqSelectSubRoom(HQ_selectedSubRoom);
+  drawMainRoom(); drawTrainRoom();
 }
-
 function HQ_doActivity(roomId, actId) {
   var room = HQ_ROOMS[roomId]; if (!room) return;
   var act = room.activities.filter(function(a){ return a.id === actId; })[0]; if (!act) return;
-  var cdKey = roomId + '_' + actId;
-  var now = Date.now(); var cdMs = (act.cooldown || 0) * 1000;
+  var cdKey = roomId + '_' + actId; var now = Date.now(); var cdMs = (act.cooldown || 0) * 1000;
   if (cdMs > 0 && HQ_COOLDOWNS[cdKey] && now < HQ_COOLDOWNS[cdKey]) {
-    var rem = Math.ceil((HQ_COOLDOWNS[cdKey] - now) / 1000);
-    showNotif('Cooldown: ešte ' + rem + 's'); return;
+    var rem = Math.ceil((HQ_COOLDOWNS[cdKey] - now) / 1000); showNotif('Cooldown: ešte ' + rem + 's'); return;
   }
   if (act.requires && !act.requires()) { showNotif(act.requiresLabel || 'Podmienka nesplnená'); return; }
   if (act.cost && act.cost > 0) {
@@ -5268,142 +6641,703 @@ function HQ_doActivity(roomId, actId) {
   }
   act.action();
   if (cdMs > 0) HQ_COOLDOWNS[cdKey] = now + cdMs;
-  renderHQRoomDetail(roomId);
+  hqSelectSubRoom(HQ_selectedSubRoom);
 }
 
-function selectHQRoom(roomId) {
-  HQ_selectedRoom = roomId;
-  document.querySelectorAll('.hq-room-svg').forEach(function(g){ g.classList.remove('active-room'); });
-  var el = document.getElementById('svg-room-' + roomId);
-  if (el) el.classList.add('active-room');
-  renderHQRoomDetail(roomId);
+// ── Tab switching ────────────────────────────────────────────
+function hqSwitchTab(tab) {
+  HQ_activeTab = tab;
+  document.querySelectorAll('.hq-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById('hq-tab-' + tab); if (btn) btn.classList.add('active');
+  document.querySelectorAll('.hq-view').forEach(function(v){ v.classList.remove('active'); });
+  var view = document.getElementById('hq-view-' + tab); if (view) view.classList.add('active');
+  if (tab === 'main')   { setTimeout(drawMainRoom, 50); }
+  if (tab === 'train')  { setTimeout(drawTrainRoom, 50); renderTrainRoomPanel(); }
+  if (tab === 'garden') { setTimeout(drawGardenRoom, 50); renderGardenPanel(); }
 }
 
-function renderHQRoomDetail(roomId) {
+// ── Sub-room selection in main view ──────────────────────────
+function hqSelectSubRoom(roomId) {
+  HQ_selectedSubRoom = roomId;
+  // Highlight selected quad
+  ['spalna','kancelaria','kuchyna'].forEach(function(r){
+    var el = document.getElementById('main-room-' + r);
+    if (el) el.style.borderColor = r === roomId ? 'rgba(57,255,20,0.4)' : 'transparent';
+  });
+  if (!roomId) return;
   var room = HQ_ROOMS[roomId]; if (!room) return;
-  var detail = document.getElementById('hq-room-detail'); if (!detail) return;
-  var unlocked = HQ_isRoomUnlocked(roomId);
-
-  var html = '<div class="hq-room-header">';
-  html += '<div class="hq-room-icon">' + room.icon + '</div>';
-  html += '<div class="hq-room-name">' + room.name.toUpperCase() + '</div>';
-  html += '<div class="hq-room-desc">' + escH(room.desc) + '</div>';
-  html += '</div>';
-
-  if (!unlocked) {
-    html += '<div style="text-align:center;padding:30px 0">';
-    html += '<div style="font-size:40px;margin-bottom:12px">🔒</div>';
-    html += '<div style="font-family:var(--font-hud);font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-bottom:16px">MIESTNOSŤ ZAMKNUTÁ</div>';
-    html += '<div style="font-size:12px;color:var(--text-dim);margin-bottom:16px">Rekonštrukcia stojí <b style="color:var(--warn)">₿' + (room.unlockPrice||0).toLocaleString('sk') + '</b></div>';
-    var canUnlock = S.money >= (room.unlockPrice||0);
-    html += '<button class="hq-activity-btn" style="max-width:200px;margin:0 auto' + (canUnlock?';border-color:var(--green3);color:var(--green)':'') + '" ' + (canUnlock?'':'disabled') + ' onclick="HQ_unlockRoom(\'' + roomId + '\')">';
-    html += canUnlock ? '🔓 Odomknúť miestnosť' : '💸 Nedostatok kreditov';
-    html += '</button></div>';
-    detail.innerHTML = html; return;
-  }
-
+  var titleEl = document.getElementById('main-room-title');
+  var descEl  = document.getElementById('main-room-desc');
+  var detailEl= document.getElementById('main-room-detail');
+  if (titleEl) titleEl.textContent = room.icon + ' ' + room.name.toUpperCase();
+  if (descEl)  descEl.textContent  = room.desc;
+  if (!detailEl) return;
+  var html = '';
   if (room.activities && room.activities.length) {
     html += '<div class="hq-section-label">⚡ Aktivity</div>';
     room.activities.forEach(function(act) {
       var cdKey = roomId + '_' + act.id; var now = Date.now();
-      var onCd = act.cooldown && HQ_COOLDOWNS[cdKey] && now < HQ_COOLDOWNS[cdKey];
-      var rem = onCd ? Math.ceil((HQ_COOLDOWNS[cdKey] - now) / 1000) : 0;
+      var onCd  = act.cooldown && HQ_COOLDOWNS[cdKey] && now < HQ_COOLDOWNS[cdKey];
+      var rem   = onCd ? Math.ceil((HQ_COOLDOWNS[cdKey] - now) / 1000) : 0;
       var needsReq = act.requires && !act.requires();
       var disabled = onCd || needsReq || (act.cost && S.money < act.cost);
+      var cdPct = onCd ? Math.max(0, Math.min(100, 100 - (rem / act.cooldown * 100))) : 100;
       html += '<div class="hq-activity-card">';
-      html += '<div class="hq-activity-header">';
-      html += '<span class="hq-activity-icon">' + act.icon + '</span>';
+      html += '<div class="hq-activity-header"><span class="hq-activity-icon">' + act.icon + '</span>';
       html += '<span class="hq-activity-name">' + escH(act.name) + '</span>';
       if (act.cost > 0) html += '<span class="hq-activity-cost">₿' + act.cost + '</span>';
-      html += '</div>';
-      html += '<div class="hq-activity-desc">' + escH(act.desc) + '</div>';
-      if (needsReq) html += '<div style="font-size:10px;color:var(--warn);margin-bottom:6px;letter-spacing:1px">🔒 ' + escH(act.requiresLabel||'Podmienka nesplnená') + '</div>';
-      var btnLabel = onCd ? ('⏳ Cooldown: ' + rem + 's') : '▶ Vykonať';
+      html += '</div><div class="hq-activity-desc">' + escH(act.desc) + '</div>';
+      if (needsReq) html += '<div style="font-size:10px;color:#f59e0b;margin-bottom:6px">🔒 ' + escH(act.requiresLabel||'') + '</div>';
+      var btnLabel = onCd ? ('⏳ ' + rem + 's') : '▶ Vykonať';
       html += '<button class="hq-activity-btn" ' + (disabled?'disabled':'') + ' onclick="HQ_doActivity(\'' + roomId + '\',\'' + act.id + '\')">' + btnLabel + '</button>';
+      if (onCd) html += '<div class="hq-cd-bar"><div class="hq-cd-bar-fill" style="width:' + cdPct + '%"></div></div>';
       html += '</div>';
     });
   }
-
   if (room.upgrades && room.upgrades.length) {
-    html += '<div class="hq-section-label" style="margin-top:8px">🔧 Vylepšenia miestnosti</div>';
+    html += '<div class="hq-section-label" style="margin-top:8px">🔧 Vylepšenia</div>';
     room.upgrades.forEach(function(upg) {
       var owned = HQ_hasUpgrade(roomId, upg.id); var canBuy = !owned && S.money >= upg.price;
       html += '<div class="hq-upgrade-card ' + (owned?'owned':'') + '">';
-      html += '<div class="hq-upgrade-header">';
-      html += '<span class="hq-upgrade-name">' + (upg.icon||'⚙') + ' ' + escH(upg.name) + '</span>';
+      html += '<div class="hq-upgrade-header"><span class="hq-upgrade-name">' + (upg.icon||'⚙') + ' ' + escH(upg.name) + '</span>';
       if (!owned) html += '<span class="hq-upgrade-price">₿' + upg.price.toLocaleString('sk') + '</span>';
-      html += '</div>';
-      html += '<div class="hq-upgrade-desc">' + escH(upg.desc) + '</div>';
-      html += '<div style="font-size:9px;color:var(--green3);margin-bottom:6px;letter-spacing:1px">→ ' + escH(upg.effectLabel||'') + '</div>';
-      if (owned) {
-        html += '<div class="hq-upgrade-owned-badge">✓ NAINŠTALOVANÉ</div>';
-      } else {
-        html += '<button class="hq-upgrade-btn" ' + (canBuy?'':'disabled') + ' onclick="HQ_buyUpgrade(\'' + roomId + '\',\'' + upg.id + '\')">';
-        html += canBuy ? '[ KÚPIŤ ]' : '[ ₿' + upg.price.toLocaleString('sk') + ' ]';
-        html += '</button>';
-      }
+      html += '</div><div class="hq-upgrade-desc">' + escH(upg.desc) + '</div>';
+      html += '<div style="font-size:9px;color:#16a34a;margin-bottom:6px">→ ' + escH(upg.effectLabel||'') + '</div>';
+      if (owned) { html += '<div class="hq-upgrade-owned-badge">✓ NAINŠTALOVANÉ</div>'; }
+      else { html += '<button class="hq-upgrade-btn" ' + (canBuy?'':'disabled') + ' onclick="HQ_buyUpgrade(\'' + roomId + '\',\'' + upg.id + '\')">' + (canBuy ? '[ KÚPIŤ ]' : '[ ₿' + upg.price.toLocaleString('sk') + ' ]') + '</button>'; }
       html += '</div>';
     });
   }
-  detail.innerHTML = html;
+  detailEl.innerHTML = html || '<div style="color:#1a3a1a;padding:20px 0;font-size:10px;font-family:Share Tech Mono,monospace;text-align:center">// prázdne //</div>';
 }
 
-function renderHQMap() {
-  var rooms = ['spalna','kancelaria','kuchyna','trenazer'];
-  rooms.forEach(function(roomId) {
-    var room = HQ_ROOMS[roomId];
-    var unlocked = HQ_isRoomUnlocked(roomId);
-    var level = HQ_getRoomLevel(roomId);
-    var labelEl = document.getElementById('svg-label-' + roomId);
-    var iconEl  = document.getElementById('svg-icon-' + roomId);
-    var groupEl = document.getElementById('svg-room-' + roomId);
-    var doorEl  = document.getElementById('svg-door-' + roomId);
-    if (labelEl) {
-      if (!unlocked) { labelEl.textContent = 'Zamknuté'; labelEl.setAttribute('fill', '#1a2a1a'); }
-      else {
-        var upgs = S.hqUpgrades && S.hqUpgrades[roomId] ? S.hqUpgrades[roomId].length : 0;
-        labelEl.textContent = 'Lvl ' + (upgs + 1);
-        labelEl.setAttribute('fill', upgs > 0 ? '#39ff14' : '#2d5a2d');
-      }
+// ── PUNCH CLUB CANVAS DRAWING ────────────────────────────────
+
+function drawRoom(canvasId, config) {
+  var canvas = document.getElementById(canvasId); if (!canvas) return;
+  var wrap = canvas.parentElement;
+  canvas.width  = wrap.clientWidth  || 700;
+  canvas.height = wrap.clientHeight || 500;
+  var c = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+
+  // Background — dark room gradient
+  var bg = c.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0, config.bgTop || '#06080a');
+  bg.addColorStop(1, config.bgBot || '#020404');
+  c.fillStyle = bg; c.fillRect(0,0,W,H);
+
+  // Floor — isometric tiles
+  var tileW = 64, tileH = 32;
+  var cols = Math.ceil(W / tileW) + 4;
+  var rows = Math.ceil(H / tileH) + 4;
+  var offX = W * 0.5, offY = H * 0.25;
+  c.save();
+  for (var row = -2; row < rows; row++) {
+    for (var col = -2; col < cols; col++) {
+      var x = offX + (col - row) * tileW * 0.5;
+      var y = offY + (col + row) * tileH * 0.5;
+      // Tile face
+      c.beginPath();
+      c.moveTo(x, y);
+      c.lineTo(x + tileW*0.5, y + tileH*0.5);
+      c.lineTo(x, y + tileH);
+      c.lineTo(x - tileW*0.5, y + tileH*0.5);
+      c.closePath();
+      var alt = (row + col) % 2 === 0;
+      c.fillStyle = alt ? (config.tileA || '#07100a') : (config.tileB || '#080e0a');
+      c.fill();
+      c.strokeStyle = config.tileEdge || 'rgba(57,255,20,0.04)';
+      c.lineWidth = 0.5; c.stroke();
     }
-    if (iconEl) { iconEl.textContent = unlocked ? room.icon : '🔒'; iconEl.style.opacity = unlocked ? '0.7' : '0.3'; }
-    if (groupEl) {
-      var rectEl = groupEl.querySelector('rect.room-bg');
-      if (rectEl) { rectEl.style.opacity = unlocked ? '1' : '0.5'; }
-    }
-    if (doorEl) {
-      doorEl.setAttribute('stroke', unlocked ? '#39ff14' : '#1a3a1a');
-      doorEl.setAttribute('opacity', unlocked ? '0.6' : '0.3');
+  }
+  c.restore();
+
+  // Back wall
+  c.fillStyle = config.wallColor || '#050a06';
+  c.fillRect(0, 0, W, H * 0.38);
+  // Wall grid lines
+  c.strokeStyle = config.wallGrid || 'rgba(57,255,20,0.04)';
+  c.lineWidth = 1;
+  for (var wx = 0; wx < W; wx += 64) { c.beginPath(); c.moveTo(wx,0); c.lineTo(wx, H*0.38); c.stroke(); }
+  for (var wy = 0; wy < H*0.38; wy += 32) { c.beginPath(); c.moveTo(0,wy); c.lineTo(W,wy); c.stroke(); }
+
+  // Wall/floor border line
+  c.strokeStyle = config.edgeColor || 'rgba(57,255,20,0.12)';
+  c.lineWidth = 2;
+  c.beginPath(); c.moveTo(0, H*0.38); c.lineTo(W, H*0.38); c.stroke();
+
+  // Draw furniture
+  if (config.drawFurniture) config.drawFurniture(c, W, H);
+
+  // Scanlines overlay
+  c.save();
+  for (var sl = 0; sl < H; sl += 4) {
+    c.fillStyle = 'rgba(0,0,0,0.06)';
+    c.fillRect(0, sl, W, 2);
+  }
+  c.restore();
+
+  // Corner glow
+  var glow = c.createRadialGradient(0, H, 0, 0, H, W*0.5);
+  glow.addColorStop(0, 'rgba(57,255,20,0.04)');
+  glow.addColorStop(1, 'transparent');
+  c.fillStyle = glow; c.fillRect(0,0,W,H);
+}
+
+// Helper: draw isometric box (furniture)
+function isoBox(c, wx, wy, wz, w, h, d, colTop, colLeft, colRight) {
+  // Top face
+  c.beginPath();
+  c.moveTo(wx, wy - wz);
+  c.lineTo(wx + w, wy + w*0.5 - wz);
+  c.lineTo(wx + w - d, wy + w*0.5 + d*0.5 - wz);
+  c.lineTo(wx - d, wy + d*0.5 - wz);
+  c.closePath(); c.fillStyle = colTop; c.fill();
+  // Left face
+  c.beginPath();
+  c.moveTo(wx - d, wy + d*0.5 - wz);
+  c.lineTo(wx + w - d, wy + w*0.5 + d*0.5 - wz);
+  c.lineTo(wx + w - d, wy + w*0.5 + d*0.5);
+  c.lineTo(wx - d, wy + d*0.5);
+  c.closePath(); c.fillStyle = colLeft; c.fill();
+  // Right face
+  c.beginPath();
+  c.moveTo(wx + w, wy + w*0.5 - wz);
+  c.lineTo(wx + w - d, wy + w*0.5 + d*0.5 - wz);
+  c.lineTo(wx + w - d, wy + w*0.5 + d*0.5);
+  c.lineTo(wx + w, wy + w*0.5);
+  c.closePath(); c.fillStyle = colRight; c.fill();
+}
+
+// ── MAIN ROOM CANVAS ─────────────────────────────────────────
+function drawMainRoom() {
+  drawRoom('hq-main-canvas', {
+    bgTop: '#050a05', bgBot: '#020402',
+    tileA: '#071008', tileB: '#08120a',
+    tileEdge: 'rgba(57,255,20,0.05)',
+    wallColor: '#040804', wallGrid: 'rgba(57,255,20,0.04)',
+    edgeColor: 'rgba(57,255,20,0.15)',
+    drawFurniture: function(c, W, H) {
+      var fl = H * 0.42;
+      // === LEFT QUADRANT: Spálňa ===
+      // Bed
+      isoBox(c, W*0.08, fl+10, 18, 95, 0, 50, '#0d1a0a','#0a1208','#0c1509');
+      // Mattress
+      isoBox(c, W*0.09, fl+8, 20, 88, 0, 45, '#182a12','#12200e','#15260f');
+      // Pillow
+      isoBox(c, W*0.10, fl+4, 24, 22, 0, 18, '#1f3a18','#182e12','#1c3415');
+      // Lamp
+      isoBox(c, W*0.22, fl+6, 32, 12, 0, 12, '#0a1a0a','#081208','#091509');
+      c.fillStyle='#39ff14'; c.shadowBlur=12; c.shadowColor='#39ff14';
+      c.beginPath(); c.arc(W*0.23, fl-12, 5, 0, Math.PI*2); c.fill();
+      c.shadowBlur=0;
+      // Label emoji
+      c.font = '28px serif'; c.textAlign='center'; c.fillStyle='rgba(57,255,20,0.6)';
+      c.fillText('🛏️', W*0.15, fl - 5);
+
+      // === RIGHT QUADRANT: Kancelária ===
+      var kx = W * 0.52;
+      // Desk
+      isoBox(c, kx, fl+8, 20, 110, 0, 45, '#0a0d12','#07090e','#080b10');
+      // Monitor 1
+      isoBox(c, kx+10, fl-10, 50, 30, 0, 5, '#111a22','#0c1219','#0e151f');
+      isoBox(c, kx+12, fl-8, 52, 26, 0, 4, '#0a2a3a','#082030','#092535');
+      c.fillStyle='rgba(34,211,238,0.4)'; c.fillRect(kx+14, fl-58, 22, 22);
+      // Monitor 2
+      isoBox(c, kx+48, fl-8, 50, 28, 0, 5, '#111a22','#0c1219','#0e151f');
+      isoBox(c, kx+50, fl-6, 52, 24, 0, 4, '#0a2a3a','#082030','#092535');
+      c.fillStyle='rgba(34,211,238,0.3)'; c.fillRect(kx+52, fl-54, 20, 20);
+      // Server rack on wall
+      c.fillStyle='#0a1018'; c.fillRect(kx+85, fl-80, 25, 75);
+      c.fillStyle='rgba(57,255,20,0.2)'; c.fillRect(kx+88, fl-76, 5, 2);
+      c.fillRect(kx+88, fl-70, 5, 2); c.fillRect(kx+88, fl-64, 5, 2);
+      c.font = '22px serif'; c.textAlign='center';
+      c.fillText('💻', kx+40, fl-2);
+      // Chair
+      isoBox(c, kx+20, fl+38, 12, 28, 0, 28, '#0a0a10','#07070c','#08080e');
+
+      // === BOTTOM LEFT: Kuchyňa ===
+      var kky = fl + 55;
+      // Counter
+      isoBox(c, W*0.05, kky, 20, 120, 0, 35, '#0d100a','#0a0d08','#0c0f09');
+      // Pot on counter
+      isoBox(c, W*0.10, kky-8, 28, 20, 0, 20, '#1a2a10','#14220c','#17260e');
+      // Fridge
+      isoBox(c, W*0.28, fl+58, 18, 24, 0, 40, '#0c1210','#090e0c','#0b100e');
+      c.font = '22px serif'; c.textAlign='center';
+      c.fillText('🍳', W*0.14, kky-12);
     }
   });
 }
 
+// ── TRAINING ROOM CANVAS ─────────────────────────────────────
+function drawTrainRoom() {
+  var unlocked = HQ_isRoomUnlocked('trenazer');
+  drawRoom('hq-train-canvas', {
+    bgTop: '#0a0505', bgBot: '#040202',
+    tileA: '#10080a', tileB: '#120a0c',
+    tileEdge: 'rgba(239,68,68,0.05)',
+    wallColor: '#080405', wallGrid: 'rgba(239,68,68,0.03)',
+    edgeColor: 'rgba(239,68,68,0.12)',
+    drawFurniture: function(c, W, H) {
+      var fl = H * 0.42;
+      if (!unlocked) {
+        // Locked room — rubble and darkness
+        c.fillStyle = 'rgba(0,0,0,0.5)'; c.fillRect(0,0,W,H);
+        // Big lock icon
+        c.font = '80px serif'; c.textAlign='center';
+        c.fillStyle = 'rgba(100,20,20,0.6)';
+        c.fillText('🔒', W*0.5, H*0.55);
+        c.font = '14px Orbitron,monospace'; c.fillStyle='rgba(239,68,68,0.4)';
+        c.fillText('// MIESTNOSŤ ZAMKNUTÁ //', W*0.5, H*0.72);
+        c.font = '11px Share Tech Mono'; c.fillStyle='rgba(239,68,68,0.3)';
+        c.fillText('Rekonštrukcia: ₿5 000', W*0.5, H*0.8);
+        return;
+      }
+      // Punching bag
+      var bx = W*0.25, by = fl - 20;
+      isoBox(c, bx, by, 30, 25, 0, 25, '#2a0808','#200606','#250707');
+      c.strokeStyle='rgba(239,68,68,0.4)'; c.lineWidth=1;
+      c.beginPath(); c.moveTo(bx+12, by-30); c.lineTo(bx+12, by-60); c.stroke();
+      c.fillStyle='rgba(239,68,68,0.2)'; c.fillRect(bx+10, by-65, 5, 8);
+      // Chain hanging from ceiling
+      for (var cy2=fl-120; cy2<by-60; cy2+=8) {
+        c.fillStyle='rgba(100,100,100,0.3)'; c.fillRect(bx+11, cy2, 3, 5);
+      }
+      c.font = '28px serif'; c.textAlign='center';
+      c.fillText('🥊', bx+12, by-2);
+
+      // Barbell rack
+      var rx = W*0.55, ry = fl;
+      isoBox(c, rx, ry, 15, 60, 0, 20, '#1a1010','#140c0c','#17010e');
+      // Weights
+      isoBox(c, rx+5, ry-5, 22, 8, 0, 20, '#0d0808','#0a0606','#0c0707');
+      isoBox(c, rx+47, ry-5, 22, 8, 0, 20, '#0d0808','#0a0606','#0c0707');
+      c.font = '20px serif'; c.textAlign='center';
+      c.fillText('🏋️', rx+30, ry-8);
+
+      // Tatami mat
+      var mx = W*0.1, my = fl + 30;
+      isoBox(c, mx, my, 5, 180, 0, 90, '#1a1208','#14100a','#17110b');
+      // Octagon outlines on mat
+      c.strokeStyle='rgba(200,100,0,0.15)'; c.lineWidth=1;
+      c.beginPath(); c.ellipse(mx+90, my+25, 80, 40, 0, 0, Math.PI*2); c.stroke();
+      c.font = '20px serif'; c.textAlign='center';
+      c.fillText('🥋', mx+90, my+20);
+
+      // Upgrade items visible if bought
+      if (HQ_hasUpgrade('trenazer','heavy_bag')) {
+        // Second bag upgraded
+        c.font='8px Orbitron,monospace'; c.fillStyle='rgba(239,68,68,0.5)';
+        c.textAlign='center'; c.fillText('PRO BAG', bx+12, by-70);
+      }
+      if (HQ_hasUpgrade('trenazer','weight_rack')) {
+        // Extra weights
+        isoBox(c, rx-25, ry, 15, 20, 0, 20, '#1a0a0a','#140808','#170909');
+      }
+
+      // Sparring dummy if has Eva flag
+      if (S.flags && S.flags['eva_otec']) {
+        c.font = '32px serif'; c.textAlign='center';
+        c.fillText('👤', W*0.72, fl - 10);
+        c.font='9px Share Tech Mono'; c.fillStyle='rgba(57,255,20,0.4)';
+        c.fillText('EVA', W*0.72, fl+8);
+      }
+    }
+  });
+}
+
+// ── GARDEN ROOM CANVAS ───────────────────────────────────────
+var SEED_DATA = {
+  seed_rajcina: { name:'Rajčina', icon:'🍅', growMs:2*60*1000,  reward:80,   color:'#8B2500' },
+  seed_paprika: { name:'Paprika', icon:'🌶️', growMs:5*60*1000,  reward:220,  color:'#8B0000' },
+  seed_uhorka:  { name:'Uhorka',  icon:'🥒', growMs:8*60*1000,  reward:400,  color:'#2d5a1a' },
+  seed_dyna:    { name:'Dyňa',    icon:'🍉', growMs:15*60*1000, reward:900,  color:'#3a8000' },
+  seed_cannabis:{ name:'Bylina',  icon:'🌿', growMs:30*60*1000, reward:2000, color:'#1a5a1a' },
+};
+var PLOT_POSITIONS = [
+  { x:0.12, y:0.55 }, { x:0.30, y:0.62 }, { x:0.48, y:0.55 },
+  { x:0.20, y:0.72 }, { x:0.38, y:0.78 }, { x:0.55, y:0.70 },
+];
+
+function drawGardenRoom() {
+  var canvas = document.getElementById('hq-garden-canvas'); if (!canvas) return;
+  var wrap = canvas.parentElement;
+  canvas.width  = wrap.clientWidth  || 700;
+  canvas.height = wrap.clientHeight || 500;
+  var c = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+
+  // Outdoor sky gradient
+  var sky = c.createLinearGradient(0,0,0,H*0.4);
+  sky.addColorStop(0, '#010805');
+  sky.addColorStop(1, '#030e06');
+  c.fillStyle = sky; c.fillRect(0,0,W,H*0.4);
+
+  // Stars
+  c.fillStyle='rgba(57,255,20,0.15)';
+  var stars = [[0.1,0.05],[0.25,0.12],[0.45,0.04],[0.6,0.09],[0.75,0.06],[0.9,0.14],[0.15,0.18],[0.55,0.2],[0.8,0.02]];
+  stars.forEach(function(s){ c.beginPath(); c.arc(W*s[0],H*s[1],1,0,Math.PI*2); c.fill(); });
+
+  // Ground gradient
+  var ground = c.createLinearGradient(0,H*0.4,0,H);
+  ground.addColorStop(0, '#071009');
+  ground.addColorStop(1, '#040a05');
+  c.fillStyle = ground; c.fillRect(0,H*0.4,W,H*0.6);
+
+  // Horizon line
+  c.strokeStyle='rgba(57,255,20,0.1)'; c.lineWidth=1;
+  c.beginPath(); c.moveTo(0,H*0.4); c.lineTo(W,H*0.4); c.stroke();
+
+  // Fence in background
+  c.fillStyle='#0a1208'; c.fillRect(0, H*0.38, W, 6);
+  for (var fi=0; fi<W; fi+=20) {
+    c.fillStyle='#0a1208'; c.fillRect(fi, H*0.30, 4, H*0.12);
+    c.fillStyle='#0c150a'; c.fillRect(fi, H*0.28, 6, 4);
+  }
+
+  // Neon moon
+  c.save(); c.shadowBlur=20; c.shadowColor='#39ff14';
+  c.fillStyle='rgba(57,255,20,0.15)';
+  c.beginPath(); c.arc(W*0.85, H*0.12, 22, 0, Math.PI*2); c.fill();
+  c.fillStyle='rgba(57,255,20,0.3)'; c.beginPath(); c.arc(W*0.85, H*0.12, 14, 0, Math.PI*2); c.fill();
+  c.restore();
+
+  // Draw garden plots (soil beds)
+  if (!S.gardenPlots) S.gardenPlots = [];
+  PLOT_POSITIONS.forEach(function(pos, i) {
+    var px = W * pos.x, py = H * pos.y;
+    var plot = S.gardenPlots[i] || { seed:null, plantedAt:null };
+    var isSelected = HQ_selectedPlot === i;
+
+    // Soil bed isometric
+    isoBox(c, px, py, 8, 55, 0, 28, '#0d180a', '#0a1208', '#0b1509');
+    // Soil texture
+    c.fillStyle = plot.seed ? '#102210' : '#0c1a0c';
+    c.beginPath();
+    c.moveTo(px, py-8); c.lineTo(px+55*0.5, py+55*0.5*0.5-8);
+    c.lineTo(px+55*0.5-28*0.5, py+55*0.5*0.5+28*0.5-8); c.lineTo(px-28*0.5, py+28*0.5-8);
+    c.closePath(); c.fill();
+
+    // Selection highlight
+    if (isSelected) {
+      c.strokeStyle='rgba(57,255,20,0.6)'; c.lineWidth=2;
+      c.beginPath();
+      c.moveTo(px, py-8); c.lineTo(px+55*0.5, py+55*0.5*0.5-8);
+      c.lineTo(px+55*0.5-28*0.5, py+55*0.5*0.5+28*0.5-8); c.lineTo(px-28*0.5, py+28*0.5-8);
+      c.closePath(); c.stroke();
+    }
+
+    // Plant visualization based on growth
+    if (plot.seed && plot.plantedAt) {
+      var sd = SEED_DATA[plot.seed];
+      var pct = Math.min(1, (Date.now() - plot.plantedAt) / sd.growMs);
+      var midX = px + 55*0.5*0.5 - 28*0.5*0.5;
+      var midY = py - 8 + 55*0.5*0.5*0.5 + 28*0.5*0.5*0.5;
+      if (pct >= 1) {
+        // Fully grown — big emoji
+        c.font = '28px serif'; c.textAlign='center';
+        c.fillText(sd.icon, midX, midY - 10);
+        // Harvest glow
+        c.save(); c.shadowBlur=16; c.shadowColor='#39ff14';
+        c.strokeStyle='rgba(57,255,20,0.5)'; c.lineWidth=1;
+        c.beginPath(); c.arc(midX, midY-14, 16, 0, Math.PI*2); c.stroke();
+        c.restore();
+      } else if (pct > 0.5) {
+        // Growing — medium
+        c.font = '18px serif'; c.textAlign='center';
+        c.fillText(sd.icon, midX, midY-4);
+        c.fillStyle='rgba(57,255,20,0.3)'; c.font='7px Share Tech Mono';
+        c.fillText(Math.round(pct*100)+'%', midX, midY+8);
+      } else if (pct > 0.1) {
+        // Seedling
+        c.font = '12px serif'; c.textAlign='center';
+        c.fillText('🌱', midX, midY-2);
+      } else {
+        // Just planted
+        c.fillStyle='rgba(57,255,20,0.3)'; c.font='7px Share Tech Mono';
+        c.textAlign='center'; c.fillText('🌱', midX, midY-2);
+      }
+    }
+
+    // Plot number label
+    c.fillStyle=isSelected?'#39ff14':'rgba(57,255,20,0.3)';
+    c.font='8px Orbitron,monospace'; c.textAlign='center';
+    c.fillText('#'+(i+1), px+8, py-12);
+  });
+
+  // Scanlines
+  c.save();
+  for (var sl=0; sl<H; sl+=4) { c.fillStyle='rgba(0,0,0,0.05)'; c.fillRect(0,sl,W,2); }
+  c.restore();
+
+  // Render clickable plot areas
+  renderGardenPlotOverlay(W, H);
+}
+
+function renderGardenPlotOverlay(W, H) {
+  var overlay = document.getElementById('garden-plots-overlay'); if (!overlay) return;
+  overlay.innerHTML = '';
+  PLOT_POSITIONS.forEach(function(pos, i) {
+    var px = Math.round(W * pos.x);
+    var py = Math.round(H * pos.y);
+    var btn = document.createElement('div');
+    btn.className = 'plot-slot';
+    btn.style.left  = (px - 30) + 'px';
+    btn.style.top   = (py - 40) + 'px';
+    btn.style.width = '70px';
+    btn.style.height= '60px';
+    var plot = (S.gardenPlots||[])[i] || {};
+    var label = plot.seed ? SEED_DATA[plot.seed].icon : '⬜';
+    btn.innerHTML = '<div class="plot-bubble">' + (plot.seed ? SEED_DATA[plot.seed].name : 'Prázdny záhon') + '</div>';
+    btn.onclick = function(){ gardenSelectPlot(i); };
+    overlay.appendChild(btn);
+  });
+}
+
+// ── Garden panel rendering ────────────────────────────────────
+function renderGardenPanel() {
+  renderGardenSeedInv();
+  renderGardenSeedShop();
+  renderGardenPlotsSummary();
+  if (HQ_selectedPlot !== null) renderGardenPlotDetail(HQ_selectedPlot);
+}
+
+function renderGardenSeedInv() {
+  var el = document.getElementById('garden-seed-inv'); if (!el) return;
+  var seeds = (S.inventory || []).filter(function(id){ return id.startsWith('seed_'); });
+  if (!seeds.length) {
+    el.innerHTML = '<div style="color:#1a3a1a;font-size:10px;font-family:Share Tech Mono,monospace">// Žiadne semienka — kúp nižšie //</div>';
+    return;
+  }
+  // Count
+  var counts = {};
+  seeds.forEach(function(id){ counts[id] = (counts[id]||0)+1; });
+  var html = '';
+  Object.keys(counts).forEach(function(id) {
+    var sd = SEED_DATA[id]; if (!sd) return;
+    html += '<div class="seed-inv-chip' + (HQ_selectedSeed===id?' selected':'') + '" onclick="gardenSelectSeed(\'' + id + '\')">';
+    html += sd.icon + ' ' + sd.name + ' <span style="color:#2d5a2d">×' + counts[id] + '</span></div>';
+  });
+  el.innerHTML = html || '<div style="color:#1a3a1a;font-size:10px;font-family:Share Tech Mono,monospace">// Žiadne semienka //</div>';
+}
+
+function renderGardenSeedShop() {
+  var el = document.getElementById('garden-seed-shop'); if (!el) return;
+  var html = '';
+  Object.keys(SEED_DATA).forEach(function(id) {
+    var sd = SEED_DATA[id];
+    var si = SHOP_ITEMS.filter(function(s){ return s.id===id; })[0];
+    if (!si) return;
+    var growMin = Math.round(sd.growMs / 60000);
+    html += '<div class="seed-card" onclick="gardenBuySeed(\'' + id + '\')">';
+    html += '<div class="seed-card-icon">' + sd.icon + '</div>';
+    html += '<div class="seed-card-name">' + sd.name + '</div>';
+    html += '<div class="seed-card-time">⏱ ' + growMin + 'min → ₿' + sd.reward + '</div>';
+    html += '<div class="seed-card-price">₿' + si.price + '</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderGardenPlotsSummary() {
+  var el = document.getElementById('garden-plots-summary'); if (!el) return;
+  if (!S.gardenPlots) { el.innerHTML=''; return; }
+  var html = '';
+  S.gardenPlots.forEach(function(plot, i) {
+    if (!plot.seed) {
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #0e200e;font-size:10px;color:#1a3a1a;font-family:Share Tech Mono,monospace">';
+      html += '<span style="color:#1a3a1a">Záhon #' + (i+1) + '</span><span>Prázdny</span></div>';
+    } else {
+      var sd = SEED_DATA[plot.seed];
+      var pct = Math.min(100, Math.round((Date.now() - plot.plantedAt) / sd.growMs * 100));
+      var ready = pct >= 100;
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #0e200e;font-size:10px;font-family:Share Tech Mono,monospace">';
+      html += '<span style="color:#2d5a2d">Záhon #' + (i+1) + '</span>';
+      html += '<span>' + sd.icon + '</span>';
+      if (ready) {
+        html += '<span style="color:#39ff14;font-family:Orbitron,monospace;font-size:9px">ZBER!</span>';
+        html += '<button onclick="gardenHarvest(' + i + ')" style="margin-left:auto;background:#0a180a;border:1px solid #39ff14;color:#39ff14;font-size:9px;padding:2px 6px;cursor:pointer;font-family:Share Tech Mono,monospace">Zobrať ₿' + sd.reward + '</button>';
+      } else {
+        html += '<div style="flex:1;height:4px;background:#0e200e;border-radius:2px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#16a34a,#39ff14);width:' + pct + '%"></div></div>';
+        html += '<span style="color:#2d5a2d">' + pct + '%</span>';
+      }
+      html += '</div>';
+    }
+  });
+  el.innerHTML = html;
+}
+
+function renderGardenPlotDetail(i) {
+  var infoEl   = document.getElementById('garden-plot-info'); if (!infoEl) return;
+  var detailEl = document.getElementById('garden-plot-detail'); if (!detailEl) return;
+  var plot = (S.gardenPlots||[])[i]; if (!plot) return;
+  infoEl.style.display = '';
+
+  if (!plot.seed) {
+    // Empty plot — show plant button if seed selected
+    var html = '<div class="plot-detail-name">Záhon #' + (i+1) + ' — Prázdny</div>';
+    if (HQ_selectedSeed) {
+      var sd = SEED_DATA[HQ_selectedSeed];
+      html += '<div style="margin:8px 0;font-size:11px;color:#2d5a2d;font-family:Share Tech Mono,monospace">Zasadiť ' + sd.icon + ' ' + sd.name + '?</div>';
+      html += '<button class="hq-activity-btn" onclick="gardenPlant(' + i + ')" style="border-color:#22c55e;color:#39ff14">🌱 Zasadiť ' + sd.icon + '</button>';
+    } else {
+      html += '<div style="font-size:10px;color:#1a3a1a;font-family:Share Tech Mono,monospace;margin-top:8px">Vyber semienka z inventára vyššie, potom zasaď sem.</div>';
+    }
+    detailEl.innerHTML = html;
+  } else {
+    var sd = SEED_DATA[plot.seed];
+    var pct = Math.min(100, (Date.now() - plot.plantedAt) / sd.growMs * 100);
+    var rem = Math.max(0, plot.plantedAt + sd.growMs - Date.now());
+    var remMin = Math.floor(rem / 60000);
+    var remSec = Math.floor((rem % 60000) / 1000);
+    var html = '<div class="plot-detail-name">Záhon #' + (i+1) + ' — ' + sd.icon + ' ' + sd.name + '</div>';
+    html += '<div class="plot-progress-bar"><div class="plot-progress-fill" style="width:' + Math.round(pct) + '%"></div></div>';
+    if (pct >= 100) {
+      html += '<div class="plot-progress-label" style="color:#39ff14">✓ Zrelé! Pripravené na zber.</div>';
+      html += '<button class="hq-activity-btn" onclick="gardenHarvest(' + i + ')" style="margin-top:8px;border-color:#39ff14;color:#39ff14">🌾 Zobrať ₿' + sd.reward + '</button>';
+    } else {
+      html += '<div class="plot-progress-label">' + Math.round(pct) + '% — zostatok: ' + remMin + 'm ' + remSec + 's</div>';
+    }
+    detailEl.innerHTML = html;
+  }
+}
+
+// ── Garden interactions ───────────────────────────────────────
+function gardenSelectPlot(i) {
+  HQ_selectedPlot = i;
+  renderGardenPlotDetail(i);
+  drawGardenRoom();
+}
+function gardenSelectSeed(id) {
+  HQ_selectedSeed = HQ_selectedSeed === id ? null : id;
+  renderGardenSeedInv();
+  if (HQ_selectedPlot !== null) renderGardenPlotDetail(HQ_selectedPlot);
+}
+function gardenBuySeed(id) {
+  var si = SHOP_ITEMS.filter(function(s){ return s.id===id; })[0]; if (!si) return;
+  if (S.money < si.price) { showNotif('Nedostatok kreditov! Treba ₿' + si.price); return; }
+  S.money -= si.price; updateMoneyDisplay();
+  if (!S.inventory) S.inventory = [];
+  S.inventory.push(id);
+  addLog('Kúpil si semienka: ' + SEED_DATA[id].icon + ' ' + SEED_DATA[id].name + '.', 'ok');
+  showNotif(SEED_DATA[id].icon + ' ' + SEED_DATA[id].name + ' zakúpené!');
+  renderGardenSeedInv();
+}
+function gardenPlant(plotIndex) {
+  if (!HQ_selectedSeed) { showNotif('Najprv vyber semienka!'); return; }
+  if (!hasItem(HQ_selectedSeed)) { showNotif('Nemáš toto semienka v inventári!'); return; }
+  var plot = S.gardenPlots[plotIndex];
+  if (plot.seed) { showNotif('Záhon je obsadený!'); return; }
+  removeItem(HQ_selectedSeed);
+  plot.seed = HQ_selectedSeed; plot.plantedAt = Date.now();
+  var sd = SEED_DATA[HQ_selectedSeed];
+  addLog('🌱 Zasadil si ' + sd.icon + ' ' + sd.name + ' do záhonu #' + (plotIndex+1) + '.', 'ok');
+  showNotif('🌱 Zasadené! Čakaj ' + Math.round(sd.growMs/60000) + ' minút.');
+  HQ_selectedSeed = null;
+  renderGardenPanel(); drawGardenRoom();
+}
+function gardenHarvest(plotIndex) {
+  var plot = S.gardenPlots[plotIndex]; if (!plot || !plot.seed) return;
+  var sd = SEED_DATA[plot.seed];
+  if (Date.now() - plot.plantedAt < sd.growMs) { showNotif('Ešte nie je zrelé!'); return; }
+  S.money += sd.reward; updateMoneyDisplay();
+  addLog('🌾 Zozberal si ' + sd.icon + ' ' + sd.name + ': +₿' + sd.reward + '!', 'ok');
+  showNotif('🌾 ' + sd.icon + ' +₿' + sd.reward + '!');
+  gainXP(Math.round(sd.reward / 20));
+  plot.seed = null; plot.plantedAt = null;
+  if (HQ_selectedPlot === plotIndex) renderGardenPlotDetail(plotIndex);
+  renderGardenPlotsSummary(); drawGardenRoom();
+}
+function gardenHarvestAll() {
+  var count = 0;
+  (S.gardenPlots||[]).forEach(function(plot, i) {
+    if (plot.seed && Date.now() - plot.plantedAt >= SEED_DATA[plot.seed].growMs) {
+      gardenHarvest(i); count++;
+    }
+  });
+  if (!count) showNotif('Nič nie je zrelé.');
+}
+
+// ── Train room panel ──────────────────────────────────────────
+function renderTrainRoomPanel() {
+  var unlocked = HQ_isRoomUnlocked('trenazer');
+  var statusEl = document.getElementById('train-unlock-status');
+  var detailEl = document.getElementById('train-room-detail');
+  if (!detailEl) return;
+
+  if (statusEl) statusEl.textContent = unlocked ? 'Plne vybavená tréningová miestnosť.' : 'Uzamknutá miestnosť. Vyžaduje rekonštrukciu za ₿5 000.';
+
+  if (!unlocked) {
+    var canUnlock = S.money >= 5000;
+    detailEl.innerHTML = '<div style="text-align:center;padding:30px 0">' +
+      '<div style="font-size:48px;margin-bottom:12px">🔒</div>' +
+      '<div style="font-family:Orbitron,monospace;font-size:10px;color:#2d5a2d;letter-spacing:2px;margin-bottom:12px">MIESTNOSŤ ZAMKNUTÁ</div>' +
+      '<div style="font-size:12px;color:#2d5a2d;margin-bottom:16px;font-family:Share Tech Mono,monospace">Rekonštrukcia: <b style="color:#f59e0b">₿5 000</b></div>' +
+      '<button class="hq-activity-btn" style="max-width:200px;margin:0 auto' + (canUnlock?';border-color:#22c55e;color:#39ff14':'') + '" ' + (canUnlock?'':'disabled') + ' onclick="HQ_unlockRoom(\'trenazer\')">' +
+      (canUnlock ? '🔓 Odomknúť!' : '💸 Nedostatok kreditov') + '</button></div>';
+    return;
+  }
+
+  // Render activities and upgrades for trenazer
+  var room = HQ_ROOMS['trenazer'];
+  var html = '<div class="hq-section-label">⚡ Aktivity</div>';
+  room.activities.forEach(function(act) {
+    var cdKey = 'trenazer_' + act.id; var now = Date.now();
+    var onCd  = act.cooldown && HQ_COOLDOWNS[cdKey] && now < HQ_COOLDOWNS[cdKey];
+    var rem   = onCd ? Math.ceil((HQ_COOLDOWNS[cdKey] - now) / 1000) : 0;
+    var needsReq = act.requires && !act.requires();
+    var disabled = onCd || needsReq;
+    html += '<div class="hq-activity-card"><div class="hq-activity-header">';
+    html += '<span class="hq-activity-icon">' + act.icon + '</span>';
+    html += '<span class="hq-activity-name">' + escH(act.name) + '</span></div>';
+    html += '<div class="hq-activity-desc">' + escH(act.desc) + '</div>';
+    if (needsReq) html += '<div style="font-size:10px;color:#f59e0b;margin-bottom:6px">🔒 ' + escH(act.requiresLabel||'') + '</div>';
+    var btnLabel = onCd ? ('⏳ ' + rem + 's') : '▶ Vykonať';
+    html += '<button class="hq-activity-btn" ' + (disabled?'disabled':'') + ' onclick="HQ_doActivity(\'trenazer\',\'' + act.id + '\')">' + btnLabel + '</button>';
+    if (onCd) html += '<div class="hq-cd-bar"><div class="hq-cd-bar-fill" style="width:' + Math.min(100,100-(rem/act.cooldown*100)) + '%"></div></div>';
+    html += '</div>';
+  });
+  html += '<div class="hq-section-label" style="margin-top:8px">🔧 Vylepšenia</div>';
+  room.upgrades.forEach(function(upg) {
+    var owned = HQ_hasUpgrade('trenazer', upg.id); var canBuy = !owned && S.money >= upg.price;
+    html += '<div class="hq-upgrade-card ' + (owned?'owned':'') + '">';
+    html += '<div class="hq-upgrade-header"><span class="hq-upgrade-name">' + (upg.icon||'⚙') + ' ' + escH(upg.name) + '</span>';
+    if (!owned) html += '<span class="hq-upgrade-price">₿' + upg.price.toLocaleString('sk') + '</span>';
+    html += '</div><div class="hq-upgrade-desc">' + escH(upg.desc) + '</div>';
+    html += '<div style="font-size:9px;color:#16a34a;margin-bottom:6px">→ ' + escH(upg.effectLabel||'') + '</div>';
+    if (owned) { html += '<div class="hq-upgrade-owned-badge">✓ NAINŠTALOVANÉ</div>'; }
+    else { html += '<button class="hq-upgrade-btn" ' + (canBuy?'':'disabled') + ' onclick="HQ_buyUpgrade(\'trenazer\',\'' + upg.id + '\')">' + (canBuy?'[ KÚPIŤ ]':'[ ₿'+upg.price.toLocaleString('sk')+' ]') + '</button>'; }
+    html += '</div>';
+  });
+  detailEl.innerHTML = html;
+}
+
+// ── Main HQ stats bar ─────────────────────────────────────────
 function renderHQStats() {
   if (!S.hqPassive) S.hqPassive = { hp:0, san:0, hack:0, str:0 };
-  var totalUpgrades = 0;
-  if (S.hqUpgrades) Object.keys(S.hqUpgrades).forEach(function(k){ totalUpgrades += (S.hqUpgrades[k]||[]).length; });
-  var unlockedRooms = 3 + (S.hqUnlocked && S.hqUnlocked['trenazer'] ? 1 : 0);
-  var hqLevel = 1 + Math.floor(totalUpgrades / 3);
   var el = function(id, val) { var e = document.getElementById(id); if(e) e.textContent = val; };
-  el('hq-stat-level', hqLevel);
-  el('hq-stat-rooms', unlockedRooms);
-  el('hq-stat-hpregen', '+' + (S.hqPassive.hp||0).toFixed(2) + '/s');
-  el('hq-stat-sanregen', '+' + (S.hqPassive.san||0).toFixed(2) + '/s');
+  el('hq-stat-hpregen',  '+' + (S.hqPassive.hp  ||0).toFixed(2));
+  el('hq-stat-sanregen', '+' + (S.hqPassive.san ||0).toFixed(2));
   el('hq-stat-hckbonus', '+' + Math.floor(S.hqPassive.hack||0));
-  el('hq-stat-income', '+' + (S.income.bonus||0) + '₿/s');
-  var lvlLabel = document.getElementById('hq-map-level-label');
-  if (lvlLabel) lvlLabel.textContent = 'HQ Úroveň ' + hqLevel;
+  el('hq-stat-income',   '+' + (S.income.bonus||0));
 }
 
+// ── openHQ entry point ────────────────────────────────────────
 function openHQ() {
-  if (!S.hqUpgrades) S.hqUpgrades = {};
-  if (!S.hqUnlocked) S.hqUnlocked = {};
-  if (!S.hqPassive)  S.hqPassive  = { hp:0, san:0, hack:0, str:0 };
-  renderHQMap(); renderHQStats();
-  if (!HQ_selectedRoom) selectHQRoom('spalna');
-  else selectHQRoom(HQ_selectedRoom);
+  if (!S.hqUpgrades)  S.hqUpgrades  = {};
+  if (!S.hqUnlocked)  S.hqUnlocked  = {};
+  if (!S.hqPassive)   S.hqPassive   = { hp:0, san:0, hack:0, str:0 };
+  if (!S.gardenPlots) S.gardenPlots = [{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null}];
+  renderHQStats();
+  hqSwitchTab(HQ_activeTab || 'main');
 }
 
+// ── selectHQRoom stub (backward compat) ───────────────────────
+function selectHQRoom(r) { hqSelectSubRoom(r); }
+
+// ── Passive tick ──────────────────────────────────────────────
 function hqPassiveTick() {
   if (!S.hqPassive) return;
   if (S.hqPassive.hp)   S.hp       = Math.min(100, S.hp       + (S.hqPassive.hp  ||0));
@@ -5412,11 +7346,13 @@ function hqPassiveTick() {
   if (S.hqPassive.str)  S.str      = Math.min(100, S.str      + (S.hqPassive.str ||0));
 }
 
-// Cooldown refresh pre HQ aktivity
+// ── Cooldown + garden refresh ─────────────────────────────────
 setInterval(function() {
-  if (HQ_selectedRoom && document.getElementById('hq-overlay') && document.getElementById('hq-overlay').classList.contains('show')) {
-    renderHQRoomDetail(HQ_selectedRoom);
-  }
+  var hqEl = document.getElementById('hq-overlay');
+  if (!hqEl || !hqEl.classList.contains('show')) return;
+  if (HQ_activeTab === 'main' && HQ_selectedSubRoom)   hqSelectSubRoom(HQ_selectedSubRoom);
+  if (HQ_activeTab === 'train')  renderTrainRoomPanel();
+  if (HQ_activeTab === 'garden') { renderGardenPlotsSummary(); if (HQ_selectedPlot !== null) renderGardenPlotDetail(HQ_selectedPlot); drawGardenRoom(); }
 }, 1000);
 
 // ══════════════════════════════════════════════════════════════════
@@ -5579,6 +7515,7 @@ function loadGame() {
     if (!S.hqUpgrades)        S.hqUpgrades= {};
     if (!S.hqUnlocked)        S.hqUnlocked= {};
     if (!S.hqPassive)         S.hqPassive = { hp:0, san:0, hack:0, str:0 };
+    if (!S.gardenPlots)       S.gardenPlots = [{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null}];
     if (S.str      === undefined) S.str      = 10;
     if (S.flex     === undefined) S.flex     = 10;
     if (S.hackStat === undefined) S.hackStat = 10;
@@ -5605,6 +7542,7 @@ function newGame() {
     attrRates:{ hp:0, san:0, str:0, flex:0, hack:0 },
     equipped:{ head:null, body:null, pants:null, weapon:null, special:null, feet:null },
     hqUpgrades:{}, hqUnlocked:{}, hqPassive:{ hp:0, san:0, hack:0, str:0 },
+    gardenPlots: [{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null},{seed:null,plantedAt:null}],
     flags:{}, visited:{}
   };
   FLEET_STATE  = {};
@@ -5635,6 +7573,59 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
+
+// ══════════════════════════════════════════════════════════════════
+//  ► MOBILNÁ NAVIGÁCIA
+// ══════════════════════════════════════════════════════════════════
+var _mobileActivePanel = null;
+
+function mobilePanel(name) {
+  // Close all
+  ['stats','map','inv','log'].forEach(function(p){
+    var el = document.getElementById('mobile-' + p + '-panel');
+    if (el) el.classList.remove('open');
+  });
+  if (!name || name === _mobileActivePanel) {
+    _mobileActivePanel = null;
+    return;
+  }
+  _mobileActivePanel = name;
+  var panel = document.getElementById('mobile-' + name + '-panel');
+  if (!panel) return;
+
+  if (name === 'stats') {
+    // Clone stats from left panel
+    var src = document.getElementById('left-scroll');
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    if (src) {
+      var clone = src.cloneNode(true);
+      panel.appendChild(clone);
+    }
+  } else if (name === 'map') {
+    var src = document.getElementById('sec-map');
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    if (src) {
+      var clone = src.cloneNode(true);
+      panel.appendChild(clone);
+    }
+  } else if (name === 'inv') {
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    var rp = document.getElementById('right-panel');
+    if (rp) {
+      var clone = rp.cloneNode(true);
+      panel.appendChild(clone);
+    }
+  } else if (name === 'log') {
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    var lw = document.getElementById('log-wrap');
+    if (lw) {
+      var clone = lw.cloneNode(true);
+      clone.style.maxHeight = 'none';
+      panel.appendChild(clone);
+    }
+  }
+  panel.classList.add('open');
+}
 
 // ══════════════════════════════════════════════════════════════════
 //  ► INICIALIZÁCIA (spustenie hry)
