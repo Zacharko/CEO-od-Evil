@@ -1191,7 +1191,7 @@ a:hover { color: #fff; }
 <div id="mobile-log-panel" class="mobile-overlay-panel"></div>
 
 <!-- JOB SELECT -->
-<div id="job-overlay">
+<div id="job-overlay" class="hidden">
   <div class="job-screen">
     <div class="job-title">⚔ CEO ZLA ⚔</div>
     <div class="job-sub">Vyber si svoju rolu — Operácia Lazarus</div>
@@ -7310,18 +7310,29 @@ function renderGardenShop() {
     if (mm) mm.classList.add('visible');
     var ls = document.getElementById('loading-screen');
     if (ls) ls.classList.add('hidden');
+    // Show continue button only if save exists
+    var btnLoad = document.getElementById('menu-load-btn');
+    if (btnLoad) btnLoad.style.display = '';
   });
 
   StateMachine.on(StateMachine.STATES.PLAYING, function() {
-    var mm = document.getElementById('main-menu');
-    if (mm) mm.classList.remove('visible');
-    GameLoop.start();
-    Renderer.updateAll();
-    renderShop();
-    renderTrainingView('uni');
-    renderTrainingView('gym');
-    openGarden();
-    hqSwitchTab('main');
+    try {
+      var mm = document.getElementById('main-menu');
+      if (mm) mm.classList.remove('visible');
+      var ls = document.getElementById('loading-screen');
+      if (ls) ls.classList.add('hidden');
+      GameLoop.start();
+      Renderer.updateAll();
+      try { renderShop(); } catch(e) { console.warn('renderShop:', e); }
+      try { renderTrainingView('uni'); } catch(e) { console.warn('renderTrainingView uni:', e); }
+      try { renderTrainingView('gym'); } catch(e) { console.warn('renderTrainingView gym:', e); }
+      try { openGarden(); } catch(e) { console.warn('openGarden:', e); }
+      try { hqSwitchTab('main'); } catch(e) { console.warn('hqSwitchTab:', e); }
+      // Render the starting scene
+      try { goTo(S.scene || 'start'); } catch(e) { console.warn('goTo start:', e); }
+    } catch(e) {
+      console.error('PLAYING state error:', e);
+    }
   });
 
   // Loading screen simulation
@@ -7342,16 +7353,15 @@ function renderGardenShop() {
     if (stepIdx >= steps.length) {
       // Check for saved game
       var saved = null;
-      try { saved = localStorage.getItem(GameConfig.SAVE_KEY || 'ceozla-lazarus'); } catch(e) {}
+      try { saved = localStorage.getItem(SAVE_KEY); } catch(e) {}
       if (saved) {
-        // Show main menu with continue option
+        // Has save — show main menu (continue or new game)
         StateMachine.transition(StateMachine.STATES.MAIN_MENU);
       } else {
-        // New game — go straight to playing (job select will appear)
+        // No save — go to playing + show job select
         StateMachine.transition(StateMachine.STATES.PLAYING);
-        // Show job overlay for new players
         var jo = document.getElementById('job-overlay');
-        if (jo) jo.style.display = 'flex';
+        if (jo) jo.classList.remove('hidden');
       }
       return;
     }
@@ -7375,15 +7385,10 @@ function renderGardenShop() {
     newGame();
     StateMachine.transition(StateMachine.STATES.PLAYING);
     var jo = document.getElementById('job-overlay');
-    if (jo) jo.classList.remove('hidden');
+    if (jo) { jo.classList.remove('hidden'); }
   });
 
   if (btnCont) btnCont.addEventListener('click', function() {
-    loadGame();
-    StateMachine.transition(StateMachine.STATES.PLAYING);
-  });
-
-  if (btnLoad) btnLoad.addEventListener('click', function() {
     loadGame();
     StateMachine.transition(StateMachine.STATES.PLAYING);
   });
