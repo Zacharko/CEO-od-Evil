@@ -1,0 +1,1339 @@
+<!DOCTYPE HTML>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<title>CEO Zla // Operácia: LAZARUS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════
+   RESET & CSS VARIABLES
+══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #080d08;
+  --bg2:        #0b120b;
+  --bg3:        #0f170f;
+  --bg4:        #121c12;
+  --bg-glass:   rgba(8,13,8,0.97);
+  --bg-panel:   #090e09;
+  --green:      #39ff14;
+  --green2:     #22c55e;
+  --green3:     #16a34a;
+  --green4:     #4ade80;
+  --green-dim:  rgba(57,255,20,0.08);
+  --dim:        #2d5a2d;
+  --dimmer:     #1a3a1a;
+  --border:     #1a3a1a;
+  --border2:    #0e200e;
+  --border-hi:  #2a5a2a;
+  --border-gold:#1a3a1a;
+  --border-glow:#1a3a1a;
+  --gold:       #facc15;
+  --gold2:      #39ff14;
+  --gold3:      #16a34a;
+  --gold-dim:   #0e200e;
+  --gold-glow:  rgba(57,255,20,0.15);
+  --blue:       #22d3ee;
+  --blue2:      #22d3ee;
+  --blue3:      #0891b2;
+  --blue-dim:   #1a3a1a;
+  --blue-glow:  rgba(34,211,238,0.1);
+  --red:        #c0392b;
+  --red2:       #e74c3c;
+  --cyan:       #22d3ee;
+  --purple:     #a855f7;
+  --warn:       #f59e0b;
+  --danger:     #ef4444;
+  --text:       #5dde80;
+  --text-bright:#c2f0cc;
+  --text-dim:   #2d5a2d;
+  --text-muted: #1a3a1a;
+  --font-body:  'Share Tech Mono', 'Courier New', monospace;
+  --font-mono:  'Share Tech Mono', 'Courier New', monospace;
+  --font-hud:   'Orbitron', 'Share Tech Mono', monospace;
+  --scene-fs:   15px;
+  --choice-fs:  14px;
+  --hud-fs:     11px;
+  --log-fs:     11px;
+  --shadow-panel: 0 4px 24px rgba(0,0,0,0.6);
+  --shadow-gold:  0 0 16px rgba(57,255,20,0.2);
+  --shadow-blue:  0 0 16px rgba(34,211,238,0.15);
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 9000;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+  opacity: 0.5;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 8999;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.7) 100%);
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--dimmer); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--green3); }
+a { color: var(--green); text-decoration: none; }
+a:hover { color: #fff; }
+
+/* ── LOADING SCREEN (State: LOADING) ── */
+#loading-screen {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+  transition: opacity 0.5s;
+}
+#loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loading-title {
+  font-family: var(--font-hud);
+  font-size: 22px; font-weight: 900;
+  color: var(--green);
+  letter-spacing: 6px;
+  text-shadow: 0 0 20px rgba(57,255,20,0.8), 0 0 40px rgba(57,255,20,0.4);
+  animation: loadPulse 1.2s ease-in-out infinite alternate;
+}
+@keyframes loadPulse {
+  from { text-shadow: 0 0 10px rgba(57,255,20,0.5); }
+  to   { text-shadow: 0 0 30px rgba(57,255,20,1), 0 0 60px rgba(57,255,20,0.5); }
+}
+.loading-bar-wrap {
+  width: 280px; height: 4px;
+  background: var(--border2); border: 1px solid var(--border);
+}
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green3), var(--green));
+  width: 0%;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px var(--green);
+}
+.loading-status {
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
+}
+
+/* ── MAIN MENU (State: MAIN_MENU) ── */
+#main-menu {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+}
+#main-menu.visible { display: flex; }
+.menu-title {
+  font-family: var(--font-hud); font-size: 28px; font-weight: 900;
+  color: var(--green); letter-spacing: 8px;
+  text-shadow: 0 0 20px rgba(57,255,20,0.8);
+  margin-bottom: 8px;
+}
+.menu-sub {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--text-dim); letter-spacing: 3px; margin-bottom: 24px;
+}
+.menu-btn {
+  background: transparent;
+  border: 1px solid var(--green3);
+  color: var(--text-bright);
+  font-family: var(--font-body);
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 3px; padding: 10px 40px;
+  cursor: pointer; transition: all 0.15s;
+  text-transform: uppercase; width: 240px;
+}
+.menu-btn:hover {
+  background: rgba(57,255,20,0.08);
+  border-color: var(--green);
+  color: var(--green);
+  text-shadow: 0 0 8px rgba(57,255,20,0.4);
+  box-shadow: 0 0 16px rgba(57,255,20,0.2);
+}
+.menu-version {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-muted); letter-spacing: 2px;
+  position: absolute; bottom: 20px;
+}
+
+/* ── ORNAMENTS ── */
+.ornament-line {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px;
+}
+.ornament-line::before, .ornament-line::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold3), transparent);
+}
+.bf-frame {
+  border: 1px solid var(--border);
+  border-top: 1px solid var(--border-hi);
+  background: linear-gradient(180deg, var(--bg3) 0%, var(--bg2) 100%);
+  position: relative;
+}
+.bf-frame::before {
+  content: '';
+  position: absolute; top: -1px; left: 20px; right: 20px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold2), transparent);
+  opacity: 0.4;
+}
+
+/* ── TOP BAR ── */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 800;
+  background: linear-gradient(180deg, #0e1420 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  display: flex; align-items: center;
+  height: 38px; padding: 0 14px; gap: 12px;
+}
+#topbar::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.08), transparent);
+}
+#topbar-title {
+  font-family: var(--font-hud);
+  font-size: 13px; font-weight: 700;
+  color: var(--green); letter-spacing: 3px;
+  text-shadow: 0 0 14px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.2);
+  flex-shrink: 0; white-space: nowrap;
+}
+#topbar-tabs { display: flex; gap: 2px; flex: 1; }
+.tab-btn {
+  background: transparent; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 600; letter-spacing: 1px;
+  padding: 0 12px; height: 38px;
+  cursor: pointer; transition: all 0.15s;
+  text-transform: uppercase; position: relative;
+}
+.tab-btn:hover { color: var(--blue); }
+.tab-btn.active {
+  color: var(--green);
+  border-bottom-color: var(--green);
+  text-shadow: 0 0 8px rgba(57,255,20,0.4);
+}
+#topbar-right { display: flex; align-items: center; gap: 12px; }
+#topbar-money {
+  font-family: var(--font-hud); color: var(--gold); font-size: 13px; font-weight: 700;
+  text-shadow: 0 0 8px rgba(250,204,21,0.4); letter-spacing: 1px;
+}
+#topbar-job {
+  font-size: 11px; color: var(--blue); font-weight: 600;
+  border: 1px solid var(--blue-dim); padding: 2px 10px;
+  font-family: var(--font-body); letter-spacing: 1px;
+  background: rgba(77,159,255,0.05);
+}
+#topbar-clock { color: var(--text-dim); font-size: 12px; font-family: var(--font-mono); }
+.top-micro-btn {
+    <span id="topbar-hunger-chip">🟢 Sýty</span>
+  background: linear-gradient(180deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--border);
+  border-top-color: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+  font-family: var(--font-body); font-size: 11px; font-weight: 600;
+  padding: 3px 10px; cursor: pointer; letter-spacing: 1px; transition: all 0.12s;
+  text-transform: uppercase;
+}
+.top-micro-btn:hover {
+  color: var(--green); border-color: var(--border-hi);
+  background: rgba(57,255,20,0.04);
+}
+
+/* ── LAYOUT ── */
+#main {
+  padding-top: 38px;
+  display: grid;
+  grid-template-columns: 52px 230px 1fr 210px;
+  height: 100vh; height: 100dvh;
+}
+#center-panel {
+  display: flex; flex-direction: column;
+  height: calc(100dvh - 38px);
+  overflow: hidden;
+}
+
+/* ── LEFT NAV ── */
+#left-nav {
+  border-right: 1px solid var(--border);
+  background: linear-gradient(180deg, #060b06 0%, var(--bg) 100%);
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 8px; gap: 2px;
+  height: calc(100vh - 38px);
+  overflow: hidden; flex-shrink: 0;
+}
+.sidenav-btn {
+  width: 44px; height: 44px;
+  background: transparent;
+  border: none; border-left: 2px solid transparent;
+  color: var(--text-dim); font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; position: relative;
+  border-radius: 0 4px 4px 0;
+}
+.sidenav-btn:hover { color: var(--green); background: rgba(57,255,20,0.06); border-left-color: var(--green3); }
+.sidenav-btn.active { color: var(--green); background: rgba(57,255,20,0.1); border-left-color: var(--green); text-shadow: 0 0 10px rgba(57,255,20,0.6); }
+.sidenav-btn[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; left: 52px; top: 50%; transform: translateY(-50%);
+  background: var(--bg3); border: 1px solid var(--border-hi);
+  color: var(--text-bright); font-family: var(--font-body);
+  font-size: 11px; letter-spacing: 1px;
+  padding: 4px 10px; white-space: nowrap; z-index: 999; pointer-events: none;
+}
+.sidenav-divider { width: 30px; height: 1px; background: var(--border2); margin: 4px 0; }
+
+/* ── LEFT PANEL ── */
+#left-panel {
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  height: calc(100vh - 38px);
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
+}
+#left-scroll { flex: 1; overflow-y: auto; }
+.panel-section { border-bottom: 1px solid var(--border2); }
+.panel-header {
+  background: linear-gradient(90deg, rgba(57,255,20,0.05), transparent);
+  border-bottom: 1px solid var(--border2);
+  padding: 5px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; transition: background 0.12s;
+}
+.panel-header:hover { background: linear-gradient(90deg, rgba(57,255,20,0.09), transparent); }
+.panel-header-title {
+  font-family: var(--font-hud); font-size: 9px; letter-spacing: 2px;
+  color: var(--green3); text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+}
+.panel-header-title::before { content: '◆'; font-size: 6px; color: var(--green3); opacity: 0.7; }
+.panel-header-toggle { font-size: 9px; color: var(--text-dim); }
+.panel-body { padding: 10px 12px; }
+.panel-body.collapsed { display: none; }
+
+/* ── STAT ROWS ── */
+.stat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.stat-row:last-child { margin-bottom: 0; }
+.stat-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; filter: drop-shadow(0 0 4px currentColor); }
+.stat-label { font-size: var(--hud-fs); font-family: var(--font-body); font-weight: 700; color: var(--text-dim); letter-spacing: 1px; min-width: 32px; }
+.stat-bar-wrap { flex: 1; height: 8px; background: var(--bg); border: 1px solid var(--border2); overflow: hidden; border-radius: 2px; position: relative; }
+.stat-bar-wrap::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%; background: rgba(255,255,255,0.04); border-radius: 2px 2px 0 0; pointer-events: none; }
+.stat-bar { height: 100%; transition: width 0.4s, background 0.4s; border-radius: 1px; }
+.stat-bar.hp    { background: linear-gradient(90deg, #1a0505, #dc2626, #ef4444); }
+.stat-bar.san   { background: linear-gradient(90deg, #1a1000, #d97706, #fbbf24); }
+.stat-bar.xp    { background: linear-gradient(90deg, #0a0a20, #2563eb, #60a5fa); }
+.stat-bar.str   { background: linear-gradient(90deg, #200808, #b45309, #f97316); }
+.stat-bar.flex-s{ background: linear-gradient(90deg, #100a20, #7c3aed, #a78bfa); }
+.stat-bar.hack-s{ background: linear-gradient(90deg, #001520, #0891b2, #22d3ee); }
+.stat-bar.red   { background: linear-gradient(90deg, #200a0a, var(--danger)); }
+.stat-val { font-family: var(--font-hud); font-size: 11px; min-width: 32px; text-align: right; font-weight: 600; }
+.stat-val.hp    { color: #ef4444; }
+.stat-val.san   { color: var(--warn); }
+.stat-val.xp    { color: var(--blue); }
+.stat-val.str   { color: #f97316; }
+.stat-val.flex-s{ color: #a78bfa; }
+.stat-val.hack-s{ color: var(--cyan); }
+.stat-divider { border-top: 1px solid var(--border2); margin: 8px 0; position: relative; }
+.stat-divider::before { content: '◈'; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--green3); background: var(--bg-panel); padding: 0 4px; }
+
+/* ── INCOME ── */
+.income-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border2); }
+.income-row:last-child { border-bottom: none; }
+.income-label { font-size: 12px; color: var(--text-dim); font-family: var(--font-body); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+.income-label-icon { font-size: 13px; }
+.income-val   { font-size: 11px; color: var(--warn); font-family: var(--font-hud); }
+.income-total { font-size: 12px; color: var(--gold); font-family: var(--font-hud); font-weight: 700; }
+
+/* ── QUESTS ── */
+.op-flag { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px dotted var(--border2); font-size: 12px; }
+.op-flag:last-child { border-bottom: none; }
+.op-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bg); border: 1px solid var(--text-muted); flex-shrink: 0; margin-top: 3px; transition: all 0.3s; }
+.op-dot.active { background: var(--green); border-color: var(--green); box-shadow: 0 0 8px var(--green); }
+.op-name { color: var(--text-muted); transition: color 0.3s; letter-spacing: 0.3px; line-height: 1.4; font-family: var(--font-body); font-weight: 500; }
+.op-flag.active .op-name { color: var(--green4); }
+
+/* ── MINIMAP ── */
+.minimap-grid { font-size: 11px; line-height: 1.9; color: var(--dim); padding: 4px 0; white-space: pre; font-family: var(--font-mono); }
+.node { color: var(--green3); cursor: pointer; transition: color 0.1s, text-shadow 0.1s; font-weight: 600; font-family: var(--font-mono); }
+.node:hover { color: var(--green); text-shadow: 0 0 8px rgba(57,255,20,0.5); }
+
+/* ── CENTER PANEL ── */
+#center-panel {
+  display: flex; flex-direction: column;
+  height: calc(100vh - 38px);
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+#scene-img-wrap {
+  position: relative; height: 110px; flex-shrink: 0;
+  background: linear-gradient(180deg, #06090f 0%, #0a0f1a 100%);
+  overflow: hidden; border-bottom: 1px solid var(--border);
+}
+#scene-img-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent 0, transparent 20px, rgba(30,45,74,0.15) 20px, rgba(30,45,74,0.15) 21px);
+  z-index: 1;
+}
+#scene-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 1;
+  filter: sepia(0.4) hue-rotate(200deg) saturate(1.2) brightness(0.5);
+  z-index: 0;
+}
+#scene-photo.loaded { opacity: 1; }
+#scene-photo-overlay {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(7,9,13,0.9) 100%);
+}
+#scene-placeholder {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+}
+#scene-placeholder-icon { font-size: 72px; opacity: 0.12; filter: sepia(1) hue-rotate(200deg); }
+#scene-placeholder-label { font-family: var(--font-hud); font-size: 10px; color: var(--border-glow); letter-spacing: 3px; opacity: 0.4; }
+#scene-topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 10px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border2);
+}
+#scene-loc-name { font-family: var(--font-hud); font-size: 11px; color: var(--green); letter-spacing: 2px; text-shadow: 0 0 10px rgba(57,255,20,0.5); }
+#scene-loc-coords { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); letter-spacing: 1px; }
+#scene-loc-badge {
+  position: absolute; bottom: 10px; left: 12px; z-index: 4;
+  font-family: var(--font-hud); font-size: 7px; color: var(--green); letter-spacing: 2px;
+  background: rgba(0,0,0,0.85); padding: 2px 8px;
+  border: 1px solid var(--green3);
+  text-shadow: 0 0 8px var(--green); box-shadow: 0 0 12px rgba(57,255,20,0.15);
+  animation: badgePulse 3s ease-in-out infinite alternate;
+}
+@keyframes badgePulse {
+  from { box-shadow: 0 0 8px rgba(57,255,20,0.15); }
+  to   { box-shadow: 0 0 20px rgba(57,255,20,0.3); }
+}
+#scene-img-wrap::after {
+  content: '';
+  position: absolute; bottom: 0; right: 0; z-index: 6;
+  width: 60px; height: 60px;
+  border-bottom: 1px solid var(--border); border-right: 2px solid var(--green3);
+  opacity: 0.4; pointer-events: none;
+}
+
+/* ── DIALOG ── */
+#scene-text-wrap {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 0; min-height: 0;
+  display: flex; flex-direction: column; gap: 0; padding-bottom: 4px;
+}
+.dialog-npc-bubble {
+  margin: 12px 16px 6px 16px; padding: 12px 16px 12px 52px;
+  background: rgba(0,15,0,0.7); border: 1px solid var(--green3); border-left: 3px solid var(--green);
+  position: relative; font-size: 14px; line-height: 1.7; color: #c2f0cc; font-family: var(--font-mono);
+}
+.dialog-npc-bubble::before {
+  content: attr(data-speaker);
+  position: absolute; top: -10px; left: 12px;
+  background: var(--bg); padding: 0 8px;
+  font-family: var(--font-hud); font-size: 9px; letter-spacing: 3px;
+  color: var(--green); text-transform: uppercase; text-shadow: 0 0 8px rgba(57,255,20,0.5);
+}
+.dialog-npc-bubble .npc-avatar {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 24px; line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(57,255,20,0.4));
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border-radius: 50%;
+}
+.dialog-npc-bubble .npc-avatar img {
+  width: 36px; height: 36px; object-fit: cover; border-radius: 50%;
+  border: 1px solid var(--green3);
+  filter: sepia(0.2) hue-rotate(80deg) saturate(1.3) brightness(0.95); display: block;
+}
+.dialog-npc-bubble b { color: var(--green); font-weight: normal; text-shadow: 0 0 6px rgba(57,255,20,0.35); }
+.dialog-npc-bubble i { color: var(--text-dim); font-style: normal; font-size: 12px; display: block; margin-top: 4px; border-top: 1px solid var(--border2); padding-top: 4px; }
+.dialog-narration {
+  margin: 8px 16px 4px 16px; padding: 8px 12px;
+  font-size: 13px; line-height: 1.7; color: #7ab87a; font-family: var(--font-mono);
+  border-left: 2px solid var(--dimmer); background: rgba(0,8,0,0.4);
+}
+.dialog-narration b { color: var(--green4); font-weight: normal; }
+.dialog-narration i { color: var(--text-dim); font-style: italic; font-size: 11px; }
+.dialog-divider { height: 1px; margin: 8px 16px 0; background: linear-gradient(90deg, transparent, var(--green3), transparent); opacity: 0.4; }
+
+/* ── CHOICES ── */
+#choices-wrap {
+  padding: 6px 12px 10px; border-top: 1px solid var(--border2); flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(0,8,0,0.9), var(--bg-panel));
+}
+#choices-label { font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px; color: var(--green3); padding: 4px 4px 6px; text-transform: uppercase; opacity: 0.7; }
+.choice-btn {
+  display: flex; width: 100%; text-align: left; align-items: flex-start; gap: 0;
+  background: transparent; border: none; border-bottom: 1px solid var(--border2);
+  color: #7ab87a; font-family: var(--font-mono); font-size: 13px; font-weight: normal;
+  letter-spacing: 0.2px; line-height: 1.5; padding: 9px 6px; margin-bottom: 0;
+  cursor: pointer; transition: background 0.08s, color 0.08s, border-color 0.08s; position: relative;
+}
+.choice-btn:last-child { border-bottom: none; }
+.choice-btn .choice-num { display: inline-block; min-width: 22px; font-family: var(--font-hud); font-size: 10px; color: var(--green3); flex-shrink: 0; padding-top: 1px; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
+.choice-btn .choice-text { flex: 1; line-height: 1.5; }
+.choice-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: transparent; transition: background 0.08s; }
+.choice-btn:hover { color: #d4ffd4; background: rgba(57,255,20,0.06); }
+.choice-btn:hover::before { background: var(--green); }
+.choice-btn:hover .choice-num { color: var(--green); text-shadow: 0 0 10px rgba(57,255,20,0.6); }
+.choice-btn:active { background: rgba(57,255,20,0.12); }
+.choice-btn:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.45; }
+.choice-btn:disabled:hover { background: transparent; }
+.choice-btn:disabled:hover::before { background: transparent; }
+.choice-fail-hint { display: block; font-size: 10px; color: var(--danger); opacity: 0.7; margin-top: 2px; font-family: var(--font-mono); }
+
+/* ── LOG ── */
+#log-wrap {
+  border-top: 1px solid var(--border2); max-height: 90px; overflow-y: auto;
+  background: rgba(0,4,0,0.8); flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.log-line { font-family: var(--font-mono); font-size: var(--log-fs); padding: 2px 12px; color: var(--text-dim); letter-spacing: 0.5px; line-height: 1.5; }
+.log-line.ok   { color: var(--green3); }
+.log-line.warn { color: var(--warn); }
+.log-line.err  { color: var(--danger); }
+.log-line.info { color: var(--blue); }
+
+/* ── RIGHT PANEL ── */
+#right-panel {
+  display: flex; flex-direction: column;
+  height: calc(100vh - 38px);
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
+  overflow: hidden;
+}
+#inv-tab-bar {
+  display: flex; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #060b06, var(--bg));
+  flex-shrink: 0;
+}
+.inv-tab {
+  flex: 1; background: transparent; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim); font-family: var(--font-body); font-size: 10px;
+  font-weight: 600; letter-spacing: 1px;
+  padding: 6px 4px; cursor: pointer; transition: all 0.12s;
+}
+.inv-tab.active { color: var(--green); border-bottom-color: var(--green); }
+.inv-tab:hover  { color: var(--blue); }
+.inv-pane { flex: 1; overflow-y: auto; display: none; -webkit-overflow-scrolling: touch; }
+.inv-pane.active { display: block; }
+.inv-empty { color: var(--text-muted); font-size: 11px; letter-spacing: 1px; padding: 16px; text-align: center; font-family: var(--font-mono); }
+.item-card { border: 1px solid var(--border); margin: 6px 8px; padding: 8px 10px; background: var(--bg); }
+.item-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.item-card-icon { font-size: 18px; flex-shrink: 0; }
+.item-card-name { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--text-bright); letter-spacing: 1px; }
+.item-card-qty  { font-family: var(--font-hud); font-size: 10px; color: var(--gold); margin-left: auto; }
+.item-card-desc { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); line-height: 1.4; }
+.item-card-use  { margin-top: 6px; background: transparent; border: 1px solid var(--green3); color: var(--green3); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 3px 10px; cursor: pointer; transition: all 0.1s; }
+.item-card-use:hover { background: rgba(57,255,20,0.08); color: var(--green); }
+
+/* ── PAPERDOLL ── */
+.paperdoll-wrap { display: grid; grid-template-columns: 1fr auto 1fr; gap: 4px; padding: 8px; }
+.equip-col { display: flex; flex-direction: column; gap: 6px; }
+.eq-slot-wrap { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+.eq-slot-wrap label { font-family: var(--font-hud); font-size: 8px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+.eq-slot { width: 48px; height: 48px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.12s; }
+.eq-slot:hover { border-color: var(--green3); background: rgba(57,255,20,0.04); }
+.eq-slot.filled { border-color: var(--green3); background: rgba(57,255,20,0.06); }
+.eq-slot-name { font-size: 8px; color: var(--text-muted); text-align: center; font-family: var(--font-mono); letter-spacing: 0.5px; max-width: 56px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.paperdoll-center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.pd-label { font-family: var(--font-hud); font-size: 7px; color: var(--green3); letter-spacing: 3px; margin-top: 4px; }
+.equip-stats-box { margin: 4px 8px; padding: 8px; border: 1px solid var(--border2); background: rgba(0,8,0,0.5); }
+.equip-stats-title { font-family: var(--font-hud); font-size: 8px; color: var(--text-dim); letter-spacing: 2px; margin-bottom: 6px; }
+.equip-bonus-row { display: flex; justify-content: space-between; font-size: 10px; padding: 2px 0; border-bottom: 1px solid var(--border2); }
+.equip-bonus-row:last-child { border-bottom: none; }
+.equip-hint { font-size: 9px; color: var(--text-muted); font-family: var(--font-mono); text-align: center; padding: 4px 8px; letter-spacing: 0.5px; }
+.equip-avail-btn { display: flex; align-items: center; gap: 6px; width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border2); padding: 5px 8px; cursor: pointer; color: var(--text-dim); font-family: var(--font-body); font-size: 11px; letter-spacing: 0.5px; transition: all 0.1s; }
+.equip-avail-btn:hover { color: var(--green); background: rgba(57,255,20,0.04); }
+
+/* ── SHOP ── */
+.shop-section-label { font-family: var(--font-hud); font-size: 9px; color: var(--green3); letter-spacing: 2px; padding: 6px 10px 4px; border-bottom: 1px solid var(--border2); text-transform: uppercase; }
+.shop-item { border: 1px solid var(--border); margin: 6px 8px; padding: 8px 10px; background: var(--bg); transition: border-color 0.12s; }
+.shop-item:hover { border-color: var(--border-hi); }
+.shop-item-header { display: flex; align-items: center; margin-bottom: 4px; }
+.shop-item-icon { font-size: 20px; flex-shrink: 0; }
+.shop-item-name { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--text-bright); letter-spacing: 1px; flex: 1; }
+.shop-item-price { font-family: var(--font-hud); font-size: 11px; color: var(--gold); font-weight: 700; }
+.shop-item-desc { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); line-height: 1.4; margin-bottom: 6px; }
+.shop-buy-btn { width: 100%; background: linear-gradient(180deg, var(--bg3), var(--bg)); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 5px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
+.shop-buy-btn:hover:not([disabled]) { background: rgba(57,255,20,0.06); border-color: var(--green3); color: var(--green); }
+.shop-buy-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+/* ── OVERLAYS (Uni, Gym, Boats, Garden, HQ) ── */
+.overlay {
+  position: fixed; inset: 0; z-index: 700;
+  background: rgba(0,0,0,0.92);
+  display: none; align-items: flex-start; justify-content: center;
+  padding-top: 38px; overflow-y: auto;
+}
+.overlay.show { display: flex; }
+
+#uni-overlay, #gym-overlay, #boats-overlay, #garden-overlay, #hq-overlay {
+  position: fixed; top: 38px; left: 52px; right: 0; bottom: 0; z-index: 600;
+  background: var(--bg); display: none; flex-direction: column;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+#uni-overlay.show, #gym-overlay.show, #boats-overlay.show,
+#garden-overlay.show, #hq-overlay.show { display: flex; }
+
+.training-header { font-family: var(--font-hud); font-size: 16px; font-weight: 700; color: var(--green); letter-spacing: 4px; padding: 20px 24px 4px; text-shadow: 0 0 12px rgba(57,255,20,0.4); }
+.training-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); letter-spacing: 1px; padding: 0 24px 16px; border-bottom: 1px solid var(--border); }
+.training-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; padding: 16px 24px; }
+
+/* ── COURSE CARD ── */
+.course-card { border: 1px solid var(--border); background: var(--bg2); padding: 14px; transition: border-color 0.15s; }
+.course-card.active-course { border-color: var(--green3); background: rgba(57,255,20,0.04); }
+.course-icon { font-size: 28px; margin-bottom: 6px; }
+.course-name { font-family: var(--font-hud); font-size: 11px; color: var(--text-bright); letter-spacing: 2px; margin-bottom: 4px; }
+.course-desc { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); line-height: 1.5; margin-bottom: 8px; }
+.course-stats { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.course-stat { font-family: var(--font-hud); font-size: 9px; color: var(--cyan); letter-spacing: 1px; background: rgba(34,211,238,0.06); border: 1px solid rgba(34,211,238,0.15); padding: 2px 6px; }
+.course-cost { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); margin-bottom: 8px; }
+.course-progress-wrap { height: 4px; background: var(--border2); margin-bottom: 8px; }
+.course-progress-bar { height: 100%; background: linear-gradient(90deg, var(--green3), var(--green)); transition: width 1s; }
+.course-btn { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 6px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
+.course-btn.enrolled { border-color: var(--green3); color: var(--green3); }
+.course-btn:hover:not([disabled]) { background: rgba(57,255,20,0.06); border-color: var(--green3); color: var(--green); }
+.course-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+/* ── BOATS ── */
+.fishing-clicker-wrap { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.clicker-title { font-family: var(--font-hud); font-size: 10px; color: var(--text-dim); letter-spacing: 3px; }
+.clicker-boat { font-size: 64px; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 0 12px rgba(34,211,238,0.3)); user-select: none; -webkit-user-select: none; }
+.clicker-boat:active { transform: scale(0.92); }
+.clicker-stats { display: flex; gap: 24px; }
+.clicker-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.clicker-stat-val { font-family: var(--font-hud); font-size: 16px; color: var(--gold); font-weight: 700; }
+.clicker-stat > :last-child { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
+.clicker-hint { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); text-align: center; }
+.boats-section-title { font-family: var(--font-hud); font-size: 11px; color: var(--green3); letter-spacing: 3px; padding: 12px 24px 8px; border-bottom: 1px solid var(--border); }
+.boat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; padding: 16px 24px; }
+.boat-card { border: 1px solid var(--border); background: var(--bg2); padding: 14px; transition: border-color 0.15s; }
+.boat-card.owned { border-color: var(--green3); background: rgba(57,255,20,0.03); }
+.boat-card-top { display: flex; gap: 12px; margin-bottom: 10px; }
+.boat-img-wrap { position: relative; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: var(--bg); flex-shrink: 0; overflow: hidden; }
+.boat-click-fx { position: absolute; inset: 0; background: rgba(57,255,20,0); transition: background 0.1s; }
+.boat-img-wrap:active .boat-click-fx { background: rgba(57,255,20,0.15); }
+.boat-click-label { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-family: var(--font-hud); font-size: 7px; color: var(--green3); letter-spacing: 1px; }
+.boat-info { flex: 1; }
+.boat-name { font-family: var(--font-hud); font-size: 11px; color: var(--text-bright); letter-spacing: 2px; margin-bottom: 4px; }
+.boat-desc { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); margin-bottom: 6px; }
+.boat-income-badge { font-family: var(--font-hud); font-size: 11px; color: var(--gold); }
+.boat-upgrades { border-top: 1px solid var(--border2); padding-top: 8px; margin-bottom: 8px; }
+.boat-upgrade-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px dotted var(--border2); }
+.boat-upgrade-row:last-child { border-bottom: none; }
+.boat-upg-name { font-size: 11px; color: var(--text-dim); }
+.boat-upg-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 9px; letter-spacing: 1px; padding: 2px 8px; cursor: pointer; transition: all 0.1s; }
+.boat-upg-btn:hover:not([disabled]) { border-color: var(--green3); color: var(--green); }
+.boat-upg-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.boat-buy-btn { width: 100%; background: linear-gradient(180deg, var(--bg3), var(--bg)); border: 1px solid var(--green3); color: var(--green3); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 6px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
+.boat-buy-btn.owned-btn { border-color: var(--border); color: var(--text-muted); }
+.boat-buy-btn:hover:not([disabled]) { background: rgba(57,255,20,0.08); color: var(--green); }
+.boat-buy-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+/* ── GARDEN ── */
+.garden-plot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px 24px; }
+.garden-plot { border: 1px solid var(--border); background: var(--bg2); padding: 12px; cursor: pointer; text-align: center; transition: all 0.15s; }
+.garden-plot:hover { border-color: var(--green3); }
+.garden-plot.empty { opacity: 0.6; }
+.garden-plot.ready { border-color: var(--gold); box-shadow: 0 0 8px rgba(250,204,21,0.2); animation: readyPulse 1s ease-in-out infinite alternate; }
+@keyframes readyPulse { from { box-shadow: 0 0 4px rgba(250,204,21,0.1); } to { box-shadow: 0 0 12px rgba(250,204,21,0.4); } }
+.garden-plot.growing { border-color: var(--green3); }
+.garden-plot-emoji { font-size: 28px; margin-bottom: 4px; }
+.garden-plot-name { font-family: var(--font-hud); font-size: 9px; color: var(--text-bright); letter-spacing: 2px; margin-bottom: 2px; }
+.garden-plot-timer { font-family: var(--font-hud); font-size: 11px; color: var(--gold); }
+.garden-plot-status { font-size: 9px; color: var(--text-dim); font-family: var(--font-mono); }
+.garden-shop-title { font-family: var(--font-hud); font-size: 10px; color: var(--green3); letter-spacing: 3px; padding: 8px 24px 4px; border-top: 1px solid var(--border); }
+.garden-seed-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 24px; }
+.garden-seed-btn { display: flex; align-items: center; gap: 8px; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; cursor: pointer; font-family: var(--font-body); font-size: 11px; letter-spacing: 1px; transition: all 0.12s; }
+.garden-seed-btn:hover { border-color: var(--green3); background: rgba(57,255,20,0.04); }
+.seed-cost { font-family: var(--font-hud); font-size: 10px; color: var(--gold); }
+
+/* ── HQ ── */
+.hq-topbar { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--border); padding: 8px 16px; flex-shrink: 0; flex-wrap: wrap; }
+.hq-tab-btn { background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-dim); font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 1px; padding: 6px 14px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+.hq-tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+.hq-tab-btn:hover { color: var(--blue); }
+.hq-tab-icon { font-size: 14px; }
+.hq-stats-strip { display: flex; gap: 8px; align-items: center; }
+.hq-stat-chip { font-family: var(--font-hud); font-size: 9px; color: var(--text-dim); background: var(--bg); border: 1px solid var(--border2); padding: 2px 8px; letter-spacing: 1px; }
+.hq-content { flex: 1; overflow: hidden; }
+.hq-view { display: none; height: 100%; overflow-y: auto; }
+.hq-view.active { display: block; }
+.hq-room-layout { display: grid; grid-template-columns: 1fr 320px; height: 100%; overflow: hidden; }
+.hq-room-visual { position: relative; background: var(--bg2); border-right: 1px solid var(--border); overflow: hidden; }
+.hq-room-visual canvas { width: 100%; height: 100%; }
+.hq-room-panel { display: flex; flex-direction: column; overflow-y: auto; }
+.hq-room-panel-header { padding: 16px; border-bottom: 1px solid var(--border); }
+.hq-room-panel-title { font-family: var(--font-hud); font-size: 12px; color: var(--green); letter-spacing: 3px; margin-bottom: 4px; }
+.hq-room-panel-desc { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); }
+.hq-panel-body { padding: 12px 16px; flex: 1; }
+.hq-section-label { font-family: var(--font-hud); font-size: 9px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border2); }
+.hq-activity-btn { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 11px; letter-spacing: 1px; padding: 8px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; text-align: left; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.hq-activity-btn:hover:not([disabled]) { border-color: var(--green3); color: var(--green); background: rgba(57,255,20,0.04); }
+.hq-activity-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.hq-upgrade-btn { background: transparent; border: 1px solid var(--green3); color: var(--green3); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 4px 12px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
+.hq-upgrade-btn:hover:not([disabled]) { background: rgba(57,255,20,0.08); color: var(--green); }
+.hq-upgrade-btn[disabled] { opacity: 0.4; cursor: not-allowed; border-color: var(--border); color: var(--text-dim); }
+.hq-upgrade-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border2); }
+.hq-upgrade-row:last-child { border-bottom: none; }
+.hq-upgrade-info { flex: 1; }
+.hq-upgrade-name { font-family: var(--font-body); font-size: 11px; color: var(--text-bright); margin-bottom: 2px; }
+.hq-upgrade-desc { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); }
+.hq-cooldown-bar-wrap { height: 3px; background: var(--border2); margin-top: 4px; }
+.hq-cooldown-bar { height: 100%; background: var(--green3); transition: width 1s linear; }
+.seed-inv-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.seed-inv-btn { font-size: 20px; cursor: pointer; padding: 4px 8px; border: 1px solid var(--border); background: var(--bg); transition: all 0.12s; }
+.seed-inv-btn:hover { border-color: var(--green3); }
+.plot-detail-box { padding: 10px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 12px; }
+.garden-plots-overlay { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); gap: 4px; padding: 4px; pointer-events: none; }
+.garden-plot-hotspot { pointer-events: all; cursor: pointer; border: 1px solid transparent; transition: border-color 0.12s; display: flex; align-items: center; justify-content: center; }
+.garden-plot-hotspot:hover { border-color: var(--green3); background: rgba(57,255,20,0.06); }
+.garden-plot-hotspot.active-plot { border-color: var(--gold); }
+.garden-plots-summary { display: flex; flex-direction: column; gap: 4px; }
+.garden-plot-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; border-bottom: 1px dotted var(--border2); }
+.garden-plot-row:last-child { border-bottom: none; }
+.seed-shop-grid { display: flex; flex-direction: column; gap: 6px; }
+.seed-shop-btn { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); padding: 6px 10px; cursor: pointer; transition: all 0.12s; color: var(--text); font-family: var(--font-body); font-size: 11px; width: 100%; text-align: left; }
+.seed-shop-btn:hover:not([disabled]) { border-color: var(--green3); background: rgba(57,255,20,0.04); }
+.seed-shop-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+/* ── FISHING OVERLAY ── */
+#fishing-overlay { align-items: center; justify-content: center; flex-direction: column; }
+#fishing-panel {
+  background: var(--bg2); border: 1px solid var(--border); padding: 16px;
+  min-width: 300px; max-width: 380px; width: 90%;
+}
+.fishing-header { font-family: var(--font-hud); font-size: 12px; color: var(--green); letter-spacing: 3px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+#fishing-canvas-wrap { margin-bottom: 10px; }
+#fishing-canvas { width: 100%; height: auto; display: block; border: 1px solid var(--border); }
+#fishing-status { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 8px; text-align: center; }
+#fishing-action-btn { width: 100%; background: rgba(57,255,20,0.06); border: 1px solid var(--green3); color: var(--green); font-family: var(--font-body); font-size: 12px; letter-spacing: 2px; padding: 8px; cursor: pointer; margin-bottom: 6px; text-transform: uppercase; transition: all 0.12s; }
+#fishing-action-btn:hover { background: rgba(57,255,20,0.12); }
+#fishing-close { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 11px; letter-spacing: 1px; padding: 6px; cursor: pointer; transition: all 0.12s; }
+#fishing-close:hover { border-color: var(--red); color: var(--red2); }
+
+/* ── ENDGAME / GAME OVER ── */
+#gameover-overlay, #win-overlay {
+  position: fixed; inset: 0; z-index: 5000;
+  background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center;
+}
+#gameover-overlay.show, #win-overlay.show { display: flex; }
+.endgame-box { text-align: center; padding: 40px; border: 1px solid var(--border); background: var(--bg2); max-width: 400px; }
+.endgame-title { font-family: var(--font-hud); font-size: 24px; font-weight: 700; letter-spacing: 4px; margin-bottom: 12px; }
+.endgame-title.danger { color: var(--danger); text-shadow: 0 0 20px rgba(239,68,68,0.5); }
+.endgame-title.success { color: var(--green); text-shadow: 0 0 20px rgba(57,255,20,0.5); }
+.endgame-text { font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 20px; }
+.endgame-btn { background: transparent; border: 1px solid var(--green3); color: var(--green); font-family: var(--font-body); font-size: 13px; letter-spacing: 3px; padding: 10px 32px; cursor: pointer; transition: all 0.15s; }
+.endgame-btn:hover { background: rgba(57,255,20,0.1); border-color: var(--green); box-shadow: 0 0 16px rgba(57,255,20,0.2); }
+
+/* ── NOTIF ── */
+#notif {
+  position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
+  background: rgba(8,13,8,0.97); border: 1px solid var(--green3);
+  color: var(--green4); font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 1px; padding: 8px 20px;
+  white-space: nowrap; z-index: 9998; opacity: 0; transition: opacity 0.25s;
+  box-shadow: 0 0 16px rgba(57,255,20,0.2); pointer-events: none;
+}
+#notif.show { opacity: 1; }
+
+/* ── FLOAT TEXT ── */
+.fish-float {
+  position: fixed; pointer-events: none; z-index: 9997;
+  font-family: var(--font-hud); font-size: 13px; color: var(--gold); font-weight: 700;
+  text-shadow: 0 0 8px rgba(250,204,21,0.6);
+  animation: floatUp 0.9s ease-out forwards;
+}
+@keyframes floatUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-40px); } }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+  :root { --scene-fs: 14px; --choice-fs: 13px; }
+  #main { grid-template-columns: 1fr !important; grid-template-rows: auto 1fr auto; height: 100dvh; }
+  #left-nav { display: none !important; }
+  #left-panel { display: none; }
+  #right-panel { display: none; }
+  #center-panel { height: auto; flex: 1; border-right: none; }
+  #topbar-tabs { display: none; }
+  #topbar-title { font-size: 11px; letter-spacing: 2px; }
+  #topbar-right { gap: 6px; }
+  .top-micro-btn { display: none; }
+  #topbar-money { font-size: 12px; }
+  #mobile-nav { display: flex; }
+  .overlay { padding-top: 38px; }
+  #uni-overlay, #gym-overlay, #boats-overlay, #garden-overlay, #hq-overlay { left: 0; }
+  .training-grid { grid-template-columns: 1fr; }
+  .boat-grid { grid-template-columns: 1fr; }
+  .garden-plot-grid { grid-template-columns: repeat(3,1fr); gap: 4px; padding: 8px; }
+  .hq-room-layout { grid-template-columns: 1fr; grid-template-rows: 200px 1fr; }
+}
+
+/* ── MOBILE NAV ── */
+#mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 790;
+  background: linear-gradient(180deg, var(--bg) 0%, #040804 100%);
+  border-top: 1px solid var(--border);
+  height: 52px;
+}
+.mobile-nav-btn {
+  flex: 1; background: transparent; border: none; border-right: 1px solid var(--border2);
+  color: var(--text-dim); font-family: var(--font-body); font-size: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer; padding: 4px 0; letter-spacing: 0.5px;
+  transition: all 0.12s;
+}
+.mobile-nav-btn:last-child { border-right: none; }
+.mobile-nav-btn:hover { color: var(--green); background: rgba(57,255,20,0.04); }
+.mobile-overlay-panel {
+  position: fixed; top: 38px; left: 0; right: 0; bottom: 52px; z-index: 780;
+  background: var(--bg); border-top: 1px solid var(--border);
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: none; padding: 12px;
+  transform: translateY(100%); transition: transform 0.25s ease;
+}
+.mobile-overlay-panel.open { display: block; transform: translateY(0); }
+.mobile-panel-close { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 11px; letter-spacing: 2px; padding: 8px; cursor: pointer; margin-bottom: 12px; }
+
+/* ── JOB SELECT OVERLAY ── */
+#job-overlay {
+  position: fixed; inset: 0; z-index: 8000;
+  background: radial-gradient(ellipse at center, #060d06 0%, #020502 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+#job-overlay.hidden { display: none; }
+.job-screen { max-width: 900px; width: 95%; padding: 20px; }
+.job-title { font-family: var(--font-hud); font-size: 32px; font-weight: 900; color: var(--green); letter-spacing: 8px; text-align: center; text-shadow: 0 0 24px rgba(57,255,20,0.8); margin-bottom: 4px; }
+.job-sub { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); letter-spacing: 3px; text-align: center; margin-bottom: 24px; }
+.job-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.job-card { border: 1px solid var(--border); background: linear-gradient(180deg, var(--bg3), var(--bg)); padding: 20px; cursor: pointer; transition: all 0.2s; }
+.job-card:hover { border-color: var(--green3); background: rgba(57,255,20,0.04); box-shadow: 0 0 20px rgba(57,255,20,0.1); transform: translateY(-2px); }
+.job-card-icon { font-size: 36px; margin-bottom: 10px; }
+.job-card-name { font-family: var(--font-hud); font-size: 16px; font-weight: 900; color: var(--green); letter-spacing: 4px; margin-bottom: 4px; }
+.job-card-title { font-family: var(--font-body); font-size: 11px; color: var(--blue); letter-spacing: 2px; margin-bottom: 8px; }
+.job-card-salary { font-family: var(--font-hud); font-size: 12px; color: var(--gold); margin-bottom: 10px; }
+.job-card-desc { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); line-height: 1.5; margin-bottom: 12px; }
+.job-card-attrs { border-top: 1px solid var(--border2); padding-top: 10px; margin-bottom: 10px; }
+.job-attr-row { display: flex; justify-content: space-between; font-size: 10px; padding: 2px 0; }
+.job-attr-label { color: var(--text-dim); font-family: var(--font-mono); }
+.job-attr-val { color: var(--gold); font-family: var(--font-hud); }
+.job-card-growth { font-family: var(--font-mono); font-size: 10px; color: var(--green3); letter-spacing: 0.5px; }
+
+/* ══════════════════════════════════════════════════
+   HUNGER SYSTEM STYLES
+══════════════════════════════════════════════════ */
+/* Hunger bar colors - dynamic via JS */
+.stat-bar.hunger-full    { background: linear-gradient(90deg, #14532d, #16a34a, #4ade80); }
+.stat-bar.hunger-ok      { background: linear-gradient(90deg, #78350f, #d97706, #fbbf24); }
+.stat-bar.hunger-low     { background: linear-gradient(90deg, #450a0a, #dc2626, #ef4444); }
+
+/* Topbar hunger chip */
+#topbar-hunger-chip {
+  font-family: var(--font-hud); font-size: 10px; letter-spacing: 1px;
+  border: 1px solid var(--border); padding: 2px 8px;
+  background: rgba(0,0,0,0.4); color: var(--green3);
+  white-space: nowrap; flex-shrink: 0;
+}
+@keyframes hungerBlink {
+  from { opacity: 1; box-shadow: none; }
+  to   { opacity: 0.6; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+}
+
+/* Hunger warning banner */
+#hunger-warning {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 7999;
+  background: rgba(220,38,38,0.92);
+  color: #fff; font-family: var(--font-hud); font-size: 12px;
+  letter-spacing: 2px; text-align: center; padding: 8px;
+  display: none; border-top: 2px solid #ef4444;
+  text-shadow: 0 0 8px rgba(0,0,0,0.8);
+  animation: hungerBlink 0.8s ease-in-out infinite alternate;
+}
+#hunger-warning.show { display: block; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     LOADING SCREEN (GameStateMachine: LOADING)
+═══════════════════════════════════════════════════ -->
+<div id="loading-screen">
+  <div class="loading-title">CEO ZLA // LAZARUS</div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
+  <div class="loading-status" id="loading-status">// INICIALIZÁCIA //</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN MENU (GameStateMachine: MAIN_MENU)
+═══════════════════════════════════════════════════ -->
+<div id="main-menu">
+  <div class="menu-title">⚔ CEO ZLA ⚔</div>
+  <div class="menu-sub">// OPERÁCIA: LAZARUS //</div>
+  <button class="menu-btn" id="menu-new-btn">[ NOVÁ HRA ]</button>
+  <button class="menu-btn" id="menu-load-btn">[ NAČÍTAŤ ULOŽENÚ ]</button>
+  <div class="menu-version">v2.0 — Modulárna architektúra</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TOP BAR
+═══════════════════════════════════════════════════ -->
+<div id="topbar">
+  <span id="topbar-title">⚔ CEO ZLA // LAZARUS</span>
+  <div id="topbar-tabs">
+    <button class="tab-btn active" onclick="switchView('game')">⚡ Operácia</button>
+    <button class="tab-btn"        onclick="switchView('fish')">🎣 Rybolov</button>
+    <button class="tab-btn"        onclick="switchView('boats')">⛵ Lode</button>
+    <button class="tab-btn"        onclick="switchView('garden')">🌱 Záhradka</button>
+    <button class="tab-btn"        onclick="switchView('uni')">🎓 Univerzita</button>
+    <button class="tab-btn"        onclick="switchView('gym')">💪 Gym</button>
+    <button class="tab-btn"        onclick="switchView('hq')">🏠 Základňa</button>
+    <button class="tab-btn"        onclick="switchView('shop')">🛒 Obchod</button>
+  </div>
+  <div id="topbar-right">
+    <span id="topbar-job" style="display:none">---</span>
+    <span id="topbar-equip-badge" style="display:none;font-size:12px;letter-spacing:1px;color:var(--green3);border:1px solid var(--border);padding:2px 7px;font-family:var(--font-mono)"></span>
+    <span id="topbar-money">₿ 0</span>
+    <span id="topbar-clock">--:--:--</span>
+    <button class="top-micro-btn" onclick="saveGame()">💾 Uložiť</button>
+    <button class="top-micro-btn" onclick="loadGame()">📂 Načítať</button>
+    <button class="top-micro-btn" onclick="showMainMenu()">🏠 Menu</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN LAYOUT
+═══════════════════════════════════════════════════ -->
+<div id="main">
+  <!-- LEFT NAV SIDEBAR -->
+  <div id="left-nav">
+    <button class="sidenav-btn active" data-view="game" data-tip="Operácia" onclick="switchView('game')">⚡</button>
+    <button class="sidenav-btn" data-view="fish" data-tip="Rybolov" onclick="switchView('fish')">🎣</button>
+    <button class="sidenav-btn" data-view="boats" data-tip="Lode" onclick="switchView('boats')">⛵</button>
+    <button class="sidenav-btn" data-view="garden" data-tip="Záhradka" onclick="switchView('garden')">🌱</button>
+    <div class="sidenav-divider"></div>
+    <button class="sidenav-btn" data-view="uni" data-tip="Univerzita" onclick="switchView('uni')">🎓</button>
+    <button class="sidenav-btn" data-view="gym" data-tip="Gym" onclick="switchView('gym')">💪</button>
+    <div class="sidenav-divider"></div>
+    <button class="sidenav-btn" data-view="hq" data-tip="Základňa" onclick="switchView('hq')">🏠</button>
+    <button class="sidenav-btn" data-view="shop" data-tip="Obchod" onclick="switchView('shop')">🛒</button>
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div id="left-panel">
+    <div id="left-scroll">
+      <div class="panel-section">
+        <div class="panel-header" onclick="toggleSection('sec-stats')">
+          <span class="panel-header-title">Agent // Štatistiky</span>
+          <span class="panel-header-toggle" id="toggle-sec-stats">▼</span>
+        </div>
+        <div class="panel-body" id="sec-stats">
+          <div class="stat-row"><span class="stat-icon" style="color:#ef4444">❤️</span><span class="stat-label">HP</span><div class="stat-bar-wrap"><div class="stat-bar hp" id="bar-hp" style="width:100%"></div></div><span class="stat-val hp" id="val-hp">100</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#f59e0b">🧠</span><span class="stat-label">SAN</span><div class="stat-bar-wrap"><div class="stat-bar san" id="bar-san" style="width:100%"></div></div><span class="stat-val san" id="val-san">100</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#3b82f6">⭐</span><span class="stat-label">XP</span><div class="stat-bar-wrap"><div class="stat-bar xp" id="bar-xp" style="width:0%"></div></div><span class="stat-val xp" id="val-xp">0</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">🏆</span><span class="stat-label">LVL</span><div class="stat-bar-wrap" style="background:transparent;border-color:transparent"></div><span class="stat-val" style="color:var(--cyan)" id="val-level">1</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#f97316">⚔️</span><span class="stat-label">SIL</span><div class="stat-bar-wrap"><div class="stat-bar str" id="bar-str" style="width:10%"></div></div><span class="stat-val str" id="val-str">10</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#a78bfa">🤸</span><span class="stat-label">OHY</span><div class="stat-bar-wrap"><div class="stat-bar flex-s" id="bar-flex" style="width:10%"></div></div><span class="stat-val flex-s" id="val-flex">10</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">💾</span><span class="stat-label">HCK</span><div class="stat-bar-wrap"><div class="stat-bar hack-s" id="bar-hack" style="width:10%"></div></div><span class="stat-val hack-s" id="val-hack">10</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat-row">
+            <span class="stat-icon" id="hunger-state-icon" style="color:#4ade80">🟢</span>
+            <span class="stat-label" style="color:#4ade80;font-size:9px" title="Klesá pri každej voľbe">HLAD🍽</span>
+            <div class="stat-bar-wrap">
+              <div class="stat-bar hunger-full" id="bar-hunger" style="width:100%;background:linear-gradient(90deg,#14532d,#16a34a,#4ade80)"></div>
+            </div>
+            <span class="stat-val" style="color:#4ade80" id="val-hunger">100</span>
+          </div>
+          <div class="stat-row" style="opacity:0.6;font-size:9px;padding:0 8px 4px;color:var(--text-dim)">
+            <span style="font-family:var(--font-mono);letter-spacing:1px">⚡ Hlad klesá pri VOĽBÁCH · SAN klesá časom</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-header" onclick="toggleSection('sec-income')">
+          <span class="panel-header-title">Pasívny príjem</span>
+          <span class="panel-header-toggle" id="toggle-sec-income">▼</span>
+        </div>
+        <div class="panel-body" id="sec-income">
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">💼</span>Zamestnanie</span><span class="income-val" id="inc-job">+0/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">💻</span>Hackovanie</span><span class="income-val" id="inc-hack">+0/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">🐟</span>Predaj rýb</span><span class="income-val" id="inc-fish">+0/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">⛵</span>Lode</span><span class="income-val" id="inc-boats">+0/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">⚡</span>Bonusový</span><span class="income-val" id="inc-bonus">+0/s</span></div>
+          <div class="income-row" style="border-top:1px solid var(--border2);margin-top:4px;padding-top:6px;"><span class="income-label" style="color:var(--text-bright);font-weight:700">📊 SPOLU</span><span class="income-total" id="inc-total">+0/s</span></div>
+        </div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-header" onclick="toggleSection('sec-ops')">
+          <span class="panel-header-title">Operačné ciele</span>
+          <span class="panel-header-toggle" id="toggle-sec-ops">▼</span>
+        </div>
+        <div class="panel-body" id="sec-ops">
+          <div class="op-flag" id="op-jaskyne"><div class="op-dot"></div><span class="op-name">🗺 Preskúmaj jaskyňu (+15xp)</span></div>
+          <div class="op-flag" id="op-5g"><div class="op-dot"></div><span class="op-name">📡 Vypni 5G vežu (Hlavný quest)</span></div>
+          <div class="op-flag" id="op-lazarus"><div class="op-dot"></div><span class="op-name">📁 Získaj spis OMEGA (+10xp)</span></div>
+          <div class="op-flag" id="op-druid"><div class="op-dot"></div><span class="op-name">🌿 Kontaktuj Druida</span></div>
+        </div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-header" onclick="toggleSection('sec-map')">
+          <span class="panel-header-title">Mapa // Prievidza</span>
+          <span class="panel-header-toggle" id="toggle-sec-map">▼</span>
+        </div>
+        <div class="panel-body" id="sec-map">
+          <pre class="minimap-grid">
+  ╔══ PRIEVIDZA A OKOLIE 2077 ══╗
+  ║ BOJNICKÁ OBLASŤ              ║
+  ║  🏰 <span class="node" onclick="enterLocation('bojnice')">Bojnický zámok</span>       ║
+  ║  🔒 [Tunely] (zamknuté)      ║
+  ║  🏥 <span class="node" onclick="enterLocation('biotech')">Nem. / Biotech</span>       ║
+  ╟──────────────────────────────╢
+  ║ CENTRUM                       ║
+  ║  🚉 <span class="node" onclick="enterLocation('stanica')">Hl. Stanica</span>           ║
+  ║  ⛪ <span class="node" onclick="enterLocation('namestie')">Námestie / 5G</span>         ║
+  ║  🐟 <span class="node" onclick="enterLocation('miki')">Miki Bar ★</span>             ║
+  ╟──────────────────────────────╢
+  ║ KORZO / JANTAR                ║
+  ║  🏬 <span class="node" onclick="enterLocation('korzo')">Korzo OC</span>               ║
+  ║  🟡 <span class="node" onclick="enterLocation('jantar')">Jantar Club</span>            ║
+  ║  💾 <span class="node" onclick="enterLocation('fri')">FIT — Baník</span>            ║
+  ╟──────────────────────────────╢
+  ║ ZÁHORIE / ZÁKLADŇA            ║
+  ║  🏋️ <span class="node" onclick="enterLocation('zagorska')">Gym Zagorská</span>         ║
+  ║  🌿 <span class="node" onclick="enterLocation('terasy')">Terasy</span>                ║
+  ║  🌲 <span class="node" onclick="enterLocation('lesopark')">Lesopark</span>             ║
+  ║  🏠 <span class="node" onclick="enterLocation('domov')">Základňa</span>              ║
+  ╟──────────────────────────────╢
+  ║ OKOLIE                        ║
+  ║  📻 <span class="node" onclick="enterLocation('banovce')">Bánovce · 5G Sek. 7</span>  ║
+  ╚══════════════════════════════╝
+          </pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER PANEL -->
+  <div id="center-panel">
+    <div id="scene-img-wrap">
+      <div id="scene-topbar">
+        <span id="scene-loc-name">NAČÍTAVAM...</span>
+        <span id="scene-loc-coords">48°46′N 18°37′E</span>
+      </div>
+      <div id="scene-placeholder">
+        <div id="scene-placeholder-icon">🏙️</div>
+        <div id="scene-placeholder-label">Lokácia // Prievidza</div>
+      </div>
+      <img id="scene-photo" src="" alt="" onerror="this.style.display='none'"/>
+      <div id="scene-photo-overlay"></div>
+      <div id="scene-loc-badge"></div>
+    </div>
+    <div id="scene-text-wrap"></div>
+    <div id="choices-wrap"></div>
+    <div id="log-wrap"></div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div id="right-panel">
+    <div id="inv-tab-bar">
+      <button class="inv-tab active" onclick="switchInvTab('items')">🎒 Predmety</button>
+      <button class="inv-tab"        onclick="switchInvTab('equip')">⚔️ Výstroj</button>
+      <button class="inv-tab"        onclick="switchInvTab('fish')">🐟 Ryby</button>
+      <button class="inv-tab"        onclick="switchInvTab('shop')">🛒 Obchod</button>
+    </div>
+    <div class="inv-pane active" id="inv-pane-items">
+      <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
+    </div>
+    <div class="inv-pane" id="inv-pane-equip">
+      <div class="paperdoll-wrap">
+        <div class="equip-col">
+          <div class="eq-slot-wrap"><label>Hlava</label><div class="eq-slot" id="eqslot-head" title="Prázdny slot" onclick="eqSlotClick('head')"></div><div class="eq-slot-name" id="eqslot-head-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Telo</label><div class="eq-slot" id="eqslot-body" title="Prázdny slot" onclick="eqSlotClick('body')"></div><div class="eq-slot-name" id="eqslot-body-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Nohavice</label><div class="eq-slot" id="eqslot-pants" title="Prázdny slot" onclick="eqSlotClick('pants')"></div><div class="eq-slot-name" id="eqslot-pants-name">—</div></div>
+        </div>
+        <div class="paperdoll-center">
+          <div style="width:72px;height:200px;background:linear-gradient(180deg,#050a05,#080d08);border-left:1px solid var(--border);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:48px;filter:drop-shadow(0 0 8px rgba(57,255,20,0.35))">🕵️</div>
+          <div class="pd-label">AGENT</div>
+        </div>
+        <div class="equip-col">
+          <div class="eq-slot-wrap"><label>Zbraň</label><div class="eq-slot" id="eqslot-weapon" title="Prázdny slot" onclick="eqSlotClick('weapon')"></div><div class="eq-slot-name" id="eqslot-weapon-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Špeciálne</label><div class="eq-slot" id="eqslot-special" title="Prázdny slot" onclick="eqSlotClick('special')"></div><div class="eq-slot-name" id="eqslot-special-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Nástroj</label><div class="eq-slot" id="eqslot-feet" title="Prázdny slot" onclick="eqSlotClick('feet')"></div><div class="eq-slot-name" id="eqslot-feet-name">—</div></div>
+        </div>
+      </div>
+      <div class="equip-stats-box">
+        <div class="equip-stats-title">⚙ Aktívne bonusy výstroja</div>
+        <div id="equip-bonuses-list"></div>
+      </div>
+      <div class="equip-hint">// Klikni na slot pre zloženie • Kúp v Obchode a nasaď tu //</div>
+      <div class="equip-stats-box" style="margin-top:6px">
+        <div class="equip-stats-title">📦 Predmety v inventári</div>
+        <div id="equip-available-list"></div>
+      </div>
+    </div>
+    <div class="inv-pane" id="inv-pane-fish">
+      <div id="inv-fish-body"><div class="inv-empty">// žiadne ryby //</div></div>
+    </div>
+    <div class="inv-pane" id="inv-pane-shop">
+      <div id="shop-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAYS -->
+<div id="uni-overlay">
+  <div class="training-header">🎓 Prievidza Univerzita</div>
+  <div class="training-sub">Pasívne vzdelávanie — kurzy zvyšujú skilly automaticky</div>
+  <div id="uni-courses-grid" class="training-grid"></div>
+</div>
+<div id="gym-overlay">
+  <div class="training-header">💪 Terasový Gym</div>
+  <div class="training-sub">Fyzický tréning — pasívne zvyšuje silu a ohybnosť</div>
+  <div id="gym-courses-grid" class="training-grid"></div>
+</div>
+<div id="boats-overlay">
+  <div class="training-header">⛵ Flotila rybárskych lodí</div>
+  <div class="training-sub">Klikni na loď = ručný rybolov • Vylepšuj pre pasívny príjem</div>
+  <div class="fishing-clicker-wrap">
+    <div class="clicker-title">// Ručný rybolov //</div>
+    <div class="clicker-boat" id="clicker-boat-emoji" onclick="boatClick(event)" title="Klikni pre rybolov!">🎣</div>
+    <div class="clicker-stats">
+      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-total-fish">0</span>Rýb celkom</div>
+      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-per-click">+1₿</span>Za klik</div>
+      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-passive">0₿/s</span>Pasívne</div>
+    </div>
+    <div class="clicker-hint">// Klikaj na emoji pre extra úlov • Vylepšuj lode pre väčší príjem //</div>
+  </div>
+  <div class="boats-section-title">⚓ Flotila — Kúp a vylepšuj</div>
+  <div id="boats-fleet-grid" class="boat-grid"></div>
+</div>
+<div id="garden-overlay">
+  <div class="training-header">🌱 Záhradka</div>
+  <div class="training-sub">Pestuj rastliny — pasívny príjem a špeciálne predmety</div>
+  <div id="garden-grid" class="garden-plot-grid"></div>
+  <div class="garden-shop-title">🌿 Semienka na predaj</div>
+  <div id="garden-seed-shop" class="garden-seed-row"></div>
+</div>
+<div id="hq-overlay">
+  <div class="hq-topbar">
+    <button class="hq-tab-btn active" id="hq-tab-main" onclick="hqSwitchTab('main')"><span class="hq-tab-icon">🏠</span> Hlavná izba</button>
+    <button class="hq-tab-btn" id="hq-tab-train" onclick="hqSwitchTab('train')"><span class="hq-tab-icon">🥊</span> Tréningová</button>
+    <button class="hq-tab-btn" id="hq-tab-garden" onclick="hqSwitchTab('garden')"><span class="hq-tab-icon">🌿</span> Záhradka</button>
+    <div class="hq-stats-strip" style="border-bottom:none;margin-left:auto">
+      <div class="hq-stat-chip">HP/s: <span id="hq-stat-hpregen">+0</span></div>
+      <div class="hq-stat-chip">SAN/s: <span id="hq-stat-sanregen">+0</span></div>
+      <div class="hq-stat-chip">HCK: <span id="hq-stat-hckbonus">+0</span></div>
+      <div class="hq-stat-chip">₿/s: <span id="hq-stat-income">+0</span></div>
+    </div>
+  </div>
+  <div class="hq-content">
+    <div class="hq-view active" id="hq-view-main">
+      <div class="hq-room-layout">
+        <div class="hq-room-visual" style="position:relative;">
+          <canvas id="hq-main-canvas"></canvas>
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:0;pointer-events:none">
+            <div id="main-room-spalna" onclick="hqSelectSubRoom('spalna')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Spálňa"></div>
+            <div id="main-room-kancelaria" onclick="hqSelectSubRoom('kancelaria')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Kancelária"></div>
+            <div id="main-room-kuchyna" onclick="hqSelectSubRoom('kuchyna')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Kuchyňa"></div>
+            <div style="pointer-events:none"></div>
+          </div>
+          <div style="position:absolute;inset:0;pointer-events:none;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px"><div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">🛏️ SPÁLŇA</div></div>
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px"><div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">💻 KANCELÁRIA</div></div>
+            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px"><div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">🍳 KUCHYŇA</div></div>
+            <div style="display:flex;flex-direction:column;justify-content:center;align-items:center"><div style="font-family:'Orbitron',monospace;font-size:10px;color:#1a3a1a;letter-spacing:2px;opacity:0.5">// HQ //</div></div>
+          </div>
+        </div>
+        <div class="hq-room-panel">
+          <div class="hq-room-panel-header"><div class="hq-room-panel-title">🏠 ZÁKLADŇA</div><div class="hq-room-panel-desc">Klikni na izbu v priestore vľavo pre aktivity a vylepšenia.</div></div>
+          <div class="hq-panel-body" id="main-room-detail"><div style="text-align:center;padding:40px 0;color:#1a3a1a;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;line-height:2">◆ SPÁLŇA<br>◆ KANCELÁRIA<br>◆ KUCHYŇA<br><br><span style="font-size:8px;opacity:0.5">// Klikni na izbu //</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hq-view" id="hq-view-train">
+      <div class="hq-room-layout">
+        <div class="hq-room-visual"><canvas id="hq-train-canvas"></canvas></div>
+        <div class="hq-room-panel">
+          <div class="hq-room-panel-header"><div class="hq-room-panel-title">🥊 TRÉNINGOVÁ MIESTNOSŤ</div><div class="hq-room-panel-desc" id="train-unlock-status">Uzamknutá. Vyžaduje rekonštrukciu.</div></div>
+          <div class="hq-panel-body" id="train-room-detail"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hq-view" id="hq-view-garden">
+      <div class="hq-room-layout">
+        <div class="hq-room-visual" id="garden-visual-wrap" style="position:relative">
+          <canvas id="hq-garden-canvas"></canvas>
+          <div id="garden-plots-overlay" class="garden-plots-overlay"></div>
+        </div>
+        <div class="hq-room-panel">
+          <div class="hq-room-panel-header"><div class="hq-room-panel-title">🌿 ZÁHRADKA</div><div class="hq-room-panel-desc">Sadi semienka, čakaj kým vyrastú a zober úrodu za kredity.</div></div>
+          <div class="hq-panel-body">
+            <div id="garden-plot-info" style="display:none"><div class="hq-section-label">🌱 VYBRANÝ ZÁHON</div><div id="garden-plot-detail" class="plot-detail-box"></div></div>
+            <div class="hq-section-label">🎒 SEMIENKA V INVENTÁRI</div>
+            <div id="garden-seed-inv" class="seed-inv-grid"><div style="color:#1a3a1a;font-size:10px;font-family:'Share Tech Mono',monospace">// Žiadne semienka — kúp v Obchode //</div></div>
+            <div class="hq-section-label" style="margin-top:8px">🌿 STAV ZÁHONOV</div>
+            <div id="garden-plots-summary"></div>
+            <button class="hq-activity-btn" style="margin-top:10px" onclick="gardenHarvestAll()">🌾 Zozbierať všetky zrelé</button>
+            <div class="hq-section-label" style="margin-top:12px">🛒 KÚPIŤ SEMIENKA</div>
+            <div class="seed-shop-grid" id="garden-seed-shop"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FISHING OVERLAY -->
+<div class="overlay" id="fishing-overlay">
+  <div id="fishing-panel">
+    <div class="fishing-header"><span>🎣 Rybolov // Vtáčnik</span><span id="fishing-timer" style="color:var(--text-dim);font-size:11px">--:--</span></div>
+    <div id="fishing-canvas-wrap"><canvas id="fishing-canvas" width="336" height="200"></canvas></div>
+    <div id="fishing-status">Čakáš na záber... Zahoď udicu!</div>
+    <button id="fishing-action-btn" onclick="fishingAction()">🎣 Zahoď udicu</button>
+    <button id="fishing-close" onclick="closeFishing()">✕ Opustiť rieku</button>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div class="overlay" id="gameover-overlay">
+  <div class="endgame-box">
+    <div class="endgame-title danger">💀 Neutralizovaný</div>
+    <div class="endgame-text" id="go-text">Agent bol kompromitovaný. Operácia zlyhala.</div>
+    <button class="endgame-btn" onclick="newGame()">🔄 Znova</button>
+  </div>
+</div>
+
+<!-- WIN -->
+<div class="overlay" id="win-overlay">
+  <div class="endgame-box">
+    <div class="endgame-title success">🏆 Operácia úspešná</div>
+    <div class="endgame-text">PROTOCOL LAZARUS neutralizovaný. CEO Zla víťazí.</div>
+    <button class="endgame-btn" onclick="newGame()">🔄 Znova</button>
+  </div>
+</div>
+
+<div id="notif"></div>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="mobilePanel('stats')">📊<span>Štatistiky</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel('map')">🗺️<span>Mapa</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel('inv')">🎒<span>Inventár</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel('log')">📋<span>Log</span></button>
+</div>
+<div id="mobile-stats-panel" class="mobile-overlay-panel"></div>
+<div id="mobile-map-panel" class="mobile-overlay-panel"></div>
+<div id="mobile-inv-panel" class="mobile-overlay-panel"></div>
+<div id="mobile-log-panel" class="mobile-overlay-panel"></div>
+
+<!-- JOB SELECT -->
+<div id="job-overlay">
+  <div class="job-screen">
+    <div class="job-title">⚔ CEO ZLA ⚔</div>
+    <div class="job-sub">Vyber si svoju rolu — Operácia Lazarus</div>
+    <div class="job-cards">
+      <div class="job-card" onclick="selectJob('thug')">
+        <div class="job-card-icon">🥊</div>
+        <div class="job-card-name">THUG</div>
+        <div class="job-card-title">Pouličný vymáhač</div>
+        <div class="job-card-salary">₿ 5 000 000 000/rok</div>
+        <div class="job-card-desc">Sila hovorí za teba. Frakcie sa ti boja. Priamy prístup, hrubá sila.</div>
+        <div class="job-card-attrs">
+          <div class="job-attr-row"><span class="job-attr-label">⚔️ Sila/s</span><span class="job-attr-val">+0.05</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">❤️ HP regen/s</span><span class="job-attr-val">+0.02</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">🧠 Sanita/s</span><span class="job-attr-val">-0.01</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">💾 Hacking/s</span><span class="job-attr-val">+0.00</span></div>
+        </div>
+        <div class="job-card-growth">📈 Pouličný vymáhač → Bos → Don Prievidze</div>
+      </div>
+      <div class="job-card" onclick="selectJob('hacker')">
+        <div class="job-card-icon">💻</div>
+        <div class="job-card-name">HACKER</div>
+        <div class="job-card-title">Kybernetický agent</div>
+        <div class="job-card-salary">₿ 5 000 000 000/rok</div>
+        <div class="job-card-desc">Systémy padajú pred tvojou klávesnicou. Sieť je tvoja zbraň.</div>
+        <div class="job-card-attrs">
+          <div class="job-attr-row"><span class="job-attr-label">💾 Hacking/s</span><span class="job-attr-val">+0.08</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">🧠 Sanita/s</span><span class="job-attr-val">+0.02</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">❤️ HP regen/s</span><span class="job-attr-val">+0.00</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">⚔️ Sila/s</span><span class="job-attr-val">+0.00</span></div>
+        </div>
+        <div class="job-card-growth">📈 Script Kiddie → Elite Hacker → Ghost // Root</div>
+      </div>
+      <div class="job-card" onclick="selectJob('zastupca')">
+        <div class="job-card-icon">💼</div>
+        <div class="job-card-name">ZÁSTUPCA</div>
+        <div class="job-card-title">Zástupca CEO Zla</div>
+        <div class="job-card-salary">₿ 5 000 000 000/rok</div>
+        <div class="job-card-desc">Spravuješ impérium. Viac peňazí za každú akciu. Diplomatická imunita.</div>
+        <div class="job-card-attrs">
+          <div class="job-attr-row"><span class="job-attr-label">💰 Bonus/s</span><span class="job-attr-val">+0.10</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">🧠 Sanita/s</span><span class="job-attr-val">+0.03</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">🤸 Ohybnosť/s</span><span class="job-attr-val">+0.02</span></div>
+          <div class="job-attr-row"><span class="job-attr-label">❤️ HP regen/s</span><span class="job-attr-val">+0.01</span></div>
+        </div>
+        <div class="job-card-growth">📈 Asistent → Riaditeľ operácií → CEO Zla</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     MODULY — načítavaj v tomto poradí (závislosť → závislý)
+     ═══════════════════════════════════════════════════ -->
+
+<!-- 1. Konfigurácia -->
+<script src="hra/config.js"></script>
+
+<!-- 2. Dáta (závisia len na config.js) -->
+<script src="hra/data/items.js"></script>
+<script src="hra/data/scenes.js"></script>
+
+<!-- 3. Jadrové systémy -->
+<script src="hra/systems/state.js"></script>
+<script src="hra/systems/renderer.js"></script>
+<script src="hra/systems/hunger.js"></script>
+<script src="hra/systems/scene.js"></script>
+<script src="hra/systems/gameloop.js"></script>
+
+<!-- 4. UI moduly -->
+<script src="hra/ui/engine.js"></script>
+<script src="hra/ui/shop.js"></script>
+<script src="hra/ui/hq.js"></script>
+<script src="hra/ui/boats.js"></script>
+<script src="hra/ui/fishing.js"></script>
+<script src="hra/ui/garden.js"></script>
+<script src="hra/ui/mobile.js"></script>
+
+<!-- 5. Bootstrap — posledný -->
+<script src="hra/main.js"></script>
+
+
+<!-- HUNGER WARNING BANNER -->
+<div id="hunger-warning"></div>
+
+</body>
+</html>
