@@ -820,6 +820,23 @@ a:hover { color: #fff; }
 .hq-room-layout { display: grid; grid-template-columns: 1fr 320px; height: 100%; overflow: hidden; }
 .hq-room-visual { position: relative; background: var(--bg2); border-right: 1px solid var(--border); overflow: hidden; }
 .hq-room-visual canvas { width: 100%; height: 100%; }
+/* Room mosaic cells */
+.hq-mosaic-cell {
+  position: relative; cursor: pointer; overflow: hidden;
+  background-size: cover; background-position: center; background-color: var(--bg3);
+  transition: filter 0.2s, outline 0.15s;
+  filter: saturate(0.3) brightness(0.6);
+}
+.hq-mosaic-cell:hover { filter: saturate(0.6) brightness(0.8); }
+.hq-mosaic-base { cursor: default !important; filter: saturate(0.2) brightness(0.4) !important; }
+.hq-mosaic-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+  color: var(--green); font-family: var(--font-hud); font-size: 8px;
+  letter-spacing: 2px; padding: 8px 6px 4px;
+  text-shadow: 0 0 8px rgba(57,255,20,0.6);
+  text-align: center;
+}
 .hq-room-panel { display: flex; flex-direction: column; overflow-y: auto; }
 .hq-room-panel-header { padding: 16px; border-bottom: 1px solid var(--border); }
 .hq-room-panel-title { font-family: var(--font-hud); font-size: 12px; color: var(--green); letter-spacing: 3px; margin-bottom: 4px; }
@@ -1000,14 +1017,29 @@ a:hover { color: #fff; }
 /* Hunger warning banner */
 #hunger-warning {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 7999;
-  background: rgba(220,38,38,0.92);
-  color: #fff; font-family: var(--font-hud); font-size: 12px;
-  letter-spacing: 2px; text-align: center; padding: 8px;
+  background: rgba(180,20,20,0.97);
+  color: #fff; font-family: var(--font-hud); font-size: 11px;
+  letter-spacing: 1px; text-align: center; padding: 6px 10px;
   display: none; border-top: 2px solid #ef4444;
   text-shadow: 0 0 8px rgba(0,0,0,0.8);
-  animation: hungerBlink 0.8s ease-in-out infinite alternate;
 }
 #hunger-warning.show { display: block; }
+#hunger-warning-inner { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+#hunger-warning-text { flex-shrink:0; }
+.hw-food-btn {
+  background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; font-family: var(--font-body); font-size: 11px;
+  padding: 3px 10px; cursor: pointer; border-radius: 2px;
+  transition: background 0.15s; white-space: nowrap; letter-spacing: 0.5px;
+}
+.hw-food-btn:hover { background: rgba(255,255,255,0.2); border-color:#fff; }
+.hw-food-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.hw-dismiss-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5); font-family: var(--font-body); font-size: 10px;
+  padding: 2px 8px; cursor: pointer; border-radius: 2px; flex-shrink:0;
+}
+.hw-dismiss-btn:hover { color:#fff; border-color:#fff; }
 
 </style>
 </head>
@@ -1289,29 +1321,34 @@ a:hover { color: #fff; }
     <div class="hq-view active" id="hq-view-main">
       <div class="hq-room-layout">
         <div class="hq-room-visual" style="position:relative;">
-          <canvas id="hq-main-canvas"></canvas>
-          <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:0;pointer-events:none">
-            <div id="main-room-spalna" onclick="hqSelectSubRoom('spalna')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Spálňa"></div>
-            <div id="main-room-kancelaria" onclick="hqSelectSubRoom('kancelaria')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Kancelária"></div>
-            <div id="main-room-kuchyna" onclick="hqSelectSubRoom('kuchyna')" style="pointer-events:all;cursor:pointer;border:2px solid transparent;transition:border 0.15s" title="Kuchyňa"></div>
-            <div style="pointer-events:none"></div>
-          </div>
-          <div style="position:absolute;inset:0;pointer-events:none;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
-            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px"><div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">🛏️ SPÁLŇA</div></div>
-            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px"><div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">💻 KANCELÁRIA</div></div>
-            <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px"><div style="font-family:'Orbitron',monospace;font-size:8px;color:#39ff14;letter-spacing:2px;text-shadow:0 0 8px rgba(57,255,20,0.6);background:rgba(0,0,0,0.6);padding:2px 8px;border:1px solid #1a3a1a">🍳 KUCHYŇA</div></div>
-            <div style="display:flex;flex-direction:column;justify-content:center;align-items:center"><div style="font-family:'Orbitron',monospace;font-size:10px;color:#1a3a1a;letter-spacing:2px;opacity:0.5">// HQ //</div></div>
+          <div id="hq-rooms-mosaic" style="width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:var(--border2);padding:3px;">
+            <div id="main-room-spalna" onclick="hqSelectSubRoom('spalna')" class="hq-mosaic-cell" title="Spálňa" style="background-image:url('public/images/hra/spalna.jpg')">
+              <div class="hq-mosaic-label">🛏️ SPÁLŇA</div>
+            </div>
+            <div id="main-room-kancelaria" onclick="hqSelectSubRoom('kancelaria')" class="hq-mosaic-cell" title="Kancelária" style="background-image:url('public/images/hra/kancelaria.jpg')">
+              <div class="hq-mosaic-label">💻 KANCELÁRIA</div>
+            </div>
+            <div id="main-room-kuchyna" onclick="hqSelectSubRoom('kuchyna')" class="hq-mosaic-cell" title="Kuchyňa" style="background-image:url('public/images/hra/kuchyna.jpg')">
+              <div class="hq-mosaic-label">🍳 KUCHYŇA</div>
+            </div>
+            <div class="hq-mosaic-cell hq-mosaic-base" style="background-image:url('public/images/hra/zakladna.jpg');cursor:default;">
+              <div class="hq-mosaic-label" style="color:var(--text-dim)">// HQ //</div>
+            </div>
           </div>
         </div>
         <div class="hq-room-panel">
-          <div class="hq-room-panel-header"><div class="hq-room-panel-title">🏠 ZÁKLADŇA</div><div class="hq-room-panel-desc">Klikni na izbu v priestore vľavo pre aktivity a vylepšenia.</div></div>
+          <div class="hq-room-panel-header">
+            <img src="public/images/hra/zakladna.jpg" alt="Základňa" id="hq-base-photo" style="width:100%;height:90px;object-fit:cover;border:1px solid var(--border);margin-bottom:8px;filter:saturate(0.4) brightness(0.7);display:block;">
+            <div class="hq-room-panel-title">🏠 ZÁKLADŇA</div>
+            <div class="hq-room-panel-desc">Klikni na izbu v priestore vľavo pre aktivity a vylepšenia.</div>
+          </div>
           <div class="hq-panel-body" id="main-room-detail"><div style="text-align:center;padding:40px 0;color:#1a3a1a;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;line-height:2">◆ SPÁLŇA<br>◆ KANCELÁRIA<br>◆ KUCHYŇA<br><br><span style="font-size:8px;opacity:0.5">// Klikni na izbu //</span></div></div>
         </div>
       </div>
     </div>
     <div class="hq-view" id="hq-view-train">
       <div class="hq-room-layout">
-        <div class="hq-room-visual"><canvas id="hq-train-canvas"></canvas></div>
+        <div class="hq-room-visual"><div style="width:100%;height:100%;background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px"><div style="font-family:var(--font-hud);font-size:24px;opacity:0.3">🥊</div><div style="font-family:var(--font-hud);font-size:9px;color:var(--text-muted);letter-spacing:2px">TRÉNINGOVÁ SALA</div></div></div>
         <div class="hq-room-panel">
           <div class="hq-room-panel-header"><div class="hq-room-panel-title">🥊 TRÉNINGOVÁ MIESTNOSŤ</div><div class="hq-room-panel-desc" id="train-unlock-status">Uzamknutá. Vyžaduje rekonštrukciu.</div></div>
           <div class="hq-panel-body" id="train-room-detail"></div>
@@ -2060,7 +2097,7 @@ var SceneManager = (function() {
             var isMajor    = !!(choice.hp && choice.hp < 0) || !!(choice.san && choice.san < -3);
             var isPositive = !!(choice.xp && choice.xp > 0) || !!(choice.san && choice.san > 0);
             var isHarmful  = !!(choice.hp && choice.hp < -5) || !!(choice.san && choice.san < -5);
-            HungerSystem.onDecision({ major: isMajor, positive: isPositive, harmful: isHarmful });
+            if (!choice.skipHunger) HungerSystem.onDecision({ major: isMajor, positive: isPositive, harmful: isHarmful });
             if (choice.hp)  { S.hp  = Math.max(0, S.hp  + choice.hp);  Renderer.updateStats(); }
             if (choice.san) { S.san = Math.max(0, S.san + choice.san); Renderer.updateStats(); }
             if (choice.xp)  gainXP(choice.xp);
@@ -3796,8 +3833,8 @@ var SCENES = {
     ],
     onEnter: function(){ gainXP(2); },
     choices: [
-      { text:'[A] 🃏 Hrať Blackjack',  next:'loc_miki_blackjack' },
-      { text:'[B] 🎰 Hrať Slot Machine', next:'loc_miki_slots' },
+      { text:'[A] 🃏 Hrať Blackjack',  next:'loc_miki_blackjack', skipHunger:true },
+      { text:'[B] 🎰 Hrať Slot Machine', next:'loc_miki_slots', skipHunger:true },
       { text:'[C] Späť za bar',        next:'loc_miki' },
     ]
   },
@@ -3810,7 +3847,7 @@ var SCENES = {
     text: [''],
     onEnter: function(){ openBlackjack(); },
     choices: [
-      { text:'[A] Späť k hazardu', next:'loc_miki_hazard' },
+      { text:'[A] Späť k hazardu', next:'loc_miki_hazard', skipHunger:true },
     ]
   },
 
@@ -3822,7 +3859,7 @@ var SCENES = {
     text: [''],
     onEnter: function(){ openSlots(); },
     choices: [
-      { text:'[A] Späť k hazardu', next:'loc_miki_hazard' },
+      { text:'[A] Späť k hazardu', next:'loc_miki_hazard', skipHunger:true },
     ]
   },
 
@@ -5334,8 +5371,8 @@ var HungerSystem = (function() {
   // ── Konfigurácia (data-driven, meniť tu) ──────────────────────
   var CONFIG = {
     // FYZICKÝ HLAD — klesá pri rozhodnutiach, nie čase
-    DECAY_PER_DECISION: 7,    // Hlad klesá o X za každú voľbu hráča
-    DECAY_PER_MAJOR:    12,   // Hlad klesá viac za "náročné" rozhodnutia (hp/san efekty)
+    DECAY_PER_DECISION: 5,    // Hlad klesá o X za každú voľbu hráča
+    DECAY_PER_MAJOR:    8,    // Hlad klesá viac za "náročné" rozhodnutia (hp/san efekty)
     DECAY_PER_ACTION:   4,    // Klesá za akcie (fishing klik, HQ aktivita)
     STARVING_HP_DMGE:   0.08, // HP strata/s keď hunger = 0 (zredukované — per tick)
     HUNGRY_THRESHOLD:   30,   // Pod tým si "hladný"
@@ -5518,14 +5555,35 @@ var HungerSystem = (function() {
     // Hunger warning overlay — zobrazí sa keď vyhladovaný
     var warn = document.getElementById('hunger-warning');
     if (warn) {
-      if (h <= CONFIG.STARVING_THRESHOLD) {
+      if (h <= CONFIG.STARVING_THRESHOLD || h <= CONFIG.HUNGRY_THRESHOLD) {
+        var isCritical = h <= CONFIG.STARVING_THRESHOLD;
+        var msgText = isCritical
+          ? '💀 VYHLADOVANÝ — HP klesá!'
+          : '⚠ Hladný — SAN nestabilná.';
+
+        // Build quick-food buttons from inventory
+        var foodBtns = '';
+        var FOOD_ITEMS = { vajicka:{name:'Vajíčka',icon:'🍳',hunger:35}, cestoviny:{name:'Cestoviny',icon:'🍝',hunger:60}, steak:{name:'Steak',icon:'🥩',hunger:80}, polievka:{name:'Polievka',icon:'🍲',hunger:50} };
+        var hasFoodInInv = false;
+        Object.keys(FOOD_ITEMS).forEach(function(k){
+          if (S.inventory && S.inventory[k] && S.inventory[k] > 0) {
+            hasFoodInInv = true;
+            foodBtns += '<button class="hw-food-btn" onclick="HungerSystem.eat('+FOOD_ITEMS[k].hunger+');if(S.inventory[\''+k+'\']>0)S.inventory[\''+k+'\']--;Renderer.renderInventory&&Renderer.renderInventory();">'+FOOD_ITEMS[k].icon+' '+FOOD_ITEMS[k].name+' ('+FOOD_ITEMS[k].hunger+')</button>';
+          }
+        });
+        if (!hasFoodInInv) {
+          foodBtns = '<span style="opacity:0.5;font-size:10px">// žiadne jedlo v inventári //</span>';
+        }
+
         warn.classList.add('show');
-        warn.textContent = '💀 VYHLADOVANÝ — HP klesá! Zjedz niečo pred ďalšou voľbou!';
-      } else if (h <= CONFIG.HUNGRY_THRESHOLD) {
-        warn.classList.add('show');
-        warn.textContent = '⚠ Hladný — každá voľba stojí viac. SAN nestabilná.';
+        warn.innerHTML = '<div id="hunger-warning-inner">'
+          + '<span id="hunger-warning-text">' + msgText + '</span>'
+          + foodBtns
+          + '<button class="hw-dismiss-btn" onclick="document.getElementById(\'hunger-warning\').classList.remove(\'show\')">✕</button>'
+          + '</div>';
       } else {
         warn.classList.remove('show');
+        warn.innerHTML = '';
       }
     }
   }
@@ -5884,10 +5942,14 @@ function hqSelectSubRoom(room) {
   var r = rooms[room] || rooms.spalna;
   if (titleEl) titleEl.textContent = r.title;
   detailEl.innerHTML = r.html;
+  // Update sidebar photo
+  var photo = document.getElementById('hq-base-photo');
+  var roomImgs = { spalna:'public/images/hra/spalna.jpg', kancelaria:'public/images/hra/kancelaria.jpg', kuchyna:'public/images/hra/kuchyna.jpg' };
+  if (photo) { photo.src = roomImgs[room] || 'public/images/hra/zakladna.jpg'; photo.style.filter = 'saturate(0.6) brightness(0.8)'; }
   // Highlight active room
   ['spalna','kancelaria','kuchyna'].forEach(function(rn){
     var el = document.getElementById('main-room-'+rn);
-    if (el) el.style.border = rn === room ? '2px solid var(--green3)' : '2px solid transparent';
+    if (el) el.style.outline = rn === room ? '3px solid var(--green)' : 'none';
   });
 }
 
