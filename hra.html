@@ -710,7 +710,13 @@ a:hover { color: #fff; }
   transition: border-color 0.3s;
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
 }
-.slots-reel.spinning { border-color: var(--green3); animation: slotSpin 0.15s ease-in-out infinite alternate; }
+.slots-reel.spinning { border-color: var(--green3); animation: slotSpin 0.12s ease-in-out infinite alternate; }
+.slots-btn-row { display:flex; gap:8px; margin-top:10px; }
+.slots-btn-row .slots-spin-btn { flex:2; }
+.slots-auto-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text); padding:10px 6px; border-radius:4px; font-size:12px; cursor:pointer; transition:all 0.2s; }
+.slots-auto-btn:hover { border-color:var(--green3); color:var(--green3); }
+.slots-auto-btn.auto-active { background:var(--danger); border-color:var(--danger); color:#fff; animation: autoPulse 1s ease-in-out infinite; }
+@keyframes autoPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
 @keyframes slotSpin { from { transform: scaleY(0.95); } to { transform: scaleY(1.05); } }
 .slots-reel.win-reel { border-color: var(--gold); box-shadow: 0 0 16px rgba(250,204,21,0.4), inset 0 2px 8px rgba(0,0,0,0.6); }
 .slots-payline {
@@ -1806,6 +1812,7 @@ var Renderer = (function() {
   function _renderShop() {
     var body = document.getElementById('shop-body');
     if (!body) return;
+    if (typeof SHOP_ITEMS === 'undefined' || !SHOP_ITEMS) { body.innerHTML = '<div class="inv-empty">// Načítavam... //</div>'; return; }
     var sections = {
       head:    { label:'🪖 Hlava', html:'' },
       body:    { label:'🦺 Telo', html:'' },
@@ -2018,7 +2025,7 @@ var SceneManager = (function() {
     lines.forEach(function(line) {
       var trimmed = line.trim();
       var isSpeech = trimmed.startsWith('"') || (trimmed.startsWith("'") && trimmed.length > 2);
-      var isSystem = trimmed.startsWith('<i>//') || trimmed.startsWith('// ');
+      var isSystem = trimmed.startsWith('//') || trimmed.startsWith('// ');
       if (isSpeech || isSystem) {
         flushNarr();
         if (!currentNPC) currentNPC = { lines: [] };
@@ -2471,6 +2478,29 @@ var SCENE_PHOTOS = {
   'sc_001_stanica':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/stanica.jpg', badge:'HLAVNÁ STANICA // 23:51' },
   'sc_001_noc':      { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/stanica.jpg', badge:'STANICA // NOC' },
   'terasy':          { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/terasy.jpg', badge:'TERASY // PRIEVIDZA' },
+  // PROLOG — Scéna 001
+  'sc_001_prichod':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/stanica.jpg', badge:'PRIEVIDZA HL. STANICA // 23:51' },
+  // PROLOG — Scéna 002 Stokári
+  'sc_002_stokari':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'PRIEMYSELNÁ ŠTVRŤ // 00:11' },
+  'sc_002_prechod':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'PRIEMYSELNÁ ŠTVRŤ // PRECHOD' },
+  'sc_002_moj':      { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'PRIEMYSELNÁ ŠTVRŤ // NAPÄTIE' },
+  'sc_002_jantar':   { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'PRIEMYSELNÁ ŠTVRŤ // JANTAR' },
+  'sc_002_augment':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'PRIEMYSELNÁ ŠTVRŤ // VNEM' },
+  // PROLOG — Scéna 003b Meliško
+  'sc_003b_melisko':         { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/miki.jpg', badge:'MIKI BAR // MELIŠKO · 00:31' },
+  'sc_003b_melisko_info':    { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/miki.jpg', badge:'MIKI BAR // MELIŠKO' },
+  'sc_003b_melisko_poznam':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/miki.jpg', badge:'MIKI BAR // MELIŠKO' },
+  'sc_003b_melisko_pocuvaj': { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/miki.jpg', badge:'MIKI BAR // MELIŠKO — TICHO' },
+  'sc_003b_melisko_cibula':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/miki.jpg', badge:'MIKI BAR // QUEST: CIBUĽA' },
+  // PROLOG — Scéna 003c Kubo UFO
+  'sc_003c_kubo':    { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/miki.jpg', badge:'MIKI BAR // UFO INCIDENT · 00:48' },
+  // PROLOG — Scéna 004 Druid
+  'sc_004_druid':         { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'ZA KORZO OC // DRUID · 01:14' },
+  'sc_004_druid_mech':    { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'DRUID // HP · SAN · HLAD' },
+  'sc_004_druid_nastroj': { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'DRUID // NÁSTROJE' },
+  'sc_004_druid_tunely':  { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'DRUID // TUNELY POD BOJNICAMI' },
+  'sc_004_druid_ticho':   { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'ZA KORZO OC // TICHO PRI OHNI' },
+  'sc_004_druid_kto':     { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/namestie.jpg', badge:'DRUID // KTO SI TY' },
 };
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2510,7 +2540,7 @@ var SCENES = {
       'Nástupište je prázdne. Jeden bezpečnostný dron M.E.C. sa pomaly otáča pod stropom,',
       'červené oko mení uhol. A potom ho uvidíš.',
       '',
-      '<i>// [ALZABOX] NOVÝ BYT. NOVÝ ŽIVOT. — MAGURA ESTATE CORP. //',
+      '// [ALZABOX] NOVÝ BYT. NOVÝ ŽIVOT. — MAGURA ESTATE CORP. //',
       '',
       'Hologram. Päť metrov. Beztvárá figúra sa pomaly otočí smerom k tebe.',
       'Vieš že ťa nevidí. Aj tak máš pocit, že ťa sleduje.',
@@ -2518,16 +2548,16 @@ var SCENES = {
       'Vyjdeš von. Na chodníku je kaluž — dažďová, plytká, naolejovaná z cesty.',
       'Modrobiely hologram sa odráža v nej, roztrhaný na vlnách od tvojich krokov. Ani tu mu neunikneš.',
       '',
-      '<i>// [TRAS] Prievidza. Pamätáš ju inak. Menšiu. Teplejšiu. Mesto kde ľudia ešte vedeli mená susedov.',
-      '<i>// Čo sa stalo s tým mestom? Alebo — čo sa stalo s tebou? //',
+      '// [TRAS] Prievidza. Pamätáš ju inak. Menšiu. Teplejšiu. Mesto kde ľudia ešte vedeli mená susedov.',
+      '// Čo sa stalo s tým mestom? Alebo — čo sa stalo s tebou? //',
       '',
-      '<i>// [VNEM] Dron zaznamenal tvoj príchod. Nie aktívne sledovanie — pasívna registrácia.',
-      '<i>// Niekde v databáze M.E.C. sa práve objavilo tvoje meno, čas, miesto. Niekto to môže nájsť. //',
+      '// [VNEM] Dron zaznamenal tvoj príchod. Nie aktívne sledovanie — pasívna registrácia.',
+      '// Niekde v databáze M.E.C. sa práve objavilo tvoje meno, čas, miesto. Niekto to môže nájsť. //',
       '',
-      '<i>// [LOGIKA] Alzabox hologramy sú sieťové, nie lokálne. Centrálne riadené. Čo znamená že Magura',
-      '<i>// vie presne kto stojí pred každým z nich. Pasívne biometrické skenovanie. Samozrejme. //',
+      '// [LOGIKA] Alzabox hologramy sú sieťové, nie lokálne. Centrálne riadené. Čo znamená že Magura',
+      '// vie presne kto stojí pred každým z nich. Pasívne biometrické skenovanie. Samozrejme. //',
       '',
-      '<i>// ▼ HLAD −5 · 📍 Prievidza odomknutá //',
+      '// ▼ HLAD −5 · 📍 Prievidza odomknutá //',
     ],
     onEnter: function(){
       S.hunger = Math.max(0, S.hunger - 5);
@@ -2556,12 +2586,12 @@ var SCENES = {
       '',
       'Traja muži stoja pri múre. Vidíš ich skôr ako oni teba.',
       '',
-      '<i>// [VNEM] Traja. Hoodie s kapucňou — stará, vyblednutá, ale na ramene jedného svietiaci nášivkový patch:',
-      '<i>// lebka z obvodu, modré LED. Lacný augment na predlaktí toho v strede — subkutánny indikátor sily,',
-      '<i>// Gentech B2. Červený. Stokári. Nestoja tu náhodou, bránia vchod do skladu ktorý niekto vlastní. //',
+      '// [VNEM] Traja. Hoodie s kapucňou — stará, vyblednutá, ale na ramene jedného svietiaci nášivkový patch:',
+      '// lebka z obvodu, modré LED. Lacný augment na predlaktí toho v strede — subkutánny indikátor sily,',
+      '// Gentech B2. Červený. Stokári. Nestoja tu náhodou, bránia vchod do skladu ktorý niekto vlastní. //',
       '',
-      '<i>// [TRAS] Cítiš uhlie. Nie skutočné — pamäť miesta. Dekády ľudí čo chodili touto cestou na šichtu.',
-      '<i>// A potom nič. A potom títo traja. //',
+      '// [TRAS] Cítiš uhlie. Nie skutočné — pamäť miesta. Dekády ľudí čo chodili touto cestou na šichtu.',
+      '// A potom nič. A potom títo traja. //',
       '',
       'Jeden sa odlepí od múra.',
       '"Neskorý vlak?"',
@@ -2644,11 +2674,11 @@ var SCENES = {
       'Dlhé ticho. Potom — od múra, jeden zo zvyšných — krátky smiech. Ferko cúvne o krok.',
       '"Choď."',
       '',
-      '<i>// [HRDOSŤ] Dobre. Čisto. Bez zbytočného. //',
-      '<i>// [EMPATIA] Ferko je dvadsaťpäť, možno menej. Robí toto pretože niekto mu platí',
-      '<i>// a on potrebuje kredit na nájom v M.E.C. bloku. Nie je to jeho voľba — je to jeho možnosť. //',
+      '// [HRDOSŤ] Dobre. Čisto. Bez zbytočného. //',
+      '// [EMPATIA] Ferko je dvadsaťpäť, možno menej. Robí toto pretože niekto mu platí',
+      '// a on potrebuje kredit na nájom v M.E.C. bloku. Nie je to jeho voľba — je to jeho možnosť. //',
       '',
-      '<i>// ▲ XP +15 · Stokári — prvý kontakt, neutrálny //',
+      '// ▲ XP +15 · Stokári — prvý kontakt, neutrálny //',
     ],
     onEnter: function(){
       gainXP(15);
@@ -2673,8 +2703,8 @@ var SCENES = {
       'Prvá vec ktorú pocítiš je teplo. Každá verejná budova v meste reguluje na sedemnásť stupňov.',
       'Miki bar má dvadsaťdva. Niekto to tu ohrieva schválne.',
       '',
-      '<i>// [TRAS] Vzduch chutí po cigaretách, lacnom pive a niečom čo nevieš pomenovať.',
-      '<i>// Je to vôňa mesta ktoré sa vzdalo ale ešte o tom nevie. //',
+      '// [TRAS] Vzduch chutí po cigaretách, lacnom pive a niečom čo nevieš pomenovať.',
+      '// Je to vôňa mesta ktoré sa vzdalo ale ešte o tom nevie. //',
       '',
       'Za barom stojí Lucia. Vlasy má kratšie ako predtým — temno-červené, farbené doma.',
       'Na zápästí tetovanie: obvod, alebo rieka, záleží od uhla.',
@@ -2683,6 +2713,9 @@ var SCENES = {
       '"Ty vole."',
       'Nie je to pozdrav. Nie je to nadávka. Je to konštatovanie.',
       '"Tri roky. A prídeš o polnoci, bez správy, bez ničoho, a sadneš si k baru ako keby si bol vonku na cigarete."',
+      '',
+      '// [VNEM] Pri okne sedí starší muž. Piaty pohár kávy pred ním. Neodpíja. Len pozerá von.',
+      '// Meliško. Pamätáš ho — alebo pamätáš niekoho kto vyzeral ako on, pred rokmi. //',
     ],
     onEnter: function(){
       gainXP(10);
@@ -2694,6 +2727,7 @@ var SCENES = {
       { text: '"Baku ma zdržalo." [neutrálne]',                next: 'sc_003_lucia_baku' },
       { text: '"Vedela si, že sa vrátim." [REP Lucia +1]',    next: 'sc_003_lucia_vedela', xp: 5 },
       { text: '(Nič nehovor. Len si sadni.) [SAN +2]',        next: 'sc_003_lucia_mlcanie', san: 2 },
+      { text: '(Ignoruj Luciu — prisadni k mužovi pri okne) [Meliško]', next: 'sc_003b_melisko' },
     ]
   },
 
@@ -2737,8 +2771,8 @@ var SCENES = {
       '"Vedela si, že sa vrátim."',
       '"Ja som vedela. Ty si nevedel."',
       '',
-      '<i>// [LOGIKA] Zaujímavé rozlíšenie. Ona naznačuje že tvoj návrat nebol výsledkom rozhodnutia',
-      '<i>// ale nevyhnutnosti. Má pravdu? Prečo si sa vlastne vrátil? //',
+      '// [LOGIKA] Zaujímavé rozlíšenie. Ona naznačuje že tvoj návrat nebol výsledkom rozhodnutia',
+      '// ale nevyhnutnosti. Má pravdu? Prečo si sa vlastne vrátil? //',
     ],
     onEnter: function(){ gainXP(5); S.flags['lucia_rep_plus'] = true; addLog('Lucia REP +1. XP +5.', 'ok'); },
     choices: [{ text: 'Počúvať ďalej', next: 'sc_003_lucia_hovor' }]
@@ -2754,7 +2788,7 @@ var SCENES = {
       'Lucia na teba pozrie. Potom sa ticho otočí a naleje dva poháre.',
       'Jeden stúčhne pred teba. "Aspoň si sa nič hlúpe nevymyslel."',
       '',
-      '<i>// [SAN +2] Ticho má niekedy viac zmyslu ako slová. //',
+      '// [SAN +2] Ticho má niekedy viac zmyslu ako slová. //',
     ],
     onEnter: function(){ S.san = Math.min(100, S.san + 2); Renderer.updateStats(); addLog('Lucia: SAN +2.', 'ok'); },
     choices: [{ text: 'Počúvať ďalej', next: 'sc_003_lucia_hovor' }]
@@ -2783,9 +2817,9 @@ var SCENES = {
       '"V marci hlasoval za stranu ktorej nikdy neveril. Bol z toho zmätený.",',
       '"Nechcel som," hovoril. "Ale prišiel som k urne a ruka išla sama."',
       '',
-      '<i>// [LOGIKA] 5G infraštruktúra. Bane Corp. siete. Biomodifikácia neurálnych receptorov',
-      '<i>// cez mikrovlnné frekvencie je teoreticky možná od roku 2041. Teoreticky. //',
-      '<i>// [EMPATIA] Ona ti to hovorí pretože sa bojí. A pretože nemá koho iného kto by ju počúval. //',
+      '// [LOGIKA] 5G infraštruktúra. Bane Corp. siete. Biomodifikácia neurálnych receptorov',
+      '// cez mikrovlnné frekvencie je teoreticky možná od roku 2041. Teoreticky. //',
+      '// [EMPATIA] Ona ti to hovorí pretože sa bojí. A pretože nemá koho iného kto by ju počúval. //',
     ],
     onEnter: function(){
       gainXP(15);
@@ -2864,7 +2898,7 @@ var SCENES = {
       'Meliško chvíľu mlčí. Potom začne hovoriť — nie tebe, skôr sám sebe.',
       '"Cibuľa. Z trhoviska. Tá čo predáva Marta. Bane Corp. veci nič nie sú."',
       '',
-      '<i>// [SAN +1] Niekedy stačí len byť prítomný. //',
+      '// [SAN +1] Niekedy stačí len byť prítomný. //',
     ],
     onEnter: function(){ gainXP(10); S.san = Math.min(100, S.san + 1); Renderer.updateStats(); },
     choices: [{ text: 'Pokračovať', next: 'sc_003b_melisko_cibula' }]
@@ -2878,7 +2912,7 @@ var SCENES = {
     text: [
       '"Potrebujem cibuľu."',
       '',
-      '<i>// [LOGIKA] Cibuľu. O polnoci. V bare. Buď je to metafora, alebo je to presne to čo to je. //',
+      '// [LOGIKA] Cibuľu. O polnoci. V bare. Buď je to metafora, alebo je to presne to čo to je. //',
       '',
       '"Nie hocijakú. Tú starú, z trhoviska. Tá čo predáva Marta — vedľa hodinára, každú stredu.",',
       '"Bane Corp. začali pred rokom pestovať nejaké hybridné veci, geneticky.",',
@@ -2887,10 +2921,10 @@ var SCENES = {
       '"Trhovisko je zatvorené. Marta odišla.",',
       '"Ale niekde tá cibuľa musí byť. Všetko čo bolo — niekde je."',
       '',
-      '<i>// [EMPATIA] Nehovorí o cibuli. Alebo hovorí o cibuli a zároveň o niečom inom. //',
-      '<i>// [TRAS] Všetko čo bolo — niekde je. Nie poetická pravda — doslovná. //',
+      '// [EMPATIA] Nehovorí o cibuli. Alebo hovorí o cibuli a zároveň o niečom inom. //',
+      '// [TRAS] Všetko čo bolo — niekde je. Nie poetická pravda — doslovná. //',
       '',
-      '<i>// 📋 Quest: CIBUĽA — Nájdi Martinu cibuľu · ▲ XP +10 //',
+      '// 📋 Quest: CIBUĽA — Nájdi Martinu cibuľu · ▲ XP +10 //',
     ],
     onEnter: function(){
       gainXP(10);
@@ -2920,23 +2954,23 @@ var SCENES = {
       '"Zastavili sme auto na tej ceste pri Lesoparku.",',
       '"Oproti nám zastavilo auto. Dvaja chlapi. Spýtali sa nás kde je Lesopark."',
       '',
-      '<i>// [VNEM] Ruka mu jemne trasie. Nie od alkoholu — ruky opitých sa trasú inak.',
-      '<i>// Toto je adrenalín. Spätný adrenalín, hodiny starý. On naozaj niečo videl. //',
+      '// [VNEM] Ruka mu jemne trasie. Nie od alkoholu — ruky opitých sa trasú inak.',
+      '// Toto je adrenalín. Spätný adrenalín, hodiny starý. On naozaj niečo videl. //',
       '',
-      '<i>// [TRAS] Trojuholníkové svetlá. Ticho. Lesopark. Niečo v tebe — hlboko, pod logikou —',
-      '<i>// vie že toto je dôležité. Nevie prečo. Zatiaľ. //',
+      '// [TRAS] Trojuholníkové svetlá. Ticho. Lesopark. Niečo v tebe — hlboko, pod logikou —',
+      '// vie že toto je dôležité. Nevie prečo. Zatiaľ. //',
       '',
       '"Ich auto nemalo poznávaciu značku. Rovnako ako to biele pred barom."',
       'Všetci sa pozrú na dvere. Biele auto je preč.',
       '',
-      '<i>// [DAEDALUS — PRÍJEM 01:52] Agent. Vitám ťa späť v operačnej oblasti.',
-      '<i>// Incident utorok 02:14 — zaregistrovaný. Klasifikácia: otvorená.',
-      '<i>// Neidentifikované vzdušné objekty nad Prievidzou — tri nezávislé zdroje.',
-      '<i>// Súvislosť s projektom LAZARUS: pravdepodobná.',
-      '<i>// Priorita A: Bánovce nad Bebravou. 5G vysielač, sektor 7.',
-      '<i>// Odchod odporúčaný pred svitaním. //',
+      '// [DAEDALUS — PRÍJEM 01:52] Agent. Vitám ťa späť v operačnej oblasti.',
+      '// Incident utorok 02:14 — zaregistrovaný. Klasifikácia: otvorená.',
+      '// Neidentifikované vzdušné objekty nad Prievidzou — tri nezávislé zdroje.',
+      '// Súvislosť s projektom LAZARUS: pravdepodobná.',
+      '// Priorita A: Bánovce nad Bebravou. 5G vysielač, sektor 7.',
+      '// Odchod odporúčaný pred svitaním. //',
       '',
-      '<i>// 📋 Quest: LAZARUS — Bánovce, Sektor 7 · ▼ HLAD −8 · ▼ SAN −3 //',
+      '// 📋 Quest: LAZARUS — Bánovce, Sektor 7 · ▼ HLAD −8 · ▼ SAN −3 //',
     ],
     onEnter: function(){
       gainXP(20);
@@ -2998,22 +3032,22 @@ var SCENES = {
     npcName: 'Druid',
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     text: [
-      '<i>// [TELO — HP] //',
+      '// [TELO — HP] //',
       '"Telo je nástroj. Nie chrám, nie väzenie. Nástroje sa brúsia, opravujú, skladajú keď ich zanedbáš.",',
       '"Gym na Zagorskej. Terasy pri Bojniciach. Spánok. Jedlo."',
-      '<i>// HP max 100. Klesa bojom, hladom, nespánkom. Rastie odpočinkom, jedlom, lekárom. //',
+      '// HP max 100. Klesa bojom, hladom, nespánkom. Rastie odpočinkom, jedlom, lekárom. //',
       '',
-      '<i>// [MYSEĽ — SANITA] //',
+      '// [MYSEĽ — SANITA] //',
       '"V tomto meste existujú informácie ktoré mozog nevie spracovať bez straty.",',
       '"Čím hlbšie pôjdeš — do tunelov, do sietí, do histórie — tým viac budeš vidieť veci ktoré nie sú pre ľudské oči.",',
       '"Sanita nie je slabosť. Je to zásobník. Keď je prázdny, prestaneš rozlišovať čo je skutočné."',
-      '<i>// SAN max 100. Klesa odhaleniami, izoláciou, Mentátom. Rastie rozhovorom, prírodou, záhradou. //',
+      '// SAN max 100. Klesa odhaleniami, izoláciou, Mentátom. Rastie rozhovorom, prírodou, záhradou. //',
       '',
-      '<i>// [HLAD] //',
+      '// [HLAD] //',
       '"Hladný agent je pomalý agent. Hladný agent robí chyby. Základňa má sporák. Použi ho."',
-      '<i>// HLAD max 100. Pri 30 a menej: −2 ku každej akcii. Pri 0: strácaš HP každú hodinu. //',
+      '// HLAD max 100. Pri 30 a menej: −2 ku každej akcii. Pri 0: strácaš HP každú hodinu. //',
       '',
-      '<i>// ▼ SAN −2 (príliš veľa informácií naraz) //',
+      '// ▼ SAN −2 (príliš veľa informácií naraz) //',
     ],
     onEnter: function(){
       gainXP(10);
@@ -3057,8 +3091,8 @@ var SCENES = {
       '"LAZARUS bol zapnutý v roku 2061. Tam. Pod Bojnicami.",',
       '"Mysleli sme že je to zálohovací systém. Nebol."',
       '',
-      '<i>// [LOGIKA] Server farm pod Bojnicami. Rok 2061. Šestnásť rokov.',
-      '<i>// Čo vie o systéme ktorý hľadá telo? //',
+      '// [LOGIKA] Server farm pod Bojnicami. Rok 2061. Šestnásť rokov.',
+      '// Čo vie o systéme ktorý hľadá telo? //',
     ],
     onEnter: function(){
       gainXP(10);
@@ -3081,7 +3115,7 @@ var SCENES = {
       'Druid ťa odmeria. Kývne pomaly. "Dobrý začiatok."',
       'Oheň. Tichá ulica. Vzdialený bzukot Alzaboxu.',
       '',
-      '<i>// [SAN +3] //',
+      '// [SAN +3] //',
     ],
     onEnter: function(){
       S.san = Math.min(100, S.san + 3);
@@ -3108,18 +3142,18 @@ var SCENES = {
       '"Nie pretože je to najefektívnejšie.",',
       '"Ale pretože LAZARUS žije v sieti a ak ho chceš vidieť, musíš vedieť kde pozerať."',
       '',
-      '<i>// [LOGIKA] Druid bol pri zapnutí LAZARU. Rok 2061. Šestnásť rokov. //',
-      '<i>// [VÔĽA] Môžeš odísť. Máš dosť informácií. Ale niečo ťa tu drží — zvedavosť.',
-      '<i>// A to je možno najnebezpečnejšia vec v tomto meste. //',
+      '// [LOGIKA] Druid bol pri zapnutí LAZARU. Rok 2061. Šestnásť rokov. //',
+      '// [VÔĽA] Môžeš odísť. Máš dosť informácií. Ale niečo ťa tu drží — zvedavosť.',
+      '// A to je možno najnebezpečnejšia vec v tomto meste. //',
       '',
       'Druid vstane. Zbalí mapu. Oheň nechá horieť.',
       'Za ním zostane len plameň v plechovke a hologramový odraz Alzaboxu v kaluži pätnásť metrov ďalej.',
       '',
-      '<i>// [ALZABOX] NOVÝ BYT. NOVÝ ŽIVOT. //',
-      '<i>// [TRAS] Tri veci v jednom odraze. Ty. Oheň starého muža. Reklama korporácie.',
-      '<i>// Toto je mesto. Toto je situácia. Vyber si čo z toho si. //',
+      '// [ALZABOX] NOVÝ BYT. NOVÝ ŽIVOT. //',
+      '// [TRAS] Tri veci v jednom odraze. Ty. Oheň starého muža. Reklama korporácie.',
+      '// Toto je mesto. Toto je situácia. Vyber si čo z toho si. //',
       '',
-      '<i>// ▲ XP +20 · SAN +3 · Druid — kontakt pridaný · LAZARUS: zapnutý 2061, Bojnice //',
+      '// ▲ XP +20 · SAN +3 · Druid — kontakt pridaný · LAZARUS: zapnutý 2061, Bojnice //',
     ],
     onEnter: function(){
       gainXP(20);
@@ -3152,7 +3186,7 @@ var SCENES = {
       '"LAZARUS je aktívny. Máš do štyroch hodín."',
       '"— Druid"',
       '',
-      '<i>// Druid. Tvoj kontakt. Čo presne je LAZARUS? //',
+      '// Druid. Tvoj kontakt. Čo presne je LAZARUS? //',
     ],
     choices: [
       { text:'[A] Ísť na poštu za Druidom',     next:'posta' },
@@ -3164,17 +3198,26 @@ var SCENES = {
   },
 
   centrum_noc: {
-    name: 'Centrum // Nočné Prievidza',
+    name: 'Centrum // Prievidza 03:47',
     art: '🌃',
     text: [
-      'Neon Pizzéria a Supermarket sú zamknuté. Ticho.',
+      'Hlavná ulica. Tristo metrov betónu a neonov, ktoré nikto nezapol.',
+      'Alzabox pri každom vchode — niektoré blikajú, niektoré sú rozbité, jeden má na skle',
+      'čierny sprej: "VIDÍME ŤA."',
       '',
-      'Na plote: nový nápis — "PROJEKT 5G = BOJ PROTI SLOBODE".',
-      'Vedľa: "LAZARUS NÁS POČUJE. ALOBAL POMÁHA."',
+      'Na plote kostola — čerstvý nápis, ešte mokrý:',
+      '"PROJEKT 5G = BOJ PROTI SLOBODE"',
+      'Vedľa, iná ruka, iná farba:',
+      '"LAZARUS NÁS POČUJE. ALOBAL NEPOMÁHA."',
       '',
-      'Žena v čiernom stojí pri fontáne a fajčí.',
-      '"Nočná smena?" Pohľad na teba. Ostrý. Vyhodnocujúci.',
-      '"Alebo nočná akcia?"',
+      '// [VNEM] Dvaja nápisy, dve ruky, dve správy. Jeden z pisateľov vedel viac ako druhý.',
+      '// Alebo obaja vedeli rovnako málo — a to je horšie. //',
+      '',
+      'Fontána v strede námestia. Nefunguje — voda zamrznutá do šedého prstencu.',
+      'Pri nej stojí žena. Čierna bunda, cigareta, pohľad upretý niekam za tvoje rameno.',
+      'Keď sa pozrie na teba, nie je to pohľad cudzinca. Je to pohľad niekoho, kto čakal.',
+      '',
+      '"Nočná smena?" Hlas tichý. "Alebo niečo iné?"',
     ],
     onEnter: function(){ gainXP(5); },
     choices: [
@@ -3185,21 +3228,26 @@ var SCENES = {
   },
 
   centrum_lucia: {
-    name: 'Centrum // Lucia',
+    name: 'Centrum // Lucia Vaňová',
     npcName: 'Lucia Vaňová',
     npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '👩',
     text: [
-      '"Čo sa deje?" Zasmeje sa. Nie veselo.',
-      '"Štandardná Prievidza. Ľudia sa boja, niečo cítia ale nevedia čo."',
-      '',
+      '"Čo sa deje?" Zasmeje sa. Nie veselo — tichý zvuk bez radosti.',
+      '"Štandardná Prievidza. Ľudia niečo cítia, ale nevedia čo."',
       '"Volám sa Lucia. Novinárka — bola som novinárka."',
-      '"Teraz som len... tu."',
+      '"Teraz som tu. To je všetko čo mám."',
       '',
-      'Na jej zápästí: jazva. Čerstvá. Chirurgická.',
-      '"Záujímavé, nie?" Vidí, že si si všimol. "Dajú ti to bez pytania. Vraj monitoring."',
-      '"Vraj dobrovoľné." Zahodí cigaretu.',
+      'Zahodí cigaretu. Na zápästí vidíš jazvu. Čerstvú.',
+      'Chirurgickú. Nevyzerá ako nehoda.',
+      '',
+      '"Záujímavé, nie?" Všimla si, že pozeráš.',
+      '"Dajú ti to bez pýtania. Vraj monitoring zdravia. Vraj dobrovoľné."',
+      '',
       '"Nebolo."',
+      '',
+      '// [VNEM] Jazva je stará asi päť dní. Nie sedemdesiatdva hodín, nie dva týždne.',
+      '// Päť dní — to je deň po tom, čo Druid poslal správu. Zhoda? //',
     ],
     onEnter: function(){ gainXP(15); S.flags['lucia_jazva']=true; addLog('Lucia Vaňová: implantát bez súhlasu.','ok'); },
     choices: [
@@ -3215,15 +3263,23 @@ var SCENES = {
     npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '👩',
     text: [
-      '"LAZARUS." Pauza.',
-      '"Písala som o tom. Pred mesiacom. Redakcia článok zabila."',
-      '"Šéfredaktor povedal: nedokázaná konšpirácia."',
-      '"Na druhý deň som mala predvolanie k lekárovi. Povinné. Z mesta."',
-      '"A keď som sa vrátila — mal som niečo nové na zápästí."',
+      '"LAZARUS." Zastaví sa. Dlhá sekunda.',
+      '"Písala som o tom. Mesiac dozadu. Redakcia článok zabila bez vysvetlenia."',
+      '"Šéfredaktor povedal: nedokázaná konšpirácia, nebudeme sa zosmiešňovať."',
+      '"Na druhý deň som dostala predvolanie k lekárovi. Povinné. Z mesta, nie od môjho doktora."',
+      '"Keď som sa vrátila, mala som toto."',
       '',
-      '"LAZARUS nie je projekt. Je to systém."',
-      '"Frekvencie, biológia, kontrola." Pozrie na hodinky.',
-      '"O štvrtej sa spustí druhá fáza. Vtedy je neskoro."',
+      'Ukáže zápästie.',
+      '',
+      '"LAZARUS nie je projekt. Je to systém. Frekvencie, biológia, poddajnosť."',
+      '"Nie smrť — niečo subtílnejšie. Ľudia prestanú klásť otázky.",',
+      '"Alebo začnú hlasovať pre strany, ktorým nikdy neverili."',
+      '',
+      '"O štvrtej ráno sa spustí druhá fáza. Potom je neskoro."',
+      '',
+      '// [LOGIKA] Koreluje s tým čo hovoril Druid. Nezávislé zdroje, rovnaký záver.',
+      '// [EMPATIA] Stratila prácu, dostala implantát bez súhlasu. A stále tu stojí a hovorí ti to.',
+      '// To nie je strach. To je rozhodnutie. //',
     ],
     onEnter: function(){ gainXP(20); S.flags['lucia_stopa']=true; addLog('Lucia: LAZARUS = systém frekvenčnej kontroly. Fáza 2 o 4:00.','warn'); activateOp('op-lazarus'); },
     choices: [
@@ -3239,12 +3295,17 @@ var SCENES = {
     art: '👩',
     text: [
       '"Kto?" Pozrie na jazvu.',
-      '"Doktor Mináč. Klinika pri FRI."',
-      '"Ale — on len vykonáva. Príkazy dostáva z FRI."',
-      '"Oravec. Pavel Oravec."',
+      '"Doktor Mináč. Klinika pri FRI. Ale on len vykonáva — rozkazy dostáva od niekoho iného."',
+      '"Pavel Oravec. FRI, laboratórium B7."',
       '',
-      '"Viem, že to znie ako konšpirácia."',
-      '"Ale konšpirácie majú jeden problém: niekedy sú pravda."',
+      'Odmlčí sa. Pozrie na fontánu.',
+      '"Viem, že to znie ako konšpirácia. Sama som si to hovorila, kým som sedela v čakárni",',
+      '"a pozerala na plakát: DOBROVOĽNÝ MONITORING = ZDRAVŠIA KOMUNITA."',
+      '"Podpísala som. Lebo čo iné si robí človek v čakárni?"',
+      '',
+      '"Konšpirácie majú jeden problém: niekedy sú pravda."',
+      '',
+      '// [VNEM] Oravec. To meno si počul na FRI bulletine. Etická komisia pozastavená. //',
     ],
     onEnter: function(){ gainXP(10); S.flags['oravec_stopa']=true; addLog('Dr. Oravec na FRI — LAZARUS velenie.','ok'); },
     choices: [
@@ -3254,21 +3315,25 @@ var SCENES = {
   },
 
   centrum_lucia_pomoc: {
-    name: 'Centrum // Lucia — Spolupraca',
+    name: 'Centrum // Lucia — Spojenectvo',
     npcName: 'Lucia Vaňová',
     npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     art: '👩',
     text: [
-      'Lucia sa zastaví.',
-      '"Zastaviť." Opakuje slovo.',
-      '"Vtáčnik. To je miesto. Hlavný uzol."',
-      '"Ak ho fyzicky prerušíš — fáza 2 sa nespustí."',
-      '"Potrebuješ sa dostať do jaskyne pod ním."',
+      'Lucia sa zastaví. Opakuje slovo ako by ho testovala.',
+      '"Zastaviť."',
       '',
-      '"Mám toto." Podá ti starú turistickú mapu so zápisom.',
-      '"Vstup cez Bojnické jaskyne, stredný koridor. Ale —"',
-      '"Potrebuješ baterku. A niekoho kto vie cestu."',
-      '"Druid vie cestu. Choď za ním."',
+      '"Vtáčnik. To je miesto. Hlavný uzol siete — ak ho prerušíš fyzicky, fáza 2 sa nespustí."',
+      '"Vstup cez Bojnické jaskyne. Stredný koridor."',
+      '"Pozor na pravý — je strážený."',
+      '',
+      'Vytiahne starú turistickú mapu, poprepisovanú ceruzkou.',
+      'Podá ti ju.',
+      '"Druid vie cestu. A vie o bunkri pod uzlom."',
+      '"Potrebuješ jeho. A baterku."',
+      '',
+      '// [EMPATIA] Dáva ti mapu. To je všetko čo má — papier a informácia.',
+      '// [LOGIKA] Ak ťa zatkne M.E.C., Lucia je kompromitovaná. Vie o tom. //',
     ],
     onEnter: function(){ gainXP(25); S.flags['vtacnik_info']=true; addLog('Lucia: Vtáčnik = hlavný uzol. Jaskyňa = vstup.','ok'); activateOp('op-jaskyne'); },
     choices: [
@@ -3282,16 +3347,21 @@ var SCENES = {
     name: 'Centrum // Nápisy na múre',
     art: '🖊️',
     text: [
-      'Väčšina sú klasiky — anarchistické symboly, politické heslá.',
+      'Väčšina sú stariny — anarchistické symboly, politické heslá, meno niekoho komu sa niekto sťažuje.',
+      'Obvyklý folklór múrov.',
       '',
-      'Ale jeden nápis je iný. Čerstvý. Presný.',
+      'Ale jeden nápis je iný.',
+      'Čerstvý, presný, nie sprej ale permanentný fix:',
       '"LAZARUS NODE 7 = 48.7702°N 18.6196°E"',
       '"VTÁČNIK. SIGMA CORE. NEUTRALIZUJ."',
       '',
-      'Pod tým, ceruzkou:',
+      'Pod tým, ceruzkou, tichším písmom:',
       '"— A.D."',
       '',
-      '<i>// A.D. = Agent Delta? Koordináty sú GPS. Vtáčnik. //',
+      '// [VNEM] GPS koordináty sú presné na meter. Kto toto napísal vedel kde stojí uzol.',
+      '// [LOGIKA] A.D. — Agent Delta? Rovnaká iniciála ako v zápisníku na FRI.',
+      '// Toto nie je varovanie pre náhodných chodcov. Toto je správa. Pre niekoho konkrétneho.',
+      '// Pre teba, možno. //',
     ],
     onEnter: function(){ gainXP(15); S.flags['centrum_gps']=true; addLog('GPS koordináty Vtáčnik Uzol 7: 48.7702°N 18.6196°E','ok'); activateOp('op-5g'); },
     choices: [
@@ -3309,15 +3379,21 @@ var SCENES = {
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     art: '📮',
     text: [
-      'Pošta. Zatvoreá. Ale dvierka sú pootvorené.',
+      'Pošta. Zatvorená od jedenástej. Ale dvierka na skok otvorené — niekto zanechal priečku.',
       '',
-      'Za pultom: starší muž. Čaká.',
-      '"Myslel som, že neprídeš." Druid. Tvoj kontakt.',
-      '"Máme menej času, ako som čakal."',
+      'Vo vnútri tma. Len malá lampa za pultom.',
+      'Za ňou: Druid. Sedí na stoličke zamestnanca, ako by tu pracoval tridsať rokov.',
       '',
-      '"LAZARUS — protokol rezonančnej synchronizácie —"',
-      '"— aktivácia o štvrtej ráno. Primárny uzol je Vtáčnik."',
-      '"Ak ho nezastavíme, celé mesto bude pod vplyvom do rána."',
+      '"Myslel som, že neprídeš." Niet v tom výčitke. Len konštatovanie.',
+      '"Máme menej času ako som čakal."',
+      '',
+      'Rozloží na pult papier — ručne písaný, siahajúci na obe strany.',
+      '"LAZARUS. Protokol rezonančnej synchronizácie. Aktivácia o štvrtej ráno.",',
+      '"Primárny uzol: Vtáčnik nad Bánovcami. Sektor 7."',
+      '"Ak ho nezastavíme — celé mesto bude pod vplyvom do svitania."',
+      '',
+      '// [VNEM] Za jeho chrbtom: rady poštových priečinkov. Jeden z nich, druhý zľava, prvý rad —',
+      '// má dvierka pootvorené. Vo vnútri kus obálky. Biela. //',
     ],
     onEnter: function(){ gainXP(20); activateOp('op-druid'); addLog('Druid: LAZARUS o 4:00. Vtáčnik = primárny uzol.','ok'); },
     choices: [
@@ -3336,16 +3412,21 @@ var SCENES = {
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     art: '📮',
     text: [
-      '"Čo robí?" Druid si sadne.',
-      '"60 GHz milimetrové vlny. Saturácia kyslíka."',
-      '"Nie smrť — niečo subtílnejšie. Poddajnosť."',
-      '"Biologická poddajnosť. Ako keď ľudia prestanú klásť otázky."',
+      'Druid si sadne. Skríži ruky.',
+      '"60 gigahertzové milimetrové vlny. Viete čo robia s kyslíkom v krvi?"',
+      '"Nie smrť — to by bolo jednoduché. Niečo subtílnejšie."',
+      '"Biologická poddajnosť. Schopnosť klásť otázky — mierne, nepostrehnuteľne otupená.",',
+      '"Ako keď ľudia prestanú klásť otázky. Nie z donútenia. Len... prestanú."',
       '',
-      '"Viem, znie to absurdne." Pozrie na teba priamo.',
-      '"Ale Oravec mi to potvrdil — pred tým, než zmizol."',
-      '"A Lucia Vaňová to cítila na vlastnej koži."',
+      '"Znie to absurdne." Pozrie na teba priamo. "Aj mne znelo."',
+      '"Kým Oravec mi to nepotvrdil — pred tým, ako zmizol."',
+      '"A kým Lucia Vaňová mi neukázala jazvu na zápästí."',
       '',
-      '"Musíme zastaviť uzol 7. Fyzicky — alebo hackingom."',
+      '"Uzol 7 musíme zastaviť. Fyzicky — alebo cez sieť."',
+      '"Oboje má cenu. Oboje má riziko."',
+      '',
+      '// [LOGIKA] Dva nezávislé zdroje — Oravec a Lucia. Druid bol pri zapnutí LAZARU.',
+      '// Toto nie je konšpirácia. Toto je dokumentovaná operácia. //',
     ],
     onEnter: function(){ gainXP(15); addLog('Druid potvrdzuje: LAZARUS = biologická poddajnosť.','warn'); },
     choices: [
@@ -3362,17 +3443,20 @@ var SCENES = {
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     art: '🗺️',
     text: [
-      'Druid rozloží starú mapu.',
-      '"Bojnické jaskyne. Tri koridory."',
-      '"Ľavý vedie k podzemnej rieke — slepá ulička."',
-      '"Pravý — ten je nebezpečný. Strážený."',
-      '"Stredný koridor. To je cesta k uzlu 7."',
+      'Druid vytiahne z tašky zloženú mapu — starú, ale s ceruzkovými záznamami, ktoré sú čerstvé.',
+      'Rozloží ju na pult.',
       '',
-      '"Uzol je v hĺbke 40 metrov. Tam je bunker."',
-      '"Na bunkri potrebuješ keycard. A — spis OMEGA pre overenie."',
-      '"Bez oboch ťa systém odmietne."',
+      '"Bojnické jaskyne. Tri koridory od vstupu."',
+      '"Ľavý vedie k podzemnej rieke. Krásne. Slepá ulička."',
+      '"Pravý — strážený. Dvaja, možno traja. Striedanie každé štyri hodiny."',
+      '"Stredný — to je cesta."',
       '',
-      '"Baterku máš?" Pozrie na teba.',
+      '"Uzol je v hĺbke štyridsať metrov. Pod ním bunker."',
+      '"Na bunkri potrebuješ keycard a spis OMEGA pre overenie totožnosti.",',
+      '"Bez oboch ťa systém odmietne. Bez šance."',
+      '',
+      'Pozrie na teba.',
+      '"Baterku máš?"',
     ],
     onEnter: function(){ gainXP(20); S.flags['mapa_jaskyn']=true; addLog('Mapa jaskýň: stredný koridor k Uzlu 7.','ok'); activateOp('op-jaskyne'); activateOp('op-lazarus'); },
     choices: [
@@ -3389,14 +3473,19 @@ var SCENES = {
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     art: '📮',
     text: [
-      '"Spis OMEGA." Druid si prezrie dokumenty.',
-      '"Toto je... viac ako som čakal."',
-      '"Agent Delta bol dôkladný."',
+      'Druid si vezme dokumenty. Číta pomaly. Obráti jednu stranu, potom druhú.',
+      '"Spis OMEGA." Odloží ich. "Agent Delta bol dôkladný."',
+      '"Tohto som sa bál nájsť. A zároveň dúfal."',
       '',
-      '"S týmto a keycardou môžeš vstúpiť do bunkra."',
-      '"Koordinátor bude tam. Musíš ho presvedčiť — alebo zastaviť."',
-      '"Ak vírus do systému — LAZARUS sa zablokuje."',
-      '"Ale potrebuješ HCK 30 alebo viac."',
+      '"S týmto a s keycardou — bunker je otvorený."',
+      '"Koordinátor bude vo vnútri. Musíš ho presvedčiť alebo zastaviť."',
+      '"Ak vieš kód do terminálu, môžeš nasadiť vírus priamo do LAZARUS siete."',
+      '"Systém sa zablokuje. Fáza 2 sa nespustí."',
+      '"Ale terminál vyžaduje HCK 30 alebo viac. Pod tým — len fyzická cesta."',
+      '',
+      '// [LOGIKA] Dve možnosti, jeden cieľ. Presvedčiť koordinátora = riskantné, neisté.',
+      '// Vírus = technicky náročné, ale čisté. Fyzická konfrontácia = rýchle, nevratné.',
+      '// Čo si ty za agenta? Teraz sa to ukáže. //',
     ],
     onEnter: function(){ gainXP(20); S.flags['druid_bunker']=true; addLog('Druid: Bunker = spis + keycard + HCK 30.','ok'); },
     choices: [
@@ -3421,7 +3510,7 @@ var SCENES = {
       '"PRIMÁRNY UZOL: VTÁČNIK. AKTIVÁCIA: 04:00."',
       '"PRÍSTUPOVÝ KĽÚČ: OMEGA-7-DELTA"',
       '',
-      '<i>// Spis OMEGA. Toto je dôkaz. //',
+      '// Spis OMEGA. Toto je dôkaz. //',
     ],
     onEnter: function(){ addItem('spis'); gainXP(20); activateOp('op-lazarus'); addLog('Spis OMEGA získaný! Dôkaz o LAZARUS.','ok'); showNotif('📁 Spis OMEGA — plán LAZARUS!'); },
     choices: [
@@ -3435,16 +3524,20 @@ var SCENES = {
     name: 'Bojnické Jaskyne // Vstup',
     art: '🕳️',
     text: [
-      'Vstup do jaskyne. Čelová lampa (alebo baterka) na maximum.',
+      'Vstup do jaskyne je nenápadný — drevená doska, starý rebrík dole, turistická cedula',
+      'z roku 2043 s vyblednutým textom: BOJNICKÉ JASKYNE — TURISTICKÁ TRASA.',
+      'Turistická trasa nikam nevedie. Sezóna skončila v roku 2051, keď M.E.C. odkúpil pozemky.',
       '',
-      'Tma. Dych. Vlhkosť.',
+      'Pusti lampu naplno. Teplota klesne o päť stupňov.',
+      'Vlhkosť. Vôňa hliny a niečoho starého, minerálneho, akoby zem sama dýcha.',
       '',
-      'Tri koridory pred tebou.',
-      'ĽAVÝ: zvuky vody — podzemná rieka.',
-      'STREDNÝ: ticho. Hlboké ticho.',
-      'PRAVÝ: vzdialené svetlo. A hlasy.',
+      'Tri koridory.',
       '',
-      '<i>// Druid hovoril: stredný koridor. //',
+      'ĽAVÝ: vzdialený zvuk vody. Plynúcej. Hlbokej.',
+      'STREDNÝ: ticho. Nie prázdne ticho — plné ticho. Niečo tam je.',
+      'PRAVÝ: svetlo. Žlté, teplé. A hlasy — dvaja, možno traja.',
+      '',
+      '// Druid hovoril: stredný koridor. Ale on tu nie je. Ty tu si. //',
     ],
     onEnter: function(){ gainXP(15); activateOp('op-jaskyne'); addLog('Vstup do jaskýň.','ok'); },
     choices: [
@@ -3458,14 +3551,18 @@ var SCENES = {
     name: 'Jaskyne // Ľavý Koridor',
     art: '💧',
     text: [
-      'Zvuky vody zosilňujú. Podzemná rieka.',
-      'Krásne. A slepá ulička — rieka blokuje cestu.',
+      'Koridor sa zužuje. Steny mokré, chladné, tmavomodré v svetle baterky.',
+      'Zvuk vody zosilňuje — nie kap-kap, ale hukot. Niečo pod nohami, hlboko.',
       '',
-      'Ale na stene, ceruzkou:',
-      '"UZOL 7 → STREDNÝ. NE ĽAV."',
-      '"—T.D."',
+      'Po tridsiatich metroch: stena. Slepá ulička.',
+      'Rieka vykrojila chodbu, ale pokračovanie spolkla.',
       '',
-      '<i>// T.D. = Tomáš Dravecký? //',
+      'Ale na stene, tesne nad líniou vody, ceruzkou:',
+      '"UZOL 7 — STREDNÝ. NIE ĽAVÝ."',
+      '"— T.D."',
+      '',
+      '// [LOGIKA] T.D. — Tomáš Dravecký? Agent Delta zanechal značky.',
+      '// Vedel, že niekto príde. Alebo dúfal, že príde. //',
     ],
     onEnter: function(){ gainXP(8); },
     choices: [{ text:'[A] Vrátiť sa a ísť stredným', next:'jaskyne_vstup' }]
@@ -3475,13 +3572,16 @@ var SCENES = {
     name: 'Jaskyne // Pravý Koridor',
     art: '🔦',
     text: [
-      'Svetlo. Dvaja strážnici pri kempingovom stolíku.',
-      'Nie štandardná bezpečnostná uniforfia — civily. Vyzerajú unavene.',
+      'Svetlo je skutočné — kempingová lampa na kamennej rímse.',
+      'Pri nej: kempingový stolík, dve stoličky, zvyšky jedla.',
+      'A dvaja muži. Nie uniformy — civily, ale niečo v postoji, v pokojnom sledovaní každého vstupu,',
+      'hovorí: toto nie je náhoda. Sú tu za určeným účelom.',
       '',
-      'Jeden z nich ťa zazrie.',
-      '"Hej! Kto si?"',
+      'Jeden si ťa všimne skôr ako druhý.',
+      '"Hej." Nie výkrik — tichý, jasný. Profesionálny.',
+      '"Kto si?"',
       '',
-      'Máš sekundu na rozhodnutie.',
+      'Máš sekundu. Možno dve.',
     ],
     choices: [
       { text:'[A] Utiecť späť',         next:'jaskyne_vstup' },
@@ -3493,19 +3593,23 @@ var SCENES = {
   },
 
   jaskyne_boj: {
-    name: 'Jaskyne // Súboj — Pravý Koridor',
+    name: 'Jaskyne // Súboj',
     art: '⚔️',
     text: [
-      'Prvý útok tvojej strany. Prekvapenie.',
-      'HP -15. Ale obaja dole.',
+      'Prekvapenie. Jeden úder, rýchly, presný — nie brutalita, efektivita.',
+      'Obaja dole za desať sekúnd. Ty tiež dostaneš — lakeť do rebier, bolestivé.',
       '',
-      'Za nimi: dvierka. Zamknuté.',
-      'A na stole: tablet s označením "LAZARUS NET MONITOR".',
+      'HP -15. Dýchaš. Funguje to.',
       '',
-      'Rýchle prezeranie. Reálny čas.',
-      'Uzol 7 — online. Countdown: 47 minút.',
+      'Za nimi: dvierka. Zamknuté oceľovým závorom.',
+      'Na stole: tablet. Obrazovka svieti.',
+      '"LAZARUS NET MONITOR — UZOL 7 — ONLINE"',
+      '"COUNTDOWN: 47:12"',
       '',
-      '<i>// Čas beží. //',
+      'Čierny panel, zelené písmená. Reálny čas.',
+      'Storyboard pred tebou — fáza 2 sa začne za menej ako hodinu.',
+      '',
+      '// Čas beží. Dvierka sú zamknuté. Stredný koridor čaká. //',
     ],
     onEnter: function(){ S.hp=Math.max(0,S.hp-15); S.str=Math.min(100,S.str+3); Renderer.updateStats(); gainXP(25); addLog('HP -15. Sila +3. Uzol 7 countdown.','warn'); if(S.hp<=0) gameOver('Vyčerpal si sa v boji.'); },
     choices: [
@@ -3525,7 +3629,7 @@ var SCENES = {
       'Za zatáčkou: chodba vedúca hlboko dolu.',
       '"STREDNÝ SEKTOR — AUTORIZÁCIA POVINNÁ"',
       '',
-      '<i>// Cesta je voľná. Ale autorizácia? //',
+      '// Cesta je voľná. Ale autorizácia? //',
     ],
     onEnter: function(){ S.hp=Math.max(0,S.hp-5); S.flex=Math.min(100,S.flex+2); Renderer.updateStats(); gainXP(20); addLog('HP -5. Ohybnosť +2.','ok'); },
     choices: [{ text:'[A] Pokračovať chodba', next:'jaskyne_stred' }]
@@ -3545,7 +3649,7 @@ var SCENES = {
       '',
       '"DELAY ACCEPTED. Nová aktivácia: 04:30."',
       '',
-      '<i>// Kúpil si čas. Teraz — uzol. //',
+      '// Kúpil si čas. Teraz — uzol. //',
     ],
     onEnter: function(){ gainXP(30); S.hackStat=Math.min(100,S.hackStat+3); Renderer.updateStats(); S.flags['delay_lazarus']=true; addLog('LAZARUS odložený o 30 min. Hacking +3.','ok'); showNotif('⏱ LAZARUS delay: +30 minút'); },
     choices: [{ text:'[A] Ísť stredným koridorom', next:'jaskyne_stred' }]
@@ -3585,7 +3689,7 @@ var SCENES = {
       '',
       'Zámok klikne.',
       '',
-      '<i>// Prístup udelený. Kroky pribúdajú. //',
+      '// Prístup udelený. Kroky pribúdajú. //',
     ],
     onEnter: function(){ gainXP(35); S.hackStat=Math.min(100,S.hackStat+5); Renderer.updateStats(); addLog('Hacking +5. Zámok hacknutý.','ok'); },
     choices: [{ text:'[A] Vstúpiť rýchlo', next:'bunker' }]
@@ -3604,7 +3708,7 @@ var SCENES = {
       '"Bio-Echo." Pamätáš si Oravca.',
       '"Oni ťa môžu vidieť."',
       '',
-      '<i>// Je neskoro na opatrnosť. Pohyb. //',
+      '// Je neskoro na opatrnosť. Pohyb. //',
     ],
     onEnter: function(){ S.san=Math.max(0,S.san-8); Renderer.updateStats(); gainXP(10); addLog('SAN -8. Bio-Echo aktívny.','warn'); },
     choices: [{ text:'[A] Pokračovať', next:'jaskyne_stred' }]
@@ -3750,7 +3854,7 @@ var SCENES = {
       'Tvoj telefón vibruje.',
       '"Výborne. — Druid"',
       '',
-      '<i>// CEO Zla víťazí. Operácia LAZARUS: NEUTRALIZOVANÁ. //',
+      '// CEO Zla víťazí. Operácia LAZARUS: NEUTRALIZOVANÁ. //',
     ],
     onEnter: function(){ gainXP(100); S.money += 50000; Renderer.updateMoney(); addLog('Operácia LAZARUS: NEUTRALIZOVANÁ. +50000₿ odmena.','ok'); setTimeout(function(){ winGame(); }, 2000); },
     choices: []
@@ -3981,7 +4085,7 @@ var SCENES = {
       '"Prišiel si kvôli squashi?" Nevšíma si čas.',
       '"Alebo kvôli jedlu? Máme zvyšky. Zadarmo — musíme vyhodiť."',
       '',
-      '<i>// Zadarmo jedlo? Vždy vítané. //',
+      '// Zadarmo jedlo? Vždy vítané. //',
     ],
     onEnter: function(){ gainXP(5); },
     choices: [
@@ -4097,7 +4201,7 @@ var SCENES = {
       '',
       'Mozog sa trochu preberie.',
       '',
-      '<i>// Kofein: SAN +8, Hlad -10. Ale hlad trochu ukojí. //',
+      '// Kofein: SAN +8, Hlad -10. Ale hlad trochu ukojí. //',
     ],
     onEnter: function(){
       if(S.money>=20){
@@ -4164,7 +4268,7 @@ var SCENES = {
       '"Vodič mal za uchom niečo. Malé. Blikajúce."',
       '"Myslel som — bluetooth. Teraz si nie som istý."',
       '',
-      '<i>// Implantát. LAZARUS terén. //',
+      '// Implantát. LAZARUS terén. //',
     ],
     onEnter: function(){ gainXP(15); S.flags['mercedes_jazva']=true; addLog('Mercedes — vodič s implantátom.','ok'); },
     choices: [
@@ -4186,7 +4290,7 @@ var SCENES = {
       '"Niektorých tých ľudí poznám. Všetci zmizli."',
       '"Pred dátumami vedľa mien."',
       '',
-      '<i>// Zoznam obetí LAZARUS — vopred plánovaný. //',
+      '// Zoznam obetí LAZARUS — vopred plánovaný. //',
     ],
     onEnter: function(){ gainXP(25); S.san=Math.max(0,S.san-10); Renderer.updateStats(); S.flags['stanica_zoznam']=true; addLog('SAN -10. Zoznam obetí LAZARUS.','warn'); },
     choices: [
@@ -4206,7 +4310,7 @@ var SCENES = {
       'A dolu — bez dátumu:',
       '"<b>AGENT DELTA — NEUTRALIZÁCIA PRIORITNÁ</b>"',
       '',
-      '<i>// Si ty Agent Delta? //',
+      '// Si ty Agent Delta? //',
     ],
     onEnter: function(){ gainXP(30); S.flags['lazarus_zoznam']=true; addItem('spis'); addLog('Zoznam LAZARUS = Spis OMEGA získaný.','ok'); showNotif('Zoznam obetí LAZARUS + Spis OMEGA!'); },
     choices: [
@@ -4224,7 +4328,7 @@ var SCENES = {
       'Na jednej stoličke: zabudnutý batoh. Zips otvorený.',
       'Zápisník, pero, sušienky — a prázdna injekčná striekačka.',
       '',
-      '<i>// Nie drogy. Injekcia má etiketu: BIO-MARKER SER-7. //',
+      '// Nie drogy. Injekcia má etiketu: BIO-MARKER SER-7. //',
       '',
       'Vedľa batohu: rozložená energetická tyčinka. Napoly zjedená.',
     ],
@@ -4269,7 +4373,7 @@ var SCENES = {
       '"BIO-MARKER aplikovaný. Ak zmiznem — zápisník a striekačka sú dôkaz."',
       '"Moje meno: <b>Tomáš Dravecký</b>. Technik FRI. Agent Delta."',
       '',
-      '<i>// Agent Delta je TU. V čakárni. Alebo bol. //',
+      '// Agent Delta je TU. V čakárni. Alebo bol. //',
     ],
     onEnter: function(){ gainXP(35); S.flags['agent_delta_tomas']=true; addItem('spis'); addLog('Agent Delta = Tomáš Dravecký, technik FRI.','ok'); showNotif('Agent Delta nájdený: Tomáš Dravecký!'); },
     choices: [
@@ -4312,7 +4416,7 @@ var SCENES = {
       '',
       'Možno ty nie si prvý.',
       '',
-      '<i>// Kofein + taurín: SAN +10, Hlad -5. Ale spánok bude horší. //',
+      '// Kofein + taurín: SAN +10, Hlad -5. Ale spánok bude horší. //',
     ],
     onEnter: function(){
       if(S.money>=25){
@@ -4355,7 +4459,7 @@ var SCENES = {
       '"Subkortikálna sugescia: POZITÍVNE VÝSLEDKY"',
       '"Etická komisia: POZASTAVENÁ — Viď príloha OMEGA-2"',
       '',
-      '<i>// OMEGA-2. Etika pozastavená. Kto to schválil? //',
+      '// OMEGA-2. Etika pozastavená. Kto to schválil? //',
     ],
     onEnter: function(){ gainXP(15); S.hackStat=Math.min(100,S.hackStat+2); Renderer.updateStats(); addLog('FRI bulletin: etická komisia pozastavená. HCK +2.','ok'); },
     choices: [{ text:'[A] Ísť k Oravcovi', next:'loc_fri_dvere' }]
@@ -4618,7 +4722,7 @@ var SCENES = {
       '"Ty si tu. Teda ty si označený."',
       '"Koordinátor ťa vidí. Teraz. Reálny čas."',
       '',
-      '<i>// SAN -15. Toto nie je teória. //',
+      '// SAN -15. Toto nie je teória. //',
     ],
     onEnter: function(){ S.san=Math.max(0,S.san-15); Renderer.updateStats(); gainXP(20); addLog('SAN -15. BIO-ECHO: si označený.','warn'); },
     choices: [
@@ -4659,7 +4763,7 @@ var SCENES = {
       '"Viktor hovoril, že príde niekto."',
       '"Dobre. Vojdi."',
       '',
-      '<i>// Niekedy stačí sebaistota. //',
+      '// Niekedy stačí sebaistota. //',
     ],
     onEnter: function(){ gainXP(10); addLog('Vstup do Jantaru zadarmo.','ok'); },
     choices: [{ text:'[A] Vojsť', next:'loc_jantar_vnutri' }]
@@ -4679,7 +4783,7 @@ var SCENES = {
       'Viktor Neon. Hovorí sa o ňom veľa.',
       'Vidí ťa. Kýve na teba.',
       '',
-      '<i>// Na bare: menu s nočnými špeciálmi. Jedlo dostupné. //',
+      '// Na bare: menu s nočnými špeciálmi. Jedlo dostupné. //',
     ],
     onEnter: function(){ gainXP(10); S.flags['jantar_vstup']=true; },
     choices: [
@@ -4762,7 +4866,7 @@ var SCENES = {
       '"Viktor ich nechal hovoriť. Potom zavolal niekomu."',
       '"Na druhý deň tí traja zmizli."',
       '',
-      '<i>// Viktor = spojka. Alebo strážca. //',
+      '// Viktor = spojka. Alebo strážca. //',
     ],
     onEnter: function(){ gainXP(15); S.flags['jantar_jana']=true; addLog('Jana: Viktor sleduje FRI. Traja muži zmizli.','warn'); },
     choices: [
@@ -4913,7 +5017,7 @@ var SCENES = {
       '"AGENT DELTA" — pravidelné vstupy. Meno, nie kód: <b>P. Oravec</b>.',
       '',
       'Dr. Pavel Oravec. FRI.',
-      '<i>// Conexia: FRI je súčasť siete LAZARUS. //',
+      '// Conexia: FRI je súčasť siete LAZARUS. //',
     ],
     onEnter: function(){ gainXP(30); S.hackStat=Math.min(100,S.hackStat+3); Renderer.updateStats(); S.flags['fri_spojenie']=true; addLog('Hacking +3. FRI = LAZARUS uzol.','ok'); activateOp('op-lazarus'); },
     choices: [
@@ -5113,7 +5217,7 @@ var SCENES = {
       'Na stenách: vodovodné potrubia, káble — a niečo iné.',
       'Jemné vlákna, biele, organické. Ako mycélium.',
       '',
-      '<i>// Organické vlákna — biologická prítomnosť pod mestom. SAN -10 //',
+      '// Organické vlákna — biologická prítomnosť pod mestom. SAN -10 //',
     ],
     onEnter: function(){ S.san=Math.max(0,S.san-10); Renderer.updateStats(); gainXP(20); addLog('SAN -10. Vlákna pod mestom.','warn'); S.flags['podchod_vlakna']=true; },
     choices: [
@@ -5155,7 +5259,7 @@ var SCENES = {
       'Signál tu je silný. Príliš silný.',
       'Tvoj telefón vibruje nepretržite.',
       '',
-      '<i>// SAN -5 od expozície. Toto je uzol 7. //',
+      '// SAN -5 od expozície. Toto je uzol 7. //',
     ],
     onEnter: function(){ gainXP(20); S.san=Math.max(0,S.san-5); Renderer.updateStats(); S.flags['vtacnik_navstiva']=true; addLog('Vtáčnik: Uzol 7. SAN -5 od frekvencie.','warn'); activateOp('op-5g'); },
     choices: [
@@ -5178,7 +5282,7 @@ var SCENES = {
       'Na dverách: "VTÁČNIK OMEGA — TECHNICKÁ MIESTNOSŤ"',
       '"VSTUP LEN S AUTORIZÁCIOU"',
       '',
-      '<i>// Toto je server room pre uzol 7. //',
+      '// Toto je server room pre uzol 7. //',
     ],
     onEnter: function(){ gainXP(15); S.flags['vtacnik_server']=true; if(hasItem('detektor')){ S.hackStat=Math.min(100,S.hackStat+3); Renderer.updateStats(); addLog('Detektor: signál zameraný. HCK +3.','ok'); } },
     choices: [
@@ -5204,7 +5308,7 @@ var SCENES = {
       '',
       'Ale — záložné napájanie. Uzol 7 beží ďalej.',
       '"Nezastavil si to. Len spomalil."',
-      '<i>// Na úplné zastavenie: bunker. //',
+      '// Na úplné zastavenie: bunker. //',
     ],
     onEnter: function(){ gainXP(30); S.str=Math.min(100,S.str+3); Renderer.updateStats(); S.flags['vtacnik_offline_casto']=true; addLog('Vtáčnik offline (dočasne). SIL +3.','ok'); showNotif('⚡ Uzol 7 spomalený!'); },
     choices: [
@@ -5248,7 +5352,7 @@ var SCENES = {
       'Toto je dôkaz. Veža bez stavebného povolenia.',
       'Frekvenčné zariadenia skryté v starom telekome.',
       '',
-      '<i>// Dokumentácia = dôkaz pre verejnosť. Ale teraz: zastaviť. //',
+      '// Dokumentácia = dôkaz pre verejnosť. Ale teraz: zastaviť. //',
     ],
     onEnter: function(){ gainXP(20); S.flags['vtacnik_foto']=true; addLog('Foto Vtáčnik: dôkaz.','ok'); },
     choices: [
@@ -5326,7 +5430,7 @@ var SCENES = {
   loc_banovce: {
     name: 'Bánovce nad Bebravou // 5G Sektor 7',
     art: '📻',
-    text: ['Bánovce. Vysielač. Sektor 7.', '<i>// Toto je cieľ. Daedalus: zdokumentuj vysielač. //'],
+    text: ['Bánovce. Vysielač. Sektor 7.', '// Toto je cieľ. Daedalus: zdokumentuj vysielač. //'],
     onEnter: function(){ gainXP(10); S.flags['banovce_videny'] = true; activateOp('op-5g'); },
     choices: [{ text: 'Ísť na Vtáčnik', next: 'banovce_cesta' }, { text: 'Späť', next: 'start' }]
   },
@@ -5652,7 +5756,7 @@ function selectJob(jobId) {
   Renderer.updateIncome();
   addLog('Nástup do práce: ' + jdef.titles[0] + ' // CEO Zla Corp.', 'ok');
   showNotif('Vitaj v práci! Plat: ' + jdef.salary[0] + '₿/s');
-  goTo('start');
+  goTo(S.scene || 'sc_001_prichod');
   HungerSystem.init();
 }
 
@@ -5773,7 +5877,7 @@ function switchView(v) {
   if (v==='uni')    { document.getElementById('uni-overlay').classList.add('show'); renderTrainingView('uni'); }
   if (v==='gym')    { document.getElementById('gym-overlay').classList.add('show'); renderTrainingView('gym'); }
   if (v==='hq')     { document.getElementById('hq-overlay').classList.add('show'); openHQ(); }
-  if (v==='shop')   { switchInvTab('shop'); }
+  if (v==='shop')   { switchInvTab('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
 }
 
 function switchInvTab(tab) {
@@ -5869,7 +5973,7 @@ function loadGame() {
 
 function newGame() {
   S = {
-    scene:'start', hp:100, san:100, hunger:100,
+    scene:'sc_001_prichod', hp:100, san:100, hunger:100,
     xp:0, level:1, money:150,
     job:null, jobLevel:0, str:10, flex:10, hackStat:10,
     inventory:[], fishCaught:{},
@@ -6155,74 +6259,100 @@ function renderBoatsOverlay() {
 /* ── FISHING MINIGAME ────────────────────────────────────────── */
 var FG = { state:'idle', fishTarget:null, biteTimer:null, barPos:0, barDir:1, playerPos:0.5, catchZonePos:0.4, catchPower:0, animFrame:null, canvas:null, ctx:null, waitTimeout:null, biteTimeout:null };
 
+var reelPressed = false;
+
 function openFishing() {
-  FG.state = 'idle';
-  var overlay = document.getElementById('fishing-overlay');
-  if (overlay) overlay.classList.add('show');
+  FG.state  = 'idle';
   FG.canvas = document.getElementById('fishing-canvas');
   if (!FG.canvas) return;
-  FG.ctx = FG.canvas.getContext('2d');
-  if (FG.animFrame) cancelAnimationFrame(FG.animFrame);
+  FG.ctx    = FG.canvas.getContext('2d');
+  document.getElementById('fishing-status').textContent      = 'Čakáš na záber... Zahoď udicu!';
+  document.getElementById('fishing-action-btn').textContent  = '[ ZAHOĎ UDICU ]';
+  document.getElementById('fishing-overlay').classList.add('show');
   drawFishingIdle();
-  document.getElementById('fishing-action-btn').textContent = '🎣 Zahoď udicu';
-  document.getElementById('fishing-status').textContent = 'Čakáš na záber... Zahoď udicu!';
-  InputHandler.on('key:Space', function(){ if(document.getElementById('fishing-overlay').classList.contains('show')) fishingAction(); });
 }
+
 function closeFishing() {
-  var overlay = document.getElementById('fishing-overlay');
-  if (overlay) overlay.classList.remove('show');
+  clearFishTimeouts();
   if (FG.animFrame) cancelAnimationFrame(FG.animFrame);
+  FG.state = 'idle';
+  reelPressed = false;
+  document.getElementById('fishing-overlay').classList.remove('show');
+}
+
+function clearFishTimeouts() {
   if (FG.waitTimeout) clearTimeout(FG.waitTimeout);
   if (FG.biteTimeout) clearTimeout(FG.biteTimeout);
-  FG.state = 'idle';
-  InputHandler.off('key:Space');
 }
+
 function fishingAction() {
   if (FG.state === 'idle') {
     FG.state = 'waiting';
-    document.getElementById('fishing-action-btn').textContent = '[ ČAKÁM... ]';
-    document.getElementById('fishing-status').textContent = 'Udica vo vode. Čakáš...';
-    var rnd = FISH_TYPES[Math.floor(Math.random() * FISH_TYPES.length)];
-    FG.fishTarget = rnd;
-    var waitTime = 1500 + Math.random() * 4000;
+    document.getElementById('fishing-action-btn').textContent = '[ ČAKÁŠ... ]';
+    document.getElementById('fishing-status').textContent     = 'Udica hodená. Čakaj na záber...';
+    var wait = 2000 + Math.random() * 3000;
     FG.waitTimeout = setTimeout(function(){
-      if (FG.state !== 'waiting') return;
       FG.state = 'biting';
+      document.getElementById('fishing-status').textContent    = '!! ZÁBER !! Klikni rýchlo!';
+      document.getElementById('fishing-action-btn').textContent= '[ ! CHYŤ ! ]';
       drawFishingBite();
-      document.getElementById('fishing-status').textContent = '!! ZÁBER !! Klikni teraz!';
       FG.biteTimeout = setTimeout(function(){
         if (FG.state === 'biting') {
           FG.state = 'idle';
+          document.getElementById('fishing-status').textContent    = 'Ušla ti! Skúsiš znova?';
+          document.getElementById('fishing-action-btn').textContent= '[ ZAHOĎ ZNOVA ]';
           drawFishingFail();
-          document.getElementById('fishing-status').textContent = 'Ušla ti! Skús znova.';
-          document.getElementById('fishing-action-btn').textContent = '🎣 Zahoď znova';
         }
-      }, 1200);
-      drawFishingWait();
-    }, waitTime);
+      }, 2000);
+    }, wait);
     drawFishingWait();
   } else if (FG.state === 'biting') {
     clearTimeout(FG.biteTimeout);
     FG.state = 'reeling';
-    FG.catchPower = 0;
-    FG.barPos = 0.3 + Math.random() * 0.4;
-    FG.barDir = (Math.random() > 0.5 ? 1 : -1) * GameConfig.FISHING.BAR_SPEED;
-    FG.playerPos = 0.5;
-    document.getElementById('fishing-action-btn').textContent = '[ DRŽI ] alebo SPACE';
-    document.getElementById('fishing-status').textContent = 'Drž lištu nad rybou!';
-    FG.animFrame = requestAnimationFrame(reelingLoop);
-  } else if (FG.state === 'reeling') {
-    FG.playerPos = Math.min(1, FG.playerPos + 0.05);
+    startReeling();
   }
 }
+
+function startReeling() {
+  FG.barPos = 0.5; FG.barDir = 1; FG.playerPos = 0.5;
+  FG.catchZonePos = 0.35 + Math.random()*0.3; FG.catchPower = 0;
+  var roll = Math.random(), cumul = 0;
+  FG.fishTarget = FISH_TYPES[FISH_TYPES.length-1];
+  for (var i=0; i<FISH_TYPES.length; i++) {
+    cumul += FISH_TYPES[i].rarity;
+    if (roll <= cumul) { FG.fishTarget = FISH_TYPES[i]; break; }
+  }
+  document.getElementById('fishing-status').textContent    = 'Ťaháš... Drž zelenú lištu nad rybou!';
+  document.getElementById('fishing-action-btn').textContent= '[ ŤAHAJ HORE ]';
+  reelingLoop();
+}
+
+document.addEventListener('keydown', function(e){
+  if (e.code==='Space' && FG.state==='reeling'){ reelPressed=true; e.preventDefault(); }
+});
+document.addEventListener('keyup', function(e){ if(e.code==='Space') reelPressed=false; });
+
+function _bindFishingBtn() {
+  var btn = document.getElementById('fishing-action-btn');
+  if (!btn) return;
+  btn.addEventListener('mousedown',  function(){ if (FG.state==='reeling') reelPressed=true; });
+  btn.addEventListener('mouseup',    function(){ reelPressed=false; });
+  btn.addEventListener('touchstart', function(e){ if (FG.state==='reeling'){ reelPressed=true; e.preventDefault(); } });
+  btn.addEventListener('touchend',   function(){ reelPressed=false; });
+}
+if (document.readyState !== 'loading') { _bindFishingBtn(); }
+else { document.addEventListener('DOMContentLoaded', _bindFishingBtn); }
+
 function reelingLoop() {
   if (FG.state !== 'reeling') return;
-  FG.barPos += FG.barDir;
-  if (FG.barPos > 0.88 || FG.barPos < 0.05) FG.barDir *= -1;
-  var overlap = Math.abs(FG.playerPos - FG.barPos) < GameConfig.FISHING.OVERLAP_THRESHOLD;
-  if (overlap) FG.catchPower = Math.min(1, FG.catchPower + GameConfig.FISHING.CATCH_INCREASE);
-  else         FG.catchPower = Math.max(0, FG.catchPower - GameConfig.FISHING.CATCH_DECREASE);
-  FG.playerPos = Math.max(0.01, FG.playerPos - 0.012);
+  FG.barPos += FG.barDir * (0.008 + Math.random()*0.012);
+  if (Math.random() < 0.04) FG.barDir *= -1;
+  FG.barPos = Math.max(0, Math.min(1, FG.barPos));
+  if (reelPressed) FG.playerPos -= 0.018; else FG.playerPos += 0.012;
+  FG.playerPos = Math.max(0, Math.min(1, FG.playerPos));
+  var overlap = Math.abs(FG.playerPos - FG.barPos) < 0.12;
+  if (overlap) FG.catchPower = Math.min(1, FG.catchPower + 0.012);
+  else         FG.catchPower = Math.max(0, FG.catchPower - 0.008);
   drawReeling();
   if (FG.catchPower >= 1) {
     FG.state = 'caught';
@@ -6231,6 +6361,7 @@ function reelingLoop() {
   }
   FG.animFrame = requestAnimationFrame(reelingLoop);
 }
+
 function fishCaught() {
   var ft = FG.fishTarget;
   if (!S.fishCaught[ft.id]) S.fishCaught[ft.id] = 0;
@@ -6241,16 +6372,15 @@ function fishCaught() {
   }, 0);
   Renderer.updateIncome(); Renderer.updateFish();
   var xpGain = Math.max(5, Math.floor(ft.value/3)); gainXP(xpGain);
-  S.flex     = Math.min(100, S.flex + 0.5);
+  S.flex     = Math.min(100, S.flex     + 0.5);
   S.hackStat = Math.min(100, S.hackStat + 0.1);
-  S.san      = Math.min(100, S.san + 0.5);
-  // Rybárčenie tiež zvyšuje hlad
+  S.san      = Math.min(100, S.san      + 0.5);
   HungerSystem.tick();
   Renderer.updateStats(); activityAttrBonus('fishing');
-  document.getElementById('fishing-status').textContent = 'Chytil si: ' + ft.icon + ' ' + ft.name + ' (' + ft.value + '₿) | XP +' + xpGain;
-  document.getElementById('fishing-action-btn').textContent = '[ ZAHOĎ ZNOVA ]';
+  document.getElementById('fishing-status').textContent    = 'Chytil si: ' + ft.icon + ' ' + ft.name + ' (' + ft.value + '₿) | XP +' + xpGain;
+  document.getElementById('fishing-action-btn').textContent= '[ ZAHOĎ ZNOVA ]';
   addLog('Rybolov: ' + ft.icon + ' ' + ft.name + ' chytená!', 'ok');
-  showNotif(ft.icon + ' ' + ft.name + ' — ₿' + ft.value + ' | XP +' + xpGain);
+  showNotif(ft.icon + ' ' + ft.name + ' — ₿' + ft.value + ' | XP +' + xpGain + ' | Ohybnosť +0.5');
   drawFishCaught(ft); FG.state = 'idle';
 }
 
@@ -6268,7 +6398,7 @@ function drawFishingIdle() {
   c.fillText('// Nitrická rieka — zvláštne ticho //',w/2,h-12);
 }
 function drawFishingWait() {
-  if (FG.state!=='waiting' && FG.state!=='biting') return;
+  if (FG.state!=='waiting') return;
   var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
   c.clearRect(0,0,w,h);
   var g=c.createLinearGradient(0,0,0,h); g.addColorStop(0,'#020d14'); g.addColorStop(1,'#010a0e');
@@ -6304,10 +6434,10 @@ function drawReeling() {
   c.fillText(FG.fishTarget?FG.fishTarget.icon:'🐟', bX+FG.barPos*bW-11, 63);
   c.fillStyle='rgba(74,222,128,0.07)'; c.fillRect(bX,90,bW,22);
   c.strokeStyle='rgba(74,222,128,0.18)'; c.strokeRect(bX,90,bW,22);
-  var pX=bX+FG.playerPos*bW, zW=bW*GameConfig.FISHING.CATCH_ZONE_WIDTH;
+  var pX=bX+FG.playerPos*bW, zW=bW*0.22;
   c.fillStyle='rgba(57,255,20,0.32)'; c.fillRect(pX-zW/2,90,zW,22);
   c.strokeStyle='#39ff14'; c.lineWidth=2; c.beginPath(); c.moveTo(pX,90); c.lineTo(pX,112); c.stroke();
-  var ov=Math.abs(FG.playerPos-FG.barPos)<GameConfig.FISHING.OVERLAP_THRESHOLD;
+  var ov=Math.abs(FG.playerPos-FG.barPos)<0.12;
   c.fillStyle=ov?'rgba(57,255,20,0.8)':'rgba(239,68,68,0.6)';
   c.font='9px Share Tech Mono'; c.textAlign='center';
   c.fillText(ov?'// CATCHING //':'// ALIGN! //',w/2,135);
@@ -6329,7 +6459,6 @@ function drawFishCaught(ft) {
   c.fillStyle='#39ff14'; c.font='14px Orbitron'; c.fillText(ft.name,w/2,h/2+20);
   c.fillStyle='#facc15'; c.font='11px Share Tech Mono'; c.fillText('₿'+ft.value,w/2,h/2+38);
 }
-
 /* ── EQUIP SYSTEM ────────────────────────────────────────────── */
 var EQUIP_BONUSES = {
   cap_alobal:   { san: 5,        label:'SAN +5' },
@@ -6646,6 +6775,7 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
 document.getElementById('menu-new-btn').onclick = function() {
   document.getElementById('main-menu').classList.remove('visible');
   newGame();
+  setTimeout(function(){ Renderer.updateShop(); }, 100);
 };
 document.getElementById('menu-load-btn').onclick = function() {
   document.getElementById('main-menu').classList.remove('visible');
@@ -6654,6 +6784,72 @@ document.getElementById('menu-load-btn').onclick = function() {
 
 // ── Input Handler Init ───────────────────────────────────────────
 InputHandler.init();
+
+// ── Casino keyboard controls ─────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  var overlay = document.getElementById('casino-overlay');
+  if (!overlay || !overlay.classList.contains('show')) return;
+  // Detect which casino is open
+  var isSlots = !!document.getElementById('reel0');
+  var isBJ    = !!document.getElementById('bj-player-cards');
+
+  if (isSlots) {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      Slots.spin();
+    }
+    return;
+  }
+
+  if (isBJ) {
+    // ← ArrowLeft = HIT
+    if (e.code === 'ArrowLeft') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        // find HIT button
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        btns.forEach(function(b){ if(b.textContent.trim()==='HIT') b.click(); });
+      }
+    }
+    // ↓ ArrowDown = STAND
+    if (e.code === 'ArrowDown') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        btns.forEach(function(b){ if(b.textContent.trim()==='STAND') b.click(); });
+      }
+    }
+    // → ArrowRight = DOUBLE / NOVÁ HRA
+    if (e.code === 'ArrowRight') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        var found = false;
+        btns.forEach(function(b){
+          if(b.textContent.trim()==='DOUBLE') { b.click(); found=true; }
+        });
+        if (!found) btns.forEach(function(b){
+          if(b.textContent.trim()==='NOVÁ HRA') b.click();
+        });
+      }
+    }
+    // Space = DEAL / NOVÁ HRA
+    if (e.code === 'Space') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        btns.forEach(function(b){
+          if(b.textContent.trim()==='ROZDAJ KARTY' || b.textContent.trim()==='NOVÁ HRA') b.click();
+        });
+      }
+    }
+  }
+});
+
 
 // ── Initial render ───────────────────────────────────────────────
 Renderer.updateMoney();
@@ -6687,6 +6883,8 @@ var Casino = (function() {
     var els = getOverlay();
     els.overlay.classList.remove('show');
     els.panel.innerHTML = '';
+    // Stop auto-spin if running
+    if (typeof Slots !== 'undefined' && Slots.stopAuto) Slots.stopAuto();
   }
 
   return { open: open, close: close };
@@ -6888,6 +7086,7 @@ function openBlackjack() {
         +'<div id="bj-actions-wrap">'
           +'<div class="bj-actions">'
             +'<button class="bj-btn" onclick="BJ.deal()">ROZDAJ KARTY</button>'
+          +'<div style="font-size:10px;color:var(--text-muted);margin-top:8px;text-align:center">[ ← ] HIT &nbsp;|&nbsp; [ ↓ ] STAND &nbsp;|&nbsp; [ → ] DOUBLE</div>'
             +'<button class="bj-btn danger" onclick="Casino.close()">ODÍSŤ</button>'
           +'</div>'
         +'</div>'
@@ -6901,10 +7100,8 @@ function openBlackjack() {
 /* ── SLOT MACHINE ──────────────────────────────────────────────── */
 var Slots = (function() {
   var SYMBOLS = ['🍒','🍋','🔔','⭐','💎','7️⃣','🍀','🎱'];
-  var WEIGHTS  = [30,  25,  20,  12,   8,   3,   15,  10];  // higher = more common
-  var PAYOUTS = {
-    '💎': 50, '7️⃣': 30, '⭐': 20, '🍀': 15, '🔔': 10, '🍋': 6, '🍒': 4, '🎱': 8
-  };
+  var WEIGHTS  = [30,  25,  20,  12,   8,   3,   15,  10];
+  var PAYOUTS  = {'💎':50,'7️⃣':30,'⭐':20,'🍀':15,'🔔':10,'🍋':6,'🍒':4,'🎱':8};
 
   function weightedRandom() {
     var total = WEIGHTS.reduce(function(a,b){return a+b;},0);
@@ -6914,81 +7111,127 @@ var Slots = (function() {
   }
 
   var spinning = false;
+  var autoInterval = null;
   var currentBet = 10;
+
+  // Reel ticker animation — cycles through random symbols rapidly
+  function animateReel(el, durationMs, finalSym, cb) {
+    var start = Date.now();
+    var speed = 60; // ms per frame
+    var t = setInterval(function(){
+      el.textContent = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
+      if (Date.now() - start >= durationMs - speed) {
+        clearInterval(t);
+        el.textContent = finalSym;
+        el.classList.remove('spinning');
+        if (cb) cb();
+      }
+    }, speed);
+  }
+
+  function doSpin() {
+    if (spinning) return;
+    if (S.money < currentBet) {
+      addLog('Nedostatok kreditov pre stávku.','warn');
+      _pub.stopAuto();
+      return;
+    }
+    S.money -= currentBet;
+    Renderer.updateMoney();
+    spinning = true;
+
+    var reels = [
+      document.getElementById('reel0'),
+      document.getElementById('reel1'),
+      document.getElementById('reel2'),
+    ];
+    var result = document.getElementById('slots-result');
+    result.textContent = '⟳';
+    result.className = 'slots-result';
+    reels.forEach(function(r){ r.classList.add('spinning'); });
+
+    var final = [weightedRandom(), weightedRandom(), weightedRandom()];
+    // Staggered stop: reel 0 stops first, then 1, then 2
+    var stopped = 0;
+    var durations = [700, 1100, 1500];
+    reels.forEach(function(r, i){
+      animateReel(r, durations[i], final[i], function(){
+        stopped++;
+        if (stopped === 3) evaluate(final, reels, result);
+      });
+    });
+  }
+
+  function evaluate(final, reels, result) {
+    spinning = false;
+    var a = final[0], b2 = final[1], c2 = final[2];
+    var payout = 0, msg = '', cls = 'lose';
+
+    if (a===b2 && b2===c2) {
+      var mult = PAYOUTS[a] || 5;
+      payout = currentBet * mult;
+      msg = a==='💎' ? '💎💎💎 JACKPOT! +'+payout+'₿' : a+a+a+' TROJKA! +'+payout+'₿';
+      cls = a==='💎' ? 'jackpot' : 'win';
+      reels.forEach(function(r){ r.classList.add('win-reel'); });
+      gainXP(5);
+    } else if (a===b2 || b2===c2 || a===c2) {
+      var pairSym = (a===b2)?a:(b2===c2?b2:a);
+      var pairMult = Math.max(1, Math.floor((PAYOUTS[pairSym]||4)/3));
+      payout = currentBet * pairMult;
+      msg = pairSym+pairSym+' PÁR — Výhra: '+payout+'₿';
+      cls = payout >= currentBet ? 'win' : 'lose';
+    } else {
+      msg = 'Žiadna výhra. -'+currentBet+'₿';
+      cls = 'lose';
+    }
+    reels.forEach(function(r){ r.classList.remove('win-reel'); });
+    if (cls==='win'||cls==='jackpot') reels.forEach(function(r){ r.classList.add('win-reel'); });
+
+    S.money = Math.max(0, S.money + payout);
+    Renderer.updateMoney();
+    if (payout > 0) addLog('Sloty: Výhra '+payout+'₿ | '+msg,'ok');
+    else            addLog('Sloty: Prehral si '+currentBet+'₿','warn');
+
+    result.textContent = msg;
+    result.className = 'slots-result '+cls;
+    var bal = document.getElementById('slots-balance');
+    if(bal) bal.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+currentBet+'₿';
+
+    // if auto is running, schedule next spin
+    if (autoInterval === 'running') {
+      autoInterval = setTimeout(function(){ doSpin(); }, 400);
+    }
+  }
 
   var _pub = {
     setBet: function(v) {
       currentBet = v;
       var b = document.getElementById('slots-balance');
       if(b) b.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+v+'₿';
-      // update chip highlight
-      document.querySelectorAll('.slots-chip').forEach(function(c){ c.classList.toggle('active', parseInt(c.dataset.v)===v); });
+      document.querySelectorAll('.slots-chip').forEach(function(c){
+        c.classList.toggle('active', parseInt(c.dataset.v)===v);
+      });
     },
 
-    spin: function() {
-      if (spinning) return;
-      if (S.money < currentBet) { addLog('Nedostatok kreditov pre stávku.','warn'); return; }
-      S.money -= currentBet;
-      Renderer.updateMoney();
-      spinning = true;
+    spin: function() { doSpin(); },
 
-      var reels = [
-        document.getElementById('reel0'),
-        document.getElementById('reel1'),
-        document.getElementById('reel2'),
-      ];
-      var result = document.getElementById('slots-result');
-      result.textContent = '';
-      result.className = 'slots-result';
+    startAuto: function() {
+      if (autoInterval) return;
+      autoInterval = 'running';
+      var btn = document.getElementById('slots-auto-btn');
+      if(btn){ btn.textContent='⏹ STOP AUTO'; btn.classList.add('auto-active'); }
+      doSpin();
+    },
 
-      reels.forEach(function(r){ r.classList.add('spinning'); r.textContent='⁉️'; });
+    stopAuto: function() {
+      if (autoInterval && autoInterval !== 'running') clearTimeout(autoInterval);
+      autoInterval = null;
+      var btn = document.getElementById('slots-auto-btn');
+      if(btn){ btn.textContent='🔁 AUTO'; btn.classList.remove('auto-active'); }
+    },
 
-      var final = [weightedRandom(), weightedRandom(), weightedRandom()];
-      var delays = [600, 900, 1200];
-
-      delays.forEach(function(d, i){
-        setTimeout(function(){
-          reels[i].classList.remove('spinning');
-          reels[i].textContent = final[i];
-          reels[i].classList.remove('win-reel');
-        }, d);
-      });
-
-      setTimeout(function(){
-        spinning = false;
-        // S.money already has bet deducted. We add back (bet + profit) on win, nothing on loss
-        var payout = 0;
-        if (a===b2 && b2===c2) {
-          var mult2 = PAYOUTS[a] || 5;
-          payout = currentBet * mult2; // total payout (not including bet back)
-          delta = payout;
-          msg = a==='💎' ? '💎💎💎 JACKPOT! +'+payout+'₿' : a+a+a+' TROJKA! +'+payout+'₿';
-          cls = a==='💎' ? 'jackpot' : 'win';
-          reels.forEach(function(r){ r.classList.add('win-reel'); });
-          gainXP(5);
-        } else if (a===b2 || b2===c2 || a===c2) {
-          var pairSym2 = (a===b2)?a:(b2===c2?b2:a);
-          var pairMult2 = Math.max(1, Math.floor((PAYOUTS[pairSym2]||4)/3));
-          payout = currentBet * pairMult2;
-          delta = payout - currentBet; // net profit (could be negative)
-          msg = pairSym2+pairSym2+' PÁR — Výhra: '+payout+'₿';
-          cls = payout >= currentBet ? 'win' : 'lose';
-        } else {
-          msg = 'Žiadna výhra. -'+currentBet+'₿';
-          cls = 'lose';
-          payout = 0;
-        }
-        // Add payout (on no-win payout=0, bet already gone)
-        S.money = Math.max(0, S.money + payout);
-        Renderer.updateMoney();
-        if (payout > 0) addLog('Sloty: Výhra '+payout+'₿ | '+msg,'ok');
-        else addLog('Sloty: Prehral si '+currentBet+'₿','warn');
-
-        result.textContent = msg;
-        result.className = 'slots-result '+cls;
-        var bal = document.getElementById('slots-balance');
-        if(bal) bal.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+currentBet+'₿';
-      }, 1400);
+    toggleAuto: function() {
+      if (autoInterval) _pub.stopAuto(); else _pub.startAuto();
     }
   };
   return _pub;
@@ -7017,12 +7260,12 @@ function openSlots() {
         +'<button class="slots-chip bj-bet-chip" data-v="50" onclick="Slots.setBet(50)">50₿</button>'
         +'<button class="slots-chip bj-bet-chip" data-v="100" onclick="Slots.setBet(100)">100₿</button>'
       +'</div>'
-      +'<button class="slots-spin-btn" onclick="Slots.spin()">⚡ TOČIŤ ⚡</button>'
-    +'</div>'
-  );
-  Slots.setBet(10);
-}
+      +'<div class="slots-btn-row">'        +'<button class="slots-spin-btn" id="slots-spin-btn" onclick="Slots.spin()">⚡ TOČIŤ ⚡</button>'        +'<button class="slots-auto-btn bj-btn" id="slots-auto-btn" onclick="Slots.toggleAuto()">🔁 AUTO</button>'      +'</div>'      +'<div class="slots-hint" style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:6px">[SPACE] = Točiť</div>'    +'</div>'  );  Slots.setBet(10);}
 
+
+function escH(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
 function safeHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'\x01').replace(/>/g,'\x02')
