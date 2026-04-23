@@ -23,11 +23,11 @@
   --green3:     #16a34a;
   --green4:     #4ade80;
   --green-dim:  rgba(57,255,20,0.08);
-  --dim:        #2d5a2d;
-  --dimmer:     #1a3a1a;
-  --border:     #1a3a1a;
-  --border2:    #0e200e;
-  --border-hi:  #2a5a2a;
+  --dim:        #4a8a4a;
+  --dimmer:     #2e6a2e;
+  --border:     #2a5a2a;
+  --border2:    #1a3a1a;
+  --border-hi:  #3a7a3a;
   --border-gold:#1a3a1a;
   --border-glow:#1a3a1a;
   --gold:       #facc15;
@@ -46,17 +46,17 @@
   --purple:     #a855f7;
   --warn:       #f59e0b;
   --danger:     #ef4444;
-  --text:       #5dde80;
-  --text-bright:#c2f0cc;
-  --text-dim:   #2d5a2d;
-  --text-muted: #1a3a1a;
+  --text:       #7feba0;
+  --text-bright:#d8f8e0;
+  --text-dim:   #5a9a5a;
+  --text-muted: #3a6a3a;
   --font-body:  'Share Tech Mono', 'Courier New', monospace;
   --font-mono:  'Share Tech Mono', 'Courier New', monospace;
   --font-hud:   'Orbitron', 'Share Tech Mono', monospace;
-  --scene-fs:   15px;
-  --choice-fs:  14px;
-  --hud-fs:     11px;
-  --log-fs:     11px;
+  --scene-fs:   16px;
+  --choice-fs:  15px;
+  --hud-fs:     12px;
+  --log-fs:     12px;
   --shadow-panel: 0 4px 24px rgba(0,0,0,0.6);
   --shadow-gold:  0 0 16px rgba(57,255,20,0.2);
   --shadow-blue:  0 0 16px rgba(34,211,238,0.15);
@@ -67,9 +67,9 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.6;
-  letter-spacing: 0.2px;
+  font-size: 15px;
+  line-height: 1.65;
+  letter-spacing: 0.3px;
   overflow-x: hidden;
 }
 body::before {
@@ -210,6 +210,11 @@ a:hover { color: #fff; }
   color: var(--green); letter-spacing: 3px;
   text-shadow: 0 0 14px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.2);
   flex-shrink: 0; white-space: nowrap;
+  text-decoration: none; cursor: pointer; transition: color 0.15s, text-shadow 0.15s;
+}
+#topbar-title:hover {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(57,255,20,0.9), 0 0 40px rgba(57,255,20,0.5);
 }
 #topbar-tabs { display: flex; gap: 2px; flex: 1; }
 .tab-btn {
@@ -336,7 +341,7 @@ a:hover { color: #fff; }
 .stat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
 .stat-row:last-child { margin-bottom: 0; }
 .stat-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; filter: drop-shadow(0 0 4px currentColor); }
-.stat-label { font-size: var(--hud-fs); font-family: var(--font-body); font-weight: 700; color: var(--text-dim); letter-spacing: 1px; min-width: 32px; }
+.stat-label { font-size: var(--hud-fs); font-family: var(--font-body); font-weight: 700; color: #6aaa6a; letter-spacing: 1px; min-width: 32px; }
 .stat-bar-wrap { flex: 1; height: 8px; background: var(--bg); border: 1px solid var(--border2); overflow: hidden; border-radius: 2px; position: relative; }
 .stat-bar-wrap::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%; background: rgba(255,255,255,0.04); border-radius: 2px 2px 0 0; pointer-events: none; }
 .stat-bar { height: 100%; transition: width 0.4s, background 0.4s; border-radius: 1px; }
@@ -360,7 +365,7 @@ a:hover { color: #fff; }
 /* ── INCOME ── */
 .income-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border2); }
 .income-row:last-child { border-bottom: none; }
-.income-label { font-size: 12px; color: var(--text-dim); font-family: var(--font-body); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+.income-label { font-size: 12px; color: #6aaa6a; font-family: var(--font-body); font-weight: 500; display: flex; align-items: center; gap: 5px; }
 .income-label-icon { font-size: 13px; }
 .income-val   { font-size: 11px; color: var(--warn); font-family: var(--font-hud); }
 .income-total { font-size: 12px; color: var(--gold); font-family: var(--font-hud); font-weight: 700; }
@@ -472,8 +477,8 @@ a:hover { color: #fff; }
 .dialog-npc-bubble i { color: var(--text-dim); font-style: normal; font-size: 12px; display: block; margin-top: 4px; border-top: 1px solid var(--border2); padding-top: 4px; }
 .dialog-narration {
   margin: 8px 16px 4px 16px; padding: 8px 12px;
-  font-size: 13px; line-height: 1.7; color: #7ab87a; font-family: var(--font-mono);
-  border-left: 2px solid var(--dimmer); background: rgba(0,8,0,0.4);
+  font-size: 14px; line-height: 1.75; color: #9ed4a0; font-family: var(--font-mono);
+  border-left: 2px solid var(--dimmer); background: rgba(0,10,0,0.5);
 }
 .dialog-narration b { color: var(--green4); font-weight: normal; }
 .dialog-narration i { color: var(--text-dim); font-style: italic; font-size: 11px; }
@@ -488,7 +493,7 @@ a:hover { color: #fff; }
 .choice-btn {
   display: flex; width: 100%; text-align: left; align-items: flex-start; gap: 0;
   background: transparent; border: none; border-bottom: 1px solid var(--border2);
-  color: #7ab87a; font-family: var(--font-mono); font-size: 13px; font-weight: normal;
+  color: #9ed4a0; font-family: var(--font-mono); font-size: 14px; font-weight: normal;
   letter-spacing: 0.2px; line-height: 1.5; padding: 9px 6px; margin-bottom: 0;
   cursor: pointer; transition: background 0.08s, color 0.08s, border-color 0.08s; position: relative;
 }
@@ -496,7 +501,7 @@ a:hover { color: #fff; }
 .choice-btn .choice-num { display: inline-block; min-width: 22px; font-family: var(--font-hud); font-size: 10px; color: var(--green3); flex-shrink: 0; padding-top: 1px; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
 .choice-btn .choice-text { flex: 1; line-height: 1.5; }
 .choice-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: transparent; transition: background 0.08s; }
-.choice-btn:hover { color: #d4ffd4; background: rgba(57,255,20,0.06); }
+.choice-btn:hover { color: #eafff0; background: rgba(57,255,20,0.08); }
 .choice-btn:hover::before { background: var(--green); }
 .choice-btn:hover .choice-num { color: var(--green); text-shadow: 0 0 10px rgba(57,255,20,0.6); }
 .choice-btn:active { background: rgba(57,255,20,0.12); }
@@ -511,8 +516,8 @@ a:hover { color: #fff; }
   background: rgba(0,4,0,0.8); flex-shrink: 0;
   -webkit-overflow-scrolling: touch;
 }
-.log-line { font-family: var(--font-mono); font-size: var(--log-fs); padding: 2px 12px; color: var(--text-dim); letter-spacing: 0.5px; line-height: 1.5; }
-.log-line.ok   { color: var(--green3); }
+.log-line { font-family: var(--font-mono); font-size: var(--log-fs); padding: 2px 12px; color: #6aaa6a; letter-spacing: 0.5px; line-height: 1.5; }
+.log-line.ok   { color: #4ade80; }
 .log-line.warn { color: var(--warn); }
 .log-line.err  { color: var(--danger); }
 .log-line.info { color: var(--blue); }
@@ -577,7 +582,7 @@ a:hover { color: #fff; }
 .shop-item-icon { font-size: 20px; flex-shrink: 0; }
 .shop-item-name { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--text-bright); letter-spacing: 1px; flex: 1; }
 .shop-item-price { font-family: var(--font-hud); font-size: 11px; color: var(--gold); font-weight: 700; }
-.shop-item-desc { font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); line-height: 1.4; margin-bottom: 6px; }
+.shop-item-desc { font-size: 11px; color: #6aaa6a; font-family: var(--font-mono); line-height: 1.4; margin-bottom: 6px; }
 .shop-buy-btn { width: 100%; background: linear-gradient(180deg, var(--bg3), var(--bg)); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 5px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
 .shop-buy-btn:hover:not([disabled]) { background: rgba(57,255,20,0.06); border-color: var(--green3); color: var(--green); }
 .shop-buy-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
@@ -1069,7 +1074,7 @@ a:hover { color: #fff; }
      TOP BAR
 ═══════════════════════════════════════════════════ -->
 <div id="topbar">
-  <span id="topbar-title">⚔ CEO ZLA // LAZARUS</span>
+  <a href="https://zacharko.github.io/CEO-od-Evil/" id="topbar-title" title="Domovská stránka">⚔ CEO ZLA // LAZARUS</a>
   <div id="topbar-tabs">
     <button class="tab-btn active" onclick="switchView('game')">⚡ Operácia</button>
     <button class="tab-btn"        onclick="switchView('fish')">🎣 Rybolov</button>
