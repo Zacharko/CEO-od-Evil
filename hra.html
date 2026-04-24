@@ -1,10 +1,10 @@
-<!DOCTYPE HTML>
-<html lang="sk">
-<head>
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<!-- saved from url=(0043)file:///C:/Users/milos/Downloads/lazar.html -->
+<html lang="sk"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>CEO Zla // Operácia: LAZARUS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="./hra_files/css2" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════
    RESET & CSS VARIABLES
@@ -1052,23 +1052,165 @@ a:hover { color: #fff; }
 }
 .hw-dismiss-btn:hover { color:#fff; border-color:#fff; }
 
+
+/* ══ NEW SYSTEM CSS ══════════════════════════════════════════════════ */
+
+/* HACK VIEW */
+#hack-view { display:none; position:fixed; inset:0; z-index:700; padding-top:38px; background:var(--bg); }
+#hack-view.show { display:flex; flex-direction:column; }
+.hack-tab-bar { display:flex; border-bottom:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
+.hack-tab-btn { background:transparent; border:none; border-bottom:2px solid transparent; color:var(--text-dim);
+  font-family:var(--font-body); font-size:11px; font-weight:600; letter-spacing:1px; padding:8px 16px;
+  cursor:pointer; transition:all 0.12s; text-transform:uppercase; }
+.hack-tab-btn:hover { color:var(--blue); }
+.hack-tab-btn.active { color:var(--green); border-bottom-color:var(--green); }
+.hack-pane { display:none; flex:1; overflow-y:auto; padding:12px; }
+.hack-pane.active { display:block; }
+
+/* SERVER CARDS */
+.hack-server-card { background:var(--bg3); border:1px solid var(--border); margin-bottom:10px;
+  padding:10px 12px; transition:border-color 0.2s; }
+.hack-server-card.rooted { border-color:var(--green3); }
+.hack-server-card.locked { border-color:var(--border2); opacity:0.8; }
+.hack-srv-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.hack-srv-name { font-family:var(--font-mono); font-size:12px; color:var(--cyan); letter-spacing:1px; }
+.hack-srv-status { font-size:11px; font-weight:700; letter-spacing:1px; }
+.hack-srv-status.ok   { color:var(--green); }
+.hack-srv-status.warn { color:var(--warn); }
+.hack-srv-bars { margin-bottom:8px; }
+.hack-bar-row { display:flex; align-items:center; gap:6px; margin-bottom:4px; font-size:11px; color:var(--text-dim); }
+.hack-bar-wrap { flex:1; height:6px; background:var(--bg); border:1px solid var(--border2); overflow:hidden; }
+.hack-bar { height:100%; transition:width 0.5s; }
+.hack-bar.money { background:linear-gradient(90deg,var(--green3),var(--green)); }
+.hack-bar.sec   { background:linear-gradient(90deg,#450a0a,var(--danger)); }
+.hack-bar-label { font-family:var(--font-mono); font-size:10px; min-width:36px; text-align:right; }
+.hack-srv-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.hack-btn { background:transparent; border:1px solid; font-family:var(--font-body); font-size:11px;
+  font-weight:700; letter-spacing:2px; padding:4px 10px; cursor:pointer; transition:all 0.12s; }
+.hack-btn:disabled { opacity:0.35; cursor:not-allowed; }
+.hack-btn.nuke { border-color:var(--warn);      color:var(--warn);      }
+.hack-btn.nuke:not(:disabled):hover { background:rgba(245,158,11,0.12); }
+.hack-btn.hack { border-color:var(--green);     color:var(--green);     }
+.hack-btn.hack:hover { background:rgba(57,255,20,0.1); }
+.hack-btn.grow { border-color:var(--blue);      color:var(--blue);      }
+.hack-btn.grow:hover { background:rgba(34,211,238,0.1); }
+.hack-btn.weak { border-color:var(--purple);    color:var(--purple);    }
+.hack-btn.weak:hover { background:rgba(168,85,247,0.1); }
+.hack-empty { color:var(--text-muted); font-family:var(--font-mono); font-size:11px; padding:20px; text-align:center; }
+
+/* SCRIPT CARDS */
+.script-card { background:var(--bg3); border:1px solid var(--border2); margin-bottom:8px; padding:10px 12px; transition:border-color 0.2s; }
+.script-card.running { border-color:var(--green); animation:scriptPulse 2s ease-in-out infinite; }
+.script-card.owned   { border-color:var(--border); }
+.script-card.locked  { opacity:0.4; }
+@keyframes scriptPulse { 0%,100%{border-color:var(--green);} 50%{border-color:var(--green3);} }
+.script-name { font-family:var(--font-mono); font-size:12px; color:var(--cyan); margin-bottom:4px; }
+.script-desc { font-size:11px; color:var(--text-dim); margin-bottom:4px; }
+.script-meta { font-size:10px; color:var(--text-muted); margin-bottom:8px; }
+.script-btn  { background:transparent; border:1px solid; font-family:var(--font-body); font-size:11px; font-weight:700;
+  letter-spacing:1px; padding:4px 12px; cursor:pointer; transition:all 0.12s; width:100%; }
+.script-btn.buy-btn   { border-color:var(--gold);   color:var(--gold);   }
+.script-btn.buy-btn:hover { background:rgba(250,204,21,0.1); }
+.script-btn.start-btn { border-color:var(--green);  color:var(--green);  }
+.script-btn.start-btn:hover { background:rgba(57,255,20,0.1); }
+.script-btn.stop-btn  { border-color:var(--danger); color:var(--danger); }
+.script-btn.stop-btn:hover { background:rgba(239,68,68,0.1); }
+.script-locked-msg { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); padding:4px 0; }
+
+/* CORP CARDS */
+.corp-card { background:var(--bg3); border:1px solid var(--border2); margin-bottom:10px; padding:12px; transition:border-color 0.2s; }
+.corp-card.owned  { border-color:var(--blue3); }
+.corp-card.locked { opacity:0.4; }
+.corp-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.corp-name   { font-family:var(--font-hud); font-size:12px; color:var(--text-bright); letter-spacing:2px; }
+.corp-income { font-family:var(--font-mono); font-size:12px; color:var(--green); font-weight:700; }
+.corp-desc   { font-size:11px; color:var(--text-dim); margin-bottom:8px; }
+.corp-locked-msg { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); }
+.corp-buy-btn { background:transparent; border:1px solid var(--gold); color:var(--gold); font-family:var(--font-body);
+  font-size:11px; font-weight:700; letter-spacing:1px; padding:5px 16px; cursor:pointer; transition:all 0.12s; width:100%; }
+.corp-buy-btn:hover { background:rgba(250,204,21,0.1); }
+.corp-upgrades { border-top:1px solid var(--border2); padding-top:8px; }
+.corp-upgrade { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.corp-upgrade.owned-up { opacity:0.6; }
+.up-name  { flex:1; font-size:11px; color:var(--text); }
+.up-bonus { font-family:var(--font-mono); font-size:10px; color:var(--green3); min-width:48px; text-align:right; }
+.up-btn   { background:transparent; border:1px solid var(--border-hi); color:var(--text-dim); font-family:var(--font-body);
+  font-size:10px; padding:3px 8px; cursor:pointer; transition:all 0.12s; white-space:nowrap; }
+.up-btn:hover { border-color:var(--green); color:var(--green); }
+.up-done  { color:var(--green); font-size:14px; }
+
+/* TERMINAL */
+.terminal-wrap { display:flex; flex-direction:column; height:100%; background:var(--bg); }
+#terminal-output { flex:1; overflow-y:auto; font-family:var(--font-mono); font-size:11px; padding:10px;
+  color:var(--text); white-space:pre-wrap; line-height:1.6; }
+.t-line { margin:1px 0; }
+.t-prompt { color:var(--green); }
+.t-hi     { color:var(--cyan); }
+.t-ok     { color:var(--green); }
+.t-warn   { color:var(--warn); }
+.t-dim    { color:var(--text-dim); }
+.t-cmd    { color:var(--gold); background:rgba(250,204,21,0.08); padding:0 3px; }
+.terminal-input-row { display:flex; gap:6px; padding:8px 10px; border-top:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
+#terminal-input { flex:1; background:transparent; border:none; border-bottom:1px solid var(--green3);
+  color:var(--green); font-family:var(--font-mono); font-size:12px; outline:none; padding:2px 4px; letter-spacing:1px; }
+#terminal-run { background:transparent; border:1px solid var(--green3); color:var(--green); font-family:var(--font-body);
+  font-size:11px; font-weight:700; letter-spacing:2px; padding:3px 12px; cursor:pointer; transition:all 0.12s; }
+#terminal-run:hover { background:rgba(57,255,20,0.1); }
+
+/* TOAST NOTIFICATIONS */
+#toast-container { position:fixed; bottom:60px; right:16px; z-index:9500; display:flex; flex-direction:column; gap:6px; width:280px; }
+.toast-item { background:var(--bg3); border:1px solid var(--border); padding:10px 14px;
+  font-family:var(--font-body); transform:translateX(110%); transition:transform 0.35s cubic-bezier(.4,0,.2,1), opacity 0.35s;
+  opacity:0; pointer-events:none; }
+.toast-item.toast-show { transform:translateX(0); opacity:1; }
+.toast-item.toast-ok   { border-left:3px solid var(--green); }
+.toast-item.toast-warn { border-left:3px solid var(--warn); }
+.toast-item.toast-info { border-left:3px solid var(--blue); }
+.toast-title { font-size:12px; font-weight:700; color:var(--text-bright); letter-spacing:1px; }
+.toast-body  { font-size:11px; color:var(--text-dim); margin-top:3px; line-height:1.5; }
+
+/* TIER BADGE */
+#tier-badge { font-family:var(--font-hud); font-size:10px; color:var(--cyan); letter-spacing:2px;
+  border:1px solid var(--blue3); padding:2px 8px; background:rgba(34,211,238,0.05); }
+
+/* CORP INCOME ROW */
+.income-row .income-corp { color:var(--blue); }
+
+/* GLITCH EFFECT */
+@keyframes glitchAnim {
+  0%   { transform:translate(0); }
+  20%  { transform:translate(-2px,1px); filter:hue-rotate(20deg); }
+  40%  { transform:translate(2px,-1px); filter:hue-rotate(-20deg); }
+  60%  { transform:translate(-1px,2px); }
+  80%  { transform:translate(1px,-2px); filter:hue-rotate(15deg); }
+  100% { transform:translate(0); filter:none; }
+}
+body.glitch-active  { animation:glitchAnim 0.6s steps(3) forwards; }
+body.tier-up-flash  { animation:glitchAnim 1.2s steps(5) forwards; box-shadow:inset 0 0 60px rgba(57,255,20,0.15); }
+
+/* HACK NAV BUTTON */
+.sidenav-btn[data-view="hack"] { }
+
+/* inc-corp row */
+#inc-corp-row { display:flex; align-items:center; justify-content:space-between; padding:3px 0; }
+
 </style>
 </head>
-<body>
+<body class="">
 
 <!-- ═══════════════════════════════════════════════════
      LOADING SCREEN (GameStateMachine: LOADING)
 ═══════════════════════════════════════════════════ -->
-<div id="loading-screen">
+<div id="loading-screen" class="hidden">
   <div class="loading-title">CEO ZLA // LAZARUS</div>
-  <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar"></div></div>
-  <div class="loading-status" id="loading-status">// INICIALIZÁCIA //</div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loading-bar" style="width: 100%;"></div></div>
+  <div class="loading-status" id="loading-status">// OPERÁCIA LAZARUS PRIPRAVENÁ //</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
      MAIN MENU (GameStateMachine: MAIN_MENU)
 ═══════════════════════════════════════════════════ -->
-<div id="main-menu">
+<div id="main-menu" class="">
   <div class="menu-title">⚔ CEO ZLA ⚔</div>
   <div class="menu-sub">// OPERÁCIA: LAZARUS //</div>
   <button class="menu-btn" id="menu-new-btn">[ NOVÁ HRA ]</button>
@@ -1082,20 +1224,22 @@ a:hover { color: #fff; }
 <div id="topbar">
   <a href="https://zacharko.github.io/CEO-od-Evil/" id="topbar-title" title="Domovská stránka">⚔ CEO ZLA // LAZARUS</a>
   <div id="topbar-tabs">
-    <button class="tab-btn active" onclick="switchView('game')">⚡ Operácia</button>
-    <button class="tab-btn"        onclick="switchView('fish')">🎣 Rybolov</button>
-    <button class="tab-btn"        onclick="switchView('boats')">⛵ Lode</button>
-    <button class="tab-btn"        onclick="switchView('garden')">🌱 Záhradka</button>
-    <button class="tab-btn"        onclick="switchView('uni')">🎓 Univerzita</button>
-    <button class="tab-btn"        onclick="switchView('gym')">💪 Gym</button>
-    <button class="tab-btn"        onclick="switchView('hq')">🏠 Základňa</button>
-    <button class="tab-btn"        onclick="switchView('shop')">🛒 Obchod</button>
+    <button class="tab-btn" onclick="switchView(&#39;game&#39;)">⚡ Operácia</button>
+    <button class="tab-btn" onclick="switchView(&#39;fish&#39;)">🎣 Rybolov</button>
+    <button class="tab-btn active" onclick="switchView(&#39;boats&#39;)">⛵ Lode</button>
+    <button class="tab-btn" onclick="switchView(&#39;garden&#39;)">🌱 Záhradka</button>
+    <button class="tab-btn" onclick="switchView(&#39;uni&#39;)">🎓 Univerzita</button>
+    <button class="tab-btn" onclick="switchView(&#39;gym&#39;)">💪 Gym</button>
+    <button class="tab-btn" onclick="switchView(&#39;hq&#39;)">🏠 Základňa</button>
+    <button class="tab-btn" onclick="switchView(&#39;shop&#39;)">🛒 Obchod</button>
+    <button class="tab-btn" onclick="openHackView()">💻 Hack</button>
   </div>
   <div id="topbar-right">
-    <span id="topbar-job" style="display:none">---</span>
+    <span id="topbar-job" style="">Ghost // Root</span>
     <span id="topbar-equip-badge" style="display:none;font-size:12px;letter-spacing:1px;color:var(--green3);border:1px solid var(--border);padding:2px 7px;font-family:var(--font-mono)"></span>
-    <span id="topbar-money">₿ 0</span>
-    <span id="topbar-clock">--:--:--</span>
+    <span id="tier-badge">T4 👑 CEO Zla</span>
+    <span id="topbar-money">₿ 15&nbsp;542&nbsp;439</span>
+    <span id="topbar-clock">22:32:58</span>
     <button class="top-micro-btn" onclick="saveGame()">💾 Uložiť</button>
     <button class="top-micro-btn" onclick="loadGame()">📂 Načítať</button>
     <button class="top-micro-btn" onclick="showMainMenu()">🏠 Menu</button>
@@ -1108,43 +1252,45 @@ a:hover { color: #fff; }
 <div id="main">
   <!-- LEFT NAV SIDEBAR -->
   <div id="left-nav">
-    <button class="sidenav-btn active" data-view="game" data-tip="Operácia" onclick="switchView('game')">⚡</button>
-    <button class="sidenav-btn" data-view="fish" data-tip="Rybolov" onclick="switchView('fish')">🎣</button>
-    <button class="sidenav-btn" data-view="boats" data-tip="Lode" onclick="switchView('boats')">⛵</button>
-    <button class="sidenav-btn" data-view="garden" data-tip="Záhradka" onclick="switchView('garden')">🌱</button>
+    <button class="sidenav-btn" data-view="game" data-tip="Operácia" onclick="switchView(&#39;game&#39;)">⚡</button>
+    <button class="sidenav-btn" data-view="fish" data-tip="Rybolov" onclick="switchView(&#39;fish&#39;)">🎣</button>
+    <button class="sidenav-btn active" data-view="boats" data-tip="Lode" onclick="switchView(&#39;boats&#39;)">⛵</button>
+    <button class="sidenav-btn" data-view="garden" data-tip="Záhradka" onclick="switchView(&#39;garden&#39;)">🌱</button>
     <div class="sidenav-divider"></div>
-    <button class="sidenav-btn" data-view="uni" data-tip="Univerzita" onclick="switchView('uni')">🎓</button>
-    <button class="sidenav-btn" data-view="gym" data-tip="Gym" onclick="switchView('gym')">💪</button>
+    <button class="sidenav-btn" data-view="uni" data-tip="Univerzita" onclick="switchView(&#39;uni&#39;)">🎓</button>
+    <button class="sidenav-btn" data-view="gym" data-tip="Gym" onclick="switchView(&#39;gym&#39;)">💪</button>
     <div class="sidenav-divider"></div>
-    <button class="sidenav-btn" data-view="hq" data-tip="Základňa" onclick="switchView('hq')">🏠</button>
-    <button class="sidenav-btn" data-view="shop" data-tip="Obchod" onclick="switchView('shop')">🛒</button>
+    <button class="sidenav-btn" data-view="hq" data-tip="Základňa" onclick="switchView(&#39;hq&#39;)">🏠</button>
+    <button class="sidenav-btn" data-view="shop" data-tip="Obchod" onclick="switchView(&#39;shop&#39;)">🛒</button>
+    <div class="sidenav-divider"></div>
+    <button class="sidenav-btn" data-view="hack" data-tip="Hacking" onclick="openHackView()">💻</button>
   </div>
 
   <!-- LEFT PANEL -->
   <div id="left-panel">
     <div id="left-scroll">
       <div class="panel-section">
-        <div class="panel-header" onclick="toggleSection('sec-stats')">
+        <div class="panel-header" onclick="toggleSection(&#39;sec-stats&#39;)">
           <span class="panel-header-title">Agent // Štatistiky</span>
           <span class="panel-header-toggle" id="toggle-sec-stats">▼</span>
         </div>
         <div class="panel-body" id="sec-stats">
           <div class="stat-row"><span class="stat-icon" style="color:#ef4444">❤️</span><span class="stat-label">HP</span><div class="stat-bar-wrap"><div class="stat-bar hp" id="bar-hp" style="width:100%"></div></div><span class="stat-val hp" id="val-hp">100</span></div>
-          <div class="stat-row"><span class="stat-icon" style="color:#f59e0b">🧠</span><span class="stat-label">SAN</span><div class="stat-bar-wrap"><div class="stat-bar san" id="bar-san" style="width:100%"></div></div><span class="stat-val san" id="val-san">100</span></div>
-          <div class="stat-row"><span class="stat-icon" style="color:#3b82f6">⭐</span><span class="stat-label">XP</span><div class="stat-bar-wrap"><div class="stat-bar xp" id="bar-xp" style="width:0%"></div></div><span class="stat-val xp" id="val-xp">0</span></div>
-          <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">🏆</span><span class="stat-label">LVL</span><div class="stat-bar-wrap" style="background:transparent;border-color:transparent"></div><span class="stat-val" style="color:var(--cyan)" id="val-level">1</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#f59e0b">🧠</span><span class="stat-label">SAN</span><div class="stat-bar-wrap"><div class="stat-bar san" id="bar-san" style="width: 85.31%;"></div></div><span class="stat-val san" id="val-san">85</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#3b82f6">⭐</span><span class="stat-label">XP</span><div class="stat-bar-wrap"><div class="stat-bar xp" id="bar-xp" style="width: 89%;"></div></div><span class="stat-val xp" id="val-xp">142</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">🏆</span><span class="stat-label">LVL</span><div class="stat-bar-wrap" style="background:transparent;border-color:transparent"></div><span class="stat-val" style="color:var(--cyan)" id="val-level">2</span></div>
           <div class="stat-divider"></div>
-          <div class="stat-row"><span class="stat-icon" style="color:#f97316">⚔️</span><span class="stat-label">SIL</span><div class="stat-bar-wrap"><div class="stat-bar str" id="bar-str" style="width:10%"></div></div><span class="stat-val str" id="val-str">10</span></div>
-          <div class="stat-row"><span class="stat-icon" style="color:#a78bfa">🤸</span><span class="stat-label">OHY</span><div class="stat-bar-wrap"><div class="stat-bar flex-s" id="bar-flex" style="width:10%"></div></div><span class="stat-val flex-s" id="val-flex">10</span></div>
-          <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">💾</span><span class="stat-label">HCK</span><div class="stat-bar-wrap"><div class="stat-bar hack-s" id="bar-hack" style="width:10%"></div></div><span class="stat-val hack-s" id="val-hack">10</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#f97316">⚔️</span><span class="stat-label">SIL</span><div class="stat-bar-wrap"><div class="stat-bar str" id="bar-str" style="width: 27.225%;"></div></div><span class="stat-val str" id="val-str">27</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#a78bfa">🤸</span><span class="stat-label">OHY</span><div class="stat-bar-wrap"><div class="stat-bar flex-s" id="bar-flex" style="width: 23.6%;"></div></div><span class="stat-val flex-s" id="val-flex">23</span></div>
+          <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">💾</span><span class="stat-label">HCK</span><div class="stat-bar-wrap"><div class="stat-bar hack-s" id="bar-hack" style="width: 100%;"></div></div><span class="stat-val hack-s" id="val-hack">100</span></div>
           <div class="stat-divider"></div>
           <div class="stat-row">
-            <span class="stat-icon" id="hunger-state-icon" style="color:#4ade80">🟢</span>
+            <span class="stat-icon" id="hunger-state-icon" style="color:#4ade80">🟠</span>
             <span class="stat-label" style="color:#4ade80;font-size:9px" title="Klesá pri každej voľbe">HLAD🍽</span>
             <div class="stat-bar-wrap">
-              <div class="stat-bar hunger-full" id="bar-hunger" style="width:100%;background:linear-gradient(90deg,#14532d,#16a34a,#4ade80)"></div>
+              <div class="stat-bar hunger-full" id="bar-hunger" style="width: 37%; background: linear-gradient(90deg, rgb(120, 53, 15), rgb(217, 119, 6), rgb(251, 191, 36));"></div>
             </div>
-            <span class="stat-val" style="color:#4ade80" id="val-hunger">100</span>
+            <span class="stat-val" style="color:#4ade80" id="val-hunger">37</span>
           </div>
           <div class="stat-row" style="opacity:0.6;font-size:9px;padding:0 8px 4px;color:var(--text-dim)">
             <span style="font-family:var(--font-mono);letter-spacing:1px">⚡ Hlad klesá pri VOĽBÁCH · SAN klesá časom</span>
@@ -1152,62 +1298,62 @@ a:hover { color: #fff; }
         </div>
       </div>
       <div class="panel-section">
-        <div class="panel-header" onclick="toggleSection('sec-income')">
+        <div class="panel-header" onclick="toggleSection(&#39;sec-income&#39;)">
           <span class="panel-header-title">Pasívny príjem</span>
           <span class="panel-header-toggle" id="toggle-sec-income">▼</span>
         </div>
         <div class="panel-body" id="sec-income">
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">💼</span>Zamestnanie</span><span class="income-val" id="inc-job">+0/s</span></div>
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">💻</span>Hackovanie</span><span class="income-val" id="inc-hack">+0/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">💼</span>Zamestnanie</span><span class="income-val" id="inc-job">+280/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">💻</span>Hackovanie</span><span class="income-val" id="inc-hack">+5/s</span></div>
           <div class="income-row"><span class="income-label"><span class="income-label-icon">🐟</span>Predaj rýb</span><span class="income-val" id="inc-fish">+0/s</span></div>
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">⛵</span>Lode</span><span class="income-val" id="inc-boats">+0/s</span></div>
+          <div class="income-row"><span class="income-label"><span class="income-label-icon">⛵</span>Lode</span><span class="income-val" id="inc-boats">+40/s</span></div>
           <div class="income-row"><span class="income-label"><span class="income-label-icon">⚡</span>Bonusový</span><span class="income-val" id="inc-bonus">+0/s</span></div>
-          <div class="income-row" style="border-top:1px solid var(--border2);margin-top:4px;padding-top:6px;"><span class="income-label" style="color:var(--text-bright);font-weight:700">📊 SPOLU</span><span class="income-total" id="inc-total">+0/s</span></div>
+          <div class="income-row" id="inc-corp-row"><span class="income-label"><span class="income-label-icon">🏢</span>Korporácie</span><span class="income-val" id="inc-corp">+8.0/s</span></div>
+          <div class="income-row" style="border-top:1px solid var(--border2);margin-top:4px;padding-top:6px;"><span class="income-label" style="color:var(--text-bright);font-weight:700">📊 SPOLU</span><span class="income-total" id="inc-total">+325/s</span></div>
         </div>
       </div>
       <div class="panel-section">
-        <div class="panel-header" onclick="toggleSection('sec-ops')">
+        <div class="panel-header" onclick="toggleSection(&#39;sec-ops&#39;)">
           <span class="panel-header-title">Operačné ciele</span>
           <span class="panel-header-toggle" id="toggle-sec-ops">▼</span>
         </div>
         <div class="panel-body" id="sec-ops">
-          <div class="op-flag" id="op-jaskyne"><div class="op-dot"></div><span class="op-name">🗺 Preskúmaj jaskyňu (+15xp)</span></div>
-          <div class="op-flag" id="op-5g"><div class="op-dot"></div><span class="op-name">📡 Vypni 5G vežu (Hlavný quest)</span></div>
-          <div class="op-flag" id="op-lazarus"><div class="op-dot"></div><span class="op-name">📁 Získaj spis OMEGA (+10xp)</span></div>
-          <div class="op-flag" id="op-druid"><div class="op-dot"></div><span class="op-name">🌿 Kontaktuj Druida</span></div>
+          <div class="op-flag active" id="op-jaskyne"><div class="op-dot active"></div><span class="op-name">🗺 Preskúmaj jaskyňu (+15xp)</span></div>
+          <div class="op-flag active" id="op-5g"><div class="op-dot active"></div><span class="op-name">📡 Vypni 5G vežu (Hlavný quest)</span></div>
+          <div class="op-flag active" id="op-lazarus"><div class="op-dot active"></div><span class="op-name">📁 Získaj spis OMEGA (+10xp)</span></div>
+          <div class="op-flag active" id="op-druid"><div class="op-dot active"></div><span class="op-name">🌿 Kontaktuj Druida</span></div>
         </div>
       </div>
       <div class="panel-section">
-        <div class="panel-header" onclick="toggleSection('sec-map')">
+        <div class="panel-header" onclick="toggleSection(&#39;sec-map&#39;)">
           <span class="panel-header-title">Mapa // Prievidza</span>
           <span class="panel-header-toggle" id="toggle-sec-map">▼</span>
         </div>
         <div class="panel-body" id="sec-map">
-          <pre class="minimap-grid">
-  ╔══ PRIEVIDZA A OKOLIE 2077 ══╗
+          <pre class="minimap-grid">  ╔══ PRIEVIDZA A OKOLIE 2077 ══╗
   ║ BOJNICKÁ OBLASŤ              ║
-  ║  🏰 <span class="node" onclick="enterLocation('bojnice')">Bojnický zámok</span>       ║
+  ║  🏰 <span class="node" onclick="enterLocation(&#39;bojnice&#39;)">Bojnický zámok</span>       ║
   ║  🔒 [Tunely] (zamknuté)      ║
-  ║  🏥 <span class="node" onclick="enterLocation('biotech')">Nem. / Biotech</span>       ║
+  ║  🏥 <span class="node" onclick="enterLocation(&#39;biotech&#39;)">Nem. / Biotech</span>       ║
   ╟──────────────────────────────╢
   ║ CENTRUM                       ║
-  ║  🚉 <span class="node" onclick="enterLocation('stanica')">Hl. Stanica</span>           ║
-  ║  ⛪ <span class="node" onclick="enterLocation('namestie')">Námestie / 5G</span>         ║
-  ║  🐟 <span class="node" onclick="enterLocation('miki')">Miki Bar ★</span>             ║
+  ║  🚉 <span class="node" onclick="enterLocation(&#39;stanica&#39;)">Hl. Stanica</span>           ║
+  ║  ⛪ <span class="node" onclick="enterLocation(&#39;namestie&#39;)">Námestie / 5G</span>         ║
+  ║  🐟 <span class="node" onclick="enterLocation(&#39;miki&#39;)">Miki Bar ★</span>             ║
   ╟──────────────────────────────╢
   ║ KORZO / JANTAR                ║
-  ║  🏬 <span class="node" onclick="enterLocation('korzo')">Korzo OC</span>               ║
-  ║  🟡 <span class="node" onclick="enterLocation('jantar')">Jantar Club</span>            ║
-  ║  💾 <span class="node" onclick="enterLocation('fri')">FIT — Baník</span>            ║
+  ║  🏬 <span class="node" onclick="enterLocation(&#39;korzo&#39;)">Korzo OC</span>               ║
+  ║  🟡 <span class="node" onclick="enterLocation(&#39;jantar&#39;)">Jantar Club</span>            ║
+  ║  💾 <span class="node" onclick="enterLocation(&#39;fri&#39;)">FIT — Baník</span>            ║
   ╟──────────────────────────────╢
   ║ ZÁHORIE / ZÁKLADŇA            ║
-  ║  🏋️ <span class="node" onclick="enterLocation('zagorska')">Gym Zagorská</span>         ║
-  ║  🌿 <span class="node" onclick="enterLocation('terasy')">Terasy</span>                ║
-  ║  🌲 <span class="node" onclick="enterLocation('lesopark')">Lesopark</span>             ║
-  ║  🏠 <span class="node" onclick="enterLocation('domov')">Základňa</span>              ║
+  ║  🏋️ <span class="node" onclick="enterLocation(&#39;zagorska&#39;)">Gym Zagorská</span>         ║
+  ║  🌿 <span class="node" onclick="enterLocation(&#39;terasy&#39;)">Terasy</span>                ║
+  ║  🌲 <span class="node" onclick="enterLocation(&#39;lesopark&#39;)">Lesopark</span>             ║
+  ║  🏠 <span class="node" onclick="enterLocation(&#39;domov&#39;)">Základňa</span>              ║
   ╟──────────────────────────────╢
   ║ OKOLIE                        ║
-  ║  📻 <span class="node" onclick="enterLocation('banovce')">Bánovce · 5G Sek. 7</span>  ║
+  ║  📻 <span class="node" onclick="enterLocation(&#39;banovce&#39;)">Bánovce · 5G Sek. 7</span>  ║
   ╚══════════════════════════════╝
           </pre>
         </div>
@@ -1219,108 +1365,108 @@ a:hover { color: #fff; }
   <div id="center-panel">
     <div id="scene-img-wrap">
       <div id="scene-topbar">
-        <span id="scene-loc-name">NAČÍTAVAM...</span>
+        <span id="scene-loc-name">Centrum // Prievidza 03:47</span>
         <span id="scene-loc-coords">48°46′N 18°37′E</span>
       </div>
-      <div id="scene-placeholder">
-        <div id="scene-placeholder-icon">🏙️</div>
-        <div id="scene-placeholder-label">Lokácia // Prievidza</div>
+      <div id="scene-placeholder" style="display: none; background-size: cover; background-position: center center; background-image: linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(7, 9, 13, 0.85) 100%), url(&quot;public/images/hra/miki.jpg&quot;);">
+        <div id="scene-placeholder-icon" style="display: none;">📻</div>
+        <div id="scene-placeholder-label">Miki Bar // Slot Machine</div>
       </div>
-      <img id="scene-photo" src="" alt="" onerror="this.style.display='none'"/>
+      <img id="scene-photo" src="./hra_files/namestie.jpg" alt="" onerror="this.style.display=&#39;none&#39;" style="display: block;">
       <div id="scene-photo-overlay"></div>
-      <div id="scene-loc-badge"></div>
+      <div id="scene-loc-badge">PRIEVIDZA // NOC</div>
     </div>
-    <div id="scene-text-wrap"></div>
-    <div id="choices-wrap"></div>
-    <div id="log-wrap"></div>
+    <div id="scene-text-wrap"><div class="dialog-narration">Hlavná ulica. Tristo metrov betónu a neonov, ktoré nikto nezapol.&lt;br&gt;Alzabox pri každom vchode — niektoré blikajú, niektoré sú rozbité, jeden má na skle&lt;br&gt;čierny sprej: "VIDÍME ŤA."&lt;br&gt;Na plote kostola — čerstvý nápis, ešte mokrý:</div><div class="dialog-npc-bubble" data-speaker="Centrum // Prievidza 03:47"><span class="npc-avatar">🌃</span><div>"PROJEKT 5G = BOJ PROTI SLOBODE"</div></div><div class="dialog-narration">Vedľa, iná ruka, iná farba:</div><div class="dialog-npc-bubble" data-speaker="Centrum // Prievidza 03:47"><span class="npc-avatar">🌃</span><div>"LAZARUS NÁS POČUJE. ALOBAL NEPOMÁHA."</div></div><div class="dialog-npc-bubble" data-speaker="Centrum // Prievidza 03:47"><span class="npc-avatar">🌃</span><div>// [VNEM] Dvaja nápisy, dve ruky, dve správy. Jeden z pisateľov vedel viac ako druhý.&lt;br&gt;// Alebo obaja vedeli rovnako málo — a to je horšie. //</div></div><div class="dialog-narration">Fontána v strede námestia. Nefunguje — voda zamrznutá do šedého prstencu.&lt;br&gt;Pri nej stojí žena. Čierna bunda, cigareta, pohľad upretý niekam za tvoje rameno.&lt;br&gt;Keď sa pozrie na teba, nie je to pohľad cudzinca. Je to pohľad niekoho, kto čakal.</div><div class="dialog-npc-bubble" data-speaker="Centrum // Prievidza 03:47"><span class="npc-avatar">🌃</span><div>"Nočná smena?" Hlas tichý. "Alebo niečo iné?"</div></div><div class="dialog-divider"></div></div>
+    <div id="choices-wrap"><div id="choices-label">// VOĽBY //</div><button class="choice-btn"><span class="choice-num">1.</span><span class="choice-text">„Čo sa tu deje?"</span></button><button class="choice-btn"><span class="choice-num">2.</span><span class="choice-text">Ignorovať — ísť na poštu</span></button><button class="choice-btn"><span class="choice-num">3.</span><span class="choice-text">Preskúmať nápisy</span></button></div>
+    <div id="log-wrap"><div class="log-line ok">&gt; [HACK] n00dles.prv — +8&nbsp;076₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +3&nbsp;061₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +5&nbsp;971₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +5&nbsp;803₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +9&nbsp;198₿ (95%)</div><div class="log-line warn">&gt; Psychická záťaž: SAN -10</div><div class="log-line info">&gt; 🧠 Psychická záťaž</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +4&nbsp;531₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +7&nbsp;401₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +5&nbsp;611₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +6&nbsp;523₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +3&nbsp;538₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +3&nbsp;175₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +4&nbsp;486₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +4&nbsp;632₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +8&nbsp;621₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +8&nbsp;162₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +5&nbsp;990₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +5&nbsp;469₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +8&nbsp;316₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +3&nbsp;550₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +6&nbsp;366₿ (95%)</div><div class="log-line warn">&gt; Psychická záťaž: SAN -10</div><div class="log-line info">&gt; 🧠 Psychická záťaž</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +6&nbsp;615₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +9&nbsp;862₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +3&nbsp;751₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +3&nbsp;959₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +2&nbsp;877₿ (95%)</div><div class="log-line ok">&gt; [HACK] n00dles.prv — +5&nbsp;964₿ (95%)</div></div>
   </div>
 
   <!-- RIGHT PANEL -->
   <div id="right-panel">
     <div id="inv-tab-bar">
-      <button class="inv-tab active" onclick="switchInvTab('items')">🎒 Predmety</button>
-      <button class="inv-tab"        onclick="switchInvTab('equip')">⚔️ Výstroj</button>
-      <button class="inv-tab"        onclick="switchInvTab('fish')">🐟 Ryby</button>
-      <button class="inv-tab"        onclick="switchInvTab('shop')">🛒 Obchod</button>
+      <button class="inv-tab" onclick="switchInvTab(&#39;items&#39;)">🎒 Predmety</button>
+      <button class="inv-tab active" onclick="switchInvTab(&#39;equip&#39;)">⚔️ Výstroj</button>
+      <button class="inv-tab" onclick="switchInvTab(&#39;fish&#39;)">🐟 Ryby</button>
+      <button class="inv-tab" onclick="switchInvTab(&#39;shop&#39;)">🛒 Obchod</button>
     </div>
-    <div class="inv-pane active" id="inv-pane-items">
-      <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
+    <div class="inv-pane" id="inv-pane-items">
+      <div id="inv-items-body"><div class="item-card"><div class="item-card-header"><span class="item-card-icon">🪖</span><span class="item-card-name">Vojenská čiapka + alobal</span></div><div class="item-card-desc">Dvojitá ochrana. SAN +5.</div></div><div class="item-card"><div class="item-card-header"><span class="item-card-icon">😷</span><span class="item-card-name">Plynová maska</span></div><div class="item-card-desc">Ochrana dýchacích ciest. SAN +3.</div></div><div class="item-card"><div class="item-card-header"><span class="item-card-icon">🥃</span><span class="item-card-name">Fľaša whisky</span></div><div class="item-card-desc">Obnoví 20 SAN. Jednorazová.</div><button class="item-card-use">⚡ Použiť</button></div></div>
     </div>
-    <div class="inv-pane" id="inv-pane-equip">
+    <div class="inv-pane active" id="inv-pane-equip">
       <div class="paperdoll-wrap">
         <div class="equip-col">
-          <div class="eq-slot-wrap"><label>Hlava</label><div class="eq-slot" id="eqslot-head" title="Prázdny slot" onclick="eqSlotClick('head')"></div><div class="eq-slot-name" id="eqslot-head-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Telo</label><div class="eq-slot" id="eqslot-body" title="Prázdny slot" onclick="eqSlotClick('body')"></div><div class="eq-slot-name" id="eqslot-body-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Nohavice</label><div class="eq-slot" id="eqslot-pants" title="Prázdny slot" onclick="eqSlotClick('pants')"></div><div class="eq-slot-name" id="eqslot-pants-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Hlava</label><div class="eq-slot filled" id="eqslot-head" title="Prázdny slot" onclick="eqSlotClick(&#39;head&#39;)">😷</div><div class="eq-slot-name" id="eqslot-head-name">Plynová maska</div></div>
+          <div class="eq-slot-wrap"><label>Telo</label><div class="eq-slot" id="eqslot-body" title="Prázdny slot" onclick="eqSlotClick(&#39;body&#39;)"></div><div class="eq-slot-name" id="eqslot-body-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Nohavice</label><div class="eq-slot" id="eqslot-pants" title="Prázdny slot" onclick="eqSlotClick(&#39;pants&#39;)"></div><div class="eq-slot-name" id="eqslot-pants-name">—</div></div>
         </div>
         <div class="paperdoll-center">
           <div style="width:72px;height:200px;background:linear-gradient(180deg,#050a05,#080d08);border-left:1px solid var(--border);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:48px;filter:drop-shadow(0 0 8px rgba(57,255,20,0.35))">🕵️</div>
           <div class="pd-label">AGENT</div>
         </div>
         <div class="equip-col">
-          <div class="eq-slot-wrap"><label>Zbraň</label><div class="eq-slot" id="eqslot-weapon" title="Prázdny slot" onclick="eqSlotClick('weapon')"></div><div class="eq-slot-name" id="eqslot-weapon-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Špeciálne</label><div class="eq-slot" id="eqslot-special" title="Prázdny slot" onclick="eqSlotClick('special')"></div><div class="eq-slot-name" id="eqslot-special-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Nástroj</label><div class="eq-slot" id="eqslot-feet" title="Prázdny slot" onclick="eqSlotClick('feet')"></div><div class="eq-slot-name" id="eqslot-feet-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Zbraň</label><div class="eq-slot" id="eqslot-weapon" title="Prázdny slot" onclick="eqSlotClick(&#39;weapon&#39;)"></div><div class="eq-slot-name" id="eqslot-weapon-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Špeciálne</label><div class="eq-slot" id="eqslot-special" title="Prázdny slot" onclick="eqSlotClick(&#39;special&#39;)"></div><div class="eq-slot-name" id="eqslot-special-name">—</div></div>
+          <div class="eq-slot-wrap"><label>Nástroj</label><div class="eq-slot" id="eqslot-feet" title="Prázdny slot" onclick="eqSlotClick(&#39;feet&#39;)"></div><div class="eq-slot-name" id="eqslot-feet-name">—</div></div>
         </div>
       </div>
       <div class="equip-stats-box">
         <div class="equip-stats-title">⚙ Aktívne bonusy výstroja</div>
-        <div id="equip-bonuses-list"></div>
+        <div id="equip-bonuses-list"><div class="equip-bonus-row"><span>😷 Plynová maska</span><span style="color:var(--green3)">SAN +3</span></div></div>
       </div>
       <div class="equip-hint">// Klikni na slot pre zloženie • Kúp v Obchode a nasaď tu //</div>
       <div class="equip-stats-box" style="margin-top:6px">
         <div class="equip-stats-title">📦 Predmety v inventári</div>
-        <div id="equip-available-list"></div>
+        <div id="equip-available-list"><button class="equip-avail-btn" onclick="equipItem(&#39;cap_alobal&#39;)">🪖 Vojenská čiapka + alobal<span style="font-size:9px;color:var(--text-muted);margin-left:auto">⊕ Nasadiť</span></button><button class="equip-avail-btn" onclick="unequipSlot(&#39;head&#39;)">😷 Plynová maska<span style="font-size:9px;color:var(--green3);margin-left:auto">✓ Nasadené</span></button></div>
       </div>
     </div>
     <div class="inv-pane" id="inv-pane-fish">
       <div id="inv-fish-body"><div class="inv-empty">// žiadne ryby //</div></div>
     </div>
     <div class="inv-pane" id="inv-pane-shop">
-      <div id="shop-body"></div>
+      <div id="shop-body"><div class="shop-section-label">🪖 Hlava</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🪖</span><span class="shop-item-name">Alobalová čiapka</span></div><span class="shop-item-price">₿100</span></div><div class="shop-item-desc">SAN +5 | Blokuje LAZARUS signály</div><button class="shop-buy-btn" onclick="equipItem(&#39;cap_alobal&#39;)">⊕ Nasadiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🥽</span><span class="shop-item-name">Tech vizír</span></div><span class="shop-item-price">₿2&nbsp;000</span></div><div class="shop-item-desc">HCK +10 | Augmentovaná realita</div><button class="shop-buy-btn" onclick="buyItem(&#39;visor_tech&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">😷</span><span class="shop-item-name">Profi plynová maska</span></div><span class="shop-item-price">₿800</span></div><div class="shop-item-desc">SAN +8 | Trieda CBRN ochrana</div><button class="shop-buy-btn" onclick="buyItem(&#39;gas_mask_pro&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">😷</span><span class="shop-item-name">Štandardná plynová maska <span style="font-size:9px;color:var(--green3)">[NASADENÉ]</span></span></div><span class="shop-item-price">₿350</span></div><div class="shop-item-desc">SAN +3 | Základná ochrana</div><button class="shop-buy-btn" onclick="unequipSlot(&#39;head&#39;)">✓ Nasadené — zložiť</button></div><div class="shop-section-label">🦺 Telo</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🦺</span><span class="shop-item-name">Kevlarová vesta</span></div><span class="shop-item-price">₿1&nbsp;500</span></div><div class="shop-item-desc">HP +20 | Balistická ochrana IIIA</div><button class="shop-buy-btn" onclick="buyItem(&#39;kevlar_vest&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🧥</span><span class="shop-item-name">Trenčkot</span></div><span class="shop-item-price">₿600</span></div><div class="shop-item-desc">SAN +10 | Psychologická ochrana</div><button class="shop-buy-btn" onclick="buyItem(&#39;trench_coat&#39;)">🛒 Kúpiť</button></div><div class="shop-section-label">🎒 Výbava</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🔦</span><span class="shop-item-name">Taktická baterka</span></div><span class="shop-item-price">₿80</span></div><div class="shop-item-desc">Potrebná pre jaskyne</div><button class="shop-buy-btn" onclick="buyItem(&#39;baterka&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🩹</span><span class="shop-item-name">Lekárnička</span></div><span class="shop-item-price">₿150</span></div><div class="shop-item-desc">HP +30 | Jednorazová</div><button class="shop-buy-btn" onclick="buyItem(&#39;medkit&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🥃</span><span class="shop-item-name">Fľaša whisky</span></div><span class="shop-item-price">₿120</span></div><div class="shop-item-desc">SAN +20 | Jednorazová</div><button class="shop-buy-btn" onclick="buyItem(&#39;flask&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🔪</span><span class="shop-item-name">Záchranný nôž</span></div><span class="shop-item-price">₿90</span></div><div class="shop-item-desc">Núdzový nástroj</div><button class="shop-buy-btn" onclick="buyItem(&#39;noze&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">📡</span><span class="shop-item-name">EMF detektor</span></div><span class="shop-item-price">₿400</span></div><div class="shop-item-desc">HCK +3 | Meranie LAZARUS frekvencií</div><button class="shop-buy-btn" onclick="buyItem(&#39;detektor&#39;)">🛒 Kúpiť</button></div><div class="shop-section-label">👖 Nohavice</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">👖</span><span class="shop-item-name">Cargo nohavice</span></div><span class="shop-item-price">₿200</span></div><div class="shop-item-desc">Inventár +5 slotov</div><button class="shop-buy-btn" onclick="buyItem(&#39;cargo_pants&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">👔</span><span class="shop-item-name">Nohavice od obleku</span></div><span class="shop-item-price">₿450</span></div><div class="shop-item-desc">SAN +3 | Charizma boost</div><button class="shop-buy-btn" onclick="buyItem(&#39;pants_suit&#39;)">🛒 Kúpiť</button></div><div class="shop-section-label">⚔️ Zbrane</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🏏</span><span class="shop-item-name">Teleskopický obušok</span></div><span class="shop-item-price">₿300</span></div><div class="shop-item-desc">SIL +15 | Pouličná zbraň</div><button class="shop-buy-btn" onclick="buyItem(&#39;weapon_baton&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🔫</span><span class="shop-item-name">Glock 19</span></div><span class="shop-item-price">₿2&nbsp;500</span></div><div class="shop-item-desc">SIL +25 | Licencovaná sidearm</div><button class="shop-buy-btn" onclick="buyItem(&#39;weapon_glock&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">⚡</span><span class="shop-item-name">Taser</span></div><span class="shop-item-price">₿700</span></div><div class="shop-item-desc">OHY +5 | Nenásilná možnosť</div><button class="shop-buy-btn" onclick="buyItem(&#39;weapon_taser&#39;)">🛒 Kúpiť</button></div><div class="shop-section-label">✨ Špeciálne</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">💻</span><span class="shop-item-name">PwnBox</span></div><span class="shop-item-price">₿3&nbsp;000</span></div><div class="shop-item-desc">HCK +15 | +50₿/s pasívne</div><button class="shop-buy-btn" onclick="buyItem(&#39;hack_pwnbox&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🧠</span><span class="shop-item-name">Neurálny prepoj</span></div><span class="shop-item-price">₿8&nbsp;000</span></div><div class="shop-item-desc">HCK +30 | Endgame item</div><button class="shop-buy-btn" onclick="buyItem(&#39;neural_link&#39;)">🛒 Kúpiť</button></div><div class="shop-section-label">⛵ Lode</div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🎣</span><span class="shop-item-name">Rybársky prút</span></div><span class="shop-item-price">₿100</span></div><div class="shop-item-desc">+5₿/s | Základný prút</div><button class="shop-buy-btn" onclick="buyItem(&#39;boat_fishing_rod&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🚣</span><span class="shop-item-name">Riečny čln</span></div><span class="shop-item-price">₿500</span></div><div class="shop-item-desc">+20₿/s | Malý čln</div><button class="shop-buy-btn" onclick="buyItem(&#39;boat_rowboat&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">⛵</span><span class="shop-item-name">Motorový čln</span></div><span class="shop-item-price">₿2&nbsp;000</span></div><div class="shop-item-desc">+80₿/s | Motorový</div><button class="shop-buy-btn" onclick="buyItem(&#39;boat_motor&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🚢</span><span class="shop-item-name">Rybársky trawler</span></div><span class="shop-item-price">₿8&nbsp;000</span></div><div class="shop-item-desc">+300₿/s | Trawler</div><button class="shop-buy-btn" onclick="buyItem(&#39;boat_trawler&#39;)">🛒 Kúpiť</button></div><div class="shop-item"><div class="shop-item-header"><div style="display:flex;align-items:center;gap:8px;flex:1"><span class="shop-item-icon">🏭</span><span class="shop-item-name">Rybárska továreň</span></div><span class="shop-item-price">₿35&nbsp;000</span></div><div class="shop-item-desc">+1200₿/s | Fabrika</div><button class="shop-buy-btn" onclick="buyItem(&#39;boat_factory&#39;)">🛒 Kúpiť</button></div></div>
     </div>
   </div>
 </div>
 
 <!-- OVERLAYS -->
-<div id="uni-overlay">
+<div id="uni-overlay" class="">
   <div class="training-header">🎓 Prievidza Univerzita</div>
   <div class="training-sub">Pasívne vzdelávanie — kurzy zvyšujú skilly automaticky</div>
-  <div id="uni-courses-grid" class="training-grid"></div>
+  <div id="uni-courses-grid" class="training-grid"><div class="course-card active-course"><div class="course-icon">💻</div><div class="course-name">Intro to Hacking</div><div class="course-desc">Základy sieťovej bezpečnosti.</div><div class="course-stats"><span class="course-stat">HCK +0.015/s</span></div><div class="course-cost">Úroveň: 1/5 | ₿900 | +0.015/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-intro_hacking" style="width: 37.5%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;intro_hacking&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card active-course"><div class="course-icon">🔓</div><div class="course-name">Advanced Exploitation</div><div class="course-desc">Buffer overflows, zero-days.</div><div class="course-stats"><span class="course-stat">HCK +0.04/s</span><span class="course-stat" style="color:var(--green3)">HCK 20+ req</span></div><div class="course-cost">Úroveň: 1/5 | ₿3&nbsp;600 | +0.040/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-advanced_exploit" style="width: 37.5%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;advanced_exploit&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card active-course"><div class="course-icon">👻</div><div class="course-name">Ghost Protocol</div><div class="course-desc">Neviditeľnosť v sieti.</div><div class="course-stats"><span class="course-stat">HCK +0.08/s</span><span class="course-stat" style="color:var(--green3)">HCK 50+ req</span></div><div class="course-cost">Úroveň: 1/3 | ₿17&nbsp;600 | +0.080/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-ghost_protocol" style="width: 92%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;ghost_protocol&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card active-course"><div class="course-icon">🧠</div><div class="course-name">Psychologická odolnosť</div><div class="course-desc">Mentálna odolnosť. SAN regen.</div><div class="course-stats"><span class="course-stat">SAN +0.02/s</span></div><div class="course-cost">Úroveň: 1/5 | ₿1&nbsp;280 | +0.020/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-psych_stability" style="width: 90.5%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;psych_stability&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card active-course"><div class="course-icon">⚠️</div><div class="course-name">Crisis Management</div><div class="course-desc">Riadenie kríz. SAN + HP.</div><div class="course-stats"><span class="course-stat">SAN +0.03/s</span><span class="course-stat" style="color:var(--green3)">SAN 30+ req</span></div><div class="course-cost">Úroveň: 1/4 | ₿5&nbsp;700 | +0.030/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-crisis_management" style="width: 34.5%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;crisis_management&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card active-course"><div class="course-icon">₿</div><div class="course-name">Fintech a Krypto</div><div class="course-desc">Blockchain investície. +Príjem.</div><div class="course-stats"><span class="course-stat">HCK +0.01/s</span><span class="course-stat">+5₿/s</span></div><div class="course-cost">Úroveň: 1/5 | ₿2&nbsp;550 | +0.010/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-fintech" style="width: 34.5%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;fintech&#39;)">[ AKTÍVNY — PAUZA ]</button></div></div>
 </div>
-<div id="gym-overlay">
+<div id="gym-overlay" class="">
   <div class="training-header">💪 Terasový Gym</div>
   <div class="training-sub">Fyzický tréning — pasívne zvyšuje silu a ohybnosť</div>
-  <div id="gym-courses-grid" class="training-grid"></div>
+  <div id="gym-courses-grid" class="training-grid"><div class="course-card active-course"><div class="course-icon">🥊</div><div class="course-name">Box</div><div class="course-desc">Priama sila a reflexy. SIL+</div><div class="course-stats"><span class="course-stat">SIL +0.025/s</span></div><div class="course-cost">Úroveň: 1/5 | ₿680 | +0.025/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-boxing" style="width: 73.5%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;boxing&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card active-course"><div class="course-icon">💪</div><div class="course-name">CrossFit</div><div class="course-desc">Všestranná kondícia. OHY + SIL.</div><div class="course-stats"><span class="course-stat">OHY +0.02/s</span></div><div class="course-cost">Úroveň: 1/5 | ₿1&nbsp;020 | +0.020/s</div><div class="course-progress-wrap"><div class="course-progress-bar" id="cprog-crossfit" style="width: 75%;"></div></div><button class="course-btn enrolled" onclick="unenrollCourse(&#39;crossfit&#39;)">[ AKTÍVNY — PAUZA ]</button></div><div class="course-card "><div class="course-icon">🤸</div><div class="course-name">Parkour</div><div class="course-desc">Mestský pohyb. OHY+</div><div class="course-stats"><span class="course-stat">OHY +0.04/s</span><span class="course-stat" style="color:var(--danger)">OHY 25+ req</span></div><div class="course-cost">Úroveň: 0/4 | ₿1&nbsp;200</div><button class="course-btn" disabled="">[ LOCKED — 25 req ]</button></div><div class="course-card "><div class="course-icon">🧘</div><div class="course-name">Meditácia</div><div class="course-desc">Vnútorný pokoj. SAN+</div><div class="course-stats"><span class="course-stat">SAN +0.015/s</span></div><div class="course-cost">Úroveň: 0/5 | ₿300</div><button class="course-btn" onclick="enrollCourse(&#39;meditation&#39;,GYM_COURSES)">[ ZAPÍSAŤ — ₿300 ]</button></div><div class="course-card "><div class="course-icon">💊</div><div class="course-name">Regeneračný tréning</div><div class="course-desc">HP regen protokol.</div><div class="course-stats"><span class="course-stat">HP +0.015/s</span></div><div class="course-cost">Úroveň: 0/5 | ₿700</div><button class="course-btn" onclick="enrollCourse(&#39;hp_recovery&#39;,GYM_COURSES)">[ ZAPÍSAŤ — ₿700 ]</button></div></div>
 </div>
-<div id="boats-overlay">
+<div id="boats-overlay" class="show">
   <div class="training-header">⛵ Flotila rybárskych lodí</div>
   <div class="training-sub">Klikni na loď = ručný rybolov • Vylepšuj pre pasívny príjem</div>
   <div class="fishing-clicker-wrap">
     <div class="clicker-title">// Ručný rybolov //</div>
-    <div class="clicker-boat" id="clicker-boat-emoji" onclick="boatClick(event)" title="Klikni pre rybolov!">🎣</div>
+    <div class="clicker-boat" id="clicker-boat-emoji" onclick="boatClick(event)" title="Klikni pre rybolov!">⛵</div>
     <div class="clicker-stats">
-      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-total-fish">0</span>Rýb celkom</div>
+      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-total-fish">12</span>Rýb celkom</div>
       <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-per-click">+1₿</span>Za klik</div>
-      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-passive">0₿/s</span>Pasívne</div>
+      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-passive">40₿/s</span>Pasívne</div>
     </div>
     <div class="clicker-hint">// Klikaj na emoji pre extra úlov • Vylepšuj lode pre väčší príjem //</div>
   </div>
   <div class="boats-section-title">⚓ Flotila — Kúp a vylepšuj</div>
-  <div id="boats-fleet-grid" class="boat-grid"></div>
+  <div id="boats-fleet-grid" class="boat-grid"><div class="boat-card owned"><div class="boat-card-top"><div class="boat-img-wrap" onclick="boatClick(event)" style="cursor:pointer"><span style="font-size:36px">🎣</span><div class="boat-click-label">KLIKNI!</div></div><div class="boat-info"><div class="boat-name">🎣 Rybársky prút</div><div class="boat-desc">undefined</div><div class="boat-income-badge">+2₿/s</div></div></div><div class="boat-upgrades"><div class="boat-upgrade-row"><div><div class="boat-upg-name">Lepší háčik <span style="color:var(--text-dim);font-size:11px">— +1₿/s</span></div><div style="font-size:8px;color:var(--gold)">+1₿/s | ₿400</div></div><div><button class="boat-upg-btn" onclick="upgradeFleetBoat(&#39;fishing_rod&#39;,&#39;better_hook&#39;)">[ KÚPIŤ ]</button></div></div><div class="boat-upgrade-row"><div><div class="boat-upg-name">Pro vlasec <span style="color:var(--text-dim);font-size:11px">— +3₿/s</span></div><div style="font-size:8px;color:var(--gold)">+3₿/s | ₿900</div></div><div><button class="boat-upg-btn" onclick="upgradeFleetBoat(&#39;fishing_rod&#39;,&#39;pro_line&#39;)">[ KÚPIŤ ]</button></div></div></div><button class="boat-buy-btn owned-btn" onclick="buyFleetBoat(&#39;fishing_rod&#39;)">✓ VLASTNÍŠ (ďalšia: ₿202)</button></div><div class="boat-card owned"><div class="boat-card-top"><div class="boat-img-wrap" onclick="boatClick(event)" style="cursor:pointer"><span style="font-size:36px">🚣</span><div class="boat-click-label">KLIKNI!</div></div><div class="boat-info"><div class="boat-name">🚣 Riečny čln</div><div class="boat-desc">undefined</div><div class="boat-income-badge">+8₿/s</div></div></div><div class="boat-upgrades"><div class="boat-upgrade-row"><div><div class="boat-upg-name">Lepšie veslá <span style="color:var(--text-dim);font-size:11px">— +4₿/s</span></div><div style="font-size:8px;color:var(--gold)">+4₿/s | ₿1&nbsp;500</div></div><div><button class="boat-upg-btn" onclick="upgradeFleetBoat(&#39;rowboat&#39;,&#39;oars_upgrade&#39;)">[ KÚPIŤ ]</button></div></div><div class="boat-upgrade-row"><div><div class="boat-upg-name">Základný sonar <span style="color:var(--text-dim);font-size:11px">— +10₿/s</span></div><div style="font-size:8px;color:var(--gold)">+10₿/s | ₿4&nbsp;000</div></div><div><button class="boat-upg-btn" onclick="upgradeFleetBoat(&#39;rowboat&#39;,&#39;sonar_basic&#39;)">[ KÚPIŤ ]</button></div></div></div><button class="boat-buy-btn owned-btn" onclick="buyFleetBoat(&#39;rowboat&#39;)">✓ VLASTNÍŠ (ďalšia: ₿1080)</button></div><div class="boat-card owned"><div class="boat-card-top"><div class="boat-img-wrap" onclick="boatClick(event)" style="cursor:pointer"><span style="font-size:36px">⛵</span><div class="boat-click-label">KLIKNI!</div></div><div class="boat-info"><div class="boat-name">⛵ Motorový čln</div><div class="boat-desc">undefined</div><div class="boat-income-badge">+30₿/s</div></div></div><div class="boat-upgrades"><div class="boat-upgrade-row"><div><div class="boat-upg-name">Turbo motor <span style="color:var(--text-dim);font-size:11px">— +15₿/s</span></div><div style="font-size:8px;color:var(--gold)">+15₿/s | ₿10&nbsp;000</div></div><div><button class="boat-upg-btn" onclick="upgradeFleetBoat(&#39;motorboat&#39;,&#39;turbo_engine&#39;)">[ KÚPIŤ ]</button></div></div><div class="boat-upgrade-row"><div><div class="boat-upg-name">Fish finder <span style="color:var(--text-dim);font-size:11px">— +30₿/s</span></div><div style="font-size:8px;color:var(--gold)">+30₿/s | ₿25&nbsp;000</div></div><div><button class="boat-upg-btn" onclick="upgradeFleetBoat(&#39;motorboat&#39;,&#39;fish_finder&#39;)">[ KÚPIŤ ]</button></div></div></div><button class="boat-buy-btn owned-btn" onclick="buyFleetBoat(&#39;motorboat&#39;)">✓ VLASTNÍŠ (ďalšia: ₿5400)</button></div><div class="boat-card "><div class="boat-card-top"><div class="boat-img-wrap" style="cursor:default"><span style="font-size:36px">🚢</span></div><div class="boat-info"><div class="boat-name">🚢 Rybársky trawler</div><div class="boat-desc">undefined</div></div></div><button class="boat-buy-btn " onclick="buyFleetBoat(&#39;trawler&#39;)">[ KÚP ZA ₿18&nbsp;000 ]</button></div><div class="boat-card "><div class="boat-card-top"><div class="boat-img-wrap" style="cursor:default"><span style="font-size:36px">🏭</span></div><div class="boat-info"><div class="boat-name">🏭 Rybárska továreň</div><div class="boat-desc">undefined</div></div></div><button class="boat-buy-btn " onclick="buyFleetBoat(&#39;factory_ship&#39;)">[ KÚP ZA ₿80&nbsp;000 ]</button></div></div>
 </div>
-<div id="garden-overlay">
+<div id="garden-overlay" class="">
   <div class="training-header">🌱 Záhradka</div>
   <div class="training-sub">Pestuj rastliny — pasívny príjem a špeciálne predmety</div>
-  <div id="garden-grid" class="garden-plot-grid"></div>
+  <div id="garden-grid" class="garden-plot-grid"><div class="garden-plot growing"><div class="garden-plot-emoji">🌱</div><div class="garden-plot-name">Cibuľka</div><div class="garden-plot-timer">49s</div><div class="garden-plot-status">+0.05₿/s</div></div><div class="garden-plot ready"><div class="garden-plot-emoji">🧅</div><div class="garden-plot-name">Cibuľka</div><div class="garden-plot-timer">HOTOVÉ!</div><div class="garden-plot-status">Klikni pre zber</div></div><div class="garden-plot growing"><div class="garden-plot-emoji">🌱</div><div class="garden-plot-name">Paradajka</div><div class="garden-plot-timer">1m 52s</div><div class="garden-plot-status">+0.1₿/s</div></div><div class="garden-plot empty"><div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div></div><div class="garden-plot empty"><div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div></div><div class="garden-plot empty"><div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div></div><div class="garden-plot empty"><div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div></div><div class="garden-plot empty"><div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div></div><div class="garden-plot empty"><div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div></div></div>
   <div class="garden-shop-title">🌿 Semienka na predaj</div>
-  <div id="garden-seed-shop" class="garden-seed-row"></div>
+  <div id="garden-seed-shop" class="garden-seed-row"><button class="garden-seed-btn" title="Pasívny príjem: +0.1₿/s"><span style="font-size:20px">🍅</span><span>Paradajka<br><span style="font-size:10px;color:var(--text-dim)">⏱ 2m 0s • Výnos: 100₿ • 🍽 25</span></span><span class="seed-cost">50₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.08₿/s"><span style="font-size:20px">🌿</span><span>Mäta<br><span style="font-size:10px;color:var(--text-dim)">⏱ 1m 30s • Výnos: 60₿ • 🍽 8</span></span><span class="seed-cost">30₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.05₿/s"><span style="font-size:20px">🧅</span><span>Cibuľka<br><span style="font-size:10px;color:var(--text-dim)">⏱ 1m 0s • Výnos: 45₿ • 🍽 12</span></span><span class="seed-cost">25₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.08₿/s"><span style="font-size:20px">🧄</span><span>Cesnak<br><span style="font-size:10px;color:var(--text-dim)">⏱ 1m 40s • Výnos: 75₿ • 🍽 10</span></span><span class="seed-cost">40₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.2₿/s"><span style="font-size:20px">🍓</span><span>Jahoda<br><span style="font-size:10px;color:var(--text-dim)">⏱ 3m 0s • Výnos: 160₿ • 🍽 30</span></span><span class="seed-cost">80₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.3₿/s"><span style="font-size:20px">🍄</span><span>Hríb<br><span style="font-size:10px;color:var(--text-dim)">⏱ 4m 0s • Výnos: 280₿ • 🍽 35</span></span><span class="seed-cost">130₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.5₿/s"><span style="font-size:20px">🍎</span><span>Jabloň<br><span style="font-size:10px;color:var(--text-dim)">⏱ 6m 0s • Výnos: 450₿ • 🍽 45</span></span><span class="seed-cost">200₿</span></button><button class="garden-seed-btn" title="Pasívny príjem: +0.15₿/s"><span style="font-size:20px">🌻</span><span>Slnečnica<br><span style="font-size:10px;color:var(--text-dim)">⏱ 2m 30s • Výnos: 130₿ • 🍽 18</span></span><span class="seed-cost">65₿</span></button></div>
 </div>
-<div id="hq-overlay">
+<div id="hq-overlay" class="">
   <div class="hq-topbar">
-    <button class="hq-tab-btn active" id="hq-tab-main" onclick="hqSwitchTab('main')"><span class="hq-tab-icon">🏠</span> Hlavná izba</button>
-    <button class="hq-tab-btn" id="hq-tab-train" onclick="hqSwitchTab('train')"><span class="hq-tab-icon">🥊</span> Tréningová</button>
-    <button class="hq-tab-btn" id="hq-tab-garden" onclick="hqSwitchTab('garden')"><span class="hq-tab-icon">🌿</span> Záhradka</button>
+    <button class="hq-tab-btn active" id="hq-tab-main" onclick="hqSwitchTab(&#39;main&#39;)"><span class="hq-tab-icon">🏠</span> Hlavná izba</button>
+    <button class="hq-tab-btn" id="hq-tab-train" onclick="hqSwitchTab(&#39;train&#39;)"><span class="hq-tab-icon">🥊</span> Tréningová</button>
+    <button class="hq-tab-btn" id="hq-tab-garden" onclick="hqSwitchTab(&#39;garden&#39;)"><span class="hq-tab-icon">🌿</span> Záhradka</button>
     <div class="hq-stats-strip" style="border-bottom:none;margin-left:auto">
       <div class="hq-stat-chip">HP/s: <span id="hq-stat-hpregen">+0</span></div>
       <div class="hq-stat-chip">SAN/s: <span id="hq-stat-sanregen">+0</span></div>
@@ -1333,27 +1479,27 @@ a:hover { color: #fff; }
       <div class="hq-room-layout">
         <div class="hq-room-visual" style="position:relative;">
           <div id="hq-rooms-mosaic" style="width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:var(--border2);padding:3px;">
-            <div id="main-room-spalna" onclick="hqSelectSubRoom('spalna')" class="hq-mosaic-cell" title="Spálňa" style="background-image:url('public/images/hra/spalna.jpg')">
+            <div id="main-room-spalna" onclick="hqSelectSubRoom(&#39;spalna&#39;)" class="hq-mosaic-cell" title="Spálňa" style="background-image: url(&quot;public/images/hra/spalna.jpg&quot;); outline: 3px solid var(--green);">
               <div class="hq-mosaic-label">🛏️ SPÁLŇA</div>
             </div>
-            <div id="main-room-kancelaria" onclick="hqSelectSubRoom('kancelaria')" class="hq-mosaic-cell" title="Kancelária" style="background-image:url('public/images/hra/kancelaria.jpg')">
+            <div id="main-room-kancelaria" onclick="hqSelectSubRoom(&#39;kancelaria&#39;)" class="hq-mosaic-cell" title="Kancelária" style="background-image: url(&quot;public/images/hra/kancelaria.jpg&quot;); outline: none;">
               <div class="hq-mosaic-label">💻 KANCELÁRIA</div>
             </div>
-            <div id="main-room-kuchyna" onclick="hqSelectSubRoom('kuchyna')" class="hq-mosaic-cell" title="Kuchyňa" style="background-image:url('public/images/hra/kuchyna.jpg')">
+            <div id="main-room-kuchyna" onclick="hqSelectSubRoom(&#39;kuchyna&#39;)" class="hq-mosaic-cell" title="Kuchyňa" style="background-image: url(&quot;public/images/hra/kuchyna.jpg&quot;); outline: none;">
               <div class="hq-mosaic-label">🍳 KUCHYŇA</div>
             </div>
-            <div class="hq-mosaic-cell hq-mosaic-base" style="background-image:url('public/images/hra/zakladna.jpg');cursor:default;">
+            <div class="hq-mosaic-cell hq-mosaic-base" style="background-image:url(&#39;public/images/hra/zakladna.jpg&#39;);cursor:default;">
               <div class="hq-mosaic-label" style="color:var(--text-dim)">// HQ //</div>
             </div>
           </div>
         </div>
         <div class="hq-room-panel">
           <div class="hq-room-panel-header">
-            <img src="public/images/hra/zakladna.jpg" alt="Základňa" id="hq-base-photo" style="width:100%;height:90px;object-fit:cover;border:1px solid var(--border);margin-bottom:8px;filter:saturate(0.4) brightness(0.7);display:block;">
+            <img src="file:///C:/Users/milos/Downloads/public/images/hra/spalna.jpg" alt="Základňa" id="hq-base-photo" style="width: 100%; height: 90px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 8px; filter: saturate(0.6) brightness(0.8); display: block;">
             <div class="hq-room-panel-title">🏠 ZÁKLADŇA</div>
             <div class="hq-room-panel-desc">Klikni na izbu v priestore vľavo pre aktivity a vylepšenia.</div>
           </div>
-          <div class="hq-panel-body" id="main-room-detail"><div style="text-align:center;padding:40px 0;color:#1a3a1a;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2px;line-height:2">◆ SPÁLŇA<br>◆ KANCELÁRIA<br>◆ KUCHYŇA<br><br><span style="font-size:8px;opacity:0.5">// Klikni na izbu //</span></div></div>
+          <div class="hq-panel-body" id="main-room-detail"><div class="hq-section-label">AKTIVITY</div><button class="hq-activity-btn" onclick="hqSleep()">😴 Spánok (HP +30, SAN +20, Hlad -10) <span style="color:var(--text-muted);font-size:10px">60s CD</span></button><button class="hq-activity-btn" onclick="hqRest()">🛌 Oddych (HP +10) <span style="color:var(--text-muted);font-size:10px">30s CD</span></button></div>
         </div>
       </div>
     </div>
@@ -1377,7 +1523,7 @@ a:hover { color: #fff; }
           <div class="hq-panel-body">
             <div id="garden-plot-info" style="display:none"><div class="hq-section-label">🌱 VYBRANÝ ZÁHON</div><div id="garden-plot-detail" class="plot-detail-box"></div></div>
             <div class="hq-section-label">🎒 SEMIENKA V INVENTÁRI</div>
-            <div id="garden-seed-inv" class="seed-inv-grid"><div style="color:#1a3a1a;font-size:10px;font-family:'Share Tech Mono',monospace">// Žiadne semienka — kúp v Obchode //</div></div>
+            <div id="garden-seed-inv" class="seed-inv-grid"><div style="color:#1a3a1a;font-size:10px;font-family:&#39;Share Tech Mono&#39;,monospace">// Žiadne semienka — kúp v Obchode //</div></div>
             <div class="hq-section-label" style="margin-top:8px">🌿 STAV ZÁHONOV</div>
             <div id="garden-plots-summary"></div>
             <button class="hq-activity-btn" style="margin-top:10px" onclick="gardenHarvestAll()">🌾 Zozbierať všetky zrelé</button>
@@ -1396,7 +1542,7 @@ a:hover { color: #fff; }
     <div class="fishing-header"><span>🎣 Rybolov // Vtáčnik</span><span id="fishing-timer" style="color:var(--text-dim);font-size:11px">--:--</span></div>
     <div id="fishing-canvas-wrap"><canvas id="fishing-canvas" width="336" height="200"></canvas></div>
     <div id="fishing-status">Čakáš na záber... Zahoď udicu!</div>
-    <button id="fishing-action-btn" onclick="fishingAction()">🎣 Zahoď udicu</button>
+    <button id="fishing-action-btn" onclick="fishingAction()">[ ZAHOĎ UDICU ]</button>
     <button id="fishing-close" onclick="closeFishing()">✕ Opustiť rieku</button>
   </div>
 </div>
@@ -1419,14 +1565,14 @@ a:hover { color: #fff; }
   </div>
 </div>
 
-<div id="notif"></div>
+<div id="notif" class="">&gt; ⭐ TIER 4: CEO Zla</div>
 
 <!-- MOBILE NAV -->
 <div id="mobile-nav">
-  <button class="mobile-nav-btn" onclick="mobilePanel('stats')">📊<span>Štatistiky</span></button>
-  <button class="mobile-nav-btn" onclick="mobilePanel('map')">🗺️<span>Mapa</span></button>
-  <button class="mobile-nav-btn" onclick="mobilePanel('inv')">🎒<span>Inventár</span></button>
-  <button class="mobile-nav-btn" onclick="mobilePanel('log')">📋<span>Log</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel(&#39;stats&#39;)">📊<span>Štatistiky</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel(&#39;map&#39;)">🗺️<span>Mapa</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel(&#39;inv&#39;)">🎒<span>Inventár</span></button>
+  <button class="mobile-nav-btn" onclick="mobilePanel(&#39;log&#39;)">📋<span>Log</span></button>
 </div>
 <div id="mobile-stats-panel" class="mobile-overlay-panel"></div>
 <div id="mobile-map-panel" class="mobile-overlay-panel"></div>
@@ -1434,12 +1580,12 @@ a:hover { color: #fff; }
 <div id="mobile-log-panel" class="mobile-overlay-panel"></div>
 
 <!-- JOB SELECT -->
-<div id="job-overlay">
+<div id="job-overlay" class="hidden">
   <div class="job-screen">
     <div class="job-title">⚔ CEO ZLA ⚔</div>
     <div class="job-sub">Vyber si svoju rolu — Operácia Lazarus</div>
     <div class="job-cards">
-      <div class="job-card" onclick="selectJob('thug')">
+      <div class="job-card" onclick="selectJob(&#39;thug&#39;)">
         <div class="job-card-icon">🥊</div>
         <div class="job-card-name">THUG</div>
         <div class="job-card-title">Pouličný vymáhač</div>
@@ -1453,7 +1599,7 @@ a:hover { color: #fff; }
         </div>
         <div class="job-card-growth">📈 Pouličný vymáhač → Bos → Don Prievidze</div>
       </div>
-      <div class="job-card" onclick="selectJob('hacker')">
+      <div class="job-card" onclick="selectJob(&#39;hacker&#39;)">
         <div class="job-card-icon">💻</div>
         <div class="job-card-name">HACKER</div>
         <div class="job-card-title">Kybernetický agent</div>
@@ -1467,7 +1613,7 @@ a:hover { color: #fff; }
         </div>
         <div class="job-card-growth">📈 Script Kiddie → Elite Hacker → Ghost // Root</div>
       </div>
-      <div class="job-card" onclick="selectJob('zastupca')">
+      <div class="job-card" onclick="selectJob(&#39;zastupca&#39;)">
         <div class="job-card-icon">💼</div>
         <div class="job-card-name">ZÁSTUPCA</div>
         <div class="job-card-title">Zástupca CEO Zla</div>
@@ -1495,7 +1641,7 @@ a:hover { color: #fff; }
    ╚══════════════════════════════════════════════════════════════╝
 ════════════════════════════════════════════════════════════════════ */
 var GameConfig = {
-  SAVE_KEY:              'ceozla-lazarus-v4',
+  SAVE_KEY:              'ceozla-lazarus-v5',
   TARGET_FPS:            60,
   TICK_INTERVAL_MS:      1000,      // passive income / attr ticks
   GARDEN_TICK_MS:        1000,
@@ -2528,36 +2674,42 @@ var SCENES = {
   // ║  // SCÉNA 001 // PRÍCHOD — Prievidza Hl. Stanica · 23:51    ║
   // ╚═══════════════════════════════════════════════════════════════╝
   sc_001_prichod: {
-    name: 'Prievidza Hl. Stanica // 23:51',
+    name: 'Prievidza Hlavná Stanica // 23:51',
     art: '🚉',
     text: [
-      'Vlak zastaví. Nevieš kedy presne si zaspal — niekde za Zlatými Moravcami.',
-      'Zobúdzaš sa na seba v okne: tmavé sklo, tvár ktorú poznáš ale nespoznávaš.',
-      'Tri roky Baku. Pred tým Tbilisi. Pred tým niečo čo radšej necháš za hranicou spomienok.',
+      "<b>DAEDALUS (AI):</b> „Dobré ráno, pán CEO. Vaša neurálna aktivita je stabilná. Práve sme vstúpili do orbitálneho priestoru nad <b>Prievidzou</b>. Pripravte sa na zostup.“<br><br>"
+      + "<i>(SANITY): Cítiš, ako sa ti sťahuje žalúdok. Po tých rokoch v Gruzínsku ti ten známy pach smogu a vlhkého betónu pripadá takmer... domácky. Takmer.</i><br><br>"
+      + "<b>DAEDALUS (AI):</b> „Máte prichádzajúci hovor z Okrsku 22. Šifrovanie typu 'Lazarus'. Prepájam zvukový výstup.“<br><br>"
+      + "<b>KUBO:</b> „Nazdar, šéfe! Vitaj späť v tom našom zapadákove. Počul som, že v Gruzínsku to bola poriadna divočina, ale ver mi, PD-Sektor je teraz iná liga.“<br><br>"
+      + "<b>KUBO:</b> „Počúvaj ma dobre. Chápem, že si sa vrátil po rokoch a tvoja prvá myšlienka je hodiť sa do kludu v <b>Základni</b>, pozdraviť starú partiu a dať si pivo. Ale nezabúdaj, prečo si tu.“<br><br>"
+      + "<b>KUBO:</b> „Misia je priorita. Magura tu vlastní každý centimeter. Sústreď sa, zlož sa v bezpečnom sektore a priprav si čipy. Veľa šťastia, brácho. Budeš ho potrebovať.“",
+      'Vlak zastaví. Nevieš kedy presne si zaspal ale takýto budíček si teda nečakal.',
+      'Pozeráš sa na svoju tvár v okne,ale nespoznávaš ju, tak velmi si sa zmenil, toľko vrások ti pribudlo.',
+      'Posraných 6 rokov v Tbilisi a pred tým 2 roky v Baku. Tak dlho som nevidel svojich blízkych, som zvedaví ako svoje zmiznutie vysvetlím keď väčšina vecí čo som robil je prísne klasifikovaných, o bojových športoch(+SIL) nevieš ľuďom čo nešportujú povedať veľa,',
       '',
-      'Dvere sa otvoria. Studený vzduch príde prvý.',
+      'Dvere sa otvoria a ženský AI hlas oznámi príchod. Studený vzduch ťa ovanie prvý, cítiš jemný zápach rýb a horiacej elektroniky, ako keby niekto prepaloval cievku.',
       '',
-      'Nástupište je prázdne. Jeden bezpečnostný dron M.E.C. sa pomaly otáča pod stropom,',
-      'červené oko mení uhol. A potom ho uvidíš.',
+      'Nástupište je prázdne. Jeden bezpečnostný dron M.E.C. (Magura Estate Corporation), z poza okna čakárne sleduješ ako sa pomaly otáča a sleduje z výšky stanicu, odhaduješ tak 30m.Tieto nové objektívy čo im nainštalovali zachytia fakt všetko.',
+      'A potom ho zbadáš.Nesvätí Behemot Stojaci v strede Autobusovej stanice, otravný Hologram s maximálnou hlasitostou ktoré dovoľuje norma ISO 2542069.',
       '',
-      '// [ALZABOX] NOVÝ BYT. NOVÝ ŽIVOT. — MAGURA ESTATE CORP. //',
+      '// [ALZÁK]: STO TABLETOV TÝžDENNE !!!, Už SÚ TU, 👽👽👽MIMOZEMSKÉ👽👽👽 NÁKUPY NA ALZA.SK !!!, 83 ROKOV OD PRISTÁTIA 🚀 ,LEGENDÁRNE CENY TAKÉTO ZĽAVY STE URčITE Už ZAžILI. ZVYšUJEME ICH TOTIž KVôLI VOJNE PROTI MLOKOM🦎. DÚFAM žE SA TEšíTE POMÁHAť N.W.O ROVNAKO AKO MY 🫶🏻 🤭 :)))//',
       '',
-      'Hologram. Päť metrov. Beztvárá figúra sa pomaly otočí smerom k tebe.',
-      'Vieš že ťa nevidí. Aj tak máš pocit, že ťa sleduje.',
+      'Hologram má asi tak 3 metre. Tento vyškerený mimozemšťan ti začína už fakt liezť na nervy.Praješ mu aby sa vrátil odkiaľ prišiel a radšej mimo zem Šťal. Tento vrchol korporátnej drzosti sa pomaly otočí smerom k tebe.',
+      'Vieš že ťa nevidí. Aj tak máš pocit, že ťa sleduje.(Hack:)Jeho LIDAR senzory nie sú dostatočne citlivé, AI sa ale už dávno naučilo kde sa o takejto hodine najviac ľudí zdržuje',
+      '(Konceptualizácia):Ako keby sa vyžíval tom pozerať ľuďom do duše. Možno toto je najlepšia marketingová stratégia, vytvoriť umelého Nepriateľa kde spojená nenávisť Konzumentov vedie k šíreniu povedomia o ňom.',
+      'Vyjdeš von, z loc_stanica_cakaren, tam kde si kupujes listky a je tam jeden automat co predava vychladeny Modry Powwerade, kedysi tam mali aj kondómy. Na chodníku je kaluž.Dažďová, ak sa tak dá nazvať, plytká, a plná oleja z cesty.',
+      'Žiariaci zelený hologram sa odráža v nej, roztrhaný na vlnách od tvojich krokov. Ani tu mu neunikneš.',
       '',
-      'Vyjdeš von. Na chodníku je kaluž — dažďová, plytká, naolejovaná z cesty.',
-      'Modrobiely hologram sa odráža v nej, roztrhaný na vlnách od tvojich krokov. Ani tu mu neunikneš.',
-      '',
-      '// [TRAS] Prievidza. Pamätáš ju inak. Menšiu. Teplejšiu. Mesto kde ľudia ešte vedeli mená susedov.',
+      '// [TRAS]:Prievidza. Pamätáš si ju inak. Menšiu. Prívetivejšiu. Mesto kde síce nevedeli ľudia mená susedov ale aspoň ich maly 10 rokov na Facebooku.',
       '// Čo sa stalo s tým mestom? Alebo — čo sa stalo s tebou? //',
       '',
-      '// [VNEM] Dron zaznamenal tvoj príchod. Nie aktívne sledovanie — pasívna registrácia.',
-      '// Niekde v databáze M.E.C. sa práve objavilo tvoje meno, čas, miesto. Niekto to môže nájsť. //',
+      '// [VNEM] Dron zaznamenal tvoj príchod. Nesleduje ťa síce aktívne ale zaregistroval ťa, doslovne už si v registry priradený XD',
+      '// Niekde v databáze M.E.C. sa práve objavilo tvoje meno, čas, miesto. Iba si pricestoval a už si všetci všimli tvoj príchod. Som zvedavý čo z toho bude. //',
       '',
-      '// [LOGIKA] Alzabox hologramy sú sieťové, nie lokálne. Centrálne riadené. Čo znamená že Magura',
-      '// vie presne kto stojí pred každým z nich. Pasívne biometrické skenovanie. Samozrejme. //',
+      '// [HACK]: Alzabox hologramy sú pripojené k sieti, nie sú lokálne.A ešte k tomu sú Centrálne riadené. Čo znamená že Magura Corp.',
+      '// vie presne kto stojí pred každým z nich. Pasívne biometrické skenovanie je v tejto dobe Samozrejmosť. //',
       '',
-      '// ▼ HLAD −5 · 📍 Prievidza odomknutá //',
+      '// ▼ HLAD −5 · 📍 Lokácia Hlavná Stanica odomknutá //',
     ],
     onEnter: function(){
       S.hunger = Math.max(0, S.hunger - 5);
@@ -2567,8 +2719,8 @@ var SCENES = {
       Renderer.updateStats();
     },
     choices: [
-      { text: 'Ísť cez priemyselnú štvrť — skratka',  next: 'sc_002_stokari' },
-      { text: 'Ísť hlavnou cestou do centra',          next: 'centrum_noc' },
+      { text: 'Ísť skratkou cez priemyselnú štvrť',  next: 'sc_002_stokari' },
+      { text: 'Ísť po Bojnickej priamo do centra',          next: 'centrum_noc' },
     ]
   },
 
@@ -2602,13 +2754,13 @@ var SCENES = {
       addLog('Stokári — priemyselná štvrť. Prvý kontakt.', 'ok');
     },
     choices: [
-      { text: '"Prechádzam." [neutrálne]',
+      { text: '"Iba Prechádzam, nech sa vám darí." [neutrálne]',
         next: 'sc_002_prechod' },
-      { text: '"Môj problém." [REP Stokári −1]',
+      { text: '"To je Môj problém vy zasraný zkurvysyni//Battle.js Innitiating." [REP Stokári −1]',
         next: 'sc_002_moj' },
-      { text: '"Poznáš Jantar?" [REP Stokári +1]',
+      { text: '"Čaute chalani, poznáte Jantar? Akurát tam idem, nechcete Cigarety ?(Give Item)" [REP Stokári +1]',
         next: 'sc_002_jantar', xp: 10 },
-      { text: '(Zastav sa, pozri na augment, nič nehovor) — VNEM [XP +15]',
+      { text: '(Zastav sa, pozri na Arm Augment(Pipboy Terminal) na svojej ruke, prešlo pár minút. Počasie sa bude meniť — VNEM [XP +15]',
         next: 'sc_002_augment', xp: 15 },
     ]
   },
@@ -2663,8 +2815,8 @@ var SCENES = {
     art: '🏭',
     npcName: 'Ferko',
     text: [
-      'Pozrieš na augment. LED bliká — červená, pomalá.',
-      'Gentech B2, predávali ich vo výpredaji po roku 2069 keď vyšli lepšie modely.',
+      'Pozrieš na augment. LEDka bliká červená, pomalá. Snaží sa ti niečo povedať',
+      'Gentech B2, ich predávali vo výpredaji od roku 2069 keď prišli s lepšími modelmi ktoré zvládali 100 triliónov parametrov. Istý čas sa ďalej nepokračovalo lebo zákonodárci sa nevedeli rozhodnúť či potrebujeme viac. Ukázalo sa že áno',
       'Indikuje svalovú záťaž. Červená znamená relaxovaný.',
       '',
       'Ferko si všimne že pozeráš. "Čo?"',
@@ -2697,8 +2849,8 @@ var SCENES = {
     npcName: 'Lucia',
     npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     text: [
-      'Pred vchodom — žiadny Alzabox, ale nad dverami stará neonová ryba, holografická, otvára ústa donekonečna.',
-      'Neon bliká — nie chyba elektrickej siete, rytmus. Niekto to tak nastavil.',
+      'Na pravo od vchodu je Alzabox, každých pár minút príde robot aby vyzdvihol alebo uložil zásielku podľa potreby. Musíš mať ale Subscription Samozrejme a nad dverami stará neonová ryba, holografická, otvára ústa donekonečna.',
+      'Neóny blikajú, nejde o chybu elektrickej siete, to sa ti snaží vyššia moc povedať že sa máš uvoľniť a naladiť do rytmu.',
       '',
       'Prvá vec ktorú pocítiš je teplo. Každá verejná budova v meste reguluje na sedemnásť stupňov.',
       'Miki bar má dvadsaťdva. Niekto to tu ohrieva schválne.',
@@ -2720,14 +2872,14 @@ var SCENES = {
     onEnter: function(){
       gainXP(10);
       S.flags['miki_navstiveny'] = true;
-      addLog('Miki Bar: Lucia — prvý kontakt po 3 rokoch.', 'ok');
+      addLog('Miki Bar: Lucia prvý kontakt po 3 rokoch.', 'ok');
     },
     choices: [
-      { text: '"Mal som komplikovaný rozvrh." [REP Lucia −1]', next: 'sc_003_lucia_rozvrh' },
-      { text: '"Baku ma zdržalo." [neutrálne]',                next: 'sc_003_lucia_baku' },
-      { text: '"Vedela si, že sa vrátim." [REP Lucia +1]',    next: 'sc_003_lucia_vedela', xp: 5 },
+      { text: '"Mal som toho príliš veľa, nezostal mi čas." [REP Lucia −1]', next: 'sc_003_lucia_rozvrh' },
+      { text: '"Vieš že som musel zostať inkognito, je to proste súčasťou práce." [neutrálne]',                next: 'sc_003_lucia_baku' },
+      { text: '"Vedela si, že sa vrátim. Nikdy som nezabudol na Plzeň čo čapuješ :)" [REP Lucia +1]',    next: 'sc_003_lucia_vedela', xp: 5 },
       { text: '(Nič nehovor. Len si sadni.) [SAN +2]',        next: 'sc_003_lucia_mlcanie', san: 2 },
-      { text: '(Ignoruj Luciu — prisadni k mužovi pri okne) [Meliško]', next: 'sc_003b_melisko' },
+      { text: '(Prisadni si najskôr k mužovi pri okne menom Meliško', next: 'sc_003b_melisko' },
     ]
   },
 
@@ -3659,22 +3811,29 @@ var SCENES = {
     name: 'Jaskyne // Stredný Koridor',
     art: '🕯️',
     text: [
-      'Stredný koridor. Ticho. Len tvoje kroky.',
+      'Stredný koridor. Tma za prvých desať metrov je absolútna.',
+      'Potom oči sa prispôsobia — steny sa javia svetlejšie, vlhkosť odráža svetlo baterky.',
       '',
-      'Steny sú mokré. Na zemi: stopy.',
-      'Niekoho tu chodí pravidelne.',
+      'Kroky. Len tvoje — ale echo ich zdvojuje, ztrojuje.',
+      'Steny sú mokré. Na zemi: hlina s odtlačkami.',
+      'Niekoho tu chodí. Pravidelne. Chodba je vyšliapaná, nie náhodná.',
       '',
-      'Po sto metroch: oceľové dvere.',
+      'Po sto metroch strop sa znižuje, potom náhle otvorí do malej predsiene.',
+      'V strede: oceľové dvere. Masívne. Nie jaskynné — priemyselné, sem osadené.',
       '"OMEGA VAULT — PRÍSTUP LEN S AUTORIZÁCIOU"',
       '',
-      'Vedľa: mechanický zámok a elektronický čítač kariet.',
+      'Vedľa dverí: mechanický zámok a elektronický čítač kariet. Obe vrstvy.',
+      'Niekto nechcel aby sa sem dostalo len tak hocikto.',
+      '',
+      '// [LOGIKA] Priemyselné dvere v jaskyni z roku 2051 alebo neskôr.',
+      '// Vtedy M.E.C. odkúpil pozemky. Nie náhoda. //',
     ],
     choices: [
       { text:'[A] Použiť keycard',  next:'bunker',
-        cond:function(){ return hasItem('keycard'); }, condFail:'Nemáš keycard.' },
-      { text:'[B] Vrátiť sa',       next:'jaskyne_vstup' },
-      { text:'[C] Hacknúť zámok',  next:'jaskyne_hack_zamok',
-        cond:function(){ return S.hackStat>=30; }, condFail:'Nedostatočný hacking (30+).' },
+        cond:function(){ return hasItem('keycard'); }, condFail:'Nemáš keycard. FRI — laboratórium B7.' },
+      { text:'[B] Vrátiť sa na vstup',       next:'jaskyne_vstup' },
+      { text:'[C] Hacknúť zámok (HCK 30+)',  next:'jaskyne_hack_zamok',
+        cond:function(){ return S.hackStat>=30; }, condFail:'HCK 30 potrebný. Systém je dvojvrstvový.' },
     ]
   },
 
@@ -3682,49 +3841,57 @@ var SCENES = {
     name: 'Jaskyne // Hacknutie Zámku',
     art: '🔓',
     text: [
-      'Elektronika je stará. AES-128 — ale implementácia slabá.',
+      'AES-128. Implementácia je stará — 2058 alebo skôr. Vidíš to podľa štruktúry paketov.',
+      'Nie na cracknutie brutom — ale má slabý bod v inicializačnom vektore.',
       '',
-      'Trvá to štyri minúty.',
-      'Počuješ kroky za sebou. Rýchlejší.',
+      'Štyri minúty. Tri. Dve.',
+      '',
+      'V tichu jaskyne počuješ niečo čo predtým nebolo.',
+      'Kroky. Nie tvoje. Hlbšie v jaskyni — alebo za sebou.',
+      'Blíže.',
       '',
       'Zámok klikne.',
       '',
-      '// Prístup udelený. Kroky pribúdajú. //',
+      '// Prístup udelený. Kroky pribúdajú. Čas je vec minulosti. //',
     ],
-    onEnter: function(){ gainXP(35); S.hackStat=Math.min(100,S.hackStat+5); Renderer.updateStats(); addLog('Hacking +5. Zámok hacknutý.','ok'); },
-    choices: [{ text:'[A] Vstúpiť rýchlo', next:'bunker' }]
+    onEnter: function(){ gainXP(35); S.hackStat=Math.min(100,S.hackStat+5); Renderer.updateStats(); addLog('HCK +5. Omega Vault hacknutý.','ok'); },
+    choices: [{ text:'[A] Vstúpiť — rýchlo', next:'bunker' }]
   },
 
   jaskyne_ticho: {
     name: 'Jaskyne // Tichý Sektor',
     art: '🌑',
     text: [
-      'Chodba sa zužuje. Teplota klesá.',
+      'Chodba sa zužuje. Strop klesá. Teplota klesá.',
       '',
-      'Na stenách: biele vlákna. Organické.',
-      'Rovnaké ako pod Korzom.',
+      'Na stenách: biele vlákna. Organické — nie plesnivé, niečo iné.',
+      'Sieťka. Tenká ako pavučina, ale pevná. Dotknúť sa ich netreba aby si to vedel.',
       '',
-      'SAN -8.',
-      '"Bio-Echo." Pamätáš si Oravca.',
-      '"Oni ťa môžu vidieť."',
+      'Rovnaké ako pod Korzom. Rovnaké ako v správe od Oravca.',
+      '"Bio-Echo senzory. Snímajú teplo, pohyb, biologické podpisy."',
+      '"Ak si tu, môžu ťa vidieť."',
       '',
-      '// Je neskoro na opatrnosť. Pohyb. //',
+      '// [SAN -8] Niečo v jaskyni ťa sleduje a ty nevieš čo. //',
+      '// [LOGIKA] Senzory sú živé. LAZARUS nie je len sieť — je to organizmus. //',
     ],
-    onEnter: function(){ S.san=Math.max(0,S.san-8); Renderer.updateStats(); gainXP(10); addLog('SAN -8. Bio-Echo aktívny.','warn'); },
-    choices: [{ text:'[A] Pokračovať', next:'jaskyne_stred' }]
+    onEnter: function(){ S.san=Math.max(0,S.san-8); Renderer.updateStats(); gainXP(10); addLog('SAN -8. Bio-Echo senzory aktívne — LAZARUS vidí.','warn'); },
+    choices: [{ text:'[A] Pokračovať — nič iné nezostáva', next:'jaskyne_stred' }]
   },
 
   jaskyne_hlbina: {
-    name: 'Jaskyne // Hlbina',
+    name: 'Jaskyne // Zostup',
     art: '⬇️',
     text: [
-      'Schodisko dolu. Tridsať schodov. Štyridsať.',
+      'Schodisko dolu. Betón, nie kameň — novší ako jaskyňa, osadený dodatočne.',
+      'Tridsať schodov. Štyridsať. Zvuk krokov sa mení — priestor sa otvára.',
       '',
-      'Na dne: bunker.',
+      'Bunker.',
+      '',
+      '// To čo hľadáš je za poslednou stenou. //',
     ],
     onEnter: function(){ gainXP(5); },
-    choices: [{ text:'[A] Vstúpiť do bunkra', next:'bunker',
-      cond:function(){ return hasItem('keycard'); }, condFail:'Potrebuješ keycard.' }]
+    choices: [{ text:'[A] Vstúpiť', next:'bunker',
+      cond:function(){ return hasItem('keycard'); }, condFail:'Keycard — bez nej dvere neotvoriš.' }]
   },
 
   // ── BUNKER / ZÁVER ─────────────────────────────────────────────
@@ -3732,24 +3899,31 @@ var SCENES = {
     name: 'OMEGA VAULT // Bunker LAZARUS',
     art: '🔐',
     text: [
-      'Bunker. Kovové steny. Neonové svetlo.',
+      'Dvere sa otvoria s tlakovým syčaním — vnútorná atmosféra je regulovaná.',
+      'Vzduch je suchší. Chladnejší. Ako v serverovni, nie ako v jaskyni.',
       '',
-      'Servery. Oscilátorypole. A uprostred — terminál.',
-      'Na obrazovke: countdown.',
+      'Servery — tri rady, stropné chladiče, indikátory blikajú tmavozelenou.',
+      'Uprostred miestnosti: terminál. Čierny displej s počítadlom.',
       '"LAZARUS PHASE 2 ACTIVATION: 23:14"',
+      '"23:13 ... 23:12 ..."',
       '',
-      'Pri termináloch: muž v laboratórnom plášti.',
-      'Otočí sa.',
-      '"Vedel som, že prídeš." Hlas unavený.',
-      '"Oravec? Alebo niekto nový?"',
+      'Pri termináloch stojí muž v laboratórnom plášti. Starší, šedivý.',
+      'Neotočí sa hneď — ako keby vedel, že prídeš, a rozhodol sa dať ti sekundu.',
+      '',
+      'Potom sa otočí.',
+      '"Vedel som, že príde niekto." Hlas unavený — nie vyhrážavý. Unavený.',
+      '"Oravec vás poslal? Alebo niekto nový?"',
+      '',
+      '// [VNEM] Ruky má čisté. Nie vojak — vedec. Ale jeho oči nie sú oči niekoho',
+      '// kto urobil chybu. Sú to oči niekoho kto si myslí, že má pravdu. //',
     ],
-    onEnter: function(){ gainXP(30); addLog('OMEGA VAULT: terminál aktívny. Koordinátor prítomný.','ok'); },
+    onEnter: function(){ gainXP(30); addLog('OMEGA VAULT: terminál aktívny. Countdown beží. Koordinátor prítomný.','ok'); },
     choices: [
-      { text:'[A] „Som tu to zastaviť."',      next:'bunker_dna' },
-      { text:'[B] Hacknúť terminál (HCK 30+)',  next:'bunker_hack',
-        cond:function(){ return S.hackStat>=30; }, condFail:'Nedostatočný hacking (30+).' },
+      { text:'[A] "Som tu to zastaviť."',       next:'bunker_dna' },
+      { text:'[B] Hacknúť terminál (HCK 30+)', next:'bunker_hack',
+        cond:function(){ return S.hackStat>=30; }, condFail:'HCK 30 — terminál má dvojitú autentifikáciu.' },
       { text:'[C] Zaútočiť (SIL 35+)',          next:'bunker_boj',
-        cond:function(){ return S.str>=35; }, condFail:'Nedostatočná sila (SIL 35+).' },
+        cond:function(){ return S.str>=35; }, condFail:'SIL 35 — koordinátor nie je sám.' },
     ]
   },
 
@@ -3757,23 +3931,30 @@ var SCENES = {
     name: 'OMEGA VAULT // Koordinátor',
     art: '🔐',
     text: [
-      '"Zastaviť." Koordinátor si sadne.',
-      '"Každý kto príde sem povie to isté."',
-      '"A potom pochopí prečo to nedá zastaviť."',
+      '"Zastaviť." Opakuje slovo. Sadne si na stoličku pri termináloch.',
+      '"Každý kto príde dole povie to isté. Zastaviť. Ako keby zastaviť bolo riešenie."',
       '',
-      '"Toto nie je zlo. Toto je riešenie."',
-      '"Stabilita. Žiadna panika. Žiadna vojna. Žiadne krízy."',
+      '"Viete čo sa stane ak to zastavíte? Skutočne viete?"',
+      '"Voľby za tri mesiace. Kandidát X má pätnásť percent — lebo ľudia sa boja.",',
+      '"Boja sa dobre, správne veci — ale strach ich robí iracionálnymi."',
+      '"LAZARUS neodstráni strach. Zníži amplitúdu. Ľudia budú voliť rozumom, nie panikou."',
+      '',
+      '"To nie je kontrola. To je... stabilizácia."',
+      '"Žiadna panika. Žiadna vojna. Žiadna kríza."',
       '"Len — pokoj."',
       '',
       '"Nechceš pokoj?"',
+      '',
+      '// [LOGIKA] Jeho argument nie je absurdný. Ale to je práve to čo je na ňom strašné. //',
+      '// [EMPATIA] Verí tomu. Naozaj verí. Nie fanaticky — únavne, smutne. //',
     ],
     choices: [
-      { text:'[A] „Pokoj bez slobody nie je pokoj."',   next:'bunker_spis',
-        cond:function(){ return hasItem('spis'); }, condFail:'Potrebuješ Spis OMEGA ako dôkaz.' },
-      { text:'[B] Hacknúť kým hovorí (HCK 25+)',       next:'bunker_hack',
-        cond:function(){ return S.hackStat>=25; }, condFail:'Hacking 25+.' },
-      { text:'[C] Zaútočiť',                           next:'bunker_boj',
-        cond:function(){ return S.str>=25; }, condFail:'Sila 25+.' },
+      { text:'[A] "Pokoj bez slobody nie je pokoj." (vyžaduje Spis OMEGA)', next:'bunker_spis',
+        cond:function(){ return hasItem('spis'); }, condFail:'Nemáš Spis OMEGA — argument bez dôkazu nestačí.' },
+      { text:'[B] Hacknúť kým hovorí (HCK 25+)',  next:'bunker_hack',
+        cond:function(){ return S.hackStat>=25; }, condFail:'HCK 25 — terminál je online.' },
+      { text:'[C] Zaútočiť',                       next:'bunker_boj',
+        cond:function(){ return S.str>=25; }, condFail:'SIL 25.' },
     ]
   },
 
@@ -7275,17 +7456,540 @@ function safeHtml(s) {
 }
 
 
+
+function openHackView(){
+  document.getElementById('hack-view').classList.add('show');
+  document.querySelectorAll('#topbar-tabs .tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){b.classList.remove('active');});
+  var hb=document.querySelector('#left-nav .sidenav-btn[data-view="hack"]');
+  if(hb)hb.classList.add('active');
+  switchHackTab('hacking');
+  initTerminalUI();
+}
+function closeHackView(){
+  document.getElementById('hack-view').classList.remove('show');
+  document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){b.classList.remove('active');});
+  var gb=document.querySelector('#left-nav .sidenav-btn[data-view="game"]');
+  if(gb)gb.classList.add('active');
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CEO ZLA // LAZARUS — INCREMENTAL RPG UPGRADE v3.0
+   NEW SYSTEMS: Hacking, Terminal, Corp, Scripts, Random Events, Tiers
+══════════════════════════════════════════════════════════════════════════ */
+
+var HackingSystem = (function() {
+  var SERVERS = [
+    { id:'n00dles',    name:'n00dles.prv',        tier:1, baseSec:1,  maxMoney:70000,  growth:3000, hackReq:1  },
+    { id:'joesguns',   name:'joesguns.prv',       tier:1, baseSec:10, maxMoney:2e6,    growth:20,   hackReq:10 },
+    { id:'sigma-cos',  name:'sigma-cosmetics.sk', tier:2, baseSec:15, maxMoney:6e6,    growth:15,   hackReq:25 },
+    { id:'magura-cdn', name:'magura-cdn.internal',tier:2, baseSec:25, maxMoney:20e6,   growth:12,   hackReq:40 },
+    { id:'mec-bank',   name:'mec.bancorp.sk',     tier:3, baseSec:40, maxMoney:80e6,   growth:8,    hackReq:65 },
+    { id:'lazarus-net',name:'lazarus.darknet.0',  tier:4, baseSec:80, maxMoney:500e6,  growth:4,    hackReq:90 },
+  ];
+  var _st = {};
+  function _initSrv(s) { _st[s.id] = { security:s.baseSec, money:s.maxMoney*0.5, rooted:false }; }
+  function init() {
+    SERVERS.forEach(_initSrv);
+    if (S.hackState) Object.keys(S.hackState).forEach(function(id){ if(_st[id]) Object.assign(_st[id], S.hackState[id]); });
+  }
+  function getState()   { return _st; }
+  function getServers() { return SERVERS; }
+  function canSeeServer(s) { return S.hackStat >= Math.max(1, s.hackReq*0.5); }
+  function canRoot(s)   { return S.hackStat >= s.hackReq && _st[s.id] && !_st[s.id].rooted; }
+  function canHack(s)   { return S.hackStat >= s.hackReq && _st[s.id] && _st[s.id].rooted; }
+  function _hackChance(s){ return Math.max(0.05,Math.min(0.95,(S.hackStat-s.hackReq*0.4)/(_st[s.id].security+1)*0.9)); }
+  function rootServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||st.rooted)return;
+    if(S.hackStat<s.hackReq){cb&&cb({ok:false,msg:'HCK '+s.hackReq+' potrebný.'});return;}
+    st.rooted=true; st.security=Math.min(100,st.security+5);
+    cb&&cb({ok:true,msg:'[NUKE] '+s.name+' — ROOT ZÍSKANÝ!'});
+    addLog('[NUKE] '+s.name,'ok'); showNotif('💻 '+s.name+' rooted!'); saveState(); renderHackingUI();
+  }
+  function hackServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||!st.rooted){cb&&cb({ok:false,msg:'Server nie je rooted.'});return;}
+    var chance=_hackChance(s),success=Math.random()<chance;
+    if(success){
+      var stolen=Math.min(st.money,Math.floor(st.money*(0.05+Math.random()*0.1)));
+      st.money-=stolen; st.security=Math.min(100,st.security+0.002);
+      S.money+=stolen; S.hackStat=Math.min(100,S.hackStat+0.02);
+      Renderer.updateMoney(); Renderer.updateStats();
+      cb&&cb({ok:true,msg:'[HACK] '+s.name+' — +'+stolen.toLocaleString('sk')+'₿ ('+( chance*100).toFixed(0)+'%)'});
+    } else {
+      st.security=Math.min(100,st.security+0.5);
+      cb&&cb({ok:false,msg:'[FAIL] '+s.name+' — detekovaný!'});
+    }
+    saveState();
+  }
+  function growServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||!st.rooted){cb&&cb({ok:false,msg:'Nuke najprv.'});return;}
+    var mult=1+(s.growth/100)*(S.hackStat/100);
+    st.money=Math.min(s.maxMoney,st.money*mult); st.security=Math.min(100,st.security+0.004);
+    S.hackStat=Math.min(100,S.hackStat+0.01); Renderer.updateStats();
+    cb&&cb({ok:true,msg:'[GROW] '+s.name+' x'+mult.toFixed(3)});
+    saveState();
+  }
+  function weakenServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||!st.rooted){cb&&cb({ok:false,msg:'Nuke najprv.'});return;}
+    var red=0.05*(S.hackStat/s.hackReq);
+    st.security=Math.max(s.baseSec,st.security-red); S.hackStat=Math.min(100,S.hackStat+0.01); Renderer.updateStats();
+    cb&&cb({ok:true,msg:'[WEAKEN] '+s.name+' sec:'+st.security.toFixed(2)});
+    saveState();
+  }
+  function saveState(){ S.hackState={}; Object.keys(_st).forEach(function(id){ S.hackState[id]=Object.assign({},_st[id]); }); }
+  function autoTick(){ ScriptEngine.tick(); }
+  return { init:init,getState:getState,getServers:getServers,canSeeServer:canSeeServer,canRoot:canRoot,canHack:canHack,rootServer:rootServer,hackServer:hackServer,growServer:growServer,weakenServer:weakenServer,saveState:saveState,autoTick:autoTick };
+})();
+
+var ScriptEngine = (function() {
+  var SCRIPTS = [
+    { id:'basic-hack', name:'basic-hack.js', desc:'Auto-hackuje najslabší rooted server každých 5s.', cost:500,  tier:1, interval:5,
+      action:function(){ var rt=HackingSystem.getServers().filter(function(s){return HackingSystem.getState()[s.id]&&HackingSystem.getState()[s.id].rooted;}); if(!rt.length)return; HackingSystem.hackServer(rt[0].id,function(r){if(r.ok)addLog(r.msg,'ok');}); }},
+    { id:'grow-weaken', name:'grow-weaken.js', desc:'Udržiava optimálny stav serverov (grow/weaken cycle) každých 8s.', cost:2500, tier:2, interval:8,
+      action:function(){ var srvs=HackingSystem.getServers(),st=HackingSystem.getState(); srvs.filter(function(s){return st[s.id]&&st[s.id].rooted;}).forEach(function(s){ var ss=st[s.id]; if(ss.security>s.baseSec+5) HackingSystem.weakenServer(s.id,function(){}); else if(ss.money<s.maxMoney*0.7) HackingSystem.growServer(s.id,function(){}); }); }},
+    { id:'batch-hack', name:'batch-hack.js', desc:'Hackuje všetky rooted servery simultánne každých 10s.', cost:12000, tier:3, interval:10,
+      action:function(){ var srvs=HackingSystem.getServers(),st=HackingSystem.getState(); srvs.filter(function(s){return st[s.id]&&st[s.id].rooted;}).forEach(function(s){ HackingSystem.hackServer(s.id,function(r){if(r.ok)addLog(r.msg,'ok');}); }); }},
+    { id:'lazarus-intercept', name:'lazarus-intercept.js', desc:'Interceptuje LAZARUS sieť. +25₿/s pasívne + XP.', cost:80000, tier:4, interval:3,
+      action:function(){ var b=25+Math.floor(S.hackStat*0.5); S.money+=b; gainXP(2); Renderer.updateMoney(); }},
+  ];
+  var _running={}, _counters={};
+  function getScripts(){return SCRIPTS;}
+  function isRunning(id){return !!_running[id];}
+  function buyScript(id){
+    var sc=SCRIPTS.find(function(s){return s.id===id;});
+    if(!sc||S.money<sc.cost){addLog('Nedostatok kreditov.','warn');return;}
+    S.money-=sc.cost; if(!S.ownedScripts)S.ownedScripts={}; S.ownedScripts[id]=true;
+    Renderer.updateMoney(); addLog('[SCRIPT] '+sc.name+' zakúpený!','ok'); showNotif('⚙ '+sc.name+' aktívny!');
+    startScript(id); renderScriptUI();
+  }
+  function startScript(id){ var sc=SCRIPTS.find(function(s){return s.id===id;}); if(!sc||_running[id])return; _counters[id]=0; _running[id]={script:sc}; addLog('[SCRIPT] '+sc.name+' spustený.','ok'); }
+  function stopScript(id){ if(_running[id]){delete _running[id]; addLog('[SCRIPT] '+id+' zastavený.','warn');} }
+  function tick(){ Object.keys(_running).forEach(function(id){ _counters[id]=(_counters[id]||0)+1; var sc=_running[id].script; if(_counters[id]>=sc.interval){_counters[id]=0;try{sc.action();}catch(e){}} }); }
+  function restoreFromSave(){ if(!S.ownedScripts)return; Object.keys(S.ownedScripts).forEach(function(id){if(S.ownedScripts[id])startScript(id);}); }
+  return { getScripts:getScripts,isRunning:isRunning,buyScript:buyScript,startScript:startScript,stopScript:stopScript,tick:tick,restoreFromSave:restoreFromSave };
+})();
+
+var CorporationSystem = (function() {
+  var CORPS = [
+    { id:'shadow-net',  name:'ShadowNet LLC',         desc:'Malá sieťová firma. Dáta a VPN.',               cost:5000,   tier:1, baseIncome:8,
+      upgrades:[{id:'bandwidth',name:'Bandwidth+',cost:3000,incBonus:5},{id:'darkweb',name:'DarkWeb Node',cost:10000,incBonus:15},{id:'botnet',name:'Botnet v2',cost:30000,incBonus:40}]},
+    { id:'data-brokers',name:'DataBrokers s.r.o.',     desc:'Predaj osobných dát. Rýchly zisk.',              cost:25000,  tier:2, baseIncome:30,
+      upgrades:[{id:'scraper',name:'Web Scraper',cost:15000,incBonus:20},{id:'ai-prof',name:'AI Profiler',cost:50000,incBonus:80},{id:'mec-con',name:'MEC Contract',cost:150000,incBonus:250}]},
+    { id:'corp-saboteur',name:'LAZARUS Counter-Ops',   desc:'Infiltrácia korporácií. Sabotáž a výkupné.',     cost:100000, tier:3, baseIncome:120,
+      upgrades:[{id:'insider',name:'Insider sieť',cost:60000,incBonus:100},{id:'zero-day',name:'Zero-Day Cache',cost:250000,incBonus:350},{id:'blackmail',name:'CEO Blackmail',cost:800000,incBonus:1200}]},
+    { id:'neo-magura',  name:'Neo-Magura Corp',        desc:'Ty si CEO. Úplná kontrola nad mestom. ENDGAME.', cost:2000000,tier:4, baseIncome:800,
+      upgrades:[{id:'ai-core',name:'DAEDALUS AI Core',cost:1000000,incBonus:2000},{id:'city-ctrl',name:'City Control',cost:5000000,incBonus:8000},{id:'global',name:'Global Takeover',cost:20000000,incBonus:30000}]},
+  ];
+  function getCorps(){return CORPS;}
+  function isOwned(id){return S.ownedCorps&&S.ownedCorps[id];}
+  function hasUpgrade(cid,uid){return S.corpUpgrades&&S.corpUpgrades[cid]&&S.corpUpgrades[cid][uid];}
+  function _corpIncome(c){ var t=c.baseIncome; c.upgrades.forEach(function(u){if(hasUpgrade(c.id,u.id))t+=u.incBonus;}); return t; }
+  function buyCorp(id){
+    var c=CORPS.find(function(x){return x.id===id;}); if(!c||isOwned(id))return;
+    if(S.money<c.cost){addLog('Nedostatok kreditov.','warn');return;}
+    S.money-=c.cost; if(!S.ownedCorps)S.ownedCorps={}; S.ownedCorps[id]=true;
+    Renderer.updateMoney(); recalcCorpIncome(); addLog('[CORP] '+c.name+' kúpená!','ok'); showNotif('🏢 '+c.name+' online!'); renderCorpUI();
+  }
+  function buyUpgrade(cid,uid){
+    var c=CORPS.find(function(x){return x.id===cid;}); if(!c||!isOwned(cid))return;
+    var u=c.upgrades.find(function(x){return x.id===uid;}); if(!u||hasUpgrade(cid,uid))return;
+    if(S.money<u.cost){addLog('Nedostatok kreditov.','warn');return;}
+    S.money-=u.cost; if(!S.corpUpgrades)S.corpUpgrades={}; if(!S.corpUpgrades[cid])S.corpUpgrades[cid]={};
+    S.corpUpgrades[cid][uid]=true; Renderer.updateMoney(); recalcCorpIncome(); addLog('[CORP] '+c.name+': '+u.name,'ok'); showNotif('⬆ '+u.name); renderCorpUI();
+  }
+  function recalcCorpIncome(){
+    var total=0; CORPS.forEach(function(c){if(isOwned(c.id))total+=_corpIncome(c);}); if(!S.income)S.income={}; S.income.corp=total; Renderer.updateIncome();
+  }
+  return { getCorps:getCorps,isOwned:isOwned,hasUpgrade:hasUpgrade,buyCorp:buyCorp,buyUpgrade:buyUpgrade,recalcCorpIncome:recalcCorpIncome,_corpIncome:_corpIncome };
+})();
+
+var RandomEvents = (function() {
+  var EVENTS = [
+    { id:'traced',      label:'🔴 Stopa detekovaná', weight:15,
+      cond:function(){return S.hackStat>=10;},
+      effect:function(){var st=HackingSystem.getState();Object.keys(st).forEach(function(id){st[id].security=Math.min(100,st[id].security+10);});addLog('!! MEC stopa: bezpečnosť serverov +10!','warn');}},
+    { id:'data-leak',   label:'🟢 Dátový únik',      weight:15,
+      cond:function(){return S.hackStat>=5;},
+      effect:function(){var g=50+Math.floor(Math.random()*S.hackStat*15);S.money+=g;Renderer.updateMoney();addLog('Dátový únik: +'+g+'₿','ok');showNotif('💸 +'+g+'₿ nájdených!');}},
+    { id:'corp-raid',   label:'🔴 MEC Raid',          weight:8,
+      cond:function(){return S.money>=500&&S.hackStat>=20;},
+      effect:function(){var l=Math.floor(S.money*0.05);S.money=Math.max(0,S.money-l);Renderer.updateMoney();addLog('MEC Raid: strata '+l+'₿','warn');}},
+    { id:'blackmarket',  label:'🟡 Čierny Trh',       weight:10,
+      cond:function(){return S.money>=250&&!(S.ownedScripts&&S.ownedScripts['basic-hack']);},
+      effect:function(){S.money-=250;if(!S.ownedScripts)S.ownedScripts={};S.ownedScripts['basic-hack']=true;ScriptEngine.startScript('basic-hack');Renderer.updateMoney();addLog('Čierny trh: basic-hack.js za 250₿!','ok');renderScriptUI();}},
+    { id:'whistleblower',label:'🟢 Informátor',       weight:8,
+      cond:function(){return !!(S.flags&&S.flags['agent_delta_tomas']);},
+      effect:function(){gainXP(50);addLog('Informátor: XP +50!','ok');showNotif('📁 XP +50!');}},
+    { id:'power-surge',  label:'⚡ Sieťový Glitch',   weight:6,
+      cond:function(){return true;},
+      effect:function(){S.hackStat=Math.min(100,S.hackStat+2);Renderer.updateStats();addLog('Glitch: HCK +2','ok');document.body.classList.add('glitch-active');setTimeout(function(){document.body.classList.remove('glitch-active');},600);}},
+    { id:'san-decay',    label:'🧠 Psychická záťaž',  weight:7,
+      cond:function(){return S.san>15;},
+      effect:function(){S.san=Math.max(0,S.san-10);Renderer.updateStats();addLog('Psychická záťaž: SAN -10','warn');}},
+  ];
+  var _last=0, _ticker=0;
+  function tick(){
+    _ticker++;
+    if(_ticker-_last<45)return;
+    if(Math.random()>0.03)return;
+    var avail=EVENTS.filter(function(e){return e.cond?e.cond():true;});
+    if(!avail.length)return;
+    var total=avail.reduce(function(a,e){return a+e.weight;},0),r=Math.random()*total,cum=0,chosen;
+    for(var i=0;i<avail.length;i++){cum+=avail[i].weight;if(r<=cum){chosen=avail[i];break;}}
+    if(!chosen)chosen=avail[0];
+    _last=_ticker;
+    chosen.effect();
+    addLog(chosen.label,'info');
+  }
+  return { tick:tick };
+})();
+
+var TierSystem = (function() {
+  var TIERS = [
+    { tier:1, name:'Pouličný Hacker',    icon:'💻', req:{hackStat:1,  money:0      }, unlocks:'n00dles server, basic-hack.js' },
+    { tier:2, name:'Sieťový Duch',       icon:'👻', req:{hackStat:25, money:5000   }, unlocks:'sigma-cos server, grow-weaken.js, ShadowNet Corp' },
+    { tier:3, name:'Korporátny Sabotér', icon:'🥷', req:{hackStat:50, money:50000  }, unlocks:'mec-bank server, batch-hack.js, DataBrokers Corp' },
+    { tier:4, name:'CEO Zla',            icon:'👑', req:{hackStat:80, money:500000 }, unlocks:'lazarus.darknet.0, lazarus-intercept.js, Neo-Magura Corp' },
+  ];
+  function getCurrentTier(){ var t=1; TIERS.forEach(function(x){if(S.hackStat>=x.req.hackStat&&S.money>=x.req.money)t=x.tier;}); return t; }
+  function getTierData(t){ return TIERS.find(function(x){return x.tier===t;}); }
+  function checkTierUp(){
+    var prev=S.tier||1, curr=getCurrentTier();
+    if(curr>prev){ S.tier=curr; var td=getTierData(curr); addLog('TIER UP! '+td.icon+' '+td.name,'ok'); showNotif('⭐ TIER '+curr+': '+td.name); document.body.classList.add('tier-up-flash'); setTimeout(function(){document.body.classList.remove('tier-up-flash');},1200); }
+    return curr;
+  }
+  return { getCurrentTier:getCurrentTier, getTierData:getTierData, TIERS:TIERS, checkTierUp:checkTierUp };
+})();
+
+var _toastQueue=[], _toastBusy=false;
+function showRichNotif(title,body,cls){ _toastQueue.push({title:title,body:body,cls:cls||'ok'}); if(!_toastBusy)_nextToast(); }
+function _nextToast(){
+  if(!_toastQueue.length){_toastBusy=false;return;}
+  _toastBusy=true;
+  var t=_toastQueue.shift(), cont=document.getElementById('toast-container');
+  if(!cont){_toastBusy=false;return;}
+  var el=document.createElement('div'); el.className='toast-item toast-'+t.cls;
+  el.innerHTML='<div class="toast-title">'+t.title+'</div>'+(t.body?'<div class="toast-body">'+t.body+'</div>':'');
+  cont.appendChild(el);
+  setTimeout(function(){el.classList.add('toast-show');},10);
+  setTimeout(function(){el.classList.remove('toast-show');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);setTimeout(_nextToast,150);},400);},3500);
+}
+
+var Terminal=(function(){
+  var _hist=[],_hi=-1;
+  function _pad(s,n){s=String(s);while(s.length<n)s+=' ';return s;}
+  var CMDS={
+    help:function(){return['<span class="t-hi">// LAZARUS TERMINAL — PRÍKAZY //</span>','<span class="t-cmd">ls</span>           — zoznam serverov','<span class="t-cmd">scan [id]</span>    — detail servera','<span class="t-cmd">nuke [id]</span>    — získať root','<span class="t-cmd">hack [id]</span>    — hack','<span class="t-cmd">grow [id]</span>    — grow','<span class="t-cmd">weaken [id]</span>  — weaken','<span class="t-cmd">scripts</span>      — skripty','<span class="t-cmd">corp</span>         — korporácie','<span class="t-cmd">tier</span>         — progression tier','<span class="t-cmd">stats</span>        — štatistiky','<span class="t-cmd">clear</span>        — vyčistiť'].join('\n');},
+    ls:function(){
+      var lines=['<span class="t-hi">// SERVER LIST //</span>'];
+      HackingSystem.getServers().forEach(function(s){
+        if(!HackingSystem.canSeeServer(s))return;
+        var st=HackingSystem.getState()[s.id];
+        var root=st.rooted?'<span class="t-ok">ROOT</span>':'<span class="t-warn">LOCK</span>';
+        lines.push('  '+root+' '+_pad(s.id,16)+'SEC:'+_pad(st.security.toFixed(1),6)+'💰'+Math.floor(st.money/1000)+'k  HCK'+s.hackReq);
+      });
+      return lines.join('\n');
+    },
+    scan:function(a){
+      var id=a[0]; if(!id)return'<span class="t-warn">scan [id]</span>';
+      var s=HackingSystem.getServers().find(function(x){return x.id===id;});
+      if(!s)return'<span class="t-warn">Nenájdený.</span>';
+      var st=HackingSystem.getState()[id];
+      return['<span class="t-hi">// SCAN: '+s.name+' //</span>','  HCK Req:  '+s.hackReq+' (tvoj: '+S.hackStat.toFixed(1)+')','  Security: '+st.security.toFixed(2),'  Money:    '+Math.floor(st.money).toLocaleString('sk')+'₿ / '+s.maxMoney.toLocaleString('sk')+'₿','  Root:     '+(st.rooted?'ÁNO':'NIE')].join('\n');
+    },
+    nuke:function(a){
+      var id=a[0]; if(!id)return'<span class="t-warn">nuke [id]</span>';
+      var s=HackingSystem.getServers().find(function(x){return x.id===id;});
+      if(!s||!HackingSystem.canSeeServer(s))return'<span class="t-warn">Neviditeľný server.</span>';
+      if(HackingSystem.getState()[id].rooted)return'<span class="t-ok">Už rooted.</span>';
+      if(S.hackStat<s.hackReq)return'<span class="t-warn">HCK '+s.hackReq+' potrebný.</span>';
+      var r=''; HackingSystem.rootServer(id,function(x){r='<span class="t-ok">'+x.msg+'</span>';}); return r;
+    },
+    hack:function(a){
+      var id=a[0]; if(!id)return'<span class="t-warn">hack [id]</span>';
+      if(!HackingSystem.getState()[id])return'<span class="t-warn">Nenájdený.</span>';
+      if(!HackingSystem.getState()[id].rooted)return'<span class="t-warn">Nuke najprv.</span>';
+      var r=''; HackingSystem.hackServer(id,function(x){r=x.ok?'<span class="t-ok">'+x.msg+'</span>':'<span class="t-warn">'+x.msg+'</span>';}); renderHackingUI(); return r;
+    },
+    grow:function(a){
+      var id=a[0]; if(!id||!HackingSystem.getState()[id])return'<span class="t-warn">grow [id]</span>';
+      if(!HackingSystem.getState()[id].rooted)return'<span class="t-warn">Nuke najprv.</span>';
+      var r=''; HackingSystem.growServer(id,function(x){r='<span class="t-ok">'+x.msg+'</span>';}); renderHackingUI(); return r;
+    },
+    weaken:function(a){
+      var id=a[0]; if(!id||!HackingSystem.getState()[id])return'<span class="t-warn">weaken [id]</span>';
+      if(!HackingSystem.getState()[id].rooted)return'<span class="t-warn">Nuke najprv.</span>';
+      var r=''; HackingSystem.weakenServer(id,function(x){r='<span class="t-ok">'+x.msg+'</span>';}); renderHackingUI(); return r;
+    },
+    scripts:function(){
+      var lines=['<span class="t-hi">// SKRIPTY //</span>'];
+      ScriptEngine.getScripts().forEach(function(sc){
+        var owned=S.ownedScripts&&S.ownedScripts[sc.id], running=ScriptEngine.isRunning(sc.id);
+        var stat=running?'<span class="t-ok">ACTIVE</span>':owned?'<span class="t-dim">OWNED </span>':'<span class="t-warn">'+sc.cost+'₿  </span>';
+        lines.push('  '+stat+' '+sc.name);
+      });
+      return lines.join('\n');
+    },
+    corp:function(){
+      var lines=['<span class="t-hi">// KORPORÁCIE //</span>'];
+      CorporationSystem.getCorps().forEach(function(c){
+        var owned=CorporationSystem.isOwned(c.id);
+        var stat=owned?'<span class="t-ok">OWNED</span>':'<span class="t-warn">'+c.cost.toLocaleString('sk')+'₿</span>';
+        lines.push('  '+stat+' '+c.name+' +'+c.baseIncome+'₿/s base');
+      });
+      return lines.join('\n');
+    },
+    tier:function(){
+      var t=TierSystem.getCurrentTier(), lines=['<span class="t-hi">// PROGRESSION TIER //</span>'];
+      TierSystem.TIERS.forEach(function(x){
+        var a=x.tier===t, cls=a?'t-ok':'t-dim';
+        lines.push((a?'▶ ':'  ')+'<span class="'+cls+'">TIER '+x.tier+' '+x.icon+' '+x.name+'</span>  HCK:'+x.req.hackStat+' 💰'+x.req.money.toLocaleString('sk')+'₿');
+      });
+      return lines.join('\n');
+    },
+    stats:function(){
+      var total=['job','hack','fish','bonus','boats','corp'].reduce(function(a,k){return a+(S.income&&S.income[k]?S.income[k]:0);},0);
+      return['<span class="t-hi">// ŠTATISTIKY //</span>','  HP:'+S.hp.toFixed(1)+'  SAN:'+S.san.toFixed(1)+'  Hlad:'+S.hunger.toFixed(1),'  HCK:'+S.hackStat.toFixed(2)+'  SIL:'+S.str.toFixed(2)+'  OHY:'+S.flex.toFixed(2),'  Level:'+S.level+'  XP:'+Math.floor(S.xp)+'/'+S.level*80,'  💰 '+S.money.toLocaleString('sk')+'₿  Príjem:'+total.toFixed(2)+'₿/s','  Tier:'+TierSystem.getCurrentTier()+' — '+(TierSystem.getTierData(TierSystem.getCurrentTier())||{name:'?'}).name].join('\n');
+    },
+    clear:function(){var o=document.getElementById('terminal-output');if(o)o.innerHTML='';return null;},
+  };
+  function exec(raw){
+    var p=raw.trim().split(/\s+/),cmd=p[0].toLowerCase(),args=p.slice(1);
+    _hist.unshift(raw); if(_hist.length>30)_hist.pop(); _hi=-1;
+    var fn=CMDS[cmd]; if(!fn)return'<span class="t-warn">Príkaz nenájdený: '+cmd+'. Napíš <span class="t-cmd">help</span></span>';
+    return fn(args);
+  }
+  function histUp(){if(_hi<_hist.length-1)_hi++;return _hist[_hi]||'';}
+  function histDn(){if(_hi>-1)_hi--;return _hi>=0?_hist[_hi]:'';}
+  return { exec:exec, historyUp:histUp, historyDown:histDn };
+})();
+
+function renderHackingUI(){
+  var cont=document.getElementById('hacking-panel-body'); if(!cont)return;
+  var srvs=HackingSystem.getServers(), state=HackingSystem.getState(), tier=TierSystem.getCurrentTier(), html='';
+  srvs.forEach(function(s){
+    if(!HackingSystem.canSeeServer(s))return;
+    var st=state[s.id], root=st.rooted, pct=Math.floor((st.money/s.maxMoney)*100), secPct=Math.floor(st.security);
+    html+='<div class="hack-server-card '+(root?'rooted':'locked')+'">';
+    html+='<div class="hack-srv-header"><span class="hack-srv-name">'+s.name+'</span><span class="hack-srv-status '+(root?'ok':'warn')+'">'+(root?'● ROOT':'○ LOCK')+'</span></div>';
+    html+='<div class="hack-srv-bars">';
+    html+='<div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:'+pct+'%"></div></div><span class="hack-bar-label">'+pct+'%</span></div>';
+    html+='<div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:'+secPct+'%"></div></div><span class="hack-bar-label">'+st.security.toFixed(1)+'</span></div>';
+    html+='</div><div class="hack-srv-actions">';
+    if(!root){
+      var canR=S.hackStat>=s.hackReq;
+      html+='<button class="hack-btn nuke" '+(canR?'':'disabled')+' onclick="HackingSystem.rootServer(\''+s.id+'\',function(r){addLog(r.msg,r.ok?\'ok\':\'warn\');})">NUKE</button>';
+    } else {
+      html+='<button class="hack-btn hack" onclick="HackingSystem.hackServer(\''+s.id+'\',function(r){addLog(r.msg,r.ok?\'ok\':\'warn\');renderHackingUI();})">HACK</button>';
+      html+='<button class="hack-btn grow" onclick="HackingSystem.growServer(\''+s.id+'\',function(r){addLog(r.msg,\'ok\');renderHackingUI();})">GROW</button>';
+      html+='<button class="hack-btn weak" onclick="HackingSystem.weakenServer(\''+s.id+'\',function(r){addLog(r.msg,\'ok\');renderHackingUI();})">WEAK</button>';
+    }
+    html+='</div></div>';
+  });
+  if(!html)html='<div class="hack-empty">// Zvýšte HCK pre prístup k serverom — trénujte Hacking na Uni //</div>';
+  cont.innerHTML=html;
+}
+
+function renderScriptUI(){
+  var cont=document.getElementById('scripts-panel-body'); if(!cont)return;
+  var tier=TierSystem.getCurrentTier(), html='';
+  ScriptEngine.getScripts().forEach(function(sc){
+    var owned=S.ownedScripts&&S.ownedScripts[sc.id], running=ScriptEngine.isRunning(sc.id), locked=sc.tier>tier+1;
+    html+='<div class="script-card'+(running?' running':'')+(locked?' locked':'')+(owned&&!running?' owned':'')+ '">';
+    html+='<div class="script-name">'+sc.name+'</div><div class="script-desc">'+sc.desc+'</div>';
+    html+='<div class="script-meta">⏱ '+sc.interval+'s | Tier '+sc.tier+'</div>';
+    if(locked)      html+='<div class="script-locked-msg">// Tier '+sc.tier+' locked //</div>';
+    else if(running)html+='<button class="script-btn stop-btn" onclick="ScriptEngine.stopScript(\''+sc.id+'\');renderScriptUI()">⏹ STOP</button>';
+    else if(owned)  html+='<button class="script-btn start-btn" onclick="ScriptEngine.startScript(\''+sc.id+'\');renderScriptUI()">▶ ŠTART</button>';
+    else            html+='<button class="script-btn buy-btn" onclick="ScriptEngine.buyScript(\''+sc.id+'\');renderScriptUI()">BUY '+sc.cost.toLocaleString('sk')+'₿</button>';
+    html+='</div>';
+  });
+  cont.innerHTML=html;
+}
+
+function renderCorpUI(){
+  var cont=document.getElementById('corp-panel-body'); if(!cont)return;
+  var tier=TierSystem.getCurrentTier(), html='';
+  CorporationSystem.getCorps().forEach(function(corp){
+    var owned=CorporationSystem.isOwned(corp.id), locked=corp.tier>tier+1;
+    html+='<div class="corp-card'+(owned?' owned':'')+(locked?' locked':'')+ '">';
+    html+='<div class="corp-header"><span class="corp-name">'+corp.name+'</span>';
+    var inc=owned?CorporationSystem._corpIncome(corp):corp.baseIncome;
+    html+='<span class="corp-income">+'+inc+'₿/s</span></div>';
+    html+='<div class="corp-desc">'+corp.desc+'</div>';
+    if(locked)       html+='<div class="corp-locked-msg">// Tier '+corp.tier+' req //</div>';
+    else if(!owned)  html+='<button class="corp-buy-btn" onclick="CorporationSystem.buyCorp(\''+corp.id+'\')">KÚPIŤ '+corp.cost.toLocaleString('sk')+'₿</button>';
+    else {
+      html+='<div class="corp-upgrades">';
+      corp.upgrades.forEach(function(up){
+        var has=CorporationSystem.hasUpgrade(corp.id,up.id);
+        html+='<div class="corp-upgrade'+(has?' owned-up':'')+ '"><span class="up-name">'+up.name+'</span><span class="up-bonus">+'+up.incBonus+'₿/s</span>';
+        if(!has)html+='<button class="up-btn" onclick="CorporationSystem.buyUpgrade(\''+corp.id+'\',\''+up.id+'\')">'+up.cost.toLocaleString('sk')+'₿</button>';
+        else     html+='<span class="up-done">✓</span>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  cont.innerHTML=html;
+}
+
+function switchHackTab(tab){
+  ['hacking','scripts','corp','terminal'].forEach(function(t){
+    var b=document.getElementById('hack-tab-'+t), p=document.getElementById('hack-pane-'+t);
+    if(b)b.classList.toggle('active',t===tab);
+    if(p)p.classList.toggle('active',t===tab);
+  });
+  if(tab==='hacking')renderHackingUI();
+  if(tab==='scripts')renderScriptUI();
+  if(tab==='corp')renderCorpUI();
+}
+
+function initTerminalUI(){
+  var input=document.getElementById('terminal-input'), output=document.getElementById('terminal-output');
+  if(!input||!output)return;
+  function run(){
+    var raw=input.value.trim(); if(!raw)return;
+    output.innerHTML+='<div class="t-line t-prompt">$ '+raw+'</div>';
+    var res=Terminal.exec(raw);
+    if(res!==null)output.innerHTML+='<div class="t-line">'+res+'</div>';
+    output.scrollTop=output.scrollHeight; input.value='';
+  }
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){run();}
+    if(e.key==='ArrowUp'){input.value=Terminal.historyUp();e.preventDefault();}
+    if(e.key==='ArrowDown'){input.value=Terminal.historyDown();e.preventDefault();}
+  });
+  var btn=document.getElementById('terminal-run'); if(btn)btn.onclick=run;
+  output.innerHTML='<div class="t-line t-hi">// LAZARUS TERMINAL v3.0 — CEO ZLA //</div><div class="t-line t-dim">Napíš <span class="t-cmd">help</span> pre príkazy.</div>';
+}
+
+function _updateTierBadge(){
+  var el=document.getElementById('tier-badge'); if(!el)return;
+  var t=TierSystem.getCurrentTier(), td=TierSystem.getTierData(t);
+  if(td)el.textContent='T'+t+' '+td.icon+' '+td.name;
+}
+
+var _newSysTicker=0, _newSysInterval=null;
+function _startNewSystems(){
+  if(_newSysInterval)clearInterval(_newSysInterval);
+  _newSysInterval=setInterval(function(){
+    if(!StateMachine.is(StateMachine.STATES.PLAYING))return;
+    _newSysTicker++;
+    // corp income micro-tick (every 50ms = 20 per second)
+    if(S.income&&S.income.corp)S.money+=S.income.corp/20;
+    // 1-second operations
+    if(_newSysTicker%20===0){
+      HackingSystem.autoTick();
+      RandomEvents.tick();
+      TierSystem.checkTierUp();
+      _updateTierBadge();
+      Renderer.updateMoney();
+    }
+    // auto-save every 10s
+    if(_newSysTicker%200===0){
+      HackingSystem.saveState();
+      try{
+        var sd={S:S,FLEET_STATE:(typeof FLEET_STATE!=='undefined'?FLEET_STATE:null),COURSE_STATE:(typeof COURSE_STATE!=='undefined'?COURSE_STATE:null),HQ_COOLDOWNS:(typeof HQ_COOLDOWNS!=='undefined'?HQ_COOLDOWNS:null),version:'3.0'};
+        localStorage.setItem(GameConfig.SAVE_KEY,JSON.stringify(sd));
+      }catch(e){}
+    }
+  },50);
+}
+
+StateMachine.on(StateMachine.STATES.PLAYING,function(){
+  HackingSystem.init();
+  ScriptEngine.restoreFromSave();
+  CorporationSystem.recalcCorpIncome();
+  _startNewSystems();
+  setTimeout(function(){
+    initTerminalUI(); renderHackingUI(); renderScriptUI(); renderCorpUI(); _updateTierBadge();
+  },400);
+});
+
+var _origSave=saveGame;
+saveGame=function(){HackingSystem.saveState();_origSave();};
+
+var _origLoad=loadGame;
+loadGame=function(){
+  _origLoad();
+  if(!S.ownedScripts)S.ownedScripts={};
+  if(!S.ownedCorps)S.ownedCorps={};
+  if(!S.corpUpgrades)S.corpUpgrades={};
+  if(!S.hackState)S.hackState={};
+  if(!S.income)S.income={};
+  if(!S.income.corp)S.income.corp=0;
+  if(!S.tier)S.tier=1;
+};
+
+var _origNew=newGame;
+newGame=function(){
+  _origNew();
+  S.ownedScripts={}; S.ownedCorps={}; S.corpUpgrades={}; S.hackState={}; S.income.corp=0; S.tier=1;
+};
+
+/* Patch updateIncome to show corp row */
+var _origUpdateIncome2=Renderer.updateIncome.bind(Renderer);
+Renderer.updateIncome=function(){
+  _origUpdateIncome2();
+  var el=document.getElementById('inc-corp');
+  if(el)el.textContent='+'+(S.income&&S.income.corp?S.income.corp.toFixed(1):0)+'/s';
+  var tot=document.getElementById('inc-total');
+  if(tot){
+    var sum=['job','hack','fish','bonus','boats','corp'].reduce(function(a,k){return a+(S.income&&S.income[k]?S.income[k]:0);},0);
+    tot.textContent='+'+sum.toFixed(2)+'/s';
+  }
+};
+
 </script>
 
-<!-- CASINO OVERLAY -->
-<div id="casino-overlay">
-  <div class="casino-panel" id="casino-panel-inner">
-    <!-- dynamically filled -->
+
+<!-- HACK VIEW OVERLAY -->
+<div id="hack-view" class="">
+  <div class="hack-tab-bar">
+    <button class="hack-tab-btn active" id="hack-tab-hacking" onclick="switchHackTab(&#39;hacking&#39;)">💻 Servery</button>
+    <button class="hack-tab-btn" id="hack-tab-scripts" onclick="switchHackTab(&#39;scripts&#39;)">⚙ Skripty</button>
+    <button class="hack-tab-btn" id="hack-tab-corp" onclick="switchHackTab(&#39;corp&#39;)">🏢 Corp</button>
+    <button class="hack-tab-btn" id="hack-tab-terminal" onclick="switchHackTab(&#39;terminal&#39;)">$ Terminal</button>
+    <button class="hack-tab-btn" style="margin-left:auto;color:var(--danger)" onclick="closeHackView()">✕ Zavrieť</button>
   </div>
+  <div class="hack-pane active" id="hack-pane-hacking">
+    <div id="hacking-panel-body"><div class="hack-server-card rooted"><div class="hack-srv-header"><span class="hack-srv-name">n00dles.prv</span><span class="hack-srv-status ok">● ROOT</span></div><div class="hack-srv-bars"><div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:86%"></div></div><span class="hack-bar-label">86%</span></div><div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:5%"></div></div><span class="hack-bar-label">5.9</span></div></div><div class="hack-srv-actions"><button class="hack-btn hack" onclick="HackingSystem.hackServer(&#39;n00dles&#39;,function(r){addLog(r.msg,r.ok?&#39;ok&#39;:&#39;warn&#39;);renderHackingUI();})">HACK</button><button class="hack-btn grow" onclick="HackingSystem.growServer(&#39;n00dles&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">GROW</button><button class="hack-btn weak" onclick="HackingSystem.weakenServer(&#39;n00dles&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">WEAK</button></div></div><div class="hack-server-card rooted"><div class="hack-srv-header"><span class="hack-srv-name">joesguns.prv</span><span class="hack-srv-status ok">● ROOT</span></div><div class="hack-srv-bars"><div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:50%"></div></div><span class="hack-bar-label">50%</span></div><div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:54%"></div></div><span class="hack-bar-label">54.3</span></div></div><div class="hack-srv-actions"><button class="hack-btn hack" onclick="HackingSystem.hackServer(&#39;joesguns&#39;,function(r){addLog(r.msg,r.ok?&#39;ok&#39;:&#39;warn&#39;);renderHackingUI();})">HACK</button><button class="hack-btn grow" onclick="HackingSystem.growServer(&#39;joesguns&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">GROW</button><button class="hack-btn weak" onclick="HackingSystem.weakenServer(&#39;joesguns&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">WEAK</button></div></div><div class="hack-server-card rooted"><div class="hack-srv-header"><span class="hack-srv-name">sigma-cosmetics.sk</span><span class="hack-srv-status ok">● ROOT</span></div><div class="hack-srv-bars"><div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:50%"></div></div><span class="hack-bar-label">50%</span></div><div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:59%"></div></div><span class="hack-bar-label">59.7</span></div></div><div class="hack-srv-actions"><button class="hack-btn hack" onclick="HackingSystem.hackServer(&#39;sigma-cos&#39;,function(r){addLog(r.msg,r.ok?&#39;ok&#39;:&#39;warn&#39;);renderHackingUI();})">HACK</button><button class="hack-btn grow" onclick="HackingSystem.growServer(&#39;sigma-cos&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">GROW</button><button class="hack-btn weak" onclick="HackingSystem.weakenServer(&#39;sigma-cos&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">WEAK</button></div></div><div class="hack-server-card rooted"><div class="hack-srv-header"><span class="hack-srv-name">magura-cdn.internal</span><span class="hack-srv-status ok">● ROOT</span></div><div class="hack-srv-bars"><div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:54%"></div></div><span class="hack-bar-label">54%</span></div><div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:69%"></div></div><span class="hack-bar-label">69.9</span></div></div><div class="hack-srv-actions"><button class="hack-btn hack" onclick="HackingSystem.hackServer(&#39;magura-cdn&#39;,function(r){addLog(r.msg,r.ok?&#39;ok&#39;:&#39;warn&#39;);renderHackingUI();})">HACK</button><button class="hack-btn grow" onclick="HackingSystem.growServer(&#39;magura-cdn&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">GROW</button><button class="hack-btn weak" onclick="HackingSystem.weakenServer(&#39;magura-cdn&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">WEAK</button></div></div><div class="hack-server-card rooted"><div class="hack-srv-header"><span class="hack-srv-name">mec.bancorp.sk</span><span class="hack-srv-status ok">● ROOT</span></div><div class="hack-srv-bars"><div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:95%"></div></div><span class="hack-bar-label">95%</span></div><div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:85%"></div></div><span class="hack-bar-label">85.5</span></div></div><div class="hack-srv-actions"><button class="hack-btn hack" onclick="HackingSystem.hackServer(&#39;mec-bank&#39;,function(r){addLog(r.msg,r.ok?&#39;ok&#39;:&#39;warn&#39;);renderHackingUI();})">HACK</button><button class="hack-btn grow" onclick="HackingSystem.growServer(&#39;mec-bank&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">GROW</button><button class="hack-btn weak" onclick="HackingSystem.weakenServer(&#39;mec-bank&#39;,function(r){addLog(r.msg,&#39;ok&#39;);renderHackingUI();})">WEAK</button></div></div><div class="hack-server-card locked"><div class="hack-srv-header"><span class="hack-srv-name">lazarus.darknet.0</span><span class="hack-srv-status warn">○ LOCK</span></div><div class="hack-srv-bars"><div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:50%"></div></div><span class="hack-bar-label">50%</span></div><div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:100%"></div></div><span class="hack-bar-label">100.0</span></div></div><div class="hack-srv-actions"><button class="hack-btn nuke" disabled="" onclick="HackingSystem.rootServer(&#39;lazarus-net&#39;,function(r){addLog(r.msg,r.ok?&#39;ok&#39;:&#39;warn&#39;);})">NUKE</button></div></div></div>
+  </div>
+  <div class="hack-pane" id="hack-pane-scripts">
+    <div id="scripts-panel-body"><div class="script-card running"><div class="script-name">basic-hack.js</div><div class="script-desc">Auto-hackuje najslabší rooted server každých 5s.</div><div class="script-meta">⏱ 5s | Tier 1</div><button class="script-btn stop-btn" onclick="ScriptEngine.stopScript(&#39;basic-hack&#39;);renderScriptUI()">⏹ STOP</button></div><div class="script-card running"><div class="script-name">grow-weaken.js</div><div class="script-desc">Udržiava optimálny stav serverov (grow/weaken cycle) každých 8s.</div><div class="script-meta">⏱ 8s | Tier 2</div><button class="script-btn stop-btn" onclick="ScriptEngine.stopScript(&#39;grow-weaken&#39;);renderScriptUI()">⏹ STOP</button></div><div class="script-card locked"><div class="script-name">batch-hack.js</div><div class="script-desc">Hackuje všetky rooted servery simultánne každých 10s.</div><div class="script-meta">⏱ 10s | Tier 3</div><div class="script-locked-msg">// Tier 3 locked //</div></div><div class="script-card locked"><div class="script-name">lazarus-intercept.js</div><div class="script-desc">Interceptuje LAZARUS sieť. +25₿/s pasívne + XP.</div><div class="script-meta">⏱ 3s | Tier 4</div><div class="script-locked-msg">// Tier 4 locked //</div></div></div>
+  </div>
+  <div class="hack-pane" id="hack-pane-corp">
+    <div id="corp-panel-body"><div class="corp-card owned"><div class="corp-header"><span class="corp-name">ShadowNet LLC</span><span class="corp-income">+8₿/s</span></div><div class="corp-desc">Malá sieťová firma. Dáta a VPN.</div><div class="corp-upgrades"><div class="corp-upgrade"><span class="up-name">Bandwidth+</span><span class="up-bonus">+5₿/s</span><button class="up-btn" onclick="CorporationSystem.buyUpgrade(&#39;shadow-net&#39;,&#39;bandwidth&#39;)">3&nbsp;000₿</button></div><div class="corp-upgrade"><span class="up-name">DarkWeb Node</span><span class="up-bonus">+15₿/s</span><button class="up-btn" onclick="CorporationSystem.buyUpgrade(&#39;shadow-net&#39;,&#39;darkweb&#39;)">10&nbsp;000₿</button></div><div class="corp-upgrade"><span class="up-name">Botnet v2</span><span class="up-bonus">+40₿/s</span><button class="up-btn" onclick="CorporationSystem.buyUpgrade(&#39;shadow-net&#39;,&#39;botnet&#39;)">30&nbsp;000₿</button></div></div></div><div class="corp-card"><div class="corp-header"><span class="corp-name">DataBrokers s.r.o.</span><span class="corp-income">+30₿/s</span></div><div class="corp-desc">Predaj osobných dát. Rýchly zisk.</div><button class="corp-buy-btn" onclick="CorporationSystem.buyCorp(&#39;data-brokers&#39;)">KÚPIŤ 25&nbsp;000₿</button></div><div class="corp-card locked"><div class="corp-header"><span class="corp-name">LAZARUS Counter-Ops</span><span class="corp-income">+120₿/s</span></div><div class="corp-desc">Infiltrácia korporácií. Sabotáž a výkupné.</div><div class="corp-locked-msg">// Tier 3 req //</div></div><div class="corp-card locked"><div class="corp-header"><span class="corp-name">Neo-Magura Corp</span><span class="corp-income">+800₿/s</span></div><div class="corp-desc">Ty si CEO. Úplná kontrola nad mestom. ENDGAME.</div><div class="corp-locked-msg">// Tier 4 req //</div></div></div>
+  </div>
+  <div class="hack-pane" id="hack-pane-terminal">
+    <div class="terminal-wrap">
+      <div id="terminal-output"><div class="t-line t-hi">// LAZARUS TERMINAL v3.0 — CEO ZLA //</div><div class="t-line t-dim">Napíš <span class="t-cmd">help</span> pre príkazy.</div></div>
+      <div class="terminal-input-row">
+        <span style="color:var(--green);font-family:var(--font-mono);font-size:13px">$</span>
+        <input id="terminal-input" type="text" placeholder="hack [server] | help" autocomplete="off" spellcheck="false">
+        <button id="terminal-run">RUN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- CASINO OVERLAY -->
+<div id="casino-overlay" class="">
+  <div class="casino-panel" id="casino-panel-inner"></div>
 </div>
 
 <!-- HUNGER WARNING BANNER -->
 <div id="hunger-warning"></div>
 
-</body>
-</html>
+
+</body></html>
