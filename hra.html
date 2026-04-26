@@ -1261,11 +1261,35 @@ a:hover { color: #fff; }
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
   :root { --scene-fs: 14px; --choice-fs: 13px; }
-  #main { grid-template-columns: 1fr !important; grid-template-rows: auto 1fr auto; height: 100dvh; }
+  #main {
+    display: grid !important;
+    grid-template-columns: 42px 1fr 42px !important;
+    grid-template-rows: 1fr !important;
+    height: calc(100dvh - 38px - 52px);
+    gap: 0;
+    padding-top: 0;
+    overflow: hidden;
+  }
   #left-nav { display: none !important; }
-  #left-panel { display: none; }
-  #right-panel { display: none; }
-  #center-panel { height: auto; flex: 1; border-right: none; }
+  #left-panel { display: none !important; }
+  #right-panel { display: none !important; }
+  #center-panel {
+    height: calc(100dvh - 38px - 52px);
+    flex: 1; border-right: none; border-left: none;
+    overflow: hidden;
+    grid-column: 2 !important;
+    grid-row: 1;
+  }
+  #mobile-left-arrow-main {
+    grid-column: 1 !important;
+    grid-row: 1;
+    height: 100%;
+  }
+  #mobile-right-arrow-main {
+    grid-column: 3 !important;
+    grid-row: 1;
+    height: 100%;
+  }
   #topbar-tabs { display: none; }
   #topbar-title { font-size: 11px; letter-spacing: 2px; }
   #topbar-right { gap: 6px; }
@@ -1290,13 +1314,168 @@ a:hover { color: #fff; }
 }
 .mobile-nav-btn {
   flex: 1; background: transparent; border: none; border-right: 1px solid var(--border2);
-  color: var(--text-dim); font-family: var(--font-body); font-size: 10px;
+  color: var(--text-dim); font-family: var(--font-body); font-size: 9px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2px; cursor: pointer; padding: 4px 0; letter-spacing: 0.5px;
+  gap: 2px; cursor: pointer; padding: 4px 2px; letter-spacing: 0.5px;
   transition: all 0.12s;
 }
 .mobile-nav-btn:last-child { border-right: none; }
+.mobile-nav-btn.active { color: var(--green); background: rgba(57,255,20,0.07); border-bottom: 2px solid var(--green); }
 .mobile-nav-btn:hover { color: var(--green); background: rgba(57,255,20,0.04); }
+.mobile-nav-btn span { font-size: 8px; letter-spacing: 0.5px; }
+
+/* ── MOBILE SIDE ARROWS ── */
+.mobile-side-arrow {
+  position: relative; z-index: 50;
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+  border: none;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+}
+.mobile-side-arrow:active { background: rgba(57,255,20,0.08); }
+.mobile-side-arrow.left { border-right: 1px solid var(--border2); grid-column: 1; }
+.mobile-side-arrow.right { border-left: 1px solid var(--border2); grid-column: 3; }
+.mobile-side-arrow .arrow-icon {
+  font-size: 16px; color: var(--green3);
+  text-shadow: 0 0 8px rgba(57,255,20,0.4);
+  line-height: 1;
+}
+.mobile-side-arrow .arrow-label {
+  font-family: var(--font-hud); font-size: 7px;
+  color: var(--text-muted); letter-spacing: 1px;
+  margin-top: 6px; text-align: center;
+  line-height: 1.3; padding: 0 2px;
+  max-width: 38px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.mobile-side-arrow .arrow-dots {
+  display: flex; gap: 3px; margin-top: 6px;
+}
+.mobile-side-arrow .arrow-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--border2); border: 1px solid var(--border);
+  transition: background 0.2s, border-color 0.2s;
+}
+.mobile-side-arrow .arrow-dot.active {
+  background: var(--green3); border-color: var(--green);
+  box-shadow: 0 0 4px rgba(57,255,20,0.5);
+}
+@media (max-width: 768px) {
+  .mobile-side-arrow { display: flex; }
+}
+
+/* ── MOBILE SLIDE PANEL (LEFT & RIGHT) ── */
+.mobile-slide-panel {
+  position: fixed;
+  top: 38px; bottom: 52px;
+  width: calc(100vw - 84px);
+  z-index: 700;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: none;
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s;
+  opacity: 0;
+}
+.mobile-slide-panel.left { left: 42px; transform: translateX(-100%); border-right: none; }
+.mobile-slide-panel.right { right: 42px; transform: translateX(100%); border-left: none; }
+.mobile-slide-panel.open { display: block; transform: translateX(0); opacity: 1; }
+.mobile-slide-panel.closing { transform: translateX(-100%); opacity: 0; }
+.mobile-slide-panel.right.closing { transform: translateX(100%); opacity: 0; }
+
+/* Panel header with tab name */
+.mobile-panel-header {
+  position: sticky; top: 0; z-index: 5;
+  background: linear-gradient(180deg, var(--bg3) 0%, var(--bg2) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.mobile-panel-title {
+  font-family: var(--font-hud); font-size: 10px;
+  color: var(--green); letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.mobile-panel-close-btn {
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--text-dim); font-size: 12px;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  border-radius: 2px;
+}
+.mobile-panel-content { padding: 8px; }
+
+/* Topbar full-view toggle */
+#mobile-topbar-expand {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  background: linear-gradient(180deg, #0e1420 0%, var(--bg) 100%);
+  border-bottom: 2px solid var(--green3);
+  padding: 0 10px 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+  flex-direction: column; gap: 0;
+}
+#mobile-topbar-expand.show { display: flex; }
+#mobile-topbar-expand-bar {
+  height: 38px; display: flex; align-items: center; justify-content: space-between;
+}
+#mobile-topbar-resources {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  padding: 6px 0 2px; border-top: 1px solid var(--border2);
+}
+.mobile-res-chip {
+  font-family: var(--font-hud); font-size: 10px;
+  border: 1px solid var(--border); padding: 3px 8px;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; gap: 5px;
+  color: var(--text-dim);
+}
+.mobile-res-chip .chip-val { color: var(--gold); font-weight: 700; }
+.mobile-res-chip .chip-inc { font-size: 9px; color: var(--green3); }
+#mobile-topbar-tabs-row {
+  display: flex; overflow-x: auto; gap: 2px;
+  padding: 4px 0; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#mobile-topbar-tabs-row::-webkit-scrollbar { display: none; }
+.mtab-btn {
+  flex-shrink: 0; background: transparent;
+  border: none; border-bottom: 2px solid transparent;
+  color: var(--text-dim); font-family: var(--font-body);
+  font-size: 11px; letter-spacing: 1px;
+  padding: 4px 12px; cursor: pointer; white-space: nowrap;
+  transition: all 0.12s; text-transform: uppercase;
+}
+.mtab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+.mtab-btn:hover { color: var(--blue); }
+#mobile-topbar-toggle {
+  position: fixed; top: 0; right: 0; z-index: 850;
+  width: 38px; height: 38px;
+  background: transparent; border: none;
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-dim); font-size: 16px;
+  transition: color 0.12s;
+}
+#mobile-topbar-toggle.show { display: flex; }
+#mobile-topbar-toggle:hover { color: var(--green); }
+#mobile-topbar-toggle.expanded { color: var(--green); }
+
+/* Dim the center when a slide panel is open */
+#main.panel-left-open #center-panel,
+#main.panel-right-open #center-panel {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .mobile-overlay-panel {
   position: fixed; top: 38px; left: 0; right: 0; bottom: 52px; z-index: 780;
   background: var(--bg); border-top: 1px solid var(--border);
@@ -2981,6 +3160,13 @@ body.low-power .minigame-overlay {
      MAIN LAYOUT
 ═══════════════════════════════════════════════════ -->
 <div id="main">
+  <!-- MOBILE LEFT SIDE ARROW (grid col 1 on mobile) -->
+  <button class="mobile-side-arrow left" id="mobile-left-arrow-main" aria-label="Lavy panel" onclick="mobileCycleLeft()">
+    <span class="arrow-icon">&#x25C4;</span>
+    <span class="arrow-label" id="mobile-left-label-main">&#352;tat.</span>
+    <div class="arrow-dots" id="mobile-left-dots-main"></div>
+  </button>
+
   <!-- LEFT NAV SIDEBAR -->
   <div id="left-nav">
     <button class="sidenav-btn active" data-view="game" data-tip="Operácia" onclick="switchView('game')">⚡</button>
@@ -3096,6 +3282,8 @@ body.low-power .minigame-overlay {
   ║  🌿 <span class="node" onclick="enterLocation('terasy')">Terasy</span>                ║
   ║  🌲 <span class="node" onclick="enterLocation('lesopark')">Lesopark</span>             ║
   ║  🏠 <span class="node" onclick="enterLocation('domov')">Základňa</span>              ║
+  ║  🏚 <span class="node" onclick="enterLocation('stokari')">Garáže Píla ☠</span>       ║
+  ║  🌊 <span class="node" onclick="enterLocation('mrtve_rameno')">Mŕtve Rameno 🐟</span>  ║
   ╟──────────────────────────────╢
   ║ OKOLIE                        ║
   ║  📻 <span class="node" onclick="enterLocation('banovce')">Bánovce · 5G Sek. 7</span>  ║
@@ -3171,6 +3359,13 @@ body.low-power .minigame-overlay {
       <div id="shop-body"></div>
     </div>
   </div>
+
+  <!-- MOBILE RIGHT SIDE ARROW (grid col 3 on mobile) -->
+  <button class="mobile-side-arrow right" id="mobile-right-arrow-main" aria-label="Pravy panel" onclick="mobileCycleRight()">
+    <span class="arrow-icon">&#x25BA;</span>
+    <span class="arrow-label" id="mobile-right-label-main">Inv.</span>
+    <div class="arrow-dots" id="mobile-right-dots-main"></div>
+  </button>
 </div>
 
 <!-- OVERLAYS -->
@@ -3312,13 +3507,80 @@ body.low-power .minigame-overlay {
 
 <div id="notif"></div>
 
-<!-- MOBILE NAV -->
-<div id="mobile-nav">
-  <button class="mobile-nav-btn" onclick="mobilePanel('stats')">📊<span>Štatistiky</span></button>
-  <button class="mobile-nav-btn" onclick="mobilePanel('map')">🗺️<span>Mapa</span></button>
-  <button class="mobile-nav-btn" onclick="mobilePanel('inv')">🎒<span>Inventár</span></button>
-  <button class="mobile-nav-btn" onclick="mobilePanel('log')">📋<span>Log</span></button>
+<!-- MOBILE LEFT ARROW (injected into #main grid col 1) -->
+<button class="mobile-side-arrow left" id="mobile-left-arrow" onclick="mobileArrow('left')" aria-label="Ľavý panel">
+  <span class="arrow-icon">◀</span>
+  <span class="arrow-label" id="mobile-left-label">Štat.</span>
+  <div class="arrow-dots" id="mobile-left-dots"></div>
+</button>
+
+<!-- MOBILE RIGHT ARROW (injected into #main grid col 3) -->
+<button class="mobile-side-arrow right" id="mobile-right-arrow" onclick="mobileArrow('right')" aria-label="Pravý panel">
+  <span class="arrow-icon">▶</span>
+  <span class="arrow-label" id="mobile-right-label">Inv.</span>
+  <div class="arrow-dots" id="mobile-right-dots"></div>
+</button>
+
+<!-- SLIDE PANELS -->
+<div class="mobile-slide-panel left" id="mobile-left-panel">
+  <div class="mobile-panel-header">
+    <span class="mobile-panel-title" id="mobile-left-panel-title">Panel</span>
+    <button class="mobile-panel-close-btn" onclick="mobileClosePanel('left')">✕</button>
+  </div>
+  <div class="mobile-panel-content" id="mobile-left-panel-content"></div>
 </div>
+<div class="mobile-slide-panel right" id="mobile-right-panel">
+  <div class="mobile-panel-header">
+    <span class="mobile-panel-title" id="mobile-right-panel-title">Panel</span>
+    <button class="mobile-panel-close-btn" onclick="mobileClosePanel('right')">✕</button>
+  </div>
+  <div class="mobile-panel-content" id="mobile-right-panel-content"></div>
+</div>
+
+<!-- MOBILE NAV (bottom bar) -->
+<div id="mobile-nav">
+  <button class="mobile-nav-btn" id="mnav-left" onclick="mobileCycleLeft()">◀<span>Ľavý</span></button>
+  <button class="mobile-nav-btn" id="mnav-game" onclick="mobileShowGame()">⚡<span>Hra</span></button>
+  <button class="mobile-nav-btn" id="mnav-stats" onclick="mobileMiniStats()">📊<span>Stats</span></button>
+  <button class="mobile-nav-btn" id="mnav-log" onclick="mobileMiniLog()">📋<span>Log</span></button>
+  <button class="mobile-nav-btn" id="mnav-right" onclick="mobileCycleRight()">▶<span>Pravý</span></button>
+</div>
+
+<!-- MOBILE EXPANDED TOPBAR (toggle) -->
+<button id="mobile-topbar-toggle" onclick="mobileTopbarToggle()">☰</button>
+<div id="mobile-topbar-expand">
+  <div id="mobile-topbar-expand-bar">
+    <span style="font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:2px">⚔ CEO ZLA</span>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="mobile-topbar-money2" style="font-family:var(--font-hud);color:var(--gold);font-size:12px">₿ 0</span>
+      <button onclick="mobileTopbarToggle()" style="background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:2px 8px;cursor:pointer;font-size:11px">✕</button>
+    </div>
+  </div>
+  <div id="mobile-topbar-resources">
+    <div class="mobile-res-chip">❤️ HP <span class="chip-val" id="mchip-hp">100</span></div>
+    <div class="mobile-res-chip">🧠 SAN <span class="chip-val" id="mchip-san">100</span></div>
+    <div class="mobile-res-chip">⭐ XP <span class="chip-val" id="mchip-xp">0</span></div>
+    <div class="mobile-res-chip">🏆 LVL <span class="chip-val" id="mchip-lvl">1</span></div>
+    <div class="mobile-res-chip">📊 /s <span class="chip-val chip-inc" id="mchip-inc">+0</span></div>
+    <div class="mobile-res-chip">🍽 <span class="chip-val" id="mchip-hunger">100</span></div>
+  </div>
+  <div id="mobile-topbar-tabs-row">
+    <button class="mtab-btn active" onclick="mobileTabSwitch('game');mobileTopbarToggle()">⚡ Operácia</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('fish');mobileTopbarToggle()">🎣 Rybolov</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('boats');mobileTopbarToggle()">⛵ Lode</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('garden');mobileTopbarToggle()">🌱 Záhradka</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('uni');mobileTopbarToggle()">🎓 Uni</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('gym');mobileTopbarToggle()">💪 Gym</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('hq');mobileTopbarToggle()">🏠 HQ</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('shop');mobileTopbarToggle()">🛒 Obchod</button>
+    <button class="mtab-btn" onclick="openHackView();mobileTopbarToggle()">💻 Hack</button>
+    <button class="mtab-btn" onclick="CityMap.open();mobileTopbarToggle()">⌖ Mapa</button>
+    <button class="mtab-btn" onclick="FactionsSystem.openWindow();mobileTopbarToggle()">⚔ Frakcie</button>
+    <button class="mtab-btn" onclick="saveGame();mobileTopbarToggle()">💾 Uložiť</button>
+  </div>
+</div>
+
+<!-- LEGACY MOBILE PANELS (kept for compatibility) -->
 <div id="mobile-stats-panel" class="mobile-overlay-panel"></div>
 <div id="mobile-map-panel" class="mobile-overlay-panel"></div>
 <div id="mobile-inv-panel" class="mobile-overlay-panel"></div>
@@ -4448,6 +4710,11 @@ var SCENE_PHOTOS = {
   'fac_rybari_quest_safe':           { url:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop', badge:'RYBÁRI // FOTO HOTOVÉ' },
   'fac_rybari_quest_sd':             { url:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop', badge:'RYBÁRI // SD KARTA DEKR' },
   'fac_rybari_quest_sabotage':       { url:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop', badge:'RYBÁRI // SABOTÁŽ' },
+  // ── Nové faction entry locations ──────────────────────────────
+  'loc_stokari':      { url:'https://images.unsplash.com/photo-1565536421961-15ddc36c6e02?w=800&auto=format&fit=crop', badge:'GARÁŽE PÍLA // STOKÁRI · 23:47' },
+  'loc_mrtve_rameno': { url:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop', badge:'MŔTVE RAMENO // NOVÁ LEHOTA · ÚSVIT' },
+  'loc_miki_rybari_intro': { url:'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/mikibar.jpg', badge:'MIKI BAR // LUCIA · RYBÁRI TIP' },
+  'fac_rybari_explain': { url:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop', badge:'MŔTVE RAMENO // FERO VYSVETĽUJE' },
 };
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -5926,12 +6193,47 @@ var SCENES = {
       'Lucia ťa odmeria spoza baru.',
       '"Čo budeš?"',
     ],
-    onEnter: function(){ gainXP(5); },
+    onEnter: function(){ gainXP(5); S.flags['miki_navstiveny']=true; FactionsSystem.discover('rybari'); },
     choices: [
       { text:'[A] Pýtať sa Lucie',             next:'loc_miki_barman' },
       { text:'[B] Kúpiť fľašu whisky (120₿)', next:'loc_miki_flask' },
       { text:'[C] 🎲 Hrať hazard',             next:'loc_miki_hazard' },
-      { text:'[D] Odísť',                     next:'start' },
+      { text:'[D] 🐟 „Lucia, hovorila si o rybároch..." [JOIN Rybári]',
+        next:'loc_miki_rybari_intro',
+        cond:function(){ return !S.factions || !S.factions.joined || !S.factions.joined['rybari']; },
+        condFail:'Už si členom Rybárov — Mŕtve Rameno ťa pozná.' },
+      { text:'[E] Odísť',                     next:'start' },
+    ]
+  },
+
+  loc_miki_rybari_intro: {
+    name: 'Miki Bar // Lucia o Rybároch',
+    art: '🐟',
+    npcName: 'Lucia',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
+    text: [
+      'Lucia sa nakloní cez bar. Hlas znižuje.',
+      '"Rybári. Fero a jeho ľudia. Stretávajú sa na Mŕtvom Ramene — Nová Lehota, za starou kasárňou."',
+      '',
+      '"Nie sú to obyčajní rybári. Tí chlapi vidia veci, ktoré štát nevidí."',
+      '"Keď sa niečo deje v meste — oni vedia prví. Tiché uši všade."',
+      '',
+      'Lucia ti podá papierik.',
+      '"Fero Mináč. Povedz mu, že ťa posiela Lucia z Miki. Nechaj pri sebe sako — tam chodia len ľudia čo musia."',
+      '',
+      '// Mŕtve Rameno — nová lokácia odomknutá na mape //',
+    ],
+    onEnter: function(){
+      gainXP(15);
+      S.flags['rybari_lucia_odporucenie'] = true;
+      addLog('Lucia: Rybári na Mŕtvom Ramene. Fero Mináč čaká.', 'ok');
+      showNotif('🐟 Lokácia Mŕtve Rameno odomknutá!');
+    },
+    choices: [
+      { text:'[A] 🐟 Ísť na Mŕtve Rameno [JOIN Rybári]',
+        next:'fac_rybari_rameno' },
+      { text:'[B] „Ďakujem, ešte premyslím."',
+        next:'loc_miki' },
     ]
   },
 
@@ -6564,13 +6866,20 @@ var SCENES = {
       '',
       'Na stole vedľa monitora: nedojedená pizza a studená káva.',
       'Oravec tu sedí hodiny.',
+      '',
+      'Oravec sa otočí. Zmeria ťa dlhým pohľadom.',
+      '"Ak hľadáš len informácie — dobre. Ale ak chceš niečo zmeniť — viem kde si môžeš nájsť ľudí, čo to urobia."',
     ],
-    onEnter: function(){ gainXP(25); S.flags['fri_mapa']=true; addLog('Mapa uzlov LAZARUS. Vtáčnik = primárny uzol.','ok'); activateOp('op-lazarus'); },
+    onEnter: function(){ gainXP(25); S.flags['fri_mapa']=true; addLog('Mapa uzlov LAZARUS. Vtáčnik = primárny uzol.','ok'); activateOp('op-lazarus'); FactionsSystem.discover('hackers'); },
     choices: [
       { text:'[A] „Čo je LAZARUS?"',              next:'loc_fri_lazarus' },
       { text:'[B] Hacknúť konzoly (HCK 25+)',      next:'loc_fri_hack',
         cond:function(){ return S.hackStat>=25; }, condFail:'Nedostatočný Hacking (25+).' },
       { text:'[C] „Pracuješ pre nich?"',           next:'loc_fri_konfrontacia' },
+      { text:'[D] 💻 „Chcem sa pridať k Hackerom." [JOIN]',
+        next:'fac_hackers_lab',
+        cond:function(){ return !S.factions || !S.factions.joined || !S.factions.joined['hackers']; },
+        condFail:'Už si členom Hackerov.' },
     ]
   },
 
@@ -6915,11 +7224,18 @@ var SCENES = {
       'Pauza.',
       '"Mám záujem zostať v biznise. LAZARUS nie je dobrý pre biznis."',
       '"Ľudia bez emócií nepijú."',
+      '',
+      'Viktor si upraví manžetu. Zlaté hodinky.',
+      '"Ak chceš hrať na vyššej úrovni — mám pre teba miesto v CEO kruhu. Penthouse, kontakty, Stocks trading. Nie zadarmo, ale — hodné."',
     ],
-    onEnter: function(){ gainXP(20); S.flags['viktor_spojenec']=true; addLog('Viktor Neon: pragmatický spojenec. LAZARUS kazí biznis.','ok'); },
+    onEnter: function(){ gainXP(20); S.flags['viktor_spojenec']=true; addLog('Viktor Neon: pragmatický spojenec. LAZARUS kazí biznis.','ok'); FactionsSystem.discover('ceo'); },
     choices: [
       { text:'[A] Prijať Viktorovu pomoc',     next:'loc_jantar_viktor_pomoc' },
-      { text:'[B] Odmietnut — konať sám',      next:'start' },
+      { text:'[B] 🎩 „Chcem vstúpiť do CEO." [JOIN]',
+        next:'fac_ceo_penthouse',
+        cond:function(){ return !S.factions || !S.factions.joined || !S.factions.joined['ceo']; },
+        condFail:'Už si členom CEO frakcie.' },
+      { text:'[C] Odmietnut — konať sám',      next:'start' },
     ]
   },
 
@@ -7451,6 +7767,68 @@ var SCENES = {
      ╚══════════════════════════════════════════════════════════╝
   ═══════════════════════════════════════════════════════════════ */
 
+  // ── Nové lokácie — vstupy do frakcií ─────────────────────────
+  loc_stokari: {
+    name: 'Garáže Píla // Stokári',
+    art: '🏚',
+    text: [
+      'Priemyselná štvrt na okraji Píly. Za posledným blokom panelákov — tri rady starých garáží.',
+      '',
+      'Reťaze visí z plota. Sprej na stene: obrys ruky s augmentovaným prstom.',
+      'To je ich znak.',
+      '',
+      'Pach motorového oleja a niečoho sladkého — Gentech B2. Lacné augmenty.',
+      'Stroj bzučí v tretej garáži. Niekto je vnútri.',
+      '',
+      '// Stokárska diera. Prvý kontakt. //',
+    ],
+    onEnter: function(){
+      gainXP(10);
+      S.flags['stokari_prvykontakt'] = true;
+      addLog('Garáže Píla — Stokárska diera. Prvý kontakt.', 'ok');
+      FactionsSystem.discover('stokari');
+    },
+    choices: [
+      { text:'[A] 💀 Vstúpiť do garáže [JOIN Stokári]',
+        next:'fac_stokari_garaze' },
+      { text:'[B] Pozorovať zvonku',
+        next:'fac_stokari_observe' },
+      { text:'[C] Späť do centra',
+        next:'start' },
+    ]
+  },
+
+  loc_mrtve_rameno: {
+    name: 'Mŕtve Rameno // Rybárska základňa',
+    art: '🌊',
+    text: [
+      'Za starou kasárňou. Nová Lehota.',
+      'Mŕtve Rameno — slepá vetva rieky. Voda pokojná ako zrkadlo.',
+      '',
+      'Ohnisko. Drevené sedenia. Pár člnov privязaných o kôl.',
+      'Pri ohni sedí muž — päťdesiatnik, pokrčené ruky, tichý pohľad.',
+      '',
+      '"Lucia ťa poslala?" Nestál. Len sa pozrel.',
+      '"Sadni si. Chytáme ráno. Ale ak chceš — najprv sa rozprávame."',
+      '',
+      '// Fero Mináč. Vedúci rybárskej siete. //',
+    ],
+    onEnter: function(){
+      gainXP(15);
+      S.flags['rybari_fero_kontakt'] = true;
+      addLog('Mŕtve Rameno — Fero Mináč. Tichá sieť.', 'ok');
+      FactionsSystem.discover('rybari');
+    },
+    choices: [
+      { text:'[A] 🐟 „Chcem sa pridať." [JOIN Rybári]',
+        next:'fac_rybari_rameno' },
+      { text:'[B] „Čo tu vlastne robíte?" [Dozvedieť sa viac]',
+        next:'fac_rybari_explain' },
+      { text:'[C] Späť do mesta',
+        next:'start' },
+    ]
+  },
+
   // ─── STOKÁRI: Garáže na okraji sídliska ──────────────────────────
   fac_stokari_garaze: {
     name: 'Stokári // Garáže Píla',
@@ -7868,6 +8246,33 @@ var SCENES = {
         next: 'fac_rybari_rameno' },
       { text: '← Sadnúť si k ohňu',
         next: 'fac_rybari_rameno' }
+    ]
+  },
+
+
+  fac_rybari_explain: {
+    name: 'Rybári // Čo je Mrŕtve Rameno?',
+    art: '🐟',
+    text: [
+      'Fero odloží prút. Pohľad na vodu.',
+      '"Čo tu robíme." Opakuje otázku pomaly, akoby ju skúšal.',
+      '',
+      '"Väčšina ĺudí vidí starých chlapov pri rieke. A to nie je klamstvo."',
+      '"Ale — keď chceš vedieť čo sa deje v meste, nepýtaj sa úriadníkov. Opýtaj sa toho, čo videl všetko za 40 rokov."',
+      '',
+      '"Bartoš zo skladu papiera videl nákladiaky BaneCorp kažidú noc v marci."',
+      '"Macko pri stanici počul o ľuďoch ktorí sa stratili pri Vtáčniku."',
+      '"Pavlík — ten čo robil v elektrárni — našiel vo vraku čosi čo mu nedáva pokoj."',
+      '',
+      '"Mrŕtve Rameno je tiché ucho mesta. A niekedy — keď treba — aj päsť."',
+    ],
+    onEnter: function(){ gainXP(10); addLog('Fero: Rybári = tichá sieť informácií.', 'ok'); },
+    choices: [
+      { text:'[A] 🐟 „Chcem sa pridať." [JOIN Rybári]',
+        next:'fac_rybari_joined',
+        action: function(){ FactionsSystem.join('rybari'); } },
+      { text:'[B] Späť na Mrŕtve Rameno',
+        next:'fac_rybari_rameno' },
     ]
   },
 
@@ -9672,6 +10077,270 @@ function mobilePanel(name) {
   }
   panel.classList.add('open');
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE SIDE-ARROW PANEL SYSTEM
+   Ľavá šípka: Štatistiky / Príjem / Frakcie / Ciele / Mapa
+   Pravá šípka: Predmety / Výstroj / Ryby / Obchod / Log
+══════════════════════════════════════════════════════════════════ */
+var _mobilePanelState = {
+  leftIdx: -1,   // -1 = zatvorený
+  rightIdx: -1,
+  topbarOpen: false
+};
+
+var _leftPanels = [
+  { key: 'stats',    label: 'Štat.',  icon: '📊', title: 'Agent // Štatistiky' },
+  { key: 'income',   label: 'Príjem', icon: '💰', title: 'Pasívny príjem' },
+  { key: 'factions', label: 'Frak.',  icon: '⚔',  title: 'Frakcie // Lojalita' },
+  { key: 'goals',    label: 'Ciele',  icon: '🎯', title: 'Operačné ciele' },
+  { key: 'map',      label: 'Mapa',   icon: '🗺', title: 'Mapa // Prievidza' }
+];
+var _rightPanels = [
+  { key: 'items',  label: 'Inv.',   icon: '🎒', title: 'Inventár' },
+  { key: 'equip',  label: 'Výstroj',icon: '⚔️', title: 'Výstroj' },
+  { key: 'fish',   label: 'Ryby',   icon: '🐟', title: 'Ryby' },
+  { key: 'shop',   label: 'Obchod', icon: '🛒', title: 'Obchod' },
+  { key: 'log',    label: 'Log',    icon: '📋', title: 'Event Log' }
+];
+
+function _mobileIsMobile() {
+  return window.innerWidth <= 768;
+}
+
+function _mobileRenderDots(containerId, panels, activeIdx) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  panels.forEach(function(p, i) {
+    var dot = document.createElement('div');
+    dot.className = 'arrow-dot' + (i === activeIdx ? ' active' : '');
+    el.appendChild(dot);
+  });
+}
+
+function _mobileUpdateArrowLabel(side, idx) {
+  var panels = side === 'left' ? _leftPanels : _rightPanels;
+  var label = idx >= 0 && panels[idx] ? panels[idx].label : (side === 'left' ? 'Štat.' : 'Inv.');
+  var lbl = document.getElementById('mobile-' + side + '-label-main');
+  if (lbl) lbl.textContent = label;
+  _mobileRenderDots('mobile-' + side + '-dots-main', panels, idx);
+}
+
+function _mobileFillLeftPanel(key) {
+  var content = document.getElementById('mobile-left-panel-content');
+  var titleEl = document.getElementById('mobile-left-panel-title');
+  var panel = _leftPanels.find(function(p){ return p.key === key; });
+  if (titleEl && panel) titleEl.textContent = panel.icon + ' ' + panel.title;
+  if (!content) return;
+  content.innerHTML = '';
+  if (key === 'stats') {
+    var src = document.getElementById('sec-stats');
+    if (src) content.appendChild(src.cloneNode(true));
+  } else if (key === 'income') {
+    var src2 = document.getElementById('sec-income');
+    if (src2) content.appendChild(src2.cloneNode(true));
+  } else if (key === 'factions') {
+    var src3 = document.getElementById('sec-factions');
+    if (src3) content.appendChild(src3.cloneNode(true));
+  } else if (key === 'goals') {
+    var src4 = document.getElementById('sec-ops');
+    if (src4) content.appendChild(src4.cloneNode(true));
+  } else if (key === 'map') {
+    var src5 = document.getElementById('sec-map');
+    if (src5) content.appendChild(src5.cloneNode(true));
+  }
+}
+
+function _mobileFillRightPanel(key) {
+  var content = document.getElementById('mobile-right-panel-content');
+  var titleEl = document.getElementById('mobile-right-panel-title');
+  var panel = _rightPanels.find(function(p){ return p.key === key; });
+  if (titleEl && panel) titleEl.textContent = panel.icon + ' ' + panel.title;
+  if (!content) return;
+  content.innerHTML = '';
+  if (key === 'items' || key === 'equip' || key === 'fish' || key === 'shop') {
+    var rp = document.getElementById('right-panel');
+    if (rp) {
+      var clone = rp.cloneNode(true);
+      // Activate the right tab
+      var tabMap = { items:'inv-pane-items', equip:'inv-pane-equip', fish:'inv-pane-fish', shop:'inv-pane-shop' };
+      clone.querySelectorAll('.inv-pane').forEach(function(p){ p.classList.remove('active'); });
+      var target = clone.querySelector('#' + tabMap[key]);
+      if (target) target.classList.add('active');
+      content.appendChild(clone);
+    }
+  } else if (key === 'log') {
+    var lw = document.getElementById('log-wrap');
+    if (lw) {
+      var logClone = lw.cloneNode(true);
+      logClone.style.maxHeight = 'none';
+      content.appendChild(logClone);
+    }
+  }
+}
+
+function _mobileOpenPanel(side, idx) {
+  var panelId = 'mobile-' + side + '-panel';
+  var panel = document.getElementById(panelId);
+  if (!panel) return;
+  var panels = side === 'left' ? _leftPanels : _rightPanels;
+  var key = panels[idx] ? panels[idx].key : null;
+  if (!key) return;
+  if (side === 'left') {
+    _mobileFillLeftPanel(key);
+    _mobilePanelState.leftIdx = idx;
+  } else {
+    _mobileFillRightPanel(key);
+    _mobilePanelState.rightIdx = idx;
+  }
+  panel.classList.remove('closing');
+  panel.classList.add('open');
+  // Dim center
+  var main = document.getElementById('main');
+  if (main) main.classList.add('panel-' + side + '-open');
+  _mobileUpdateArrowLabel(side, idx);
+}
+
+function mobileClosePanel(side) {
+  var panel = document.getElementById('mobile-' + side + '-panel');
+  if (!panel) return;
+  panel.classList.add('closing');
+  setTimeout(function(){
+    panel.classList.remove('open');
+    panel.classList.remove('closing');
+  }, 220);
+  var main = document.getElementById('main');
+  if (main) main.classList.remove('panel-' + side + '-open');
+  if (side === 'left') { _mobilePanelState.leftIdx = -1; _mobileUpdateArrowLabel('left', -1); }
+  else { _mobilePanelState.rightIdx = -1; _mobileUpdateArrowLabel('right', -1); }
+}
+
+function mobileCycleLeft() {
+  if (!_mobileIsMobile()) return;
+  var cur = _mobilePanelState.leftIdx;
+  var panel = document.getElementById('mobile-left-panel');
+  if (cur === -1) {
+    // Open first panel
+    _mobileOpenPanel('left', 0);
+  } else if (cur < _leftPanels.length - 1) {
+    // Next panel
+    _mobileOpenPanel('left', cur + 1);
+  } else {
+    // Close
+    mobileClosePanel('left');
+  }
+}
+
+function mobileCycleRight() {
+  if (!_mobileIsMobile()) return;
+  var cur = _mobilePanelState.rightIdx;
+  if (cur === -1) {
+    _mobileOpenPanel('right', 0);
+  } else if (cur < _rightPanels.length - 1) {
+    _mobileOpenPanel('right', cur + 1);
+  } else {
+    mobileClosePanel('right');
+  }
+}
+
+function mobileShowGame() {
+  mobileClosePanel('left');
+  mobileClosePanel('right');
+  // Highlight game button
+  document.querySelectorAll('.mobile-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById('mnav-game');
+  if (btn) btn.classList.add('active');
+}
+
+function mobileMiniStats() {
+  // Toggle left panel on stats
+  if (_mobilePanelState.leftIdx === 0) { mobileClosePanel('left'); return; }
+  _mobileOpenPanel('left', 0);
+}
+
+function mobileMiniLog() {
+  // Toggle right panel on log
+  if (_mobilePanelState.rightIdx === 4) { mobileClosePanel('right'); return; }
+  _mobileOpenPanel('right', 4);
+}
+
+// Topbar expand toggle
+function mobileTopbarToggle() {
+  var expand = document.getElementById('mobile-topbar-expand');
+  var toggle = document.getElementById('mobile-topbar-toggle');
+  if (!expand || !toggle) return;
+  _mobilePanelState.topbarOpen = !_mobilePanelState.topbarOpen;
+  if (_mobilePanelState.topbarOpen) {
+    expand.classList.add('show');
+    toggle.classList.add('expanded');
+    // Sync money chip
+    _mobileTopbarSync();
+  } else {
+    expand.classList.remove('show');
+    toggle.classList.remove('expanded');
+  }
+}
+
+function _mobileTopbarSync() {
+  var money = document.getElementById('topbar-money');
+  var dest = document.getElementById('mobile-topbar-money2');
+  if (money && dest) dest.textContent = money.textContent;
+  // Sync stat chips
+  var syncs = [
+    ['val-hp','mchip-hp'],['val-san','mchip-san'],['val-xp','mchip-xp'],
+    ['val-level','mchip-lvl'],['inc-total','mchip-inc'],['val-hunger','mchip-hunger']
+  ];
+  syncs.forEach(function(pair){
+    var src = document.getElementById(pair[0]);
+    var dst = document.getElementById(pair[1]);
+    if (src && dst) dst.textContent = src.textContent;
+  });
+}
+
+function mobileTabSwitch(view) {
+  // Update active mtab
+  document.querySelectorAll('.mtab-btn').forEach(function(b){ b.classList.remove('active'); });
+  switchView(view);
+}
+
+// Initialize mobile arrows on load
+function _mobileInit() {
+  if (!_mobileIsMobile()) return;
+  _mobileUpdateArrowLabel('left', -1);
+  _mobileUpdateArrowLabel('right', -1);
+  // Show toggle button
+  var toggle = document.getElementById('mobile-topbar-toggle');
+  if (toggle) toggle.classList.add('show');
+  // Show expand but collapsed
+  // Touch swipe on center panel
+  var center = document.getElementById('center-panel');
+  if (center) {
+    var _swipeStartX = 0;
+    var _swipeStartY = 0;
+    center.addEventListener('touchstart', function(e){
+      _swipeStartX = e.touches[0].clientX;
+      _swipeStartY = e.touches[0].clientY;
+    }, { passive: true });
+    center.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - _swipeStartX;
+      var dy = e.changedTouches[0].clientY - _swipeStartY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx > 0) mobileCycleLeft();
+        else mobileCycleRight();
+      }
+    }, { passive: true });
+  }
+  // Periodic sync of topbar chips when open
+  setInterval(function(){
+    if (_mobilePanelState.topbarOpen) _mobileTopbarSync();
+  }, 2000);
+}
+
+// Hook into game start
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(_mobileInit, 600);
+});
 
 /* ══════════════════════════════════════════════════════════════════
    HUNGER SYSTEM INJECTION INTO GAMELOOP TICK
@@ -12856,20 +13525,6 @@ var CityMap = (function() {
   };
 })();
 </script>
-     ─────────────────────────────────────────────────────────────────
-     Tento modul rieši reálne perf problémy hry:
-
-       1. SAVE DEBOUNCE       — namiesto save pri každej zmene, max raz/2s
-       2. STORAGE QUOTA       — varovanie pred QuotaExceededError
-       3. VISIBILITY API      — pause hry keď je tab v pozadí (CPU + bat.)
-       4. LAZY IMAGES         — SCENE_PHOTOS sa loadnu až keď ich treba
-       5. MOBILE DETECT       — vypnúť drahé efekty na slabých zariadeniach
-       6. RAF THROTTLE        — limit počtu rerendrov pri rýchlych zmenách
-       7. EVENT DELEGATION    — listenery na rodiča namiesto kazdý prvok
-       8. MEMORY GUARD        — log size kontroluje pri pridávaní
-
-     Všetko backwards-compatible — žiadne nové API, len lepšie internals.
-═══════════════════════════════════════════════════════════════════ -->
 <script>
 var PerfOptimizer = (function() {
 
