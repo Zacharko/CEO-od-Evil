@@ -517,96 +517,83 @@ a:hover { color: #fff; }
 /* ── TOP BAR ── */
 #topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 800;
-  background: linear-gradient(180deg, #0a1018 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, #0e1420 0%, var(--bg) 100%);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.5);
   display: flex; align-items: center;
-  height: 34px; padding: 0 8px; gap: 8px;
+  height: 38px; padding: 0 14px; gap: 12px;
 }
 #topbar::after {
   content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.12), transparent);
+  position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.08), transparent);
 }
 #topbar-title {
   font-family: var(--font-hud);
-  font-size: 11px; font-weight: 700;
-  color: var(--green); letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(57,255,20,0.5);
+  font-size: 13px; font-weight: 700;
+  color: var(--green); letter-spacing: 3px;
+  text-shadow: 0 0 14px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.2);
   flex-shrink: 0; white-space: nowrap;
-  text-decoration: none; cursor: pointer; transition: color 0.15s;
+  text-decoration: none; cursor: pointer; transition: color 0.15s, text-shadow 0.15s;
 }
-#topbar-title:hover { color: #fff; }
-#topbar-tabs {
-  display: flex; gap: 1px; flex: 1;
-  overflow-x: auto; overflow-y: hidden;
-  scrollbar-width: none;
+#topbar-title:hover {
+  color: #fff;
+  text-shadow: 0 0 20px rgba(57,255,20,0.9), 0 0 40px rgba(57,255,20,0.5);
 }
-#topbar-tabs::-webkit-scrollbar { display: none; }
+#topbar-tabs { display: flex; gap: 2px; flex: 1; }
 .tab-btn {
   background: transparent; border: none;
   border-bottom: 2px solid transparent;
   color: var(--text-dim);
-  font-size: 16px;
-  padding: 0 7px; height: 34px; min-width: 34px;
-  cursor: pointer; transition: all 0.12s;
-  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 600; letter-spacing: 1px;
+  padding: 0 12px; height: 38px;
+  cursor: pointer; transition: all 0.15s;
+  text-transform: uppercase; position: relative;
 }
-.tab-btn:hover { color: var(--green); background: rgba(57,255,20,0.05); }
+.tab-btn:hover { color: var(--blue); }
 .tab-btn.active {
   color: var(--green);
   border-bottom-color: var(--green);
-  background: rgba(57,255,20,0.06);
-  text-shadow: 0 0 8px rgba(57,255,20,0.5);
+  text-shadow: 0 0 8px rgba(57,255,20,0.4);
 }
-.tab-btn.has-pending::after {
-  content: '•'; position: absolute; top: 2px; right: 2px;
-  font-size: 8px; color: var(--warn); line-height: 1;
-}
-#topbar-right {
-  display: flex; align-items: center; gap: 4px;
-  flex-shrink: 0;
-}
+#topbar-right { display: flex; align-items: center; gap: 12px; }
 #topbar-money {
-  font-family: var(--font-hud); color: var(--gold); font-size: 12px; font-weight: 700;
+  font-family: var(--font-hud); color: var(--gold); font-size: 13px; font-weight: 700;
   text-shadow: 0 0 8px rgba(250,204,21,0.4); letter-spacing: 1px;
-  white-space: nowrap; padding: 0 4px;
-}
-#topbar-clock {
-  color: var(--text-muted); font-size: 10px; font-family: var(--font-mono);
-  white-space: nowrap; padding: 0 2px;
 }
 #topbar-job {
-  font-size: 10px; color: var(--blue); font-weight: 600;
-  border: 1px solid var(--blue-dim); padding: 1px 6px;
+  font-size: 11px; color: var(--blue); font-weight: 600;
+  border: 1px solid var(--blue-dim); padding: 2px 10px;
   font-family: var(--font-body); letter-spacing: 1px;
-  background: rgba(77,159,255,0.05); white-space: nowrap;
+  background: rgba(77,159,255,0.05);
 }
+#topbar-clock { color: var(--text-dim); font-size: 12px; font-family: var(--font-mono); }
 .top-micro-btn {
-  background: transparent;
-  border: 1px solid var(--border2);
+    <span id="topbar-hunger-chip">🟢 Sýty</span>
+  background: linear-gradient(180deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--border);
+  border-top-color: rgba(255,255,255,0.06);
   color: var(--text-dim);
-  font-size: 14px;
-  width: 28px; height: 28px;
-  padding: 0; cursor: pointer; transition: all 0.12s;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  font-family: var(--font-body); font-size: 11px; font-weight: 600;
+  padding: 3px 10px; cursor: pointer; letter-spacing: 1px; transition: all 0.12s;
+  text-transform: uppercase;
 }
 .top-micro-btn:hover {
   color: var(--green); border-color: var(--border-hi);
-  background: rgba(57,255,20,0.06);
+  background: rgba(57,255,20,0.04);
 }
 
 /* ── LAYOUT ── */
 #main {
-  padding-top: 34px;
+  padding-top: 38px;
   display: grid;
   grid-template-columns: 52px 230px 1fr 210px;
   height: 100vh; height: 100dvh;
 }
 #center-panel {
   display: flex; flex-direction: column;
-  height: calc(100dvh - 34px);
+  height: calc(100dvh - 38px);
   overflow: hidden;
 }
 #scene-text-wrap {
@@ -622,7 +609,7 @@ a:hover { color: #fff; }
   background: linear-gradient(180deg, #060b06 0%, var(--bg) 100%);
   display: flex; flex-direction: column; align-items: center;
   padding-top: 8px; gap: 2px;
-  height: calc(100vh - 34px);
+  height: calc(100vh - 38px);
   overflow: hidden; flex-shrink: 0;
 }
 .sidenav-btn {
@@ -651,7 +638,7 @@ a:hover { color: #fff; }
 #left-panel {
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
-  height: calc(100vh - 34px);
+  height: calc(100vh - 38px);
   background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
 }
 #left-scroll { flex: 1; overflow-y: auto; }
@@ -723,7 +710,7 @@ a:hover { color: #fff; }
 /* ── CENTER PANEL ── */
 #center-panel {
   display: flex; flex-direction: column;
-  height: calc(100vh - 34px);
+  height: calc(100vh - 38px);
   border-right: 1px solid var(--border);
   position: relative;
 }
@@ -862,7 +849,7 @@ a:hover { color: #fff; }
 /* ── RIGHT PANEL ── */
 #right-panel {
   display: flex; flex-direction: column;
-  height: calc(100vh - 34px);
+  height: calc(100vh - 38px);
   background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
   overflow: hidden;
 }
@@ -1899,7 +1886,7 @@ a:hover { color: #fff; }
 /* ══ NEW SYSTEM CSS ══════════════════════════════════════════════════ */
 
 /* HACK VIEW */
-#hack-view { display:none; position:fixed; inset:0; z-index:700; padding-top:34px; background:var(--bg); }
+#hack-view { display:none; position:fixed; inset:0; z-index:700; padding-top:38px; background:var(--bg); }
 #hack-view.show { display:flex; flex-direction:column; }
 .hack-tab-bar { display:flex; border-bottom:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
 .hack-tab-btn { background:transparent; border:none; border-bottom:2px solid transparent; color:var(--text-dim);
@@ -3144,20 +3131,18 @@ body.low-power .minigame-overlay {
   margin-top: 2px;
 }
 .city-map-close-btn {
-  background: rgba(239,68,68,0.1);
-  border: 1px solid rgba(239,68,68,0.4);
-  color: #fca5a5;
+  background: transparent; border: 1px solid #2a4a2a;
+  color: #6a8a6a;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 12px; letter-spacing: 2px; font-weight: 700;
-  padding: 5px 14px;
+  font-size: 12px; letter-spacing: 2px;
+  padding: 6px 14px;
   cursor: pointer;
   transition: all 0.15s;
 }
 .city-map-close-btn:hover {
-  background: rgba(239,68,68,0.25);
   border-color: #ef4444;
-  color: #fff;
-  box-shadow: 0 0 14px rgba(239,68,68,0.4);
+  color: #fca5a5;
+  box-shadow: 0 0 12px rgba(239,68,68,0.3);
 }
 
 /* Map canvas container */
@@ -3475,45 +3460,41 @@ body.low-power .minigame-overlay {
      TOP BAR
 ═══════════════════════════════════════════════════ -->
 <div id="topbar">
-  <!-- Left: title + nav tabs (scrollable) -->
-  <a href="https://zacharko.github.io/CEO-od-Evil/" id="topbar-title" title="Domov">⚔ LAZARUS</a>
+  <a href="https://zacharko.github.io/CEO-od-Evil/" id="topbar-title" title="Domovská stránka">⚔ CEO ZLA // LAZARUS</a>
   <div id="topbar-tabs">
-    <button class="tab-btn active" data-view="game"   onclick="switchView('game')">⚡</button>
-    <button class="tab-btn"        data-view="fish"   onclick="switchView('fish')">🎣</button>
-    <button class="tab-btn"        data-view="boats"  onclick="switchView('boats')">⛵</button>
-    <button class="tab-btn"        data-view="garden" onclick="switchView('garden')">🌱</button>
-    <button class="tab-btn"        data-view="uni"    onclick="switchView('uni')">🎓</button>
-    <button class="tab-btn"        data-view="gym"    onclick="switchView('gym')">💪</button>
-    <button class="tab-btn"        data-view="hq"     onclick="switchView('hq')">🏠</button>
-    <button class="tab-btn"        data-view="shop"   onclick="switchView('shop')">🛒</button>
-    <button class="tab-btn"        data-view="hack"   onclick="switchView('hack')">💻</button>
-    <button class="tab-btn" id="map-btn" data-view="map" onclick="switchView('map')">⌖</button>
-    <button class="tab-btn" data-view="factions"      onclick="switchView('factions')">⚔</button>
+    <button class="tab-btn active" onclick="switchView('game')">⚡ Operácia</button>
+    <button class="tab-btn"        onclick="switchView('fish')">🎣 Rybolov</button>
+    <button class="tab-btn"        onclick="switchView('boats')">⛵ Lode</button>
+    <button class="tab-btn"        onclick="switchView('garden')">🌱 Záhradka</button>
+    <button class="tab-btn"        onclick="switchView('uni')">🎓 Univerzita</button>
+    <button class="tab-btn"        onclick="switchView('gym')">💪 Gym</button>
+    <button class="tab-btn"        onclick="switchView('hq')">🏠 Základňa</button>
+    <button class="tab-btn"        onclick="switchView('shop')">🛒 Obchod</button>
+    <button class="tab-btn"        onclick="openHackView()">💻 Hack</button>
+    <button class="tab-btn" id="map-btn" data-tab="map" onclick="CityMap.open()">⌖ Mapa</button>
+    <button class="tab-btn" data-tab="factions" onclick="FactionsSystem.openWindow()">⚔ Frakcie</button>
   </div>
-  <!-- Right: always-visible money + actions -->
   <div id="topbar-right">
+    <span id="topbar-job" style="display:none">---</span>
+    <span id="topbar-equip-badge" style="display:none;font-size:12px;letter-spacing:1px;color:var(--green3);border:1px solid var(--border);padding:2px 7px;font-family:var(--font-mono)"></span>
+    <span id="tier-badge">T1 💻 Pouličný Hacker</span>
     <span id="topbar-money">₿ 0</span>
-    <span id="topbar-clock">--:--</span>
-    <button class="top-micro-btn" onclick="saveGame()" title="Uložiť hru">💾</button>
-    <button class="top-micro-btn" onclick="loadGame()" title="Načítať hru">📂</button>
-    <button id="audio-toggle-btn" class="top-micro-btn" onclick="AudioController.toggle()" title="Hudba">🔊</button>
-    <button class="top-micro-btn" onclick="showMainMenu()" title="Hlavné menu">☰</button>
+    <span id="topbar-clock">--:--:--</span>
+    <button class="top-micro-btn" onclick="saveGame()">💾 Uložiť</button>
+    <button class="top-micro-btn" onclick="loadGame()">📂 Načítať</button>
+    <div id="audio-controller" title="Hudba na pozadí">
+      <button id="audio-toggle-btn" onclick="AudioController.toggle()" title="Zapnúť/vypnúť hudbu">🔊</button>
+      <div id="audio-wave" class="paused">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+      <input type="range" id="volume-slider" min="0" max="100" value="35" oninput="AudioController.setVolume(this.value)">
+      <span id="volume-label">35%</span>
+    </div>
+    <button class="top-micro-btn" onclick="showMainMenu()">🏠 Menu</button>
   </div>
-
-<!-- Hidden audio DOM elements (referenced by AudioController) -->
-<div style="display:none">
-  <div id="audio-wave" class="paused">
-    <div class="wave-bar"></div><div class="wave-bar"></div>
-    <div class="wave-bar"></div><div class="wave-bar"></div>
-  </div>
-  <input type="range" id="volume-slider" min="0" max="100" value="35">
-  <span id="volume-label">35%</span>
-  <span id="topbar-job">---</span>
-  <span id="topbar-equip-badge"></span>
-  <span id="tier-badge">T1</span>
-  <span id="topbar-hunger-chip">🟢 Sýty</span>
-</div>
-
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -3741,14 +3722,24 @@ body.low-power .minigame-overlay {
   <div class="training-header">⛵ Flotila rybárskych lodí</div>
   <div class="training-sub">Klikni na loď = ručný rybolov • Vylepšuj pre pasívny príjem</div>
   <div class="fishing-clicker-wrap">
-    <div class="clicker-title">// Ručný rybolov //</div>
-    <div class="clicker-boat" id="clicker-boat-emoji" onclick="boatClick(event)" title="Klikni pre rybolov!">🎣</div>
-    <div class="clicker-stats">
-      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-total-fish">0</span>Rýb celkom</div>
-      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-per-click">+1₿</span>Za klik</div>
-      <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-passive">0₿/s</span>Pasívne</div>
+    <div class="clicker-title">// Rybolov · Cookie Clicker mode //</div>
+    <div style="display:flex;align-items:center;gap:20px;justify-content:center;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div class="clicker-boat" id="clicker-boat-emoji"
+          onclick="boatClick(event)"
+          onmousedown="boatHoldStart(event)" onmouseup="boatHoldEnd(event)" onmouseleave="boatHoldEnd(event)"
+          ontouchstart="boatHoldStart(event)" ontouchend="boatHoldEnd(event)"
+          style="user-select:none;-webkit-user-select:none;touch-action:none;" title="Drž pre auto-rybolov!">🎣</div>
+        <div style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:1px">DRŽE / KLIKNI</div>
+        <div id="clicker-combo" style="display:none;color:var(--gold);font-family:var(--font-hud);font-size:11px;"></div>
+      </div>
+      <div class="clicker-stats">
+        <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-total-fish">0</span>Klikov celkom</div>
+        <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-per-click">+1₿</span>Za klik</div>
+        <div class="clicker-stat"><span class="clicker-stat-val" id="clicker-passive">0₿/s</span>Flotila/s</div>
+      </div>
     </div>
-    <div class="clicker-hint">// Klikaj na emoji pre extra úlov • Vylepšuj lode pre väčší príjem //</div>
+    <div class="clicker-hint">// DRŽE = auto rybolov • Rýchle kliky = COMBO bonus //</div>
   </div>
   <div class="boats-section-title">⚓ Flotila — Kúp a vylepšuj</div>
   <div id="boats-fleet-grid" class="boat-grid"></div>
@@ -4453,8 +4444,6 @@ var SceneManager = (function() {
    * Navigate to a scene by ID.
    */
   function goTo(sceneId) {
-  // Zatvoriť fullscreen overlaye pri navigácii do scény
-  if (typeof closeAllOverlays === 'function') closeAllOverlays();
     if (!SCENES[sceneId]) return;
     S.scene   = sceneId;
     S.visited[sceneId] = true;
@@ -4858,29 +4847,32 @@ var SHOP_ITEMS = [
 ];
 
 var FLEET_BOATS = [
-  { id:'fishing_rod', name:'Rybársky prút', icon:'🎣', baseIncome:2, baseCost:150, upgrades:[
-    { id:'better_hook',  name:'Lepší háčik',    desc:'+1₿/s',  incomeBonus:1,  cost:400 },
-    { id:'pro_line',     name:'Pro vlasec',     desc:'+3₿/s',  incomeBonus:3,  cost:900 },
-  ]},
-  { id:'rowboat', name:'Riečny čln', icon:'🚣', baseIncome:8, baseCost:800, upgrades:[
-    { id:'oars_upgrade', name:'Lepšie veslá',    desc:'+4₿/s', incomeBonus:4,  cost:1500 },
-    { id:'sonar_basic',  name:'Základný sonar',  desc:'+10₿/s',incomeBonus:10, cost:4000 },
-  ]},
-  { id:'motorboat', name:'Motorový čln', icon:'⛵', baseIncome:30, baseCost:4000, upgrades:[
-    { id:'turbo_engine', name:'Turbo motor',     desc:'+15₿/s', incomeBonus:15,  cost:10000 },
-    { id:'fish_finder',  name:'Fish finder',     desc:'+30₿/s', incomeBonus:30,  cost:25000 },
-  ]},
-  { id:'trawler', name:'Rybársky trawler', icon:'🚢', baseIncome:100, baseCost:18000, upgrades:[
-    { id:'big_nets',     name:'Veľké siete',     desc:'+50₿/s', incomeBonus:50,  cost:45000 },
-    { id:'crew_bonus',   name:'Extra posádka',   desc:'+100₿/s',incomeBonus:100, cost:100000 },
-  ]},
-  { id:'factory_ship', name:'Rybárska továreň', icon:'🏭', baseIncome:400, baseCost:80000, upgrades:[
-    { id:'processing',   name:'Spracovateľ',     desc:'+200₿/s', incomeBonus:200, cost:180000 },
-    { id:'fleet_ai',     name:'Fleet AI',        desc:'+400₿/s', incomeBonus:400, cost:400000 },
-  ]},
+  { id:'rod',       name:'Rybársky prút',   icon:'🎣', baseIncome:1,    baseCost:0,      clickBonus:1,  desc:'Zadarmo. Základ každého rybára.',
+    upgrades:[ {id:'rod1',name:'Nylon vlasec',desc:'+1/klik',clickBonus:1,incomeBonus:0,cost:50},{id:'rod2',name:'Karbónový prút',desc:'+1/s',incomeBonus:1,clickBonus:0,cost:200},{id:'rod3',name:'Pro háčiky',desc:'+2/klik',clickBonus:2,incomeBonus:0,cost:500} ]},
+  { id:'rowboat',   name:'Riečny čln',       icon:'🚣', baseIncome:4,    baseCost:200,    clickBonus:0,  desc:'Bebrava. Ráno. Pokoj.',
+    upgrades:[ {id:'row1',name:'Lepšie veslá',desc:'+3/s',incomeBonus:3,cost:600},{id:'row2',name:'Plachta',desc:'+8/s',incomeBonus:8,cost:1500},{id:'row3',name:'Sieť',desc:'x1.5',mult:1.5,incomeBonus:0,cost:3000} ]},
+  { id:'canoe',     name:'Kajak',             icon:'🛶', baseIncome:12,   baseCost:600,    clickBonus:0,  desc:'Rýchly, tichý. Pstruhy milujú ticho.',
+    upgrades:[ {id:'can1',name:'Carbon kajak',desc:'+10/s',incomeBonus:10,cost:2000},{id:'can2',name:'Sonar básik',desc:'+18/s',incomeBonus:18,cost:5000},{id:'can3',name:'Auto háčik',desc:'+5/klik',clickBonus:5,incomeBonus:0,cost:8000} ]},
+  { id:'motorboat', name:'Motorový čln',      icon:'⛵',     baseIncome:35,   baseCost:2000,   clickBonus:0,  desc:'150 koní. Dunajec nestačí.',
+    upgrades:[ {id:'mot1',name:'Turbo motor',desc:'+25/s',incomeBonus:25,cost:6000},{id:'mot2',name:'Fish finder',desc:'+50/s',incomeBonus:50,cost:15000},{id:'mot3',name:'Auto-reel',desc:'x1.8',mult:1.8,incomeBonus:0,cost:30000} ]},
+  { id:'pontoon',   name:'Pontónová plošina', icon:'🛥', baseIncome:100,  baseCost:8000,   clickBonus:0,  desc:'Stabilná. Aj v búrke.',
+    upgrades:[ {id:'pon1',name:'Solárne panely',desc:'+80/s',incomeBonus:80,cost:25000},{id:'pon2',name:'Chladiace tanky',desc:'+150/s',incomeBonus:150,cost:60000},{id:'pon3',name:'Drone scouts',desc:'x2',mult:2.0,incomeBonus:0,cost:120000} ]},
+  { id:'trawler',   name:'Rybársky trawler',  icon:'🚢', baseIncome:280,  baseCost:25000,  clickBonus:0,  desc:'Profesionáli. Prievidza–Nórsko.',
+    upgrades:[ {id:'tra1',name:'Veľké siete',desc:'+200/s',incomeBonus:200,cost:70000},{id:'tra2',name:'GPS nav',desc:'+400/s',incomeBonus:400,cost:180000},{id:'tra3',name:'Auto siete',desc:'x2.5',mult:2.5,incomeBonus:0,cost:400000} ]},
+  { id:'submarine', name:'Minipodmornica',     icon:'🤏', baseIncome:750,  baseCost:80000,  clickBonus:0,  desc:'Hlbiny Nitry. Legendárny sumec.',
+    upgrades:[ {id:'sub1',name:'Sonar v2',desc:'+600/s',incomeBonus:600,cost:200000},{id:'sub2',name:'Robot. ramená',desc:'+1200/s',incomeBonus:1200,cost:500000},{id:'sub3',name:'AI rybár',desc:'x3',mult:3.0,incomeBonus:0,cost:1000000} ]},
+  { id:'factory',   name:'Rybárska továreň',   icon:'🏭', baseIncome:2000, baseCost:250000, clickBonus:0,  desc:'24/7. Tisíce rýb za hodinu.',
+    upgrades:[ {id:'fac1',name:'Conveyor belt',desc:'+1500/s',incomeBonus:1500,cost:600000},{id:'fac2',name:'Flash freeze',desc:'+3000/s',incomeBonus:3000,cost:1500000},{id:'fac3',name:'Bio-tech',desc:'x4',mult:4.0,incomeBonus:0,cost:3000000} ]},
+  { id:'satellite', name:'Rybársky satelit',   icon:'🛸', baseIncome:5000, baseCost:800000, clickBonus:0,  desc:'Orbit. Vidí každú rybu na planéte.',
+    upgrades:[ {id:'sat1',name:'Thermal scan',desc:'+4000/s',incomeBonus:4000,cost:2000000},{id:'sat2',name:'Quantum sonar',desc:'+8000/s',incomeBonus:8000,cost:5000000},{id:'sat3',name:'Hive mind',desc:'x5',mult:5.0,incomeBonus:0,cost:10000000} ]},
 ];
 
 var FLEET_STATE = {};
+// Auto-give free rod
+setTimeout(function(){
+  if(!FLEET_STATE['rod']) FLEET_STATE['rod']={owned:false,upgrades:{}};
+  if(!FLEET_STATE['rod'].owned){ FLEET_STATE['rod'].owned=true; if(typeof recalcFleetIncome==='function') recalcFleetIncome(); }
+},100);
 
 var UNI_COURSES = [
   { id:'intro_hacking',    name:'Intro to Hacking',    icon:'💻', desc:'Základy sieťovej bezpečnosti.', stat:'hackStat', ratePerSec:0.015, cost:500,  maxLevel:5, levelMult:1.8, statLabel:'HCK +0.015/s' },
@@ -9405,8 +9397,14 @@ function activateOp(id) {
 }
 
 function handleChoiceAction(ch) {
-  if (ch.action === 'openFishing') openFishing();
-  if (ch.action === 'openShop') switchInvTab('shop');
+  if (!ch.skipHunger) HungerSystem.onDecision({ major:false, positive:false, harmful:false });
+  if (ch.hp)  { S.hp  = Math.max(0, S.hp  + ch.hp);  Renderer.updateStats(); }
+  if (ch.san) { S.san = Math.max(0, S.san + ch.san);  Renderer.updateStats(); }
+  if (ch.xp)  gainXP(ch.xp);
+  if (typeof ch.action === 'function') { try { ch.action(); } catch(e){ console.warn('[action]',e); } }
+  else if (ch.action === 'openFishing') openFishing();
+  else if (ch.action === 'openShop') switchInvTab('shop');
+  if (ch.next) goTo(ch.next);
 }
 
 /* ── LOG ──────────────────────────────────────────────────────── */
@@ -9434,53 +9432,24 @@ function showNotif(msg) {
 }
 
 /* ── VIEW SWITCHING ───────────────────────────────────────────── */
-/* Zatvorí všetky fullscreen overlaye (mapa, hack, frakcie, kasino) */
-function closeAllOverlays() {
-  // Hack view
-  var hv = document.getElementById('hack-view');
-  if (hv) hv.classList.remove('show');
-  // City map
-  if (typeof CityMap !== 'undefined') CityMap.close();
-  // Factions
-  var fo = document.getElementById('factions-overlay');
-  if (fo) fo.classList.remove('show');
-  // Casino
-  if (typeof Casino !== 'undefined') Casino.close();
-  // Fishing overlay (ak je open)
-  var fish = document.getElementById('fishing-overlay');
-  if (fish) fish.classList.remove('show');
-  // Sub-overlays
+function switchView(v) {
+  document.querySelectorAll('#topbar-tabs .tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var tabs = document.querySelectorAll('#topbar-tabs .tab-btn');
+  var sideBtn = document.querySelector('#left-nav .sidenav-btn[data-view="'+v+'"]');
+  if (sideBtn) sideBtn.classList.add('active');
   ['uni-overlay','gym-overlay','boats-overlay','hq-overlay','garden-overlay'].forEach(function(id){
     var el = document.getElementById(id); if(el) el.classList.remove('show');
   });
-}
-
-function switchView(v) {
-  // Zatvoriť všetky overlaye pred prepnutím
-  closeAllOverlays();
-
-  // Topbar tab active state
-  document.querySelectorAll('#topbar-tabs .tab-btn').forEach(function(b){ b.classList.remove('active'); });
-  var activeTab = document.querySelector('#topbar-tabs .tab-btn[data-view="'+v+'"]');
-  if (activeTab) activeTab.classList.add('active');
-
-  // Sidenav active state
-  document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){ b.classList.remove('active'); });
-  var sideBtn = document.querySelector('#left-nav .sidenav-btn[data-view="'+v+'"]');
-  if (sideBtn) sideBtn.classList.add('active');
-
-  // Open the requested view
-  if (v==='fish')     { openFishing(); }
-  else if (v==='boats')   { document.getElementById('boats-overlay').classList.add('show'); renderBoatsOverlay(); }
-  else if (v==='garden')  { document.getElementById('garden-overlay').classList.add('show'); openGarden(); }
-  else if (v==='uni')     { document.getElementById('uni-overlay').classList.add('show'); renderTrainingView('uni'); }
-  else if (v==='gym')     { document.getElementById('gym-overlay').classList.add('show'); renderTrainingView('gym'); }
-  else if (v==='hq')      { document.getElementById('hq-overlay').classList.add('show'); openHQ(); }
-  else if (v==='shop')    { switchInvTab('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
-  else if (v==='hack')    { document.getElementById('hack-view').classList.add('show'); }
-  else if (v==='map')     { CityMap.open(); }
-  else if (v==='factions'){ FactionsSystem.openWindow(); }
-  // v==='game' → all closed = game view visible
+  var tMap = { game:0, fish:1, boats:2, garden:3, uni:4, gym:5, hq:6, shop:7 };
+  if (tMap[v] !== undefined && tabs[tMap[v]]) tabs[tMap[v]].classList.add('active');
+  if (v==='fish')   { openFishing(); }
+  if (v==='boats')  { document.getElementById('boats-overlay').classList.add('show'); renderBoatsOverlay(); }
+  if (v==='garden') { document.getElementById('garden-overlay').classList.add('show'); openGarden(); }
+  if (v==='uni')    { document.getElementById('uni-overlay').classList.add('show'); renderTrainingView('uni'); }
+  if (v==='gym')    { document.getElementById('gym-overlay').classList.add('show'); renderTrainingView('gym'); }
+  if (v==='hq')     { document.getElementById('hq-overlay').classList.add('show'); openHQ(); }
+  if (v==='shop')   { switchInvTab('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
 }
 
 function switchInvTab(tab) {
@@ -9769,85 +9738,69 @@ function hqPassiveTick() {
 }
 
 /* ── FLEET / BOATS ───────────────────────────────────────────── */
-var clickerFishCount = 0;
-var clickerPerClick  = 1;
+var clickerFishCount=0, clickerPerClick=1;
+var _holdInterval=null, _holdRate=75, _holdActive=false;
+var _lastClickTime=0, _clickCombo=0, _comboResetTimer=null;
 
-function getBoatPrice(boat) {
-  var fs = FLEET_STATE[boat.id];
-  return Math.floor(boat.baseCost * Math.pow(GameConfig.BOAT_PRICE_INFLATION, fs && fs.owned ? 1 : 0));
+function getBoatPrice(boat){ return boat.baseCost===0?0:Math.floor(boat.baseCost); }
+function getBoatIncome(boat){
+  var fs=FLEET_STATE[boat.id]; if(!fs||!fs.owned) return 0;
+  var base=boat.baseIncome, mult=1;
+  if(fs.upgrades){ boat.upgrades.forEach(function(u){ if(fs.upgrades[u.id]){ if(u.incomeBonus) base+=u.incomeBonus; if(u.mult) mult*=u.mult; } }); }
+  return Math.floor(base*mult);
 }
-function getBoatIncome(boat) {
-  var fs = FLEET_STATE[boat.id]; if (!fs || !fs.owned) return 0;
-  var base = boat.baseIncome;
-  if (fs.upgrades) { boat.upgrades.forEach(function(u){ if(fs.upgrades[u.id]) base += u.incomeBonus; }); }
-  return base;
+function getBoatClickBonus(boat){
+  var fs=FLEET_STATE[boat.id]; if(!fs||!fs.owned) return boat.clickBonus||0;
+  var bonus=boat.clickBonus||0;
+  if(fs.upgrades){ boat.upgrades.forEach(function(u){ if(fs.upgrades[u.id]&&u.clickBonus) bonus+=u.clickBonus; }); }
+  return bonus;
 }
-function recalcFleetIncome() {
-  var total = 0;
-  FLEET_BOATS.forEach(function(b){ total += getBoatIncome(b); });
-  S.income.boats = total;
-  Renderer.updateIncome();
+function recalcFleetIncome(){ var t=0; FLEET_BOATS.forEach(function(b){ t+=getBoatIncome(b); }); S.income.boats=t; Renderer.updateIncome(); }
+function recalcClickPerClick(){ var t=1; FLEET_BOATS.forEach(function(b){ t+=getBoatClickBonus(b); }); clickerPerClick=t; }
+function updateClickerStats(){
+  recalcClickPerClick();
+  var cpc=document.getElementById('clicker-per-click'), ctf=document.getElementById('clicker-total-fish'), cps=document.getElementById('clicker-passive'), combo=document.getElementById('clicker-combo');
+  if(cpc) cpc.textContent='+'+clickerPerClick+'₿';
+  if(ctf) ctf.textContent=clickerFishCount.toLocaleString('sk');
+  if(cps) cps.textContent=(S.income.boats||0).toLocaleString('sk')+'₿/s';
+  if(combo){ if(_clickCombo>3){ combo.textContent='🔥 COMBO x'+(1+_clickCombo*0.05).toFixed(1); combo.style.display='block'; } else combo.style.display='none'; }
 }
-function updateClickerStats() {
-  var cpc = document.getElementById('clicker-per-click');
-  var ctf = document.getElementById('clicker-total-fish');
-  var cps = document.getElementById('clicker-passive');
-  if (cpc) cpc.textContent = '+' + clickerPerClick + '₿';
-  if (ctf) ctf.textContent = clickerFishCount;
-  if (cps) cps.textContent = (S.income.boats||0) + '₿/s';
+function updateClickerBoatEmoji(){
+  var owned=FLEET_BOATS.filter(function(b){ return FLEET_STATE[b.id]&&FLEET_STATE[b.id].owned; });
+  var el=document.getElementById('clicker-boat-emoji');
+  if(owned.length>0&&el) el.textContent=owned[owned.length-1].icon;
 }
-function updateClickerBoatEmoji() {
-  var owned = FLEET_BOATS.filter(function(b){ return FLEET_STATE[b.id] && FLEET_STATE[b.id].owned; });
-  if (owned.length > 0) {
-    var best = owned[owned.length-1];
-    document.getElementById('clicker-boat-emoji').textContent = best.icon;
-  }
-}
-function boatClick(e) {
-  var earned = clickerPerClick;
-  S.money += earned; clickerFishCount++;
-  Renderer.updateMoney();
-  S.flex = Math.min(100, S.flex + 0.05);
-  S.san  = Math.min(100, S.san  + 0.02);
-  // Každých 5 klikov = malý hunger decay (rybolov je fyzická aktivita)
-  if (clickerFishCount % 5 === 0) HungerSystem.onAction();
+function _doOneFish(cx,cy,fromHold){
+  recalcClickPerClick();
+  var now=Date.now();
+  if(!fromHold&&now-_lastClickTime<400) _clickCombo=Math.min(_clickCombo+1,20); else if(!fromHold) _clickCombo=0;
+  _lastClickTime=now; clearTimeout(_comboResetTimer);
+  _comboResetTimer=setTimeout(function(){ _clickCombo=0; updateClickerStats(); },700);
+  var cm=1+(_clickCombo*0.05), earned=Math.ceil(clickerPerClick*cm);
+  S.money+=earned; clickerFishCount++;
+  Renderer.updateMoney(); S.flex=Math.min(100,S.flex+0.01); S.san=Math.min(100,S.san+0.005);
+  if(clickerFishCount%10===0) HungerSystem.onAction();
   Renderer.updateStats();
-  var fl = document.createElement('div');
-  fl.className = 'fish-float';
-  fl.textContent = '+' + earned + '₿';
-  fl.style.left = (e.clientX - 20) + 'px';
-  fl.style.top  = (e.clientY - 20) + 'px';
-  document.body.appendChild(fl);
-  setTimeout(function(){ if(fl.parentNode) fl.parentNode.removeChild(fl); }, GameConfig.FLOAT_TEXT_DURATION);
+  if(cx!==undefined){
+    var fl=document.createElement('div'); fl.className='fish-float';
+    fl.style.cssText='position:fixed;z-index:9999;pointer-events:none;font-weight:700;font-size:13px;';
+    fl.textContent='+'+earned+'₿'+(_clickCombo>3?' x'+cm.toFixed(1):'');
+    fl.style.left=(cx-20)+'px'; fl.style.top=(cy-20)+'px';
+    fl.style.color=_clickCombo>5?'var(--gold)':'var(--green)';
+    document.body.appendChild(fl);
+    setTimeout(function(){ if(fl.parentNode) fl.parentNode.removeChild(fl); },700);
+  }
   updateClickerStats();
 }
-function buyFleetBoat(boatId) {
-  var boat = FLEET_BOATS.filter(function(b){ return b.id===boatId; })[0]; if (!boat) return;
-  var price = getBoatPrice(boat);
-  if (S.money < price) { showNotif('Nedostatok kreditov!'); return; }
-  if (!FLEET_STATE[boatId]) FLEET_STATE[boatId] = { owned:false, upgrades:{}, priceMultiplier:1 };
-  S.money -= price; Renderer.updateMoney();
-  FLEET_STATE[boatId].owned = true;
-  recalcFleetIncome();
-  addLog('Kúpil si loď: ' + boat.icon + ' ' + boat.name, 'ok');
-  showNotif(boat.icon + ' ' + boat.name + ' sa plavila na more!');
-  updateClickerBoatEmoji();
-  renderBoatsOverlay();
+function boatClick(e){ if(e) e.stopPropagation(); _doOneFish(e?e.clientX:undefined,e?e.clientY:undefined,false); }
+function boatHoldStart(e){
+  if(e&&e.cancelable) e.preventDefault(); if(_holdActive) return; _holdActive=true;
+  var cx=e?(e.touches?e.touches[0].clientX:e.clientX):undefined, cy=e?(e.touches?e.touches[0].clientY:e.clientY):undefined;
+  _doOneFish(cx,cy,false);
+  _holdInterval=setInterval(function(){ if(!_holdActive){clearInterval(_holdInterval);_holdInterval=null;return;} _doOneFish(cx,cy,true); },_holdRate);
 }
-function upgradeFleetBoat(boatId, upgId) {
-  var boat = FLEET_BOATS.filter(function(b){ return b.id===boatId; })[0]; if (!boat) return;
-  var upg  = boat.upgrades.filter(function(u){ return u.id===upgId; })[0]; if (!upg) return;
-  var fs = FLEET_STATE[boatId]; if (!fs || !fs.owned) return;
-  if (fs.upgrades && fs.upgrades[upgId]) return;
-  if (S.money < upg.cost) { showNotif('Nedostatok kreditov!'); return; }
-  S.money -= upg.cost; Renderer.updateMoney();
-  if (!fs.upgrades) fs.upgrades = {};
-  fs.upgrades[upgId] = true;
-  recalcFleetIncome();
-  addLog('Vylepšenie: ' + upg.name + ' na ' + boat.name, 'ok');
-  showNotif('⬆ ' + upg.name);
-  renderBoatsOverlay();
-}
+function boatHoldEnd(e){ _holdActive=false; if(_holdInterval){clearInterval(_holdInterval);_holdInterval=null;} }
+
 function renderBoatsOverlay() {
   var grid = document.getElementById('boats-fleet-grid'); if (!grid) return;
   var html = '';
@@ -11193,7 +11146,6 @@ function safeHtml(s) {
 
 
 function openHackView(){
-  switchView('hack');
   document.getElementById('hack-view').classList.add('show');
   document.querySelectorAll('#topbar-tabs .tab-btn').forEach(function(b){b.classList.remove('active');});
   document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){b.classList.remove('active');});
@@ -11701,7 +11653,7 @@ Renderer.updateIncome=function(){
     <button class="hack-tab-btn"        id="hack-tab-scripts"   onclick="switchHackTab('scripts')">⚙ Skripty</button>
     <button class="hack-tab-btn"        id="hack-tab-corp"      onclick="switchHackTab('corp')">🏢 Corp</button>
     <button class="hack-tab-btn"        id="hack-tab-terminal"  onclick="switchHackTab('terminal')">$ Terminal</button>
-    <button class="hack-tab-btn" style="margin-left:auto;color:var(--danger);font-weight:700;letter-spacing:2px;padding:0 16px;border-left:1px solid var(--border);" onclick="closeHackView()">✕ ZAVRIEŤ</button>
+    <button class="hack-tab-btn" style="margin-left:auto;color:var(--danger)" onclick="closeHackView()">✕ Zavrieť</button>
   </div>
   <div class="hack-pane active" id="hack-pane-hacking">
     <div id="hacking-panel-body"></div>
@@ -11741,7 +11693,7 @@ Renderer.updateIncome=function(){
       <div class="city-map-title">⌖ PRIEVIDZA · 2077</div>
       <div class="city-map-subtitle">// KLIKNI NA LOKÁCIU PRE NAVIGÁCIU //</div>
     </div>
-    <button class="city-map-close-btn" onclick="CityMap.close()" title="Zavrieť (ESC)">✕ ESC</button>
+    <button class="city-map-close-btn" onclick="CityMap.close()">✕ ZAVRIEŤ MAPU</button>
   </div>
   <div class="city-map-canvas">
     <svg id="city-map-svg" class="city-map-svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
@@ -13172,7 +13124,7 @@ var AudioController = (function() {
       slider  = document.getElementById('volume-slider');
       label   = document.getElementById('volume-label');
       btn     = document.getElementById('audio-toggle-btn');
-      wave    = (document.getElementById('audio-wave') || {});
+      wave    = document.getElementById('audio-wave');
       overlay = document.getElementById('audio-init-overlay');
       if (!audio) return;
 
