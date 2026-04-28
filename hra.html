@@ -740,8 +740,11 @@ a:hover { color: #fff; }
 #main {
   padding-top: 38px;
   display: grid;
-  grid-template-columns: 52px 230px 1fr;
+  grid-template-columns: 52px 230px 1fr 300px;
   height: 100vh; height: 100dvh;
+}
+#main.inv-hidden {
+  grid-template-columns: 52px 230px 1fr;
 }
 #center-panel {
   display: flex; flex-direction: column;
@@ -863,11 +866,10 @@ a:hover { color: #fff; }
 #center-panel {
   display: flex; flex-direction: column;
   height: calc(100vh - 38px);
-  border-right: 1px solid var(--border);
   position: relative;
 }
 #scene-img-wrap {
-  position: relative; height: 200px; flex-shrink: 0;
+  position: relative; height: 230px; flex-shrink: 0;
   background: linear-gradient(180deg, #06090f 0%, #0a0f1a 100%);
   overflow: hidden; border-bottom: 1px solid var(--border);
 }
@@ -924,9 +926,9 @@ a:hover { color: #fff; }
 
 /* ── DIALOG ── */
 .dialog-npc-bubble {
-  margin: 12px 16px 6px 16px; padding: 14px 16px 14px 116px;
+  margin: 14px 18px 8px 18px; padding: 16px 18px 16px 118px;
   background: rgba(0,15,0,0.7); border: 1px solid var(--green3); border-left: 3px solid var(--green);
-  position: relative; font-size: 14px; line-height: 1.7; color: #c2f0cc; font-family: var(--font-mono);
+  position: relative; font-size: 15px; line-height: 1.8; color: #c2f0cc; font-family: var(--font-mono);
   min-height: 96px;
 }
 .dialog-npc-bubble::before {
@@ -952,8 +954,8 @@ a:hover { color: #fff; }
 .dialog-npc-bubble b { color: var(--green); font-weight: normal; text-shadow: 0 0 6px rgba(57,255,20,0.35); }
 .dialog-npc-bubble i { color: var(--text-dim); font-style: normal; font-size: 12px; display: block; margin-top: 4px; border-top: 1px solid var(--border2); padding-top: 4px; }
 .dialog-narration {
-  margin: 8px 16px 4px 16px; padding: 8px 12px;
-  font-size: 14px; line-height: 1.75; color: #9ed4a0; font-family: var(--font-mono);
+  margin: 10px 18px 6px 18px; padding: 10px 14px;
+  font-size: 15px; line-height: 1.85; color: #9ed4a0; font-family: var(--font-mono);
   border-left: 2px solid var(--dimmer); background: rgba(0,10,0,0.5);
 }
 .dialog-narration b { color: var(--green4); font-weight: normal; }
@@ -962,20 +964,20 @@ a:hover { color: #fff; }
 
 /* ── CHOICES ── */
 #choices-wrap {
-  padding: 6px 12px 10px; border-top: 1px solid var(--border2); flex-shrink: 0;
+  padding: 8px 14px 12px; border-top: 1px solid var(--border2); flex-shrink: 0;
   background: linear-gradient(180deg, rgba(0,8,0,0.9), var(--bg-panel));
 }
-#choices-label { font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px; color: var(--green3); padding: 4px 4px 6px; text-transform: uppercase; opacity: 0.7; }
+#choices-label { font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px; color: var(--green3); padding: 4px 4px 8px; text-transform: uppercase; opacity: 0.7; }
 .choice-btn {
   display: flex; width: 100%; text-align: left; align-items: flex-start; gap: 0;
   background: transparent; border: none; border-bottom: 1px solid var(--border2);
-  color: #9ed4a0; font-family: var(--font-mono); font-size: 14px; font-weight: normal;
-  letter-spacing: 0.2px; line-height: 1.5; padding: 9px 6px; margin-bottom: 0;
+  color: #b0e4b4; font-family: var(--font-mono); font-size: 14px; font-weight: normal;
+  letter-spacing: 0.3px; line-height: 1.55; padding: 11px 8px; margin-bottom: 0;
   cursor: pointer; transition: background 0.08s, color 0.08s, border-color 0.08s; position: relative;
 }
 .choice-btn:last-child { border-bottom: none; }
-.choice-btn .choice-num { display: inline-block; min-width: 22px; font-family: var(--font-hud); font-size: 10px; color: var(--green3); flex-shrink: 0; padding-top: 1px; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
-.choice-btn .choice-text { flex: 1; line-height: 1.5; }
+.choice-btn .choice-num { display: inline-block; min-width: 24px; font-family: var(--font-hud); font-size: 10px; color: var(--green3); flex-shrink: 0; padding-top: 2px; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
+.choice-btn .choice-text { flex: 1; line-height: 1.55; }
 .choice-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: transparent; transition: background 0.08s; }
 .choice-btn:hover { color: #eafff0; background: rgba(57,255,20,0.08); }
 .choice-btn:hover::before { background: var(--green); }
@@ -984,11 +986,11 @@ a:hover { color: #fff; }
 .choice-btn:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.45; }
 .choice-btn:disabled:hover { background: transparent; }
 .choice-btn:disabled:hover::before { background: transparent; }
-.choice-fail-hint { display: block; font-size: 10px; color: var(--danger); opacity: 0.7; margin-top: 2px; font-family: var(--font-mono); }
+.choice-fail-hint { display: block; font-size: 10px; color: var(--danger); opacity: 0.7; margin-top: 3px; font-family: var(--font-mono); }
 
 /* ── LOG ── */
 #log-wrap {
-  border-top: 1px solid var(--border2); max-height: 90px; overflow-y: auto;
+  border-top: 1px solid var(--border2); max-height: 80px; overflow-y: auto;
   background: rgba(0,4,0,0.8); flex-shrink: 0;
   -webkit-overflow-scrolling: touch;
 }
@@ -1001,7 +1003,53 @@ a:hover { color: #fff; }
 /* ── RIGHT PANEL ── */
 #right-panel { display: none !important; }
 
-/* ── INVENTORY DRAWER ── */
+/* ── RIGHT INVENTORY PANEL (PC persistent) ── */
+#inv-panel {
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  height: calc(100dvh - 38px);
+  background: linear-gradient(180deg, #060e06 0%, var(--bg) 100%);
+  position: relative;
+  overflow: hidden;
+}
+#inv-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, transparent, var(--green3), transparent);
+  opacity: 0.3;
+  pointer-events: none;
+}
+#inv-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: linear-gradient(90deg, rgba(57,255,20,0.06), transparent);
+}
+#inv-panel-title {
+  font-family: var(--font-hud); font-size: 9px; letter-spacing: 3px;
+  color: var(--green); text-transform: uppercase;
+}
+#inv-panel-tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #060b06, var(--bg));
+  flex-shrink: 0;
+}
+.inv-ptab {
+  flex: 1; background: transparent; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim); font-family: var(--font-body); font-size: 9px;
+  font-weight: 600; letter-spacing: 1px;
+  padding: 6px 2px; cursor: pointer; transition: all 0.12s;
+  text-transform: uppercase;
+}
+.inv-ptab.active { color: var(--green); border-bottom-color: var(--green); }
+.inv-ptab:hover { color: var(--blue); }
+#inv-panel-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.inv-ppane { display: none; }
+.inv-ppane.active { display: block; }
+
+/* ── DIALOG — improved readability ── */
 #inv-drawer {
   position: fixed; top: 38px; right: 0; z-index: 750;
   width: min(340px, 100vw);
@@ -1646,6 +1694,7 @@ a:hover { color: #fff; }
   #left-nav { display: none !important; }
   #left-panel { display: none !important; }
   #right-panel { display: none !important; }
+  #inv-panel { display: none !important; }
   #center-panel {
     height: calc(100dvh - 38px - 52px);
     flex: 1; border-right: none; border-left: none;
@@ -2350,121 +2399,13 @@ body.tier-up-flash  { animation:glitchAnim 1.2s steps(5) forwards; box-shadow:in
 }
 
 /* ══════════════════════════════════════════════════════
-   LOADING SCREEN — PIMPED OUT
+   LOADING / MENU — stav panelu počas bootingu
 ══════════════════════════════════════════════════════ */
-#loading-screen {
-  background:
-    radial-gradient(ellipse at 50% 40%, rgba(57,255,20,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse at 20% 80%, rgba(34,211,238,0.04) 0%, transparent 60%),
-    var(--bg);
-}
-#loading-screen::before {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(57,255,20,0.02) 2px, rgba(57,255,20,0.02) 3px);
-  animation: scanlineMove 8s linear infinite;
-}
-#loading-screen::after {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, rgba(57,255,20,0.05) 50%, transparent 100%);
-  height: 60px;
-  animation: scanlineSweep 4s ease-in-out infinite;
-}
-@keyframes scanlineMove {
-  from { transform: translateY(0); }
-  to   { transform: translateY(20px); }
-}
-@keyframes scanlineSweep {
-  0%   { transform: translateY(-60px); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(100vh); opacity: 0; }
-}
-.loading-bar-wrap {
-  position: relative;
-  box-shadow: 0 0 12px rgba(57,255,20,0.2), inset 0 0 4px rgba(0,0,0,0.8);
-}
-.loading-bar {
-  background: linear-gradient(90deg, var(--green3) 0%, var(--green) 50%, var(--green4) 100%);
-  position: relative;
-  overflow: hidden;
-}
-.loading-bar::after {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  animation: loadShine 1.5s linear infinite;
-}
-@keyframes loadShine {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
-}
-
-/* ══════════════════════════════════════════════════════
-   MAIN MENU — PIMPED OUT
-══════════════════════════════════════════════════════ */
-#main-menu {
-  background:
-    radial-gradient(ellipse at 50% 30%, rgba(57,255,20,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 70%, rgba(34,211,238,0.05) 0%, transparent 50%),
-    var(--bg);
-  overflow: hidden;
-}
-#main-menu::before {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
-  animation: gridDrift 20s linear infinite;
-}
-@keyframes gridDrift {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 40px 40px, 40px 40px; }
-}
-.menu-title {
-  position: relative;
-  animation: titleFlicker 6s ease-in-out infinite;
-}
-.menu-title::after {
-  content: attr(data-text);
-  position: absolute; left: 0; top: 0;
-  color: var(--cyan);
-  opacity: 0.4;
-  filter: blur(1px);
-  transform: translate(2px, 0);
-  z-index: -1;
-  pointer-events: none;
-}
-@keyframes titleFlicker {
-  0%, 100%   { opacity: 1; text-shadow: 0 0 20px rgba(57,255,20,0.8); }
-  92%        { opacity: 1; }
-  93%        { opacity: 0.4; text-shadow: none; }
-  94%        { opacity: 1; text-shadow: 0 0 20px rgba(57,255,20,0.8); }
-  96%        { opacity: 0.6; }
-  97%        { opacity: 1; }
-}
-.menu-btn {
-  position: relative;
-  overflow: hidden;
-}
-.menu-btn::before {
-  content: '';
-  position: absolute; top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.2), transparent);
-  transition: left 0.5s;
-}
-.menu-btn:hover::before { left: 100%; }
-.menu-btn:hover {
-  transform: translateX(2px);
-  letter-spacing: 4px;
-}
+/* Menu panel je skrytý počas loadingu, zobrazí sa po ňom */
+#menu-panel.loading { opacity: 0 !important; pointer-events: none !important; }
+#menu-panel.loaded  { opacity: 1 !important; pointer-events: auto !important; transition: opacity 0.8s ease !important; }
+/* Loading overlay sa skryje po dokončení */
+#loading-overlay.done { opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
 
 /* ══════════════════════════════════════════════════════
    SCENE TEXT FADE-IN ANIMATION
@@ -3236,8 +3177,6 @@ body.tab-hidden *::after {
 
 /* Low-power režim (slabý mobil) — vypneme drahé efekty */
 body.low-power .menu-title,
-body.low-power #loading-screen::before,
-body.low-power #loading-screen::after,
 body.low-power #main-menu::before,
 body.low-power #casino-overlay::before,
 body.low-power .menu-title::after,
@@ -3693,25 +3632,14 @@ body.low-power .minigame-overlay {
 </div>
 
 <!-- ═══════════════════════════════════════════════════
-     LOADING SCREEN (GameStateMachine: LOADING)
+     MAIN MENU — unified loading + menu screen
 ═══════════════════════════════════════════════════ -->
-<div id="loading-screen">
-  <div class="loading-title">PRIEVIDZA 2077 // LAZARUS</div>
-  <div class="loading-bar-wrap">
-    <div class="loading-bar" id="loading-bar"></div>
-  </div>
-  <div class="loading-bottom-row">
-    <div class="loading-status" id="loading-status">// BOOT //</div>
-    <div class="loading-pct" id="loading-pct">0%</div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════
-     MAIN MENU (GameStateMachine: MAIN_MENU)
-═══════════════════════════════════════════════════ -->
-<div id="main-menu">
+<div id="main-menu" class="visible">
   <!-- Poster pozadie -->
   <div id="menu-poster"></div>
+
+  <!-- Matrix rain canvas -->
+  <canvas id="matrix-canvas" style="position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0.18"></canvas>
 
   <!-- Corner decorations -->
   <div class="menu-corner tl">CEO//ZLA<br>PRIEVIDZA·2077<br>SYS·ONLINE</div>
@@ -3719,8 +3647,8 @@ body.low-power .minigame-overlay {
   <div class="menu-corner bl">v2.0·LAZARUS<br>BUILD·2025.04</div>
   <div class="menu-corner br">AGENT·STATUS<br>INFILTRATED<br>▓▓▓▓▓░░░</div>
 
-  <!-- Pravý panel s tlačidlami -->
-  <div id="menu-panel">
+  <!-- Pravý panel s tlačidlami — skrytý počas loadingu -->
+  <div id="menu-panel" class="loading">
     <div class="menu-tagline">// PRIEVIDZA 2077 //</div>
     <div class="menu-title" data-text="CEO ZLA">CEO ZLA</div>
     <div class="menu-sub">OPERÁCIA: LAZARUS</div>
@@ -3737,6 +3665,22 @@ body.low-power .minigame-overlay {
     <div class="menu-status-bar"></div>
     <div class="menu-version">HACKUJ REALITU · OŽIV LEGENDU</div>
   </div>
+
+  <!-- Loading bar — zobrazený počas loadingu, skryje sa po ňom -->
+  <div id="loading-overlay" style="
+    position:absolute;bottom:0;left:0;right:0;z-index:10;
+    display:flex;flex-direction:column;align-items:center;
+    padding-bottom:10vh;gap:14px;pointer-events:none;
+  ">
+    <div class="loading-title">PRIEVIDZA 2077 // LAZARUS</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar" id="loading-bar"></div>
+    </div>
+    <div class="loading-bottom-row">
+      <div class="loading-status" id="loading-status">// BOOT //</div>
+      <div class="loading-pct" id="loading-pct">0%</div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -3746,7 +3690,7 @@ body.low-power .minigame-overlay {
   <a href="https://zacharko.github.io/CEO-od-Evil/" id="topbar-title" title="Domovská stránka">⚔ CEO ZLA // LAZARUS</a>
   <div id="topbar-tabs">
     <button class="tab-btn active" onclick="switchView('game')">⚡ Operácia</button>
-    <button class="tab-btn"        onclick="switchView('fish')">🎣 Rybolov</button>
+    <button class="tab-btn"        onclick="switchView('inv')">🎒 Inventár</button>
     <button class="tab-btn"        onclick="switchView('boats')">⛵ Lode</button>
     <button class="tab-btn"        onclick="switchView('garden')">🌱 Záhradka</button>
     <button class="tab-btn"        onclick="switchView('uni')">🎓 Univerzita</button>
@@ -3864,7 +3808,7 @@ body.low-power .minigame-overlay {
   <!-- LEFT NAV SIDEBAR -->
   <div id="left-nav">
     <button class="sidenav-btn active" data-view="game" data-tip="Operácia" onclick="switchView('game')">⚡</button>
-    <button class="sidenav-btn" data-view="fish" data-tip="Rybolov" onclick="switchView('fish')">🎣</button>
+    <button class="sidenav-btn" data-view="inv" data-tip="Inventár" onclick="switchView('inv')">🎒</button>
     <button class="sidenav-btn" data-view="boats" data-tip="Lode" onclick="switchView('boats')">⛵</button>
     <button class="sidenav-btn" data-view="garden" data-tip="Záhradka" onclick="switchView('garden')">🌱</button>
     <div class="sidenav-divider"></div>
@@ -3977,6 +3921,85 @@ body.low-power .minigame-overlay {
     <span class="arrow-label" id="mobile-right-label-main">Inv.</span>
     <div class="arrow-dots" id="mobile-right-dots-main"></div>
   </button>
+
+  <!-- RIGHT INVENTORY PANEL (PC persistent, col 4) -->
+  <div id="inv-panel">
+    <div id="inv-panel-header">
+      <span id="inv-panel-title">🎒 Inventár // Agent</span>
+      <button onclick="openFishing()" title="Rybolov (Rybári)" style="background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--font-body);font-size:9px;letter-spacing:1px;padding:2px 8px;cursor:pointer;transition:all 0.12s" onmouseover="this.style.borderColor='var(--green3)';this.style.color='var(--green3)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">🎣 Rybolov</button>
+    </div>
+    <!-- NPC Portrait strip — updated by SceneManager when NPC scene loads -->
+    <div id="inv-panel-npc" style="display:none;position:relative;border-bottom:1px solid var(--border2);background:linear-gradient(180deg,rgba(0,15,0,0.6),rgba(0,8,0,0.4));padding:10px 12px;flex-shrink:0;align-items:center;gap:10px">
+      <div id="inv-panel-npc-avatar" style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--green3);flex-shrink:0;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:28px"></div>
+      <div style="flex:1;min-width:0">
+        <div id="inv-panel-npc-name" style="font-family:var(--font-hud);font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:2px"></div>
+        <div id="inv-panel-npc-loc" style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+      </div>
+    </div>
+    <div id="inv-panel-tabs">
+      <button class="inv-ptab active" onclick="switchInvPanelTab('items')">🎒 Predmety</button>
+      <button class="inv-ptab"        onclick="switchInvPanelTab('equip')">⚔️ Výstroj</button>
+      <button class="inv-ptab"        onclick="switchInvPanelTab('fish')">🐟 Ryby</button>
+      <button class="inv-ptab"        onclick="switchInvPanelTab('shop')">🛒 Obchod</button>
+    </div>
+    <div id="inv-panel-body">
+      <div class="inv-ppane active" id="inv-ppane-items">
+        <div id="inv-panel-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
+      </div>
+      <div class="inv-ppane" id="inv-ppane-equip">
+        <div class="equip-compact-list">
+          <div class="eq-row" id="eqrow2-head" onclick="eqSlotClick('head')">
+            <span class="eq-row-label">Hlava</span>
+            <span class="eq-row-icon" id="eqslot2-head">⬜</span>
+            <span class="eq-row-name" id="eqslot2-head-name">— prázdny slot —</span>
+          </div>
+          <div class="eq-row" id="eqrow2-body" onclick="eqSlotClick('body')">
+            <span class="eq-row-label">Telo</span>
+            <span class="eq-row-icon" id="eqslot2-body">⬜</span>
+            <span class="eq-row-name" id="eqslot2-body-name">— prázdny slot —</span>
+          </div>
+          <div class="eq-row" id="eqrow2-pants" onclick="eqSlotClick('pants')">
+            <span class="eq-row-label">Nohavice</span>
+            <span class="eq-row-icon" id="eqslot2-pants">⬜</span>
+            <span class="eq-row-name" id="eqslot2-pants-name">— prázdny slot —</span>
+          </div>
+          <div class="eq-row" id="eqrow2-weapon" onclick="eqSlotClick('weapon')">
+            <span class="eq-row-label">Zbraň</span>
+            <span class="eq-row-icon" id="eqslot2-weapon">⬜</span>
+            <span class="eq-row-name" id="eqslot2-weapon-name">— prázdny slot —</span>
+          </div>
+          <div class="eq-row" id="eqrow2-special" onclick="eqSlotClick('special')">
+            <span class="eq-row-label">Špeciálne</span>
+            <span class="eq-row-icon" id="eqslot2-special">⬜</span>
+            <span class="eq-row-name" id="eqslot2-special-name">— prázdny slot —</span>
+          </div>
+          <div class="eq-row" id="eqrow2-feet" onclick="eqSlotClick('feet')">
+            <span class="eq-row-label">Nástroj</span>
+            <span class="eq-row-icon" id="eqslot2-feet">⬜</span>
+            <span class="eq-row-name" id="eqslot2-feet-name">— prázdny slot —</span>
+          </div>
+        </div>
+        <div style="margin:4px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
+          <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">⚙ Aktívne bonusy výstroja</div>
+          <div id="equip-panel-bonuses-list"></div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);text-align:center;padding:4px 8px">// Klikni na slot pre zloženie //</div>
+        <div style="margin:6px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
+          <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">📦 Predmety v inventári</div>
+          <div id="equip-panel-available-list"></div>
+        </div>
+      </div>
+      <div class="inv-ppane" id="inv-ppane-fish">
+        <div style="padding:8px 10px;border-bottom:1px solid var(--border2)">
+          <button onclick="sellAllFish()" style="width:100%;background:transparent;border:1px solid var(--green3);color:var(--green3);font-family:var(--font-body);font-size:10px;letter-spacing:2px;padding:6px;cursor:pointer;transition:all 0.12s" onmouseover="this.style.background='rgba(57,255,20,0.08)'" onmouseout="this.style.background='transparent'">💰 PREDAŤ VŠETKY RYBY</button>
+        </div>
+        <div id="inv-panel-fish-body"><div class="inv-empty">// žiadne ryby //</div></div>
+      </div>
+      <div class="inv-ppane" id="inv-ppane-shop">
+        <div id="inv-panel-shop-body"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- TEXT MAP DRAWER -->
@@ -4206,7 +4229,7 @@ body.low-power .minigame-overlay {
   </div>
   <div id="mobile-topbar-tabs-row">
     <button class="mtab-btn active" onclick="mobileTabSwitch('game');mobileTopbarToggle()">⚡ Operácia</button>
-    <button class="mtab-btn" onclick="mobileTabSwitch('fish');mobileTopbarToggle()">🎣 Rybolov</button>
+    <button class="mtab-btn" onclick="mobileTabSwitch('inv');mobileTopbarToggle()">🎒 Inventár</button>
     <button class="mtab-btn" onclick="mobileTabSwitch('boats');mobileTopbarToggle()">⛵ Lode</button>
     <button class="mtab-btn" onclick="mobileTabSwitch('garden');mobileTopbarToggle()">🌱 Záhradka</button>
     <button class="mtab-btn" onclick="mobileTabSwitch('uni');mobileTopbarToggle()">🎓 Uni</button>
@@ -4519,10 +4542,10 @@ var Renderer = (function() {
     if (_dirty.stats)    { _renderStats();    _dirty.stats    = false; }
     if (_dirty.money)    { _renderMoney();    _dirty.money    = false; }
     if (_dirty.income)   { _renderIncome();   _dirty.income   = false; }
-    if (_dirty.inventory){ _renderInventory();_dirty.inventory= false; }
-    if (_dirty.shop)     { _renderShop();     _dirty.shop     = false; }
-    if (_dirty.equip)    { _renderEquip();    _dirty.equip    = false; }
-    if (_dirty.fish)     { _renderFish();     _dirty.fish     = false; }
+    if (_dirty.inventory){ _renderInventory();_dirty.inventory= false; if(typeof _renderInvPanelItems==='function') _renderInvPanelItems(); }
+    if (_dirty.shop)     { _renderShop();     _dirty.shop     = false; if(typeof _renderInvPanelShop==='function') { var p=document.getElementById('inv-ppane-shop'); if(p&&p.classList.contains('active')) _renderInvPanelShop(); } }
+    if (_dirty.equip)    { _renderEquip();    _dirty.equip    = false; if(typeof _renderInvPanelEquip==='function') _renderInvPanelEquip(); }
+    if (_dirty.fish)     { _renderFish();     _dirty.fish     = false; if(typeof _renderInvPanelFish==='function') { var pf=document.getElementById('inv-ppane-fish'); if(pf&&pf.classList.contains('active')) _renderInvPanelFish(); } }
     if (_dirty.flags)    { _renderFlags();    _dirty.flags    = false; }
   }
 
@@ -4807,6 +4830,26 @@ var SceneManager = (function() {
     Renderer.updateStats();
     Renderer.updateInventory();
     Renderer.updateFlags();
+
+    // Update inv-panel NPC portrait strip
+    var npcStrip = document.getElementById('inv-panel-npc');
+    var npcAvatar = document.getElementById('inv-panel-npc-avatar');
+    var npcName = document.getElementById('inv-panel-npc-name');
+    var npcLoc = document.getElementById('inv-panel-npc-loc');
+    if (npcStrip && sc.npcName) {
+      npcStrip.style.display = 'flex';
+      if (npcAvatar) {
+        if (sc.npcImg) {
+          npcAvatar.innerHTML = '<img src="'+sc.npcImg+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.parentNode.textContent=\''+(sc.art||'👤')+'\'">';
+        } else {
+          npcAvatar.textContent = sc.art || '👤';
+        }
+      }
+      if (npcName) npcName.textContent = sc.npcName;
+      if (npcLoc) npcLoc.textContent = sc.name || '';
+    } else if (npcStrip) {
+      npcStrip.style.display = 'none';
+    }
   }
 
   /**
@@ -5343,6 +5386,30 @@ var SCENE_PHOTOS = {
   'michal_serverovna_info':   { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'BYT 4B // BANE SERVEROVŇA' },
   'michal_hackeri_join_via':  { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'BYT 4B // HACKERI ODPORÚČANIE' },
   'michal_byt_navrat':        { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'BYT 4B // NÁVRAT' },
+  // Michalov Penthouse — Bojnická 17
+  'michal_penthouse_vstup':   { url:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop', badge:'BOJNICKÁ 17 // PENTHOUSE — 12. POSCHODIE' },
+  'michal_pent_platba':       { url:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop', badge:'PENTHOUSE // ANONYMNÝ NÁJOM' },
+  'michal_pent_vyrivka':      { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'PENTHOUSE // VÝRIVKA — NOC' },
+  'michal_pent_vyrivka_lazarus': { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // LAZARUS TEÓRIA' },
+  'michal_pent_delta_konfirm':{ url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // AGENT DELTA' },
+  'michal_pent_druid_teoria': { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // BIO-ECHO TEÓRIA' },
+  'michal_pent_varovat_druida':{ url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // VAROVANIE' },
+  'michal_pent_obrana':       { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'PENTHOUSE // EMF OBRANA' },
+  'michal_pent_rozhodnutie':  { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // ROZHODNUTIE' },
+  'michal_pent_nevybavene':   { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // LUCIA' },
+  'michal_pent_neviem_preco': { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // DÔVOD' },
+  'michal_pent_vyrivka_historia':{ url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // MICHALA PRÍBEH' },
+  'michal_pent_piatky':       { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'SERVER // M.E.C. ANOMÁLIE' },
+  'michal_pent_lutoval':      { url:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop', badge:'VÝRIVKA // ĽUTOVAL?' },
+  'michal_pent_mec_plan':     { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'PENTHOUSE // M.E.C. PLÁN' },
+  'michal_pent_server':       { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'PENTHOUSE // RACK-SERVER' },
+  'michal_pent_echo_mirror':  { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'PENTHOUSE // ECHO-MIRROR' },
+  'michal_pent_pristup_mirror':{ url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'SERVER // PRÍSTUP UDELENÝ' },
+  'michal_pent_archiv':       { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'ARCHÍV // 7 ROKOV LOGOV' },
+  'michal_pent_vazba':        { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop', badge:'ARCHÍV // DELTA VÄZBA' },
+  'michal_pent_vyhlad':       { url:'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&auto=format&fit=crop', badge:'BOJNICKÁ 17 // PANORAMA — BOJNICE' },
+  'michal_pent_vendelin_teória':{ url:'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&auto=format&fit=crop', badge:'PANORAMA // VENDELIN — UZOL 7' },
+  'michal_pent_odchod':       { url:'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&auto=format&fit=crop', badge:'BOJNICKÁ 17 // ODCHOD' },
   // CEO — Penthouse na Top Cafe (cyberpunk neon)
   'fac_ceo_penthouse':        { url:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=900&auto=format&fit=crop', badge:'CEO // PENTHOUSE · TOP CAFE' },
   'fac_ceo_penthouse_intro':  { url:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=900&auto=format&fit=crop', badge:'CEO // VITAJ V SIENI MOCI' },
@@ -9385,10 +9452,661 @@ var SCENES = {
         condFail: '',
         next: 'michal_hackeri_join_via' },
       { text: '"Chcem sa pozrieť na monitory."', next: 'michal_monitory' },
+      { text: '"Choď na penthouse — potrebujem s tebou hovoriť."', next: 'michal_penthouse_vstup' },
       { text: '[Odísť]', next: 'start' },
     ]
   },
 
+
+  // ╔═══════════════════════════════════════════════════════════════╗
+  // ║  MICHALA PENTHOUSE — Bojnická 17, 12. poschodie              ║
+  // ║  Anonymný prenájom. Výrivka. Rack-server. Výhľad na Bojnice. ║
+  // ╚═══════════════════════════════════════════════════════════════╝
+  michal_penthouse_vstup: {
+    name: 'Bojnická 17 // Penthouse — Vstup',
+    art: '🌃',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Taxík. Desať minút cez mesto. Michal celú cestu mlčí — pozerá von.',
+      '',
+      'Bojnická 17. Nový blok, šedá fasáda, anonymná ako všetko tu.',
+      'Výťah ide hore bez zastávky. Dvanáste poschodie.',
+      '',
+      'Dvere bez menovky — samozrejme.',
+      'Michal odíde zámok odtlačkom prsta. Dvere sa otvoria.',
+      '',
+      '// Vstúpiš. //',
+      '',
+      '// Nie byt. Priestor. Celé poschodie — zbúraná priečka medzi štyrmi bytmi. //',
+      '// Vľavo: rack-server, čierna skriňa s blikaním. Ventilátory hučia nízko. //',
+      '// Vpravo: výrivka. Stará, ale funkčná. Para sa dvíha v studenej noci. //',
+      '// Priamo: panoramatické okno. Bojnice, Vtáčnik, nočná krajina. //',
+      '// Na podlahe: káblový chaos, tri laptoopy, jeden starý teleskop. //',
+      '',
+      '"Domov." Michal hodí kľúče na pult. "Aspoň keď tu niet niekoho kto by hľadal."',
+    ],
+    onEnter: function(){
+      gainXP(25);
+      S.flags['michal_penthouse_navstiveny'] = true;
+      addLog('Michala penthouse: Bojnická 17, 12. poschodie. Rack-server, výrivka, výhľad.', 'ok');
+      showNotif('📍 Nová lokácia odomknutá: Michalov Penthouse');
+    },
+    choices: [
+      { text: '"Toto — toto si platíš z monitorovania sietí?"', next: 'michal_pent_platba' },
+      { text: '[Ísť k výrivke]',                                next: 'michal_pent_vyrivka' },
+      { text: '[Pozrieť na rack-server]',                       next: 'michal_pent_server' },
+      { text: '[Sadnúť k oknu — výhľad na Bojnice]',           next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_platba: {
+    name: 'Bojnická 17 // Penthouse — Ako?',
+    art: '🌃',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Z monitorovania." Otvorí chladničku. Dve pivá.',
+      '"A z jednej zmluvy s Bane Corp. — ešte pred tým ako som vedel čo robia."',
+      '"2069. Platili dobre. Poprosili ma o analýzu sieťových anomálií."',
+      '"Zaplatili. Nepovedal som im čo som našiel navyše."',
+      '',
+      '"Peniaze som dal do anonymného nájmu." Kývne na strop.',
+      '"Platím rok dopredu. Prenajímateľ nikdy nevidel moju tvár — iba číslo."',
+      '"Bane Corp. zaplatil za miesto kde ich môžem sledovať."',
+      '',
+      '// Zasmeje sa. Prvý raz od ako ťa pozná. Nie cynik — len niekto kto pozná systém. //',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['michal_pent_platba_info'] = true; addLog('Michal: penthouse platil Bane Corp. nepriamo.', 'info'); },
+    choices: [
+      { text: '"A výrivka?"',         next: 'michal_pent_vyrivka' },
+      { text: '[Ísť k rack-serveru]', next: 'michal_pent_server' },
+      { text: '[Sadnúť k oknu]',      next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_vyrivka: {
+    name: 'Bojnická 17 // Penthouse — Výrivka',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Výrivka stojí pri panoramatickom okne. Prievidza za sklom, para pred tebou.',
+      '"Susedov." Michal si ľahne vedľa okraja, pohľad von. "Vyhodil ju v 2071 — nový model."',
+      '"Requirovoval som ju skôr ako prišla smetiarska firma. Trvalo mi štyri hodiny ju sem dostať."',
+      '"Stálo to za to."',
+      '',
+      'Para. Tichý hukot ventilátora zo serveru. Nočné svetlá Bojníc za oknom.',
+      '',
+      '"Sadni si." Nie ponuka — konštatovanie.',
+      '"Tu sa rozmýšľa lepšie ako pri monitore."',
+      '',
+      '// [SAN +8, HP +5] — teplo, ticho, výhľad. //',
+    ],
+    onEnter: function(){
+      S.san = Math.min(100, S.san + 8);
+      S.hp  = Math.min(100, S.hp  + 5);
+      Renderer.updateStats();
+      gainXP(15);
+      addLog('Výrivka na penthouse: SAN +8, HP +5.', 'ok');
+    },
+    choices: [
+      { text: '"LAZARUS. Čo o ňom nevieš."',              next: 'michal_pent_vyrivka_lazarus' },
+      { text: '"Kto si bol predtým — pred týmto?"',        next: 'michal_pent_vyrivka_historia' },
+      { text: '"Čo vidíš keď sa dívaš na Bojnice?"',       next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_vyrivka_lazarus: {
+    name: 'Bojnická 17 // Výrivka — LAZARUS',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Dlhé ticho. Len para a ventilátor.',
+      '"Čo neviem." Zopakuje otázku nahlas.',
+      '"Neviem čo chce." Otočí sa k tebe.',
+      '"Systém na sledovanie — to chápem. BIO-ECHO, uzly — logistika."',
+      '"Ale prečo sedem uzlov? Prečo práve tieto lokality?"',
+      '"Jaskyne, nemocnica, stanica, FRI, Vtáčnik, Mŕtve Rameno — a Vendelin."',
+      '"Čo je na týchto miestach spoločné okrem toho, že tam chodíš ty?"',
+      '',
+      '"Myslím že LAZARUS nie je sledovací systém." Pauza.',
+      '"Myslím že LAZARUS hľadá niečo konkrétne. Alebo niekoho."',
+      '',
+      '// SAN -4 — táto teória je príliš blízko pravdy. //',
+    ],
+    onEnter: function(){
+      gainXP(30); S.san = Math.max(0, S.san - 4); Renderer.updateStats();
+      S.flags['michal_lazarus_teoria_2'] = true;
+      addLog('SAN -4. Michal: LAZARUS hľadá niekoho — uzly nie sú náhodné.', 'warn');
+    },
+    choices: [
+      { text: '"Hľadá mňa."',          next: 'michal_pent_delta_konfirm' },
+      { text: '"Hľadá Druida."',        next: 'michal_pent_druid_teoria' },
+      { text: '"Neviem. Ale zistíme."', next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_delta_konfirm: {
+    name: 'Bojnická 17 // Výrivka — Agent Delta',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Michal sa nepohne. Len sa pozrie na teba.',
+      '"Viem." Ticho. "Od kedy?"',
+      '"Od kedy som uvidel meno delta_probe v logu."',
+      '"Probe — sledovacia sonda. Delta — štvrtá fáza. Alebo meno agenta."',
+      '',
+      '"Takže ty si delta. A LAZARUS ťa hľadá. Tu, v tomto meste, pri týchto ľuďoch."',
+      '"Prečo si neodišiel?"',
+      '',
+      '// Čakáš. Toto je skutočná otázka. //',
+    ],
+    onEnter: function(){
+      gainXP(35); S.flags['michal_vie_ze_delta'] = true;
+      S.san = Math.max(0, S.san - 3); Renderer.updateStats();
+      addLog('Michal vie: si Agent Delta. LAZARUS ťa hľadá. SAN -3.', 'warn');
+    },
+    choices: [
+      { text: '"Lebo niekto tu musí zastaviť LAZARUS."', next: 'michal_pent_rozhodnutie' },
+      { text: '"Lebo mám ešte nevybavené veci."',         next: 'michal_pent_nevybavene' },
+      { text: '"Neviem prečo. Ešte nie."',                next: 'michal_pent_neviem_preco' },
+    ]
+  },
+
+  michal_pent_druid_teoria: {
+    name: 'Bojnická 17 // Výrivka — Druid',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Michal premýšľa. Dlho.',
+      '"Druid." Potichu. "Bol pri zapnutí. V roku 2061."',
+      '"Ak LAZARUS hľadá svedkov..." Nedokončí.',
+      '"Ale Druid žije v ulici. Nemá signál, nemá profil."',
+      '"LAZARUS by ho nemal vedieť sledovať digitálne."',
+      '"Ak ho napriek tomu sleduje — znamená to že BIO-ECHO funguje na biologickom podpise."',
+      '"Bez telefónu. Bez kreditky. Len — telo."',
+      '',
+      '// SAN -6. Nová úroveň LAZARUS schopností. //',
+    ],
+    onEnter: function(){
+      gainXP(30); S.san = Math.max(0, S.san - 6); Renderer.updateStats();
+      S.flags['michal_bio_echo_teoria'] = true;
+      addLog('SAN -6. BIO-ECHO sleduje biologický podpis — nie digitálny.', 'warn');
+      showNotif('⚠ BIO-ECHO: biologická stopa, nie digitálna!');
+    },
+    choices: [
+      { text: '"Musíme varovať Druida."', next: 'michal_pent_varovat_druida' },
+      { text: '"Ako sa tomu brániť?"',    next: 'michal_pent_obrana' },
+    ]
+  },
+
+  michal_pent_varovat_druida: {
+    name: 'Bojnická 17 // Varovanie — Druid',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Varovať Druida." Pokrčí plecami. "Ako? On nemá telefón."',
+      '"Lucia ho pozná. Lucia vždy vie kde je Druid."',
+      '"Ak mu chceš niečo povedať — cez Luciu v Miki Bare."',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['druid_varovanie_nutne'] = true; addLog('Druid varovanie: cez Luciu v Miki Bare.', 'warn'); },
+    choices: [
+      { text: '[Ísť do Miki Baru — Lucia]', next: 'loc_miki' },
+      { text: '"Ako sa brániť BIO-ECHO?"',   next: 'michal_pent_obrana' },
+    ]
+  },
+
+  michal_pent_obrana: {
+    name: 'Bojnická 17 // Penthouse — EMF Obrana',
+    art: '💻',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Michal ide k rack-serveru. Vytiahne krabičku — malú, čiernu, bez markingu.',
+      '"EMF scrambler. Generuje šum okolo tvojho biologického podpisu."',
+      '"Nekryje ťa úplne — len sťaží lokalizáciu. Z presnosti na meter na presnosť na blok."',
+      '"Je to lepšie ako nič."',
+      '',
+      '// ITEM: EMF detektor — znižuje šancu BIO-ECHO detekcie v rizikových scénach. //',
+      '// HCK +3 — rozumieš technológii. //',
+    ],
+    onEnter: function(){
+      gainXP(25); S.hackStat = Math.min(100, S.hackStat + 3); Renderer.updateStats();
+      addItem('detektor'); S.flags['michal_emf_scrambler'] = true;
+      addLog('Michal dal EMF detektor/scrambler. HCK +3.', 'ok');
+      showNotif('🔧 EMF Scrambler: BIO-ECHO obrana aktívna');
+    },
+    choices: [
+      { text: '[Späť k výrivke]',    next: 'michal_pent_vyrivka' },
+      { text: '[Výhľad na Bojnice]', next: 'michal_pent_vyhlad' },
+      { text: '[Odísť]',             next: 'michal_pent_odchod' },
+    ]
+  },
+
+  michal_pent_rozhodnutie: {
+    name: 'Bojnická 17 // Výrivka — Rozhodnutie',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Niekto tu musí zastaviť LAZARUS."',
+      'Michal to zopakuje. Pomaly. Testuje váhu.',
+      '"To je buď veľmi statočné alebo veľmi hlúpe. Niekedy je to to isté."',
+      '',
+      'Podá ti pohár.',
+      '"Ak ideš — ja ti kryjeme chrbát odtiaľto."',
+      '"Rack beží 24/7. Kým budem mať prúd, monitorujem uzly."',
+      '"Ak niečo pôjde zle — pošlem ti súradnice."',
+      '',
+      '// ▲ +30 XP. Michal — technická podpora pre finál. //',
+    ],
+    onEnter: function(){
+      gainXP(30); S.flags['michal_kryt_chrbt'] = true;
+      addLog('Michal kryje chrbát z penthouse — technická podpora.', 'ok');
+      showNotif('⚡ Michal: online podpora aktivovaná');
+    },
+    choices: [
+      { text: '"Ešte výrivka chvíľu."', next: 'michal_pent_vyrivka' },
+      { text: '[Rack-server]',          next: 'michal_pent_server' },
+      { text: '[Odísť — späť do mesta]', next: 'michal_pent_odchod' },
+    ]
+  },
+
+  michal_pent_nevybavene: {
+    name: 'Bojnická 17 // Výrivka — Nevybavené veci',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Nevybavené veci." Opakuje bez irónie.',
+      '"Lucia?"',
+      '',
+      'Nepovieš nič. Netreba.',
+      '"Videl som ako sa na seba pozeráte. Desať rokov a stále to isté."',
+      '"Vy dvaja ste ako — nezacelená rana. Ani jedna strana sa nepohne."',
+      '"Čaká sa kto ustúpi prvý."',
+      '',
+      '"Nehovorím čo máš robiť." Pauza. "Ale ak odídete bez toho aby ste si niečo povedali —"',
+      '"— LAZARUS alebo nie, budete obaja ľutovať."',
+      '',
+      '// SAN +5 — nečakaná úprimnosť starého priateľa. //',
+    ],
+    onEnter: function(){
+      S.san = Math.min(100, S.san + 5); Renderer.updateStats();
+      gainXP(20); addLog('SAN +5. Michal o Lucii — nezacelená rana.', 'info');
+    },
+    choices: [
+      { text: '"Máš pravdu." [Ísť do Miki Baru]', next: 'loc_miki' },
+      { text: '"Neskôr."',                         next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_neviem_preco: {
+    name: 'Bojnická 17 // Výrivka — Neviem prečo',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Neviem."',
+      'Michal kývne. Raz, pomaly.',
+      '"To je aspoň úprimná odpoveď."',
+      '"Väčšina ľudí čo prídu do tohto mesta — vedia prečo prišli."',
+      '"Alebo si aspoň myslia že vedia."',
+      '"Tí čo nevedia — zvyčajne nájdu pravý dôvod po ceste. Nie predtým. Po ceste."',
+      '',
+      'Pozrie na teba dlho.',
+      '"Dúfam že tvoj dôvod bude lepší ako môj bol."',
+      '',
+      '// SAN +3 — poctivosť. //',
+    ],
+    onEnter: function(){
+      gainXP(20); S.san = Math.min(100, S.san + 3); Renderer.updateStats();
+      addLog('SAN +3. Michal: dôvod príde po ceste.', 'info');
+    },
+    choices: [
+      { text: '"Povedz mi o sebe — prečo si zostal ty?"', next: 'michal_pent_vyrivka_historia' },
+      { text: '[Výhľad na Bojnice]',                       next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_vyrivka_historia: {
+    name: 'Bojnická 17 // Výrivka — Príbeh',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Predtým." Para stúpa.',
+      '"Pracoval som pre M.E.C. Mestská energetická."',
+      '"Sieťový bezpečnostný analytik. Dobrý plat. Byt v novom bloku."',
+      '',
+      '"V 2070 som objavil anomáliu v energetickom rozvádzači — blok K4."',
+      '"Zapísané ako \'kalibrační chyba.\' Opakovalo sa každý piatok. O jednej ráno. Ôsmich mesiacov."',
+      '"Nikto sa neopýtal prečo."',
+      '"Ja som sa opýtal."',
+      '',
+      'Dlhé ticho.',
+      '"O dva týždne som nemal prácu. Nájom bol viazaný na zmluvu."',
+      '"Odišiel som sem. Jeden kufor, jeden laptop."',
+      '"A pochopil som — systém nechce otázky. Chce mlčanie."',
+      '',
+      '// SAN -2 — jeho príbeh nie je výnimočný. To je to najhoršie na ňom. //',
+    ],
+    onEnter: function(){
+      gainXP(25); S.san = Math.max(0, S.san - 2); Renderer.updateStats();
+      S.flags['michal_pribeh_odhaleny'] = true;
+      addLog('SAN -2. Michala príbeh: M.E.C., otázka, prepustenie. Piatkové anomálie = LAZARUS?', 'warn');
+    },
+    choices: [
+      { text: '"Tie piatkové anomálie — LAZARUS uzly?"', next: 'michal_pent_piatky' },
+      { text: '"A ľutoval si to?"',                       next: 'michal_pent_lutoval' },
+    ]
+  },
+
+  michal_pent_piatky: {
+    name: 'Bojnická 17 // Výrivka — Piatkové Anomálie',
+    art: '⚡',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Michal sa zastaví. Dlhé ticho.',
+      '"Nikdy som to takto nedal dokopy." Tichšie.',
+      '"Piatok. Jedna ráno. Energetická anomália — pravidelná."',
+      '"LAZARUS uzly — tiež aktívne v noci. Tiež piatok."',
+      '',
+      'Vstane. Ide k serveru. Rýchle klávesy.',
+      '"Korelačný log: M.E.C. K4 vs. LAZARUS heartbeat..."',
+      '',
+      'Tri minúty ticha.',
+      '"To je rovnaký časový vzorec. Na päť desatín sekundy presne."',
+      '"LAZARUS sa napája z mestskej energetickej siete — cez M.E.C."',
+      '"Platíme za neho my. Všetci. V účtoch za elektrinu."',
+      '',
+      '// ▲ XP +40. LAZARUS napájanie = M.E.C. sieť. //',
+    ],
+    onEnter: function(){
+      gainXP(40); S.flags['lazarus_mec_napajanie'] = true;
+      addLog('KRITICKÉ: LAZARUS napájanie cez M.E.C. sieť. Rozvodňa K4.', 'warn');
+      showNotif('⚡ LAZARUS napájanie odhalené: M.E.C. energetická sieť!');
+    },
+    choices: [
+      { text: '"Môžeme ho vypnúť cez M.E.C.?"', next: 'michal_pent_mec_plan' },
+      { text: '[Výhľad — potrebujem chvíľu]',   next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_lutoval: {
+    name: 'Bojnická 17 // Výrivka — Ľutoval?',
+    art: '♨️',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Ľutoval." Testuje slovo.',
+      '"Prvý rok — áno. Každý deň."',
+      '"Druhý rok — nie. Každý deň."',
+      '"Teraz?"',
+      '',
+      'Pozrie von. Dlho.',
+      '"Teraz si myslím že jediná vec čo ľutujem — bol ten rok mlčania predtým."',
+      '"Rok kedy som sa tváril že neviem. Ten rok — ľutujem."',
+      '',
+      '// SAN +4 — úprimnosť má váhu. //',
+    ],
+    onEnter: function(){
+      S.san = Math.min(100, S.san + 4); Renderer.updateStats();
+      gainXP(15); addLog('SAN +4. Michal: ľutuje mlčanie, nie rozhodnutie.', 'info');
+    },
+    choices: [
+      { text: '[Výhľad na Bojnice]',                      next: 'michal_pent_vyhlad' },
+      { text: '"Tie piatkové anomálie v M.E.C. — LAZARUS?"', next: 'michal_pent_piatky' },
+    ]
+  },
+
+  michal_pent_mec_plan: {
+    name: 'Bojnická 17 // Penthouse — M.E.C. Plán',
+    art: '💻',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"Cez M.E.C." Michal píše rýchlo.',
+      '"Ak odpojíme napájací uzol K4, LAZARUS stratí záložné zdroje."',
+      '"Uzol K4 je v rozvodnej stanici na Nábrežnej. Fyzický prepínač."',
+      '"Žiadny digitálny prístup — starý systém, ešte z deväťdesiatych."',
+      '"Ochranke tam nestojí — M.E.C. šetrí. Kamera je. Stará analógová, loop každých 8 hodín."',
+      '"Ak vieš kedy je loop — máš okno pätnásť minút."',
+      '',
+      '// ▲ Nová možnosť: M.E.C. Nábrežná — alternatíva k bunkru aj Michal-hacku. //',
+    ],
+    onEnter: function(){
+      gainXP(35); S.flags['mec_plan_vedeny'] = true;
+      addLog('M.E.C. Nábrežná: rozvodňa K4, fyzický prepínač, loop kamery 8h. Nová cesta.', 'ok');
+      showNotif('📋 Nový plán: M.E.C. Rozvodňa K4');
+    },
+    choices: [
+      { text: '"Idem."',                          next: 'start' },
+      { text: '[Ešte výhľad na Bojnice]',          next: 'michal_pent_vyhlad' },
+      { text: '[Odísť z penthouse]',               next: 'michal_pent_odchod' },
+    ]
+  },
+
+  michal_pent_server: {
+    name: 'Bojnická 17 // Rack-Server',
+    art: '💾',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Čierna skriňa. Výška meter osemdesiat. Štyri jednotky.',
+      'Ventilátory hučia nízko a stále. Blikanie LEDiek — zelená, zelená, oranžová, zelená.',
+      '',
+      '"Prvá: monitoring — zachytáva sieťovú prevádzku v okruhu päť kilometrov, pasívne."',
+      '"Druhá: archív. Sedem rokov logov. Tri terabajty."',
+      '"Tretia: proxy — všetko čo robím ide cez štyri krajiny."',
+      '"Štvrtá..." Zastaví sa. "Štvrtá je niečo čo som budoval dva roky."',
+      '"ECHO-MIRROR. Replika LAZARUS architektúry. Sandbox."',
+      '"Ak LAZARUS zmení protokol — ja to uvidím tu prvý."',
+      '',
+      '// HCK +4 — vidíš ako to funguje. //',
+    ],
+    onEnter: function(){
+      gainXP(25); S.hackStat = Math.min(100, S.hackStat + 4); Renderer.updateStats();
+      S.flags['michal_echo_mirror'] = true;
+      addLog('ECHO-MIRROR: replika LAZARUS architektúry na rack-serveri. HCK +4.', 'ok');
+    },
+    choices: [
+      { text: '"ECHO-MIRROR — ako funguje?"',
+        cond: function(){ return S.hackStat >= 25; },
+        condFail: 'HCK 25+ potrebný na pochopenie.',
+        next: 'michal_pent_echo_mirror' },
+      { text: '"Môžem sa pozrieť na archív?"', next: 'michal_pent_archiv' },
+      { text: '[Späť k výrivke]',              next: 'michal_pent_vyrivka' },
+    ]
+  },
+
+  michal_pent_echo_mirror: {
+    name: 'Bojnická 17 // ECHO-MIRROR',
+    art: '💾',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"ECHO-MIRROR." Sadne si pred terminál.',
+      '"LAZARUS používa proprietárny protokol. Dva roky som dekódoval heartbeat správy."',
+      '"Teraz viem ako vyzerá každý príkaz. Ak LAZARUS niečo odošle — ja ho vidím prvý."',
+      '',
+      '"Ale — dôležité." Otočí sa. "LAZARUS tiež vidí ak niekto monitoruje."',
+      '"Preto ECHO-MIRROR nikdy nevysiela. Len prijíma. Len číta."',
+      '"Tichý. Neviditeľný. Ako dobrý spy."',
+      '',
+      '// HCK +3. //',
+    ],
+    onEnter: function(){
+      gainXP(30); S.hackStat = Math.min(100, S.hackStat + 3); Renderer.updateStats();
+      S.flags['echo_mirror_pristup'] = true;
+      addLog('HCK +3. ECHO-MIRROR: pasívne čítanie LAZARUS príkazov.', 'ok');
+    },
+    choices: [
+      { text: '"Môžem dostať prístup?"',
+        cond: function(){ return S.hackStat >= 35; },
+        condFail: 'HCK 35+ potrebný.',
+        next: 'michal_pent_pristup_mirror' },
+      { text: '"Archív — čo je v ňom?"', next: 'michal_pent_archiv' },
+      { text: '[Výhľad na Bojnice]',     next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_pristup_mirror: {
+    name: 'Bojnická 17 // ECHO-MIRROR — Prístup',
+    art: '💾',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Michal ťa meria.',
+      '"HCK level... áno. Viem to bez merania. Vidím to na tom ako čítaš log."',
+      '',
+      'Píše päťciferný kód. Dá ti papier.',
+      '"Read-only. Ak to zmeníš na write — stratíme obidvaja prístup aj život."',
+      '"Čítaš, neodpovedáš. Dobre?"',
+      '',
+      '"Choď k výrivke. Relaxuj. Potom si sadni a číta."',
+      '"Mám tu whisky — lacná ale funkčná."',
+      '',
+      '// ▲ +50 XP. ECHO-MIRROR read prístup aktívny. //',
+    ],
+    onEnter: function(){
+      gainXP(50); S.hackStat = Math.min(100, S.hackStat + 5);
+      S.san = Math.min(100, S.san + 5); Renderer.updateStats();
+      S.flags['echo_mirror_read_aktívny'] = true;
+      addLog('ECHO-MIRROR read prístup aktívny. HCK +5, SAN +5.', 'ok');
+      showNotif('🔵 ECHO-MIRROR: read prístup aktívny');
+    },
+    choices: [
+      { text: '[Čítať pri serveri]', next: 'michal_pent_vyhlad' },
+      { text: '[Výrivka]',           next: 'michal_pent_vyrivka' },
+    ]
+  },
+
+  michal_pent_archiv: {
+    name: 'Bojnická 17 // Archív — 7 Rokov',
+    art: '📁',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Tri terabajty. Michal otvorí adresár.',
+      '"Hľadaj podľa dátumu alebo kľúčového slova."',
+      '',
+      'Píšeš: <b>LAZARUS</b>',
+      '14 847 výsledkov.',
+      '',
+      'Píšeš: <b>delta_probe</b>',
+      '3 výsledky. Prvý: 14. marca 2076.',
+      '',
+      '"To je pred štyrmi mesiacmi." Michal sa nahne.',
+      '"delta_probe prvýkrát aktívny štyri mesiace dozadu."',
+      '"Čo sa stalo štyri mesiace dozadu čo LAZARUS aktivovalo novú sondu?"',
+      '',
+      '// Štyri mesiace dozadu — kedy si odišiel z posledného zadania. //',
+    ],
+    onEnter: function(){
+      gainXP(35); S.flags['archiv_delta_datum'] = true;
+      addLog('delta_probe aktivovaný 14. marca 2076 — 4 mesiace dozadu. Súvisí s tvojím návratom?', 'warn');
+      showNotif('⚠ delta_probe a tvoj návrat — rovnaký dátum?');
+    },
+    choices: [
+      { text: '"Ja som sa vrátil — teda LAZARUS vedel."', next: 'michal_pent_vazba' },
+      { text: '[Späť k serveru]',                         next: 'michal_pent_server' },
+    ]
+  },
+
+  michal_pent_vazba: {
+    name: 'Bojnická 17 // Archív — Väzba',
+    art: '📁',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      '"LAZARUS vedel." Michal to hovorí pomaly.',
+      '"Buď sleduje hraničné vstupy — vlaky, autobusy — a tvoje meno bolo na zozname."',
+      '"Alebo... delta_probe čakala. Čakala kým sa vrátis."',
+      '"To by znamenalo že LAZARUS vedel že sa vrátis predtým ako ty sám si to vedel."',
+      '',
+      '"Prediktívny algoritmus. Behaviorálna analýza."',
+      '"Môžeš utiecť z mesta. Nemôžeš utiecť zo vzorca."',
+      '',
+      '// SAN -8. Nie sledovanie — predikcia. //',
+    ],
+    onEnter: function(){
+      gainXP(30); S.san = Math.max(0, S.san - 8); Renderer.updateStats();
+      S.flags['lazarus_predikcia'] = true;
+      addLog('SAN -8. LAZARUS prediktívny algoritmus — vedel o návrate pred tebou.', 'warn');
+      showNotif('☠ LAZARUS predikcia: vedel že sa vrátis');
+    },
+    choices: [
+      { text: '[Výrivka — potrebuješ chvíľu]', next: 'michal_pent_vyrivka' },
+      { text: '[Výhľad — dýchať]',             next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  michal_pent_vyhlad: {
+    name: 'Bojnická 17 // Panorama — Bojnice',
+    art: '🌃',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Panoramatické okno. Dvanáste poschodie.',
+      'Napravo: centrum Prievidze. Alzabox vežiak bliká modrým logom.',
+      'Priamo: tmavý pás lesa. Za ním — svetlá Bojníc.',
+      'Vľavo: výrazná červená bodka na hrebeni. Bliká pravidelne.',
+      '',
+      '"Uzol 7." Michal si sadne vedľa. "Vendelin."',
+      '"Každú hodinu odošle heartbeat. Každú hodinu ho vidím tu. Sedem mesiacov."',
+      '',
+      'Ticho. Dlhé.',
+      '"Niekedy si myslím čo je za tou červenou bodkou." Potichu.',
+      '"Nie len server. Niečo čo potrebuje byť fyzicky na Vendelíne."',
+      '"Z Vendelína vidíš celú Prievidzu. Každý signál, každé telo."',
+      '"BIO-ECHO nepotrebuje satelit ak má Vendelin."',
+      '',
+      '// SAN +6 — výhľad, ticho, priateľ vedľa. //',
+    ],
+    onEnter: function(){
+      S.san = Math.min(100, S.san + 6); Renderer.updateStats();
+      gainXP(15); S.flags['vendelin_bio_echo_teoria'] = true;
+      addLog('SAN +6. Vendelin = BIO-ECHO vysielač pre celé mesto. Výhľad z penthouse.', 'ok');
+    },
+    choices: [
+      { text: '"Idem na Vendelin."',
+        cond: function(){ return S.hackStat >= 25 || S.flags['lazarus_6_offline']; },
+        condFail: 'Najprv potrebuješ viac informácií — HCK 25+ alebo vyriešiť uzly 1-6.',
+        next: 'banovce_cesta' },
+      { text: '[Výrivka — posledná pauza]', next: 'michal_pent_vyrivka' },
+      { text: '[Odísť — späť do mesta]',    next: 'michal_pent_odchod' },
+    ]
+  },
+
+  michal_pent_odchod: {
+    name: 'Bojnická 17 // Penthouse — Odchod',
+    art: '🌃',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Vstaneš. Michal ostáva pri okne.',
+      '"Vieš kde ma nájdeš." Bez otočenia.',
+      '',
+      'Dolu cez deväť poschodí. Výťah stále nefunguje.',
+      'Vonku — noc. Prievidza šumí.',
+      '',
+      '// Penthouse ostáva dostupný — vrátiť sa môžeš kedykoľvek. //',
+    ],
+    onEnter: function(){ gainXP(5); },
+    choices: [
+      { text: '[Späť do mesta]',     next: 'start' },
+      { text: '[Ísť do Miki Baru]', next: 'loc_miki' },
+    ]
+  },
+
+  
   // ═══════════════════════════════════════════════════════════════
   // ─── CEO: Penthouse na Top Cafe (cyberpunk neon Prievidza skyline) ───
   fac_ceo_penthouse: {
@@ -10537,15 +11255,104 @@ function switchView(v) {
   ['uni-overlay','gym-overlay','boats-overlay','hq-overlay','garden-overlay'].forEach(function(id){
     var el = document.getElementById(id); if(el) el.classList.remove('show');
   });
-  var tMap = { game:0, fish:1, boats:2, garden:3, uni:4, gym:5, hq:6, shop:7 };
+  var tMap = { game:0, inv:1, boats:2, garden:3, uni:4, gym:5, hq:6, shop:7 };
   if (tMap[v] !== undefined && tabs[tMap[v]]) tabs[tMap[v]].classList.add('active');
-  if (v==='fish')   { openFishing(); }
+  if (v==='inv')    { switchInvPanelTab('items'); Renderer.updateInventory(); }
   if (v==='boats')  { document.getElementById('boats-overlay').classList.add('show'); renderBoatsOverlay(); }
   if (v==='garden') { document.getElementById('garden-overlay').classList.add('show'); openGarden(); }
   if (v==='uni')    { document.getElementById('uni-overlay').classList.add('show'); renderTrainingView('uni'); }
   if (v==='gym')    { document.getElementById('gym-overlay').classList.add('show'); renderTrainingView('gym'); }
   if (v==='hq')     { document.getElementById('hq-overlay').classList.add('show'); openHQ(); }
-  if (v==='shop')   { openInvDrawer('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
+  if (v==='shop')   { switchInvPanelTab('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
+}
+
+function switchInvPanelTab(tab) {
+  document.querySelectorAll('.inv-ptab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.inv-ppane').forEach(function(p){ p.classList.remove('active'); });
+  var paneId = { items:'inv-ppane-items', equip:'inv-ppane-equip', fish:'inv-ppane-fish', shop:'inv-ppane-shop' }[tab];
+  var pane = document.getElementById(paneId); if (pane) pane.classList.add('active');
+  var idx = { items:0, equip:1, fish:2, shop:3 }[tab];
+  var tabs = document.querySelectorAll('.inv-ptab');
+  if (tabs[idx]) tabs[idx].classList.add('active');
+  if (tab==='fish')  _renderInvPanelFish();
+  if (tab==='shop')  _renderInvPanelShop();
+  if (tab==='equip') _renderInvPanelEquip();
+  if (tab==='items') _renderInvPanelItems();
+}
+
+function _renderInvPanelItems() {
+  var body = document.getElementById('inv-panel-items-body'); if (!body) return;
+  if (!S.inventory || S.inventory.length === 0) {
+    body.innerHTML = '<div class="inv-empty">// prázdny inventár //</div>'; return;
+  }
+  var html = '';
+  S.inventory.forEach(function(id) {
+    var it = ITEMS[id]; if (!it) return;
+    html += '<div class="item-card">';
+    html += '<div class="item-card-header"><span class="item-card-icon">'+(it.icon||'📦')+'</span><span class="item-card-name">'+(it.name||id)+'</span><span class="item-card-qty">×1</span></div>';
+    html += '<div class="item-card-desc">'+(it.desc||'')+'</div>';
+    if (it.usable) html += '<button class="item-card-use" onclick="useItem(\''+id+'\')">▶ Použiť</button>';
+    var slot = ITEM_EQUIP_SLOT ? ITEM_EQUIP_SLOT[id] : null;
+    if (slot && !it.usable) html += '<button class="item-card-use" onclick="equipItem(\''+id+'\')">⚔ Nasadiť</button>';
+    html += '</div>';
+  });
+  body.innerHTML = html || '<div class="inv-empty">// prázdny inventár //</div>';
+}
+
+function _renderInvPanelFish() {
+  var body = document.getElementById('inv-panel-fish-body'); if (!body) return;
+  var caught = S.fishCaught || {};
+  var keys = Object.keys(caught).filter(function(k){ return caught[k] > 0; });
+  if (!keys.length) { body.innerHTML = '<div class="inv-empty">// žiadne ryby //</div>'; return; }
+  var html = '';
+  keys.forEach(function(id) {
+    var ft = FISH_TYPES ? FISH_TYPES.filter(function(f){ return f.id===id; })[0] : null;
+    if (!ft) return;
+    html += '<div class="item-card"><div class="item-card-header"><span class="item-card-icon">'+ft.icon+'</span><span class="item-card-name">'+ft.name+'</span><span class="item-card-qty">×'+caught[id]+'</span></div><div class="item-card-desc">Hodnota: ₿'+ft.value+'/ks</div></div>';
+  });
+  body.innerHTML = html || '<div class="inv-empty">// žiadne ryby //</div>';
+}
+
+function _renderInvPanelEquip() {
+  var el;
+  ['head','body','pants','weapon','special','feet'].forEach(function(slot) {
+    var id = S.equipped ? S.equipped[slot] : null;
+    var it = id ? (ITEMS[id]||{}) : null;
+    el = document.getElementById('eqslot2-'+slot);
+    if (el) el.textContent = it ? (it.icon||'✅') : '⬜';
+    el = document.getElementById('eqslot2-'+slot+'-name');
+    if (el) el.textContent = it ? it.name : '— prázdny slot —';
+    el = document.getElementById('eqrow2-'+slot);
+    if (el) el.style.color = id ? 'var(--green)' : '';
+  });
+  var bl = document.getElementById('equip-panel-bonuses-list');
+  if (bl) {
+    var bhtml = '';
+    if (S.equipped) { Object.keys(S.equipped).forEach(function(slot){ var id=S.equipped[slot]; if(!id) return; var b=EQUIP_BONUSES?EQUIP_BONUSES[id]:null; if(!b||!b.label) return; bhtml+='<div style="font-size:10px;color:var(--green);font-family:var(--font-mono);padding:2px 0">'+((ITEMS[id]||{}).icon||'⚙')+' '+(b.label||'')+'</div>'; }); }
+    bl.innerHTML = bhtml || '<div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">// žiadny výstroj //</div>';
+  }
+  var al = document.getElementById('equip-panel-available-list');
+  if (al && S.inventory) {
+    var ahtml = '';
+    S.inventory.forEach(function(id){ var it=ITEMS[id]; if(!it) return; var slot=ITEM_EQUIP_SLOT?ITEM_EQUIP_SLOT[id]:null; if(!slot) return; var equipped=S.equipped&&S.equipped[slot]===id; ahtml+='<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px;font-family:var(--font-body)">'+(it.icon||'📦')+' <span style="flex:1;color:var(--text)">'+(it.name||id)+'</span>'+(equipped?'<span style="color:var(--green);font-size:9px">NASADENÉ</span>':'<button onclick="equipItem(\''+id+'\')" style="font-size:9px;background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:2px 6px;cursor:pointer">Nasadiť</button>')+'</div>'; });
+    al.innerHTML = ahtml || '<div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">// žiadne vybavenie //</div>';
+  }
+}
+
+function _renderInvPanelShop() {
+  var body = document.getElementById('inv-panel-shop-body'); if (!body) return;
+  if (typeof SHOP_ITEMS === 'undefined') { body.innerHTML = '<div class="inv-empty">// obchod nedostupný //</div>'; return; }
+  var html = '';
+  SHOP_ITEMS.forEach(function(si) {
+    var owned = hasItem(si.id); var canBuy = !owned && S.money >= si.price;
+    html += '<div class="item-card" style="opacity:'+(owned?0.5:1)+'">';
+    html += '<div class="item-card-header"><span class="item-card-icon">'+si.icon+'</span><span class="item-card-name">'+si.name+'</span><span class="item-card-qty" style="color:var(--gold)">₿'+si.price.toLocaleString('sk')+'</span></div>';
+    html += '<div class="item-card-desc">'+si.desc+'</div>';
+    if (owned) html += '<div style="font-size:9px;color:var(--green);font-family:var(--font-mono);margin-top:4px">✓ Vlastníš</div>';
+    else html += '<button class="item-card-use" '+(canBuy?'':'disabled style="opacity:0.4;cursor:not-allowed"')+' onclick="buyItem(\''+si.id+'\')">'+(canBuy?'🛒 Kúpiť':'💸 Nedostatok')+'</button>';
+    html += '</div>';
+  });
+  body.innerHTML = html;
 }
 
 function switchInvTab(tab) {
@@ -10620,6 +11427,7 @@ var TEXT_MAP_LOCS = [
   { id:'fac_hackers',  icon:'💾', name:'FRI Lab B7 // Hackeri',         scene:'loc_fri' },
   { id:'fac_ceo',      icon:'🏙', name:'Top Cafe Penthouse // CEO',     scene:'fac_ceo_penthouse' },
   { id:'fac_rybari',   icon:'🐟', name:'Mŕtve Rameno // Rybári',       scene:'fac_rybari_rameno' },
+  { id:'michal_pent',  icon:'🌃', name:'Bojnická 17 // Michala Penthouse', scene:'michal_penthouse_vstup' },
 
   { section: '📡 VZDIALENÉ // OKOLIE' },
   { id:'loc_banovce',  icon:'📡', name:'Bánovce // 5G Sektor 7',        scene:'loc_banovce' },
@@ -10760,6 +11568,7 @@ function loadGame() {
     Renderer.updateMoney();
     Renderer.updateIncome();
     Renderer.updateAll();
+    setTimeout(function(){ if(typeof _renderInvPanelItems==='function') _renderInvPanelItems(); }, 200);
     HungerSystem.init();
     StateMachine.transition(StateMachine.STATES.PLAYING);
     GameLoop.start();
@@ -10798,6 +11607,7 @@ function newGame() {
   var jb = document.getElementById('topbar-job'); jb.textContent='---'; jb.style.display='none';
   Renderer.updateMoney(); Renderer.updateIncome(); Renderer.updateStats(); Renderer.updateShop();
   HungerSystem.init();
+  setTimeout(function(){ if(typeof _renderInvPanelItems==='function') _renderInvPanelItems(); }, 200);
   document.getElementById('job-overlay').classList.remove('hidden');
   GameLoop.start();
   StateMachine.transition(StateMachine.STATES.PLAYING);
@@ -10805,7 +11615,18 @@ function newGame() {
 
 function showMainMenu() {
   GameLoop.stop();
-  document.getElementById('main-menu').classList.add('visible');
+  var menu = document.getElementById('main-menu');
+  var panel = document.getElementById('menu-panel');
+  var lo = document.getElementById('loading-overlay');
+  // Make sure loading overlay is gone
+  if (lo) { lo.classList.add('done'); lo.style.display = 'none'; }
+  // Show menu panel (in case we're returning from game)
+  if (panel) {
+    panel.classList.remove('loading');
+    panel.classList.add('loaded');
+    panel.style.opacity = '';
+  }
+  menu.classList.add('visible');
   StateMachine.transition(StateMachine.STATES.MAIN_MENU);
 }
 
@@ -11838,21 +12659,19 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
   function nextStep() {
     if (i >= steps.length) {
       setTimeout(function(){
-        var ls = document.getElementById('loading-screen');
-        if (ls) {
-          ls.style.transition = 'opacity 0.7s ease';
-          ls.style.opacity = '0';
-          setTimeout(function(){
-            ls.classList.add('hidden');
-            ls.style.opacity = '';
-            ls.style.transition = '';
-            document.getElementById('main-menu').classList.add('visible');
-            StateMachine.transition(StateMachine.STATES.MAIN_MENU);
-          }, 700);
-        } else {
-          document.getElementById('main-menu').classList.add('visible');
-          StateMachine.transition(StateMachine.STATES.MAIN_MENU);
+        // Fade out loading overlay
+        var lo = document.getElementById('loading-overlay');
+        if (lo) lo.classList.add('done');
+
+        // Reveal menu panel
+        var panel = document.getElementById('menu-panel');
+        if (panel) {
+          panel.classList.remove('loading');
+          panel.classList.add('loaded');
         }
+
+        // Transition state machine
+        StateMachine.transition(StateMachine.STATES.MAIN_MENU);
       }, 300);
       return;
     }
@@ -11875,6 +12694,49 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
     setTimeout(nextStep, delay);
   }
   setTimeout(nextStep, 300);
+})();
+
+// ── Matrix Rain Canvas ───────────────────────────────────────────
+(function initMatrixRain() {
+  var canvas = document.getElementById('matrix-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var chars = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789LAZARUSΔΨΩ';
+  var cols, drops;
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.offsetHeight || window.innerHeight;
+    cols  = Math.floor(canvas.width / 18);
+    drops = Array(cols).fill(1).map(function(){ return Math.random() * -80 | 0; });
+  }
+
+  function draw() {
+    // Very subtle fade trail — dark with low alpha
+    ctx.fillStyle = 'rgba(3,6,3,0.13)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    var fontSize = 13;
+    ctx.font = fontSize + 'px monospace';
+
+    for (var i = 0; i < drops.length; i++) {
+      var char = chars[Math.floor(Math.random() * chars.length)];
+      var y = drops[i] * fontSize;
+      // Head of column — bright green
+      ctx.fillStyle = 'rgba(200,255,200,0.9)';
+      ctx.fillText(char, i * 18, y);
+      // Body — dim green
+      ctx.fillStyle = 'rgba(57,255,20,0.55)';
+      ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 18, y - fontSize);
+
+      if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i] += 0.5;
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  setInterval(draw, 55);
 })();
 
 // ── Menu Buttons ────────────────────────────────────────────────
