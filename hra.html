@@ -740,7 +740,7 @@ a:hover { color: #fff; }
 #main {
   padding-top: 38px;
   display: grid;
-  grid-template-columns: 52px 230px 1fr 210px;
+  grid-template-columns: 52px 230px 1fr;
   height: 100vh; height: 100dvh;
 }
 #center-panel {
@@ -867,7 +867,7 @@ a:hover { color: #fff; }
   position: relative;
 }
 #scene-img-wrap {
-  position: relative; height: 110px; flex-shrink: 0;
+  position: relative; height: 200px; flex-shrink: 0;
   background: linear-gradient(180deg, #06090f 0%, #0a0f1a 100%);
   overflow: hidden; border-bottom: 1px solid var(--border);
 }
@@ -880,13 +880,13 @@ a:hover { color: #fff; }
 #scene-photo {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; opacity: 1;
-  filter: sepia(0.4) hue-rotate(200deg) saturate(1.2) brightness(0.5);
+  filter: sepia(0.2) hue-rotate(180deg) saturate(1.3) brightness(0.75);
   z-index: 0;
 }
 #scene-photo.loaded { opacity: 1; }
 #scene-photo-overlay {
   position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(7,9,13,0.9) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(7,9,13,0.7) 100%);
 }
 #scene-placeholder {
   position: absolute; inset: 0; z-index: 1;
@@ -924,10 +924,10 @@ a:hover { color: #fff; }
 
 /* ── DIALOG ── */
 .dialog-npc-bubble {
-  margin: 12px 16px 6px 16px; padding: 12px 16px 12px 96px;
+  margin: 12px 16px 6px 16px; padding: 14px 16px 14px 116px;
   background: rgba(0,15,0,0.7); border: 1px solid var(--green3); border-left: 3px solid var(--green);
   position: relative; font-size: 14px; line-height: 1.7; color: #c2f0cc; font-family: var(--font-mono);
-  min-height: 80px;
+  min-height: 96px;
 }
 .dialog-npc-bubble::before {
   content: attr(data-speaker);
@@ -938,16 +938,16 @@ a:hover { color: #fff; }
 }
 .dialog-npc-bubble .npc-avatar {
   position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 48px; line-height: 1;
-  filter: drop-shadow(0 0 6px rgba(57,255,20,0.4));
-  width: 72px; height: 72px;
+  font-size: 60px; line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(57,255,20,0.5));
+  width: 90px; height: 90px;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden; border-radius: 50%;
 }
 .dialog-npc-bubble .npc-avatar img {
-  width: 72px; height: 72px; object-fit: cover; border-radius: 50%;
+  width: 90px; height: 90px; object-fit: cover; border-radius: 50%;
   border: 2px solid var(--green3);
-  filter: sepia(0.2) hue-rotate(80deg) saturate(1.3) brightness(0.95); display: block;
+  filter: sepia(0.1) hue-rotate(60deg) saturate(1.2) brightness(1.0); display: block;
 }
 .dialog-npc-bubble b { color: var(--green); font-weight: normal; text-shadow: 0 0 6px rgba(57,255,20,0.35); }
 .dialog-npc-bubble i { color: var(--text-dim); font-style: normal; font-size: 12px; display: block; margin-top: 4px; border-top: 1px solid var(--border2); padding-top: 4px; }
@@ -999,12 +999,78 @@ a:hover { color: #fff; }
 .log-line.info { color: var(--blue); }
 
 /* ── RIGHT PANEL ── */
-#right-panel {
+#right-panel { display: none !important; }
+
+/* ── INVENTORY DRAWER ── */
+#inv-drawer {
+  position: fixed; top: 38px; right: 0; z-index: 750;
+  width: min(340px, 100vw);
+  height: calc(100vh - 38px); height: calc(100dvh - 38px);
+  background: linear-gradient(180deg, #060e06 0%, var(--bg) 100%);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 32px rgba(0,0,0,0.7);
   display: flex; flex-direction: column;
-  height: calc(100vh - 38px);
-  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
-  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
 }
+#inv-drawer.open {
+  transform: translateX(0);
+  pointer-events: all;
+}
+#inv-drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: linear-gradient(90deg, rgba(57,255,20,0.06), transparent);
+}
+#inv-drawer-title {
+  font-family: var(--font-hud); font-size: 10px; letter-spacing: 3px;
+  color: var(--green); text-transform: uppercase;
+}
+#inv-drawer-close {
+  background: transparent; border: none; color: var(--text-dim);
+  font-size: 16px; cursor: pointer; padding: 2px 6px;
+  transition: color 0.1s;
+}
+#inv-drawer-close:hover { color: var(--danger); }
+#inv-drawer-tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #060b06, var(--bg));
+  flex-shrink: 0;
+}
+.inv-drawer-tab {
+  flex: 1; background: transparent; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim); font-family: var(--font-body); font-size: 10px;
+  font-weight: 600; letter-spacing: 1px;
+  padding: 7px 4px; cursor: pointer; transition: all 0.12s;
+}
+.inv-drawer-tab.active { color: var(--green); border-bottom-color: var(--green); }
+.inv-drawer-tab:hover { color: var(--blue); }
+#inv-drawer-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.inv-drawer-pane { display: none; }
+.inv-drawer-pane.active { display: block; }
+
+/* Inventory button in topbar */
+#inv-topbar-btn {
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--text-dim); font-family: var(--font-body);
+  font-size: 11px; font-weight: 600; letter-spacing: 1px;
+  padding: 3px 10px; cursor: pointer; transition: all 0.12s;
+  flex-shrink: 0; white-space: nowrap;
+}
+#inv-topbar-btn:hover, #inv-topbar-btn.active {
+  color: var(--green); border-color: var(--green3);
+  background: rgba(57,255,20,0.06);
+  text-shadow: 0 0 8px rgba(57,255,20,0.4);
+}
+/* Backdrop when drawer open */
+#inv-drawer-backdrop {
+  display: none; position: fixed; inset: 38px 0 0 0; z-index: 749;
+  background: rgba(0,0,0,0.4);
+}
+#inv-drawer-backdrop.show { display: block; }
 #inv-tab-bar {
   display: flex; border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, #060b06, var(--bg));
@@ -1031,35 +1097,28 @@ a:hover { color: #fff; }
 .item-card-use  { margin-top: 6px; background: transparent; border: 1px solid var(--green3); color: var(--green3); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 3px 10px; cursor: pointer; transition: all 0.1s; }
 .item-card-use:hover { background: rgba(57,255,20,0.08); color: var(--green); }
 
-/* ── PAPERDOLL ── */
-.paperdoll-wrap { display: grid; grid-template-columns: 1fr auto 1fr; gap: 4px; padding: 8px; }
-.equip-col { display: flex; flex-direction: column; gap: 6px; }
-.eq-slot-wrap { display: flex; flex-direction: column; gap: 2px; align-items: center; }
-.eq-slot-wrap label { font-family: var(--font-hud); font-size: 8px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
-.eq-slot { width: 48px; height: 48px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.12s; }
-.eq-slot:hover { border-color: var(--green3); background: rgba(57,255,20,0.04); }
-.eq-slot.filled { border-color: var(--green3); background: rgba(57,255,20,0.06); }
-.eq-slot-name { font-size: 8px; color: var(--text-muted); text-align: center; font-family: var(--font-mono); letter-spacing: 0.5px; max-width: 56px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.paperdoll-center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.pd-label { font-family: var(--font-hud); font-size: 7px; color: var(--green3); letter-spacing: 3px; margin-top: 4px; }
-.equip-stats-box { margin: 4px 8px; padding: 8px; border: 1px solid var(--border2); background: rgba(0,8,0,0.5); }
-.equip-stats-title { font-family: var(--font-hud); font-size: 8px; color: var(--text-dim); letter-spacing: 2px; margin-bottom: 6px; }
-.equip-bonus-row { display: flex; justify-content: space-between; font-size: 10px; padding: 2px 0; border-bottom: 1px solid var(--border2); }
-.equip-bonus-row:last-child { border-bottom: none; }
-.equip-hint { font-size: 9px; color: var(--text-muted); font-family: var(--font-mono); text-align: center; padding: 4px 8px; letter-spacing: 0.5px; }
-.equip-avail-btn { display: flex; align-items: center; gap: 6px; width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border2); padding: 5px 8px; cursor: pointer; color: var(--text-dim); font-family: var(--font-body); font-size: 11px; letter-spacing: 0.5px; transition: all 0.1s; }
-.equip-avail-btn:hover { color: var(--green); background: rgba(57,255,20,0.04); }
+/* ── EQUIPMENT (compact list) ── */
+.equip-compact-list { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.eq-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border2); background: var(--bg); cursor: pointer; transition: all 0.1s; }
+.eq-row:hover { border-color: var(--green3); background: rgba(57,255,20,0.04); }
+.eq-row.filled { border-color: var(--green3); background: rgba(57,255,20,0.06); }
+.eq-row-label { font-family: var(--font-hud); font-size: 8px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; min-width: 58px; }
+.eq-row-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+.eq-row-name { font-size: 11px; color: var(--text-dim); font-family: var(--font-mono); flex: 1; }
+.eq-row.filled .eq-row-name { color: var(--green4); }
+.eq-row-unequip { font-size: 9px; color: var(--danger); opacity: 0.6; cursor: pointer; }
+.eq-row-unequip:hover { opacity: 1; }
 
 /* ── SHOP ── */
 .shop-section-label { font-family: var(--font-hud); font-size: 9px; color: var(--green3); letter-spacing: 2px; padding: 6px 10px 4px; border-bottom: 1px solid var(--border2); text-transform: uppercase; }
-.shop-item { border: 1px solid var(--border); margin: 6px 8px; padding: 8px 10px; background: var(--bg); transition: border-color 0.12s; }
+.shop-item { border: 1px solid var(--border); margin: 4px 8px; padding: 6px 10px; background: var(--bg); transition: border-color 0.12s; }
 .shop-item:hover { border-color: var(--border-hi); }
-.shop-item-header { display: flex; align-items: center; margin-bottom: 4px; }
-.shop-item-icon { font-size: 20px; flex-shrink: 0; }
-.shop-item-name { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--text-bright); letter-spacing: 1px; flex: 1; }
+.shop-item-header { display: flex; align-items: center; margin-bottom: 2px; }
+.shop-item-icon { font-size: 18px; flex-shrink: 0; }
+.shop-item-name { font-family: var(--font-body); font-size: 11px; font-weight: 700; color: var(--text-bright); letter-spacing: 1px; flex: 1; }
 .shop-item-price { font-family: var(--font-hud); font-size: 11px; color: var(--gold); font-weight: 700; }
-.shop-item-desc { font-size: 11px; color: #6aaa6a; font-family: var(--font-mono); line-height: 1.4; margin-bottom: 6px; }
-.shop-buy-btn { width: 100%; background: linear-gradient(180deg, var(--bg3), var(--bg)); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 5px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
+.shop-item-desc { font-size: 10px; color: #6aaa6a; font-family: var(--font-mono); line-height: 1.3; margin-bottom: 4px; }
+.shop-buy-btn { width: 100%; background: linear-gradient(180deg, var(--bg3), var(--bg)); border: 1px solid var(--border); color: var(--text-dim); font-family: var(--font-body); font-size: 10px; letter-spacing: 1px; padding: 4px; cursor: pointer; transition: all 0.12s; text-transform: uppercase; }
 .shop-buy-btn:hover:not([disabled]) { background: rgba(57,255,20,0.06); border-color: var(--green3); color: var(--green); }
 .shop-buy-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
 
@@ -3703,6 +3762,7 @@ body.low-power .minigame-overlay {
     <span id="topbar-equip-badge" style="display:none;font-size:12px;letter-spacing:1px;color:var(--green3);border:1px solid var(--border);padding:2px 7px;font-family:var(--font-mono)"></span>
     <span id="tier-badge">T1 💻 Pouličný Hacker</span>
     <span id="topbar-money">₿ 0</span>
+    <button id="inv-topbar-btn" onclick="toggleInvDrawer()">🎒 Inventár</button>
     <span id="topbar-clock">--:--:--</span>
     <button class="top-micro-btn" onclick="saveGame()">💾 Uložiť</button>
     <button class="top-micro-btn" onclick="loadGame()">📂 Načítať</button>
@@ -3718,6 +3778,75 @@ body.low-power .minigame-overlay {
       <span id="volume-label">35%</span>
     </div>
     <button class="top-micro-btn" onclick="showMainMenu()">🏠 Menu</button>
+  </div>
+</div>
+
+<!-- INVENTORY DRAWER -->
+<div id="inv-drawer-backdrop" onclick="closeInvDrawer()"></div>
+<div id="inv-drawer">
+  <div id="inv-drawer-header">
+    <span id="inv-drawer-title">🎒 Inventár // Agent</span>
+    <button id="inv-drawer-close" onclick="closeInvDrawer()">✕</button>
+  </div>
+  <div id="inv-drawer-tabs">
+    <button class="inv-drawer-tab active" onclick="switchDrawerTab('items')">🎒 Predmety</button>
+    <button class="inv-drawer-tab"        onclick="switchDrawerTab('equip')">⚔️ Výstroj</button>
+    <button class="inv-drawer-tab"        onclick="switchDrawerTab('fish')">🐟 Ryby</button>
+    <button class="inv-drawer-tab"        onclick="switchDrawerTab('shop')">🛒 Obchod</button>
+  </div>
+  <div id="inv-drawer-body">
+    <div class="inv-drawer-pane active" id="inv-drawer-pane-items">
+      <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
+    </div>
+    <div class="inv-drawer-pane" id="inv-drawer-pane-equip">
+      <div class="equip-compact-list">
+        <div class="eq-row" id="eqrow-head" onclick="eqSlotClick('head')">
+          <span class="eq-row-label">Hlava</span>
+          <span class="eq-row-icon" id="eqslot-head">⬜</span>
+          <span class="eq-row-name" id="eqslot-head-name">— prázdny slot —</span>
+        </div>
+        <div class="eq-row" id="eqrow-body" onclick="eqSlotClick('body')">
+          <span class="eq-row-label">Telo</span>
+          <span class="eq-row-icon" id="eqslot-body">⬜</span>
+          <span class="eq-row-name" id="eqslot-body-name">— prázdny slot —</span>
+        </div>
+        <div class="eq-row" id="eqrow-pants" onclick="eqSlotClick('pants')">
+          <span class="eq-row-label">Nohavice</span>
+          <span class="eq-row-icon" id="eqslot-pants">⬜</span>
+          <span class="eq-row-name" id="eqslot-pants-name">— prázdny slot —</span>
+        </div>
+        <div class="eq-row" id="eqrow-weapon" onclick="eqSlotClick('weapon')">
+          <span class="eq-row-label">Zbraň</span>
+          <span class="eq-row-icon" id="eqslot-weapon">⬜</span>
+          <span class="eq-row-name" id="eqslot-weapon-name">— prázdny slot —</span>
+        </div>
+        <div class="eq-row" id="eqrow-special" onclick="eqSlotClick('special')">
+          <span class="eq-row-label">Špeciálne</span>
+          <span class="eq-row-icon" id="eqslot-special">⬜</span>
+          <span class="eq-row-name" id="eqslot-special-name">— prázdny slot —</span>
+        </div>
+        <div class="eq-row" id="eqrow-feet" onclick="eqSlotClick('feet')">
+          <span class="eq-row-label">Nástroj</span>
+          <span class="eq-row-icon" id="eqslot-feet">⬜</span>
+          <span class="eq-row-name" id="eqslot-feet-name">— prázdny slot —</span>
+        </div>
+      </div>
+      <div style="margin:4px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
+        <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">⚙ Aktívne bonusy výstroja</div>
+        <div id="equip-bonuses-list"></div>
+      </div>
+      <div style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);text-align:center;padding:4px 8px">// Klikni na slot pre zloženie //</div>
+      <div style="margin:6px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
+        <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">📦 Predmety v inventári</div>
+        <div id="equip-available-list"></div>
+      </div>
+    </div>
+    <div class="inv-drawer-pane" id="inv-drawer-pane-fish">
+      <div id="inv-fish-body"><div class="inv-empty">// žiadne ryby //</div></div>
+    </div>
+    <div class="inv-drawer-pane" id="inv-drawer-pane-shop">
+      <div id="shop-body"></div>
+    </div>
   </div>
 </div>
 
@@ -3819,41 +3948,6 @@ body.low-power .minigame-overlay {
           <div class="op-flag" id="op-druid"><div class="op-dot"></div><span class="op-name">🌿 Kontaktuj Druida</span></div>
         </div>
       </div>
-      <div class="panel-section">
-        <div class="panel-header" onclick="toggleSection('sec-map')">
-          <span class="panel-header-title">Mapa // Prievidza</span>
-          <span class="panel-header-toggle" id="toggle-sec-map">▼</span>
-        </div>
-        <div class="panel-body" id="sec-map">
-          <pre class="minimap-grid">
-  ╔══ PRIEVIDZA A OKOLIE 2077 ══╗
-  ║ BOJNICKÁ OBLASŤ              ║
-  ║  🏰 <span class="node" onclick="enterLocation('bojnice')">Bojnický zámok</span>       ║
-  ║  🔒 [Tunely] (zamknuté)      ║
-  ║  🏥 <span class="node" onclick="enterLocation('biotech')">Nem. / Biotech</span>       ║
-  ╟──────────────────────────────╢
-  ║ CENTRUM                       ║
-  ║  🚉 <span class="node" onclick="enterLocation('stanica')">Hl. Stanica</span>           ║
-  ║  ⛪ <span class="node" onclick="enterLocation('namestie')">Námestie / 5G</span>         ║
-  ║  🐟 <span class="node" onclick="enterLocation('miki')">Miki Bar ★</span>             ║
-  ╟──────────────────────────────╢
-  ║ KORZO / JANTAR                ║
-  ║  🏬 <span class="node" onclick="enterLocation('korzo')">Korzo OC</span>               ║
-  ║  🟡 <span class="node" onclick="enterLocation('jantar')">Jantar Club</span>            ║
-  ║  💾 <span class="node" onclick="enterLocation('fri')">FIT — Baník</span>            ║
-  ╟──────────────────────────────╢
-  ║ ZÁHORIE / ZÁKLADŇA            ║
-  ║  🏋️ <span class="node" onclick="enterLocation('zagorska')">Gym Zagorská</span>         ║
-  ║  🌿 <span class="node" onclick="enterLocation('terasy')">Terasy</span>                ║
-  ║  🌲 <span class="node" onclick="enterLocation('lesopark')">Lesopark</span>             ║
-  ║  🏠 <span class="node" onclick="enterLocation('domov')">Základňa</span>              ║
-  ╟──────────────────────────────╢
-  ║ OKOLIE                        ║
-  ║  📻 <span class="node" onclick="enterLocation('banovce')">Bánovce · 5G Sek. 7</span>  ║
-  ╚══════════════════════════════╝
-          </pre>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -3877,58 +3971,31 @@ body.low-power .minigame-overlay {
     <div id="log-wrap"></div>
   </div>
 
-  <!-- RIGHT PANEL -->
-  <div id="right-panel">
-    <div id="inv-tab-bar">
-      <button class="inv-tab active" onclick="switchInvTab('items')">🎒 Predmety</button>
-      <button class="inv-tab"        onclick="switchInvTab('equip')">⚔️ Výstroj</button>
-      <button class="inv-tab"        onclick="switchInvTab('fish')">🐟 Ryby</button>
-      <button class="inv-tab"        onclick="switchInvTab('shop')">🛒 Obchod</button>
-    </div>
-    <div class="inv-pane active" id="inv-pane-items">
-      <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
-    </div>
-    <div class="inv-pane" id="inv-pane-equip">
-      <div class="paperdoll-wrap">
-        <div class="equip-col">
-          <div class="eq-slot-wrap"><label>Hlava</label><div class="eq-slot" id="eqslot-head" title="Prázdny slot" onclick="eqSlotClick('head')"></div><div class="eq-slot-name" id="eqslot-head-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Telo</label><div class="eq-slot" id="eqslot-body" title="Prázdny slot" onclick="eqSlotClick('body')"></div><div class="eq-slot-name" id="eqslot-body-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Nohavice</label><div class="eq-slot" id="eqslot-pants" title="Prázdny slot" onclick="eqSlotClick('pants')"></div><div class="eq-slot-name" id="eqslot-pants-name">—</div></div>
-        </div>
-        <div class="paperdoll-center">
-          <div style="width:72px;height:200px;background:linear-gradient(180deg,#050a05,#080d08);border-left:1px solid var(--border);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:48px;filter:drop-shadow(0 0 8px rgba(57,255,20,0.35))">🕵️</div>
-          <div class="pd-label">AGENT</div>
-        </div>
-        <div class="equip-col">
-          <div class="eq-slot-wrap"><label>Zbraň</label><div class="eq-slot" id="eqslot-weapon" title="Prázdny slot" onclick="eqSlotClick('weapon')"></div><div class="eq-slot-name" id="eqslot-weapon-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Špeciálne</label><div class="eq-slot" id="eqslot-special" title="Prázdny slot" onclick="eqSlotClick('special')"></div><div class="eq-slot-name" id="eqslot-special-name">—</div></div>
-          <div class="eq-slot-wrap"><label>Nástroj</label><div class="eq-slot" id="eqslot-feet" title="Prázdny slot" onclick="eqSlotClick('feet')"></div><div class="eq-slot-name" id="eqslot-feet-name">—</div></div>
-        </div>
-      </div>
-      <div class="equip-stats-box">
-        <div class="equip-stats-title">⚙ Aktívne bonusy výstroja</div>
-        <div id="equip-bonuses-list"></div>
-      </div>
-      <div class="equip-hint">// Klikni na slot pre zloženie • Kúp v Obchode a nasaď tu //</div>
-      <div class="equip-stats-box" style="margin-top:6px">
-        <div class="equip-stats-title">📦 Predmety v inventári</div>
-        <div id="equip-available-list"></div>
-      </div>
-    </div>
-    <div class="inv-pane" id="inv-pane-fish">
-      <div id="inv-fish-body"><div class="inv-empty">// žiadne ryby //</div></div>
-    </div>
-    <div class="inv-pane" id="inv-pane-shop">
-      <div id="shop-body"></div>
-    </div>
-  </div>
-
   <!-- MOBILE RIGHT SIDE ARROW (grid col 3 on mobile) -->
   <button class="mobile-side-arrow right" id="mobile-right-arrow-main" aria-label="Pravy panel" onclick="mobileCycleRight()">
     <span class="arrow-icon">&#x25BA;</span>
     <span class="arrow-label" id="mobile-right-label-main">Inv.</span>
     <div class="arrow-dots" id="mobile-right-dots-main"></div>
   </button>
+</div>
+
+<!-- TEXT MAP DRAWER -->
+<div id="textmap-backdrop" onclick="closeTextMap()" style="display:none;position:fixed;inset:0;z-index:748;background:rgba(0,0,0,0.5)"></div>
+<div id="textmap-drawer" style="
+  position:fixed;bottom:0;left:0;right:0;z-index:749;
+  background:linear-gradient(180deg,#060e06,var(--bg));
+  border-top:1px solid var(--border);
+  box-shadow:0 -4px 32px rgba(0,0,0,0.8);
+  max-height:70vh;display:flex;flex-direction:column;
+  transform:translateY(100%);
+  transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none;
+">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;background:linear-gradient(90deg,rgba(57,255,20,0.07),transparent)">
+    <span style="font-family:var(--font-hud);font-size:10px;letter-spacing:3px;color:var(--green)">🗺 MAPA // PRIEVIDZA 2077</span>
+    <button onclick="closeTextMap()" style="background:transparent;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:2px 8px">✕</button>
+  </div>
+  <div id="textmap-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0;flex:1"></div>
 </div>
 
 <!-- OVERLAYS -->
@@ -4114,8 +4181,8 @@ body.low-power .minigame-overlay {
 <div id="mobile-nav">
   <button class="mobile-nav-btn" id="mnav-left" onclick="mobileCycleLeft()">◀<span>Štat.</span></button>
   <button class="mobile-nav-btn" id="mnav-game" onclick="mobileShowGame()">⚡<span>Hra</span></button>
-  <button class="mobile-nav-btn" id="mnav-inv" onclick="mobileCycleRight()">🎒<span>Inv.</span></button>
-  <button class="mobile-nav-btn" id="mnav-shop" onclick="mobileOpenShop()">🛒<span>Obchod</span></button>
+  <button class="mobile-nav-btn" id="mnav-inv" onclick="toggleInvDrawer()">🎒<span>Inv.</span></button>
+  <button class="mobile-nav-btn" id="mnav-map" onclick="openTextMap()">🗺<span>Mapa</span></button>
   <button class="mobile-nav-btn" id="mnav-right" onclick="mobileMiniLog()">📋<span>Log</span></button>
 </div>
 
@@ -4587,16 +4654,17 @@ var Renderer = (function() {
       var id = S.equipped[slot];
       var slotEl  = document.getElementById('eqslot-' + slot);
       var nameEl  = document.getElementById('eqslot-' + slot + '-name');
+      var rowEl   = document.getElementById('eqrow-' + slot);
       if (!slotEl) return;
       if (id) {
         var it = ITEMS[id] || {};
         slotEl.textContent = it.icon || '?';
-        slotEl.className   = 'eq-slot filled';
         if (nameEl) nameEl.textContent = it.name || id;
+        if (rowEl) rowEl.classList.add('filled');
       } else {
-        slotEl.textContent = '';
-        slotEl.className   = 'eq-slot';
-        if (nameEl) nameEl.textContent = '—';
+        slotEl.textContent = '⬜';
+        if (nameEl) nameEl.textContent = '— prázdny slot —';
+        if (rowEl) rowEl.classList.remove('filled');
       }
     });
     // Bonus list
@@ -4797,7 +4865,7 @@ var SceneManager = (function() {
         var avatarSpan = document.createElement('span'); avatarSpan.className = 'npc-avatar';
         if (npcImg) {
           var img = document.createElement('img'); img.src = npcImg; img.alt = npcName;
-          img.style.cssText = 'width:72px;height:72px;object-fit:cover;border-radius:50%;border:2px solid var(--green3);filter:sepia(0.3) hue-rotate(80deg) saturate(1.2);';
+          img.style.cssText = 'width:90px;height:90px;object-fit:cover;border-radius:50%;border:2px solid var(--green3);filter:sepia(0.1) hue-rotate(60deg) saturate(1.2);';
           img.onerror = function(){ this.style.display='none'; avatarSpan.textContent = art; };
           avatarSpan.appendChild(img);
         } else { avatarSpan.textContent = art; }
@@ -8268,42 +8336,215 @@ var SCENES = {
   loc_zagorska: {
     name: 'Gym Zagorská // Tréning',
     art: '🏋️',
-    text: ['Gym na Zagorskej. Základné zariadenie. Funguje.'],
+    text: [
+      'Gym na Zagorskej. Základné zariadenie, ale funguje.',
+      'Kovové stroje, vôňa chloru zo šatne. Pár chlapov s augmentmi — biceps posiľňovne sa stretáva s kybernetikou.',
+      '',
+      '// [PROSTREDIE] Na nástenke inzerát: "Hľadáme sparingového partnera. Platíme." Podpísaný: Kuba M. //',
+    ],
     onEnter: function(){ gainXP(5); },
-    choices: [{ text: 'Ísť trénovať', next: 'gym' }, { text: 'Späť', next: 'start' }]
+    choices: [
+      { text: '💪 Trénovať (STR +1, HP -5)',
+        action: function(){ S.str = (S.str||10)+1; S.hp = Math.max(10, S.hp-5); Renderer.updateStats(); addLog('Tréning: STR +1, HP -5', 'ok'); },
+        next: 'loc_zagorska' },
+      { text: '🤸 Strečing (SAN +3, FLEX +1)',
+        action: function(){ S.san = Math.min(100, S.san+3); S.flex = (S.flex||10)+1; Renderer.updateStats(); addLog('Strečing: SAN +3, FLEX +1', 'ok'); },
+        next: 'loc_zagorska' },
+      { text: '📋 Pozrieť inzerát na nástenke',
+        next: 'loc_zagorska_inzerat' },
+      { text: '🏋 Ísť do Gym Terasový (overlay)',
+        next: 'gym' },
+      { text: '← Späť do centra',
+        next: 'start' }
+    ]
+  },
+  loc_zagorska_inzerat: {
+    name: 'Inzerát // Kuba M.',
+    art: '📋',
+    text: [
+      '"Hľadám partnera na sparingovanie. Nebojím sa rán. Platím 80₿/hodina alebo tovar."',
+      '"Volaj na Základni alebo príď osobne — Lesopark, utorok, 14:00. — Kuba"',
+      '',
+      '// Kuba. To meno si si niekde čítal. Lazarusov kontakt? Alebo len náhoda? //',
+    ],
+    onEnter: function(){ gainXP(5); },
+    choices: [
+      { text: '← Späť do gymu', next: 'loc_zagorska' },
+      { text: '🌲 Ísť do Lesoparku', next: 'loc_lesopark' },
+      { text: '🏠 Ísť na Základňu', next: 'loc_domov' }
+    ]
   },
   loc_terasy: {
     name: 'Terasy pri Bojniciach',
     art: '🌿',
-    text: ['Terasy. Ľudia tu chodia kvôli pohybu aj výhľadu. Bojnice dole.', 'SAN +5 za pobyt.'],
+    text: [
+      'Terasy. Ľudia tu chodia kvôli pohybu aj výhľadu. Bojnice dole, lesy nahor.',
+      'Vietor od severu. Čistý vzduch — zriedkavosť v 2077. Na chvíľu zabudneš na všetko.',
+      '',
+      '// SAN +5 za pobyt. Hlava sa prevetrá. //',
+    ],
     onEnter: function(){ S.san = Math.min(100, S.san + 5); Renderer.updateStats(); gainXP(5); addLog('Terasy: SAN +5.', 'ok'); },
-    choices: [{ text: 'Odpočívať', next: 'garden' }, { text: 'Späť', next: 'start' }]
+    choices: [
+      { text: '😌 Sediť a rozhliadať sa (SAN +5)',
+        action: function(){ S.san = Math.min(100, S.san+5); Renderer.updateStats(); addLog('Výhľad: SAN +5', 'ok'); },
+        next: 'loc_terasy' },
+      { text: '🏃 Behať po terasách (STR +1, SAN +2)',
+        action: function(){ S.str=(S.str||10)+1; S.san=Math.min(100,S.san+2); Renderer.updateStats(); addLog('Beh: STR +1, SAN +2', 'ok'); },
+        next: 'loc_terasy' },
+      { text: '🌱 Ísť do Záhradky (Garden overlay)',
+        next: 'garden' },
+      { text: '🏰 Ísť do Bojníc',
+        next: 'loc_bojnice' },
+      { text: '🌲 Ísť do Lesoparku',
+        next: 'loc_lesopark' },
+      { text: '← Späť do centra',
+        next: 'start' }
+    ]
   },
   loc_lesopark: {
     name: 'Lesopark',
     art: '🌲',
-    text: ['Lesopark na okraji mesta. Ticho.', 'Kubo spomínal, že tu zastavil v utorok o druhej.'],
+    text: [
+      'Lesopark na okraji mesta. Ticho — také ticho, aké Prievidza 2077 môže ponúknuť.',
+      'Hologramy tu nesviecia. Signál je slabý. Ideálne miesto ak nechceš byť sledovaný.',
+      '',
+      'Kubo spomínal, že tu zastavil v utorok o druhej. Na lavičke pri treťom strome.',
+      '// [VNEM] Na kôre stromu zárez: ◆ L-2 ◆ — Lazarusov kód? //',
+    ],
     onEnter: function(){ gainXP(5); },
     choices: [
-      { text: 'Prehľadať okolie', next: 'start' },
-      { text: 'Späť do centra',   next: 'start' }
+      { text: '🔍 Prehľadať okolie stromu s nápisom',
+        next: 'loc_lesopark_strom' },
+      { text: '🧘 Odpočívať v tichosti (SAN +8, HP +5)',
+        action: function(){ S.san=Math.min(100,S.san+8); S.hp=Math.min(100,S.hp+5); Renderer.updateStats(); addLog('Lesopark: SAN +8, HP +5', 'ok'); },
+        next: 'loc_lesopark' },
+      { text: '🏠 Ísť na Základňu',
+        next: 'loc_domov' },
+      { text: '🌿 Ísť na Terasy',
+        next: 'loc_terasy' },
+      { text: '← Späť do centra',
+        next: 'start' }
+    ]
+  },
+  loc_lesopark_strom: {
+    name: 'Lesopark // Zárez na strome',
+    art: '🌲',
+    text: [
+      'Tretí strom od vstupu. Zárez v kôre: ◆ L-2 ◆',
+      'Pod koreňmi — kameň, trochu odsunutý. Pod ním: zabalená vodeodolná fólia.',
+      '',
+      '"Ak toto čítaš, Daedalus nás odporučil. Cache bod číslo 2. Lazarusov protokol pokračuje. — X"',
+      '',
+      '// [QUEST] Lazarusov spis — fragment 2/5 nájdený. XP +15 //',
+    ],
+    onEnter: function(){
+      gainXP(15);
+      S.flags['lesopark_cache'] = true;
+      addLog('Lazarusov cache bod 2 nájdený!', 'ok');
+    },
+    choices: [
+      { text: '← Späť do Lesoparku', next: 'loc_lesopark' },
+      { text: '📮 Ísť na Poštu za Druidom', next: 'posta' }
     ]
   },
   loc_biotech: {
     name: 'Bojnická Nemocnica // Biotech',
     art: '🏥',
-    text: ['Nemocnica. Verené priestory — štandardné. Za nimi: nové krídlo. Bane Corp. logo.'],
+    text: [
+      'Nemocnica. Verejné priestory — štandardné. Dezinfekcia, biele steny, ľudia čakajúci na augment-check.',
+      'Za recepciou: nové krídlo. Sklenené dvere. Bane Corp. logo. Strážnik s augmentovaným okom.',
+      '',
+      '// [VNEM] Bane Corp tu robí niečo s pacientmi. Nie čo písali v správach. //',
+    ],
     onEnter: function(){ gainXP(5); S.flags['biotech_videny'] = true; },
-    choices: [{ text: 'Vstúpiť', next: 'start' }, { text: 'Späť', next: 'sc_001_prichod' }]
+    choices: [
+      { text: '🏥 Kúpiť MedKit v nemocničnej lekárni (80₿)',
+        cond: function(){ return S.money >= 80; },
+        condFail: 'Nemáš dosť ₿',
+        action: function(){ S.money -= 80; if(!S.inventory) S.inventory=[]; S.inventory.push('medkit'); Renderer.updateMoney(); Renderer.updateInventory(); addLog('Kúpil si MedKit.', 'ok'); },
+        next: 'loc_biotech' },
+      { text: '🔍 Pozorovať strážnika pri novom krídle',
+        next: 'loc_biotech_kridlo' },
+      { text: '🩺 Liečiť sa (HP +30, 50₿)',
+        cond: function(){ return S.money >= 50; },
+        condFail: 'Nemáš dosť ₿',
+        action: function(){ S.money -= 50; S.hp=Math.min(100,S.hp+30); Renderer.updateStats(); Renderer.updateMoney(); addLog('Liečenie: HP +30.', 'ok'); },
+        next: 'loc_biotech' },
+      { text: '← Ísť k Bojnickému zámku',
+        next: 'loc_bojnice' },
+      { text: '← Späť',
+        next: 'start' }
+    ]
+  },
+  loc_biotech_kridlo: {
+    name: 'Biotech // Nové krídlo',
+    art: '🔬',
+    text: [
+      'Strážnik — augmentované oko skenuje každého. Na kartičke: "Bane Corp Division B — Restricted".',
+      'Cez sklo vidíš biele haly, ľahí pacienti s drôtmi v zátylku. Nie dobrovoľne. Tváre prázdne.',
+      '',
+      '// [LAZARUS] Toto je to. Lazarusov spis hovoril o "klinike". Toto je klinika. //',
+      '// XP +10 za objav. //',
+    ],
+    onEnter: function(){
+      gainXP(10);
+      S.flags['biotech_kridlo_videne'] = true;
+      addLog('Objav: Bane Corp klinika v nemocnici!', 'warn');
+    },
+    choices: [
+      { text: '📷 Odfotografovať cez sklo (XP +5)',
+        cond: function(){ return !S.flags['biotech_foto']; },
+        action: function(){ gainXP(5); S.flags['biotech_foto']=true; addLog('Foto zachytené. Dôkaz.', 'ok'); },
+        next: 'loc_biotech_kridlo' },
+      { text: '← Späť k nemocnici', next: 'loc_biotech' }
+    ]
   },
   loc_bojnice: {
     name: 'Bojnický zámok',
     art: '🏰',
-    text: ['Bojnický zámok. Turistická atrakcia. Ale za ním — pod ním — niečo iné.', 'Tunely. Zamknuté.'],
+    text: [
+      'Bojnický zámok. Turistická atrakcia — denná. V noci niečo iné.',
+      'Historická fasáda, ale pod ňou — tunely z vojny. Zamknuté od roku 2031.',
+      'Na bráne visí hologram: "CLOSED FOR RESTORATION — Bane Corp Heritage Division"',
+      '',
+      '// [VNEM] Bane Corp má aj tu prst. Tunely vedú kamsi — pod nemocnicu? //',
+    ],
     onEnter: function(){ gainXP(5); },
     choices: [
-      { text: 'Ísť k nemocnici', next: 'loc_biotech' },
-      { text: 'Späť',            next: 'start' }
+      { text: '🔒 Skúsiť dvere do tunelov',
+        cond: function(){ return S.flags && S.flags['ma_keycards']; },
+        condFail: 'Dvere sú zamknuté — potrebuješ keycard',
+        next: 'loc_bojnice_tunely' },
+      { text: '📸 Odfotiť hologram Bane Corp',
+        action: function(){ gainXP(5); S.flags['bojnice_foto']=true; addLog('Foto: Bane Corp na zámku.', 'ok'); },
+        next: 'loc_bojnice' },
+      { text: '🏥 Ísť k nemocnici / Biotech',
+        next: 'loc_biotech' },
+      { text: '🌿 Ísť na Terasy',
+        next: 'loc_terasy' },
+      { text: '← Späť do centra',
+        next: 'start' }
+    ]
+  },
+  loc_bojnice_tunely: {
+    name: 'Bojnický zámok // Tunely',
+    art: '🕳',
+    text: [
+      'Dvere cedknú. Keycard zaberá. Tmavá chodba dolu.',
+      'Steny z 19. storočia, káble z 21. Niekto tu inštaloval servery. Blikajúce LED pásky vedú hlboko.',
+      '',
+      '// [LAZARUS] Toto je podzemná infraštruktúra. Lazarusov cieľ bol niekde tu. //',
+      '// XP +20 za objav. Quest: Tunely pod Bojnicami — SPLNENÝ //',
+    ],
+    onEnter: function(){
+      gainXP(20);
+      S.flags['tunely_otvorene'] = true;
+      activateOp('op-jaskyne');
+      addLog('Tunely objavené! Quest splnený.', 'ok');
+    },
+    choices: [
+      { text: '← Späť na povrch', next: 'loc_bojnice' },
+      { text: '📮 Reportovať Druidovi', next: 'posta' }
     ]
   },
   loc_banovce: {
@@ -10304,20 +10545,128 @@ function switchView(v) {
   if (v==='uni')    { document.getElementById('uni-overlay').classList.add('show'); renderTrainingView('uni'); }
   if (v==='gym')    { document.getElementById('gym-overlay').classList.add('show'); renderTrainingView('gym'); }
   if (v==='hq')     { document.getElementById('hq-overlay').classList.add('show'); openHQ(); }
-  if (v==='shop')   { switchInvTab('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
+  if (v==='shop')   { openInvDrawer('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
 }
 
 function switchInvTab(tab) {
-  document.querySelectorAll('.inv-tab').forEach(function(t){ t.classList.remove('active'); });
-  document.querySelectorAll('.inv-pane').forEach(function(p){ p.classList.remove('active'); });
-  var tabMap = { items:'inv-pane-items', equip:'inv-pane-equip', fish:'inv-pane-fish', shop:'inv-pane-shop' };
-  var pane = document.getElementById(tabMap[tab]); if (pane) pane.classList.add('active');
-  var tabEls = document.querySelectorAll('.inv-tab');
-  var idx = { items:0, equip:1, fish:2, shop:3 };
-  if (tabEls[idx[tab]]) tabEls[idx[tab]].classList.add('active');
+  // Open the drawer and switch to tab
+  openInvDrawer(tab);
+}
+
+function toggleInvDrawer() {
+  var drawer = document.getElementById('inv-drawer');
+  if (drawer.classList.contains('open')) { closeInvDrawer(); } else { openInvDrawer(); }
+}
+
+function openInvDrawer(tab) {
+  var drawer = document.getElementById('inv-drawer');
+  var backdrop = document.getElementById('inv-drawer-backdrop');
+  var btn = document.getElementById('inv-topbar-btn');
+  drawer.classList.add('open');
+  if (backdrop) backdrop.classList.add('show');
+  if (btn) btn.classList.add('active');
+  if (tab) switchDrawerTab(tab);
+}
+
+function closeInvDrawer() {
+  var drawer = document.getElementById('inv-drawer');
+  var backdrop = document.getElementById('inv-drawer-backdrop');
+  var btn = document.getElementById('inv-topbar-btn');
+  drawer.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('show');
+  if (btn) btn.classList.remove('active');
+}
+
+function switchDrawerTab(tab) {
+  document.querySelectorAll('.inv-drawer-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.inv-drawer-pane').forEach(function(p){ p.classList.remove('active'); });
+  var paneId = { items:'inv-drawer-pane-items', equip:'inv-drawer-pane-equip', fish:'inv-drawer-pane-fish', shop:'inv-drawer-pane-shop' }[tab];
+  var pane = document.getElementById(paneId); if (pane) pane.classList.add('active');
+  var idx = { items:0, equip:1, fish:2, shop:3 }[tab];
+  var tabs = document.querySelectorAll('.inv-drawer-tab');
+  if (tabs[idx]) tabs[idx].classList.add('active');
   if (tab==='fish')  Renderer.updateFish();
   if (tab==='shop')  Renderer.updateShop();
   if (tab==='equip') Renderer.updateEquip();
+}
+
+/* ── TEXT MAP ─────────────────────────────────────────────────── */
+var TEXT_MAP_LOCS = [
+  { section: '🏙 CENTRUM' },
+  { id:'start',        icon:'🌃', name:'Centrum // Námestie Slobody',   scene:'start' },
+  { id:'loc_namestie', icon:'⛪', name:'Námestie // 5G veža',           scene:'loc_namestie' },
+  { id:'posta',        icon:'📮', name:'Pošta // Druid kontakt',        scene:'posta' },
+  { id:'loc_miki',     icon:'🍺', name:'Miki Bar ★ // Lucia, hazard',   scene:'loc_miki' },
+  { id:'loc_jantar',   icon:'🟡', name:'Jantar Club // CEO sieť',       scene:'loc_jantar' },
+  { id:'loc_stanica',  icon:'🚉', name:'Hlavná Stanica',                scene:'loc_stanica' },
+
+  { section: '🎓 SEVER // VZDELANIE' },
+  { id:'loc_fri',      icon:'💻', name:'FIT / FRI // Oravec, Lab B7',   scene:'loc_fri' },
+  { id:'loc_korzo',    icon:'🏬', name:'Korzo OC // Obchody, jedlo',    scene:'loc_korzo' },
+  { id:'loc_squash',   icon:'🏓', name:'Squash centrum',                scene:'loc_squash' },
+
+  { section: '🌿 ZÁHORIE // JUH' },
+  { id:'loc_zagorska', icon:'🏋️', name:'Gym Zagorská // Tréning',      scene:'loc_zagorska' },
+  { id:'loc_terasy',   icon:'🌿', name:'Terasy // SAN +5, výhľad',      scene:'loc_terasy' },
+  { id:'loc_lesopark', icon:'🌲', name:'Lesopark // Ticho, stopy',      scene:'loc_lesopark' },
+  { id:'loc_domov',    icon:'🏠', name:'Základňa // Odpočinok, HQ',     scene:'loc_domov' },
+
+  { section: '🏰 BOJNICE // OKOLIE' },
+  { id:'loc_bojnice',  icon:'🏰', name:'Bojnický zámok // Tunely?',     scene:'loc_bojnice' },
+  { id:'loc_biotech',  icon:'🏥', name:'Nemocnica // Biotech, Bane Corp',scene:'loc_biotech' },
+
+  { section: '⚔ FRAKCIE // TAJNÉ' },
+  { id:'fac_stokari',  icon:'🏚', name:'Garáže Píla // Stokári',        scene:'fac_stokari_garaze' },
+  { id:'fac_hackers',  icon:'💾', name:'FRI Lab B7 // Hackeri',         scene:'loc_fri' },
+  { id:'fac_ceo',      icon:'🏙', name:'Top Cafe Penthouse // CEO',     scene:'fac_ceo_penthouse' },
+  { id:'fac_rybari',   icon:'🐟', name:'Mŕtve Rameno // Rybári',       scene:'fac_rybari_rameno' },
+
+  { section: '📡 VZDIALENÉ // OKOLIE' },
+  { id:'loc_banovce',  icon:'📡', name:'Bánovce // 5G Sektor 7',        scene:'loc_banovce' },
+  { id:'banovce_cesta',icon:'⛰', name:'Vtáčnik // Cesta',              scene:'banovce_cesta' },
+];
+
+function openTextMap() {
+  var drawer  = document.getElementById('textmap-drawer');
+  var backdrop = document.getElementById('textmap-backdrop');
+  var body    = document.getElementById('textmap-body');
+  if (!drawer) return;
+
+  // Build content
+  var html = '';
+  TEXT_MAP_LOCS.forEach(function(loc) {
+    if (loc.section) {
+      html += '<div style="font-family:var(--font-hud);font-size:9px;letter-spacing:2px;color:var(--green3);padding:10px 14px 4px;border-bottom:1px solid var(--border2);text-transform:uppercase">' + loc.section + '</div>';
+      return;
+    }
+    var sceneExists = (typeof SCENES !== 'undefined' && SCENES[loc.scene]) ? true : false;
+    var isCurrent   = (typeof S !== 'undefined' && S.scene === loc.scene);
+    html += '<button onclick="closeTextMap();goTo(\'' + loc.scene + '\')" style="' +
+      'display:flex;align-items:center;gap:10px;width:100%;' +
+      'background:' + (isCurrent ? 'rgba(57,255,20,0.1)' : 'transparent') + ';' +
+      'border:none;border-bottom:1px solid var(--border2);' +
+      'padding:9px 14px;cursor:pointer;text-align:left;transition:background 0.08s;' +
+      '-webkit-tap-highlight-color:transparent;' +
+      '">' +
+      '<span style="font-size:20px;width:28px;text-align:center;flex-shrink:0">' + loc.icon + '</span>' +
+      '<span style="font-family:var(--font-body);font-size:12px;color:' + (isCurrent ? 'var(--green)' : (sceneExists ? 'var(--text-bright)' : 'var(--text-dim)')) + ';flex:1;letter-spacing:0.3px">' + loc.name + '</span>' +
+      (isCurrent ? '<span style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1px">◆ TU</span>' : '') +
+      '</button>';
+  });
+  body.innerHTML = html;
+
+  drawer.style.pointerEvents = 'all';
+  drawer.style.transform = 'translateY(0)';
+  backdrop.style.display = 'block';
+}
+
+function closeTextMap() {
+  var drawer  = document.getElementById('textmap-drawer');
+  var backdrop = document.getElementById('textmap-backdrop');
+  if (!drawer) return;
+  drawer.style.transform = 'translateY(100%)';
+  drawer.style.pointerEvents = 'none';
+  backdrop.style.display = 'none';
 }
 
 function toggleSection(id) {
@@ -15295,7 +15644,7 @@ var MobileNav = (function() {
 ════════════════════════════════════════════════════════════════ */
 
 function mobileCycleLeft()  { MobileNav.cycleLeft(); }
-function mobileCycleRight() { MobileNav.cycleRight(); }
+function mobileCycleRight() { openInvDrawer(); }
 function mobileShowGame()   { MobileNav.showGame(); }
 function mobileMiniStats()  { MobileNav.openLeftPanel('stats'); }
 function mobileMiniLog()    { MobileNav.miniLog(); }
