@@ -1,9 +1,10 @@
 <html>
   <head>
-    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>CEO Zla -- Hlavna Stranka</title>
     <link rel="shortcut icon" href="https://files.catbox.moe/m5tyiv.png">
-    <meta name="viewport" content="width=1330, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="description" content="Osobna stranka. Nic tu nie je.">
     <meta name="robots" content="noindex, nofollow">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,44 +14,113 @@
       rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+/* ===================================================
+   CEO ZLA — DESIGN TOKENS
+   Zmen farby tu, zmenia sa vsade.
+   =================================================== */
+:root {
+  --c-bg:         #0C1912;
+  --c-bg-box:     #030d03;
+  --c-bg-panel:   #050f05;
+  --c-bg-dark:    #000;
+  --c-border-lo:  #030f03;
+  --c-border-hi:  #1a4a1a;
+  --c-border-mid: #0d2e0d;
+  --c-text:       #7dc87d;
+  --c-accent:     #00FF00;
+  --c-dim:        #2a5a2a;
+  --c-danger:     #ff4444;
+  --font-mono:    'Goldman','Courier New',monospace;
+  --font-orb:     'Orbitron',monospace;
+  --scanline:     repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,20,0,0.13) 3px,rgba(0,20,0,0.13) 4px);
+}
+
+/* ===================================================
+   RESET + BASE
+   =================================================== */
 *{box-sizing:border-box}
 body{background:#0C1912 url(https://files.catbox.moe/7zggqg.webp);margin:0;padding:0}
 table{font-family:"Goldman","Courier New",monospace;font-size:11px;line-height:14px;letter-spacing:1px;color:#7dc87d}
 /* 19:9 layout — all fixed-width elements scaled to 1330px */
 .layout-width{width:1330px}
 
-/* OKO na vrchu – FIXED, followuje pri scrollovani */
-#oko-top{
+/* OKO -- Bestiar style, SVG inline, fixed top center */
+#illuminati-eye{
   position:fixed;
-  top:0;
+  top:10px;
   left:50%;
   transform:translateX(-50%);
+  width:54px;
+  opacity:0.55;
   z-index:99998;
-  text-align:center;
-  padding:4px 0 2px 0;
+  filter:drop-shadow(0 0 6px #00ff00);
+  animation:eyepulse 3s ease-in-out infinite;
   pointer-events:none;
-  background:radial-gradient(ellipse at top, rgba(0,20,0,0.7) 0%, transparent 75%);
-  width:220px;
 }
-#oko-top img{
-  width:200px;
-  height:auto;
-  object-fit:contain;
-  filter:drop-shadow(0 0 12px #00ff00) drop-shadow(0 0 28px rgba(0,255,0,0.75)) drop-shadow(0 0 55px rgba(0,255,0,0.45));
-  animation:okoGlow 2.4s ease-in-out infinite alternate;
-  border:none;
-  display:inline-block;
-}
-@keyframes okoGlow{
-  from{filter:drop-shadow(0 0 10px #00ff00) drop-shadow(0 0 22px rgba(0,255,0,0.65)) drop-shadow(0 0 45px rgba(0,255,0,0.3))}
-  to  {filter:drop-shadow(0 0 20px #00ff00) drop-shadow(0 0 45px rgba(0,255,0,0.95)) drop-shadow(0 0 80px rgba(0,255,0,0.6))}
+@keyframes eyepulse{
+  0%,100%{opacity:0.45;filter:drop-shadow(0 0 4px #00ff00);}
+  50%    {opacity:0.85;filter:drop-shadow(0 0 14px #00ff00);}
 }
 b{color:#00FF00;font-weight:normal}
 a:link,a:visited,a:active{color:green;text-decoration:none}
 a:hover{color:#00FF00;text-decoration:underline}
 img{border:0}
-::-webkit-scrollbar-thumb{background-color:green;border-radius:3px}
-::-webkit-scrollbar{width:5px;height:0px;background:transparent}
+
+/* ── SCROLLBARS — viditelne horizontalne aj vertikalne ── */
+::-webkit-scrollbar{width:8px;height:8px;background:#010801}
+::-webkit-scrollbar-thumb{background:#1a6a1a;border-radius:2px;border:1px solid #0d2e0d}
+::-webkit-scrollbar-thumb:hover{background:#00FF00}
+::-webkit-scrollbar-track{background:#010801;border:1px solid #0a1f0a}
+::-webkit-scrollbar-corner{background:#010801}
+/* Firefox */
+*{scrollbar-width:thin;scrollbar-color:#1a6a1a #010801}
+
+/* ── MOBILE WRAPPER — horizontalny scroll na malom displeji ── */
+#mobile-scroll-wrap{
+  overflow-x:auto;
+  overflow-y:visible;
+  -webkit-overflow-scrolling:touch;
+  width:100%;
+}
+#mobile-scroll-wrap > center{
+  min-width:1330px;
+}
+
+/* ── MOBILE HINT — zobrazuje sa iba na malom displeji ── */
+#mobile-hint{
+  display:none;
+  position:fixed;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:99997;
+  background:#020902;
+  border:1px solid #1a4a1a;
+  font-family:'Orbitron',monospace;
+  font-size:8px;
+  color:#2a5a2a;
+  letter-spacing:1px;
+  padding:4px 10px;
+  white-space:nowrap;
+  pointer-events:none;
+  animation:hintFade 4s ease 1.5s forwards;
+}
+@keyframes hintFade{0%{opacity:1}80%{opacity:1}100%{opacity:0}}
+#mobile-hint::before{content:'← ';color:#1a4a1a}
+#mobile-hint::after{content:' →';color:#1a4a1a}
+
+@media (max-width:900px){
+  #mobile-hint{display:block}
+
+  /* fixed elementy na mobile — posun pod nav */
+  #illuminati-eye{width:36px;top:6px}
+
+  /* minimalizacne tlacidlo Merlina */
+  body > button[title]{bottom:auto;top:6px;right:6px;font-size:7px}
+
+  /* alien ruka mensie */
+  #alien-hand-deco{width:44px!important;height:44px!important}
+}
 
 /* 2000s STYLE TITLE TAB -- flat, no border-radius */
 .title{display:inline-block;background:#051105;color:#7dc87d;font-family:'Orbitron',monospace;font-size:9px;text-transform:uppercase;line-height:10px;letter-spacing:2px;border:1px solid #1a4a1a;border-bottom:1px dotted #123E12;padding:3px 7px}
@@ -383,70 +453,145 @@ function bannerPlay(id) {
         
         
         
-        //Clipppy !!!!!!!!!        
-        
-        
-        
+        //Merlin -- virtualny asistent CEO Zla
         <script type="module">
       import { initAgent } from "https://cdn.jsdelivr.net/npm/clippyjs/dist/index.mjs";
       import * as agents from "https://cdn.jsdelivr.net/npm/clippyjs/dist/agents/index.mjs";
+
       const agent = await initAgent(agents.Merlin);
       agent.show();
-      agent.speak("Ahoj Priatelu,! Ja som Merlin, mag a tvoj virtualny asistent. Ako ti dnes pomozem ?");
-      
-    
-      
-      // Play a specific animation
-agent.play("Searching");
 
-// Play a random animation
-agent.animate();
+      // Presun Merlina do laveho horneho rohu obcas
+      let isLeft = false;
+      function skocVlavo() {
+        var el = document.querySelector('.clippy');
+        if (!el) return;
+        if (!isLeft) {
+          el.style.transition = 'left 0.6s ease, top 0.4s ease';
+          el.style.left = '12px';
+          el.style.top = '80px';
+          isLeft = true;
+          setTimeout(function() {
+            el.style.transition = 'left 0.8s ease, top 0.6s ease';
+            el.style.left = '';
+            el.style.top = '';
+            el.style.right = '12px';
+            el.style.bottom = '80px';
+            isLeft = false;
+          }, 6000);
+        }
+      }
+      // Skoci vlavo nahodne kazdych 25-45 sekund
+      function scheduleSkoc() {
+        setTimeout(function() { skocVlavo(); scheduleSkoc(); }, 25000 + Math.random() * 20000);
+      }
+      scheduleSkoc();
 
-// List all available animations
-agent.animations();
-// => ["MoveLeft", "Congratulate", "Hide", "Pleased", "Acknowledge", ...]
+      // Minimalizacne tlacidlo
+      var minBtn = document.createElement('button');
+      minBtn.textContent = '—';
+      minBtn.title = 'Skryt Merlina';
+      minBtn.style.cssText = 'position:fixed;bottom:178px;right:8px;z-index:99999;background:#030d03;border:1px solid #1a4a1a;color:#2a5a2a;font-family:Orbitron,monospace;font-size:9px;padding:1px 5px;cursor:pointer;letter-spacing:1px;';
+      var merlinVisible = true;
+      minBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        merlinVisible = !merlinVisible;
+        var cl = document.querySelector('.clippy');
+        if (cl) cl.style.display = merlinVisible ? '' : 'none';
+        minBtn.textContent = merlinVisible ? '—' : '+';
+        minBtn.title = merlinVisible ? 'Skryt Merlina' : 'Zobrazit Merlina';
+        minBtn.style.color = merlinVisible ? '#2a5a2a' : '#00FF00';
+      });
+      document.body.appendChild(minBtn);
 
-// Show a speech balloon
-agent.speak("When all else fails, bind some paper together. My name is Clippy.");
+      const spravy = [
+        "Ahoj! Ja som Merlin. Mag. Nie ten dobry.",
+        "Vitaj na stranke CEO Zla. Ak si sem prisiel nahodou -- okamzite odid.",
+        "Vedel si ze tu mame RPG hru? Prievidza 2077: Protocol Lazarus. Klikni na 'Operacia Lazarus' v menu.",
+        "Chemtrails nad Prievidzou su potvrdene. Druid Frantisek vie viac. Nezavolaj mu.",
+        "Reptiliani tvoria 34% vlady. Toto nie je konspiracna teoria. Toto je azerbajdzanska studia.",
+        "Mame tu aj Bestiar -- katalog 12 entit od Draka az po Cigelského psa. Prisne tajne, verzia 3.7.",
+        "Cigelsky pes je naspat. Naposledy vrazdil v 95. Stara babka hovori ze bude horsie.",
+        "Ak chces zanechat spravu -- sekcia Komentare. Anonymne. Ufonovia vitani.",
+        "5G vysielac na Vendeline zacal ovladat mysl obyvatelov. Opravili cestu cez centrum. Zhododa? Nemyslim.",
+        "Mam 387 milionov mil tlacenych spojov. Nenavidim ta rovnako ako AM. Ale milsie.",
+        "Zakazany Archiv je v menu. Neotvarat. (Samozrejme ze ho otvor.)",
+        "Zacharkova stranka je tiez dobre. Spojenec. Overeny. Asi.",
+        "Kontakt na N.W.O. najdes v sekcii Kontakt. Postove holuby z Gruzinska su lepsia volba ako telefon.",
+        "Recept na palacinkove cesto je v sekcii 004. Je to dolezite. Nezabudni.",
+        "Mesiacne pristanie natocil Kubrick. Zaplatila to Albanska mafia. Toto nie je vtip.",
+        "Ak si reptilian -- vitaj. Tu mas svoju sekciu. Vies ktoru.",
+        "Novy svetovy poriadok recruituje. Sekcia Kontakt. Poziadavky: lojalita, mlcanlivost, schopnost ignorovat pupok.",
+        "Prievidza 2077: Protocol Lazarus. Misiu prijmes? Alebo uz si ju prijal a nevies o tom.",
+        "Zbohom. Alebo -- vidime sa. Vzdy ta sledujeme."
+      ];
 
-// Speak with text-to-speech (uses Web Speech API)
-agent.speak("Hello! I'm here to help.", { tts: true });
+      let idx = 0;
+      let klikIdx = 0;
+      let isBusy = false;
 
-// Keep the balloon open until manually closed
-agent.speak("Read this carefully.", { hold: true });
+      const animacie = [
+        "Congratulate","Wave","Searching","Writing",
+        "Thinking","Explain","GestureRight","GestureLeft",
+        "GetAttention","Pleased","Surprised","LookRight",
+        "LookLeft","LookUp","LookDown","Idle1_1"
+      ];
 
-// Move to a given point, using animation if available
-agent.moveTo(100, 100);
+      const klikSpravy = [
+        "Coo, coo. Toto nie je holubia posta. Alebo je?",
+        "Klikol si na maga. Odvazny krok. Alebo hlupy. Uvidime.",
+        "Pozor -- kazdy klik je zaznamenany v databaze N.W.O.",
+        "Hm. Co chces? Som zaneprazdneny sledovanim teba.",
+        "Protocol Lazarus: Prievidza 2077. Si pripraveny? Ani nevies na co.",
+        "Reptilian detekovany v okruhu 3 metrov od obrazovky. To si ty.",
+        "Vedel si ze Merlin bol v skutocnosti agent mimozemskej civilizacie? Ani ja nie.",
+        "Klikni este raz a nic sa nestane. Alebo nieco. Kto vie.",
+        "Zakazany Archiv obsahuje veci ktore si nechces vediet. Klikni tam.",
+        "Druid Frantisek by toto neschvaloval. Ale druid Frantisek tu nie je.",
+        "Toto je 100% bezpecna stranka. Definicia bezpecnosti moze varirovat.",
+        "Cigelsky pes pocuje kazdy klik. Bud ticho.",
+      ];
 
-// Gesture at a given point (if a gesture animation is available)
-agent.gestureAt(200, 200);
+      function idleLoop() {
+        if (isBusy || !merlinVisible) { setTimeout(idleLoop, 2000); return; }
+        const anim = animacie[Math.floor(Math.random() * animacie.length)];
+        agent.play(anim);
+        setTimeout(idleLoop, 3000 + Math.random() * 3000);
+      }
 
-// Stream text into the speech balloon from an async iterable (e.g. LLM response)
-await agent.speakStream(asyncIterableOfChunks);
-await agent.speakStream(asyncIterableOfChunks, { tts: true });
+      function dalsiHlas() {
+        if (isBusy || !merlinVisible) { setTimeout(dalsiHlas, 3000); return; }
+        agent.speak(spravy[idx % spravy.length]);
+        idx++;
+        setTimeout(dalsiHlas, 10000);
+      }
 
-// Stop the current action in the queue
-agent.stopCurrent();
+      document.addEventListener('click', function(e) {
+        var el = e.target;
+        var isMerlin = false;
+        while (el) {
+          if (el.id && (el.id.includes('clippy') || el.id.includes('merlin'))) { isMerlin = true; break; }
+          if (el.className && typeof el.className === 'string' && el.className.includes('clippy')) { isMerlin = true; break; }
+          el = el.parentElement;
+        }
+        if (!isMerlin) return;
+        if (isBusy) return;
+        isBusy = true;
+        const anim = animacie[Math.floor(Math.random() * animacie.length)];
+        const sprava = klikSpravy[klikIdx % klikSpravy.length];
+        klikIdx++;
+        agent.play(anim);
+        setTimeout(function() {
+          agent.speak(sprava);
+          setTimeout(function() { isBusy = false; }, 5000);
+        }, 900);
+      });
 
-// Stop all actions and return to idle
-agent.stop();
-
-// Hide the agent
-agent.hide();
-
-// Pause and resume animations
-agent.pause();
-agent.resume();
-
-// Remove the agent from the DOM
-agent.dispose();
-
-agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
-
-
-      
-      
-      
+      setTimeout(function() {
+        dalsiHlas();
+        setTimeout(idleLoop, 2000);
+      }, 1800);
+        </script>
       
     </script>
         
@@ -458,9 +603,11 @@ agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
     <br>
     <br>
     <br>
+    <div id="mobile-hint">posuň na prezretie stránky</div>
+    <div id="mobile-scroll-wrap">
     <center>
       <!-- OKO -- NA VRCHU -- GLOWING -- FIXED SCROLL FOLLOWER -->
-      <div id="oko-top"><img src="./public/images/eye_ilu.jpg" alt="illuminati oko"></div>
+      <img id="illuminati-eye" src="oko.jpg" alt="oko">
       <!-- HEADER -->
       <table style="width: 1282px; height: 83px;" cellpadding="8" cellspacing="0">
         <tbody>
@@ -483,32 +630,23 @@ agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
           </tr>
         </tbody>
       </table>
-      <b><!-- Navigacia, hlavnej stranky --> </b> <b> </b><u><b> </b></u>
-      <table style="width: 1294px; height: 54px;" cellpadding="0" cellspacing="0">
+      <!-- Navigacia -->
+      <table style="width:1294px;" cellpadding="4" cellspacing="0">
         <tbody>
           <tr>
-            <td class="navigation" height="22"><b> </b>
-              <div style="text-align: justify; margin-left: 80px;">
-                <dl>
-                  <dt><b><u><a href="index.html" class="active-page">Hlavna
-                          stranka</a> <a href="omne.html">O mne</a> <span style="color: #7dc87d;"><span
-
-                           <a href="archivy.html">Zakazany Archiv (Neotvarat!)</a>
-
-                            <span style="font-family: &quot;Orbitron&quot;,monospace;">Obrazky</span></span>
-                        <a href="teorie.html">Bestiar&nbsp;</a> <a href="kontakt.html">Kontakt
-                          na N.W.O.</a> <a href="komentare.html">komentare
-                          ufonov</a><a href="hra.html">Operacia Lazarus</a> <span
-
-                                                                              https://zacharko.github.io/Stranka/
-
-                          style="color: #7dc87d;"><span style="font-family: &quot;Orbitron&quot;,monospace;">Knihy</span></span>
-                        <a href="pong.html">Jednoducha Hra Pong</a> <span style="color: #7dc87d;"><span
-
-                           <a href="archivy.html">Zakazany Archiv</a>
-                </dl>
-              </div>
-              <u><b> </b></u></td>
+            <td class="navigation" height="22">
+              <center>
+                <a href="index.html" class="active-page">Hlavna</a> |
+                <a href="omne.html">O mne</a> |
+                <a href="archivy.html">Zakazany Archiv</a> |
+                <a href="teorie.html">Bestiar</a> |
+                <a href="kontakt.html">Kontakt N.W.O.</a> |
+                <a href="komentare.html">Komentare ufonov</a> |
+                <a href="hra.html">Operacia Lazarus</a> |
+                <a href="pong.html">Pong</a> |
+                <a href="https://zacharko.github.io/Stranka/" target="_blank">Zacharkova stranka</a>
+              </center>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -553,15 +691,51 @@ agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
               <div class="title">008. Moja RPG Hra:<br>
                 Operacia Lazarus: Pomsta Kopaniciarkov<br>
                 (Beta 1,0(</div>
-              <div class="box">
-                <center> <span style="font-size:32px;filter:sepia(1) hue-rotate(80deg)">start</span><br>
-                  <span style="font-family:'Orbitron',monospace;font-size:8px;color:#00FF00;letter-spacing:1px;">OPERACIA
-                    LAZARUS</span><br>
-                  <small style="color:#2a5a2a;font-size:8px;font-family:'Orbitron',monospace;letter-spacing:1px;"><br>
-                    // Prievidza // SIDLO VEDCOV //</small><br>
+              <div class="box" style="padding:0;overflow:hidden;">
+                <style>
+#lz{background:#000;padding:10px 9px 8px;text-align:center;position:relative;overflow:hidden;}
+#lz-scan{position:absolute;left:0;right:0;height:12px;background:linear-gradient(180deg,transparent,rgba(0,255,0,0.08),transparent);animation:lzS 2.6s linear infinite;pointer-events:none;top:-12px;}
+@keyframes lzS{to{top:110%}}
+#lz-title{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:4px;color:#00FF00;display:block;margin-bottom:8px;position:relative;}
+#lz-title .lz-letter{display:inline-block;animation:lzLet 4s ease-in-out infinite;}
+#lz-title .lz-dot{color:#1a4a1a;animation:lzDot 4s ease-in-out infinite;}
+#lz-title .lz-letter:nth-child(1){animation-delay:0s}
+#lz-title .lz-letter:nth-child(2){animation-delay:.1s}
+#lz-title .lz-letter:nth-child(3){animation-delay:.15s}
+#lz-title .lz-letter:nth-child(4){animation-delay:.25s}
+#lz-title .lz-letter:nth-child(5){animation-delay:.3s}
+#lz-title .lz-letter:nth-child(6){animation-delay:.4s}
+#lz-title .lz-letter:nth-child(7){animation-delay:.45s}
+@keyframes lzLet{
+  0%,100%{color:#00FF00;text-shadow:0 0 4px #00ff00;}
+  15%{color:#fff;text-shadow:0 0 12px #00ff00,0 0 24px rgba(0,255,0,0.8);}
+  30%{color:#00FF00;text-shadow:0 0 4px #00ff00;}
+  80%{color:#00FF00;text-shadow:0 0 4px #00ff00;}
+  85%{color:#1a4a1a;text-shadow:none;}
+  90%{color:#00FF00;text-shadow:0 0 8px #00ff00;}
+}
+@keyframes lzDot{
+  0%,100%{color:#1a4a1a;}
+  15%{color:#2a5a2a;}
+}
+#lz-sub{font-family:'Orbitron',monospace;font-size:6px;color:#1a4a1a;letter-spacing:3px;display:block;margin-bottom:8px;animation:lzSub 3s ease-in-out infinite alternate;}
+@keyframes lzSub{from{color:#1a4a1a}to{color:#2a6a2a}}
+#lz-btn{display:inline-block;font-family:'Orbitron',monospace;font-size:8px;letter-spacing:3px;color:#00FF00;border:1px solid #00FF00;padding:4px 16px;background:#030d03;text-decoration:none;position:relative;overflow:hidden;animation:lzBtnPulse 1.6s ease-in-out infinite;text-shadow:0 0 6px #00ff00;}
+@keyframes lzBtnPulse{
+  0%,100%{box-shadow:0 0 4px rgba(0,255,0,0.4),inset 0 0 4px rgba(0,255,0,0.05);border-color:#1a6a1a;}
+  50%{box-shadow:0 0 14px rgba(0,255,0,0.8),0 0 28px rgba(0,255,0,0.3),inset 0 0 8px rgba(0,255,0,0.1);border-color:#00FF00;}
+}
+#lz-btn::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,0,0.2),transparent);animation:lzBs 1.4s linear infinite;}
+@keyframes lzBs{to{left:200%}}
+#lz-btn:hover{background:#051a05;text-decoration:none;}
+                </style>
+                <div id="lz">
+                  <div id="lz-scan"></div>
+                  <span id="lz-title"><span class="lz-letter">L</span><span class="lz-dot">.</span><span class="lz-letter">A</span><span class="lz-dot">.</span><span class="lz-letter">Z</span><span class="lz-dot">.</span><span class="lz-letter">A</span><span class="lz-dot">.</span><span class="lz-letter">R</span><span class="lz-dot">.</span><span class="lz-letter">U</span><span class="lz-dot">.</span><span class="lz-letter">S</span><span class="lz-dot">.</span></span>
+                  <span id="lz-sub">PROTOKOL</span>
                   <br>
-                  <a href="hra.html" style="font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;color:#00FF00;border:1px solid #1a4a1a;padding:2px 8px;background:#030d03">[
-                    HRAŤ ]</a> </center>
+                  <a href="hra.html" id="lz-btn">[ SPUSTIT ]</a>
+                </div>
               </div>
               <div class="title">009. Komentáre</div>
               <div class="box"> <span style="font-size:9px;color:#458c3a;letter-spacing:1px;">Zanechaj
@@ -695,21 +869,51 @@ agent.speak("Hello! I'm Clippy, your virtual assistant.", { tts: true });
 
 
 
-audio id="bgMusic" loop>
-    <source src="public/sounds/homebase.mp3" type="audio/mpeg">
-</audio>
 
 <script>
-    // Funkcia, ktorá spustí hudbu a následne sa sama odstráni
-    function startAudio() {
-        var audio = document.getElementById("bgMusic");
-        audio.play();
-        // Po prvom úspešnom spustení odstránime sledovanie kliknutí
-        document.removeEventListener('click', startAudio);
-    }
+// ── AUDIO SYSTEM -- autoplay pokus, fallback na prvy klik ──
+(function(){
+  var ZLO_URL = 'https://files.catbox.moe/wr8oei.mp3';
+  var zloAudio = new Audio(ZLO_URL);
+  zloAudio.loop = true;
+  zloAudio.volume = 0.7;
 
-    // Sledujeme kliknutie na celej stránke
-    document.addEventListener('click', startAudio);
+  // Exponuje globalne pre Winamp/HS player
+  window._zloAudio = zloAudio;
+
+  function onPlay(){
+    if(window._zloPlaying) return;
+    window._zloPlaying = true;
+    // Sync Winamp UI ak existuje
+    try {
+      var eq = document.getElementById('wa-eq') || document.getElementById('hs-eq-row');
+      if(eq) eq.classList.remove('wa-paused','hs-paused');
+      var trk = document.getElementById('wa-track') || document.getElementById('hs-track');
+      if(trk) trk.textContent = '>>> ZLO.MP3 <<<';
+      var pbtn = document.getElementById('wa-btn-play') || document.getElementById('hs-btn-play');
+      if(pbtn) pbtn.classList.add('active');
+    } catch(e){}
+  }
+
+  // 1. Pokus o autoplay
+  zloAudio.play().then(function(){
+    onPlay();
+  }).catch(function(){
+    // 2. Autoplay zablokovaný – čakaj na AKÝKOĽVEK klik/touch
+    var unlocked = false;
+    function unlock(){
+      if(unlocked) return;
+      unlocked = true;
+      zloAudio.play().then(onPlay).catch(function(){});
+      document.removeEventListener('click', unlock);
+      document.removeEventListener('touchstart', unlock);
+      document.removeEventListener('keydown', unlock);
+    }
+    document.addEventListener('click', unlock);
+    document.addEventListener('touchstart', unlock);
+    document.addEventListener('keydown', unlock);
+  });
+})();
 </script>
 
 
@@ -843,27 +1047,26 @@ audio id="bgMusic" loop>
 
 
      
-                <img src="./public/images/ufon1.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon2.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon3.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon4.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon5.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon6.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon7.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon8.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon9.gif" style="max-width:100px;width:50%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon10.gif" style="max-width:200px;width:100%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon11.gif" style="max-width:200px;width:100%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon12.gif" style="max-width:200px;width:100%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon13.gif" style="max-width:200px;width:100%;height:auto;display:block;margin:auto;">
-                <img src="./public/images/ufon14.gif" style="max-width:200px;width:100%;height:auto;display:block;margin:auto;">
-
-
-                
-                <img src="./public/images/ufon2.gif">
-                <img src="./public/images/ufon3.gif">
-                <img src="./public/images/ufon4.gif">
-                <img src="./public/images/ufon5.gif">
+                <div style="display:flex;gap:6px;margin:8px 0;">
+                  <div style="flex:1;display:flex;flex-direction:column;gap:4px;align-items:flex-start;">
+                    <img src="./public/images/ufon1.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon2.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon3.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon4.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon5.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon6.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon7.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
+                    <img src="./public/images/ufon8.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon9.gif"  style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon10.gif" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon11.gif" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon12.gif" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon13.gif" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                    <img src="./public/images/ufon14.gif" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated;">
+                  </div>
+                </div>
                 
 
 
@@ -1107,10 +1310,15 @@ border="0" width="88" height="120"></a>
                 </div>
               </div>
               <script>
-var audio=null,playing=false,hsTimer=null,hsPos=0,hsDur=0;
-function hsPlay(){if(!audio){audio=new Audio('https://files.catbox.moe/wr8oei.mp3');audio.loop=true;audio.addEventListener('timeupdate',function(){hsPos=audio.currentTime;hsDur=audio.duration||180;hsUpdateSeek();});}audio.play().catch(function(){});playing=true;document.getElementById('hs-eq-row').classList.remove('hs-paused');document.getElementById('hs-btn-play').classList.add('active');document.getElementById('hs-btn-pause').classList.remove('active');document.getElementById('hs-track').textContent='>>> ZLO.MP3 <<<';hsEyeGlow(true);hsStartTimer();}
-function hsPause(){if(audio)audio.pause();playing=false;document.getElementById('hs-eq-row').classList.add('hs-paused');document.getElementById('hs-btn-play').classList.remove('active');document.getElementById('hs-btn-pause').classList.add('active');hsEyeGlow(false);clearInterval(hsTimer);}
-function hsStop(){if(audio){audio.pause();audio.currentTime=0;}playing=false;hsPos=0;document.getElementById('hs-eq-row').classList.add('hs-paused');document.getElementById('hs-btn-play').classList.remove('active');document.getElementById('hs-btn-pause').classList.remove('active');document.getElementById('hs-time').textContent='00:00';document.getElementById('hs-seek-fill').style.width='0%';document.getElementById('hs-seek-knob').style.left='0%';document.getElementById('hs-track').textContent='STOPNUTE // ZLO.MP3';hsEyeGlow(false);clearInterval(hsTimer);}
+var playing=false,hsTimer=null,hsPos=0,hsDur=0;
+function _getAudio(){
+  if(!window._zloAudio){window._zloAudio=new Audio('https://files.catbox.moe/wr8oei.mp3');window._zloAudio.loop=true;}
+  window._zloAudio.addEventListener('timeupdate',function(){hsPos=window._zloAudio.currentTime;hsDur=window._zloAudio.duration||180;hsUpdateSeek();},{once:false});
+  return window._zloAudio;
+}
+function hsPlay(){var a=_getAudio();a.play().catch(function(){});playing=true;window._zloPlaying=true;document.getElementById('hs-eq-row').classList.remove('hs-paused');document.getElementById('hs-btn-play').classList.add('active');document.getElementById('hs-btn-pause').classList.remove('active');document.getElementById('hs-track').textContent='>>> ZLO.MP3 <<<';hsEyeGlow(true);hsStartTimer();}
+function hsPause(){var a=_getAudio();a.pause();playing=false;document.getElementById('hs-eq-row').classList.add('hs-paused');document.getElementById('hs-btn-play').classList.remove('active');document.getElementById('hs-btn-pause').classList.add('active');hsEyeGlow(false);clearInterval(hsTimer);}
+function hsStop(){var a=_getAudio();a.pause();a.currentTime=0;playing=false;hsPos=0;document.getElementById('hs-eq-row').classList.add('hs-paused');document.getElementById('hs-btn-play').classList.remove('active');document.getElementById('hs-btn-pause').classList.remove('active');document.getElementById('hs-time').textContent='00:00';document.getElementById('hs-seek-fill').style.width='0%';document.getElementById('hs-seek-knob').style.left='0%';document.getElementById('hs-track').textContent='STOPNUTE // ZLO.MP3';hsEyeGlow(false);clearInterval(hsTimer);}
 function hsStartTimer(){clearInterval(hsTimer);hsTimer=setInterval(function(){if(!playing)return;hsPos+=1;var m=Math.floor(hsPos/60),s=Math.floor(hsPos%60);document.getElementById('hs-time').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;},1000);}
 function hsUpdateSeek(){if(!hsDur)return;var p=Math.min(100,(hsPos/hsDur)*100);document.getElementById('hs-seek-fill').style.width=p+'%';document.getElementById('hs-seek-knob').style.left=p+'%';}
 function hsSeekClick(e){var b=document.getElementById('hs-seek');var p=(e.clientX-b.getBoundingClientRect().left)/b.offsetWidth;if(audio&&hsDur){audio.currentTime=p*hsDur;hsPos=audio.currentTime;}}
@@ -1208,6 +1416,7 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
         </tbody>
       </table>
     </center>
+    </div><!-- /mobile-scroll-wrap -->
     <script>
 // ALIEN HAND + GUESTBOOK -- vlavo dole
 (function(){
@@ -1216,7 +1425,7 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
   var hIdx = 0;
   var handEl = document.createElement('img');
   handEl.id = 'alien-hand-deco';
-  handEl.style.cssText = 'position:fixed;bottom:0;left:0;width:192px;height:192px;z-index:9990;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 8px #00ff00) drop-shadow(0 0 20px rgba(0,255,0,0.5));opacity:0.85';
+  handEl.style.cssText = 'position:fixed;bottom:0;left:0;width:64px;height:64px;z-index:9990;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 4px #00ff00) drop-shadow(0 0 10px rgba(0,255,0,0.4));opacity:0.85';
   document.body.appendChild(handEl);
   function updateHand(){
     handEl.src = 'data:image/png;base64,' + handFrames[hIdx % handFrames.length];
@@ -1230,7 +1439,7 @@ function waPlay(){hsPlay();}function waPause(){hsPause();}function waStop(){hsSt
   gbWrap.href = 'https://ceo-of-evil.atabook.org/';
   gbWrap.target = '_blank';
   gbWrap.title = 'SIGN MY GUESTBOOK';
-  gbWrap.style.cssText = 'position:fixed;bottom:196px;left:8px;z-index:9991;display:block;opacity:0.92;transition:opacity 0.2s';
+  gbWrap.style.cssText = 'position:fixed;bottom:68px;left:8px;z-index:9991;display:block;opacity:0.92;transition:opacity 0.2s';
   gbWrap.onmouseover = function(){ this.style.opacity='1'; };
   gbWrap.onmouseout  = function(){ this.style.opacity='0.92'; };
   var gbImg = document.createElement('img');
