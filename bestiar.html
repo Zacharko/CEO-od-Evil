@@ -1,147 +1,282 @@
-<HTML>
+<!DOCTYPE html>
+<html lang="sk">
 <head>
-<title>CEO Zla | Bestiar</title>
+<meta charset="UTF-8">
+<title>CEO Zla | Bestiar — Katalog Entit</title>
 <link rel="shortcut icon" href="https://files.catbox.moe/m5tyiv.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=1000, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
-<style type="text/css">
-body { background:#0C1912 url(https://files.catbox.moe/7zggqg.webp); margin:0; padding:0;}
-table { font-family:"Goldman", courier new; font-size:11px; line-height:15px; letter-spacing: 1px; color:#458c3a;}
-b {color:#00FF00;font-weight:normal;}
-a:link, a:visited, a:active { color:green;text-decoration:none;}
-a:hover {color:#00FF00;}
-img {border:0;}
-::-webkit-scrollbar-thumb { background-color: green; border-radius: 3px;}
-::-webkit-scrollbar { width: 5px; height: 0px; background: transparent;}
-.navigation a { display:inline-block; padding-left:10px; padding-right:10px; font:9px 'orbitron'; text-transform:uppercase; font-weight:bold; line-height:12px; color:green;}
-.navigation a:hover { color:#00FF00;}
-.active-page { color:#00FF00 !important; border-bottom:1px solid #00FF00; }
-.sitename {background:#111;width:90%;font-family:'orbitron';font-size:30px;letter-spacing:10px;color:green;line-height:20px;border-radius:15px;}
-.top {background: #000; border: 1px solid #123E12;border-bottom: 0px;border-top-left-radius:15px;border-top-right-radius:15px;}
-.navigation {background:#0B250B;border-bottom: 1px dotted #123E12;}
-.footer {background: #000; border: 1px solid #123E12; border-top: 1px dotted #123E12;line-height:30px;}
-.page-title {font-family:'orbitron';font-size:18px;color:#00FF00;letter-spacing:4px;text-transform:uppercase;margin-bottom:4px;text-shadow:0 0 8px rgba(0,255,0,0.4);}
-.page-sub {font-family:'orbitron';font-size:8px;color:#2a5a2a;letter-spacing:3px;margin-bottom:16px;}
-.danger-level {display:inline-block;padding:1px 5px;font-size:8px;font-family:'orbitron';letter-spacing:1px;vertical-align:middle;}
-.d-low  {background:#001a00;color:#00aa00;border:1px solid #005500;}
-.d-mid  {background:#1a1000;color:#aaaa00;border:1px solid #555500;}
-.d-high {background:#1a0000;color:#ff4444;border:1px solid #550000;}
-.d-unknown {background:#0a0a1a;color:#8888ff;border:1px solid #333388;}
-.nekron-bar {height:14px;background:repeating-linear-gradient(90deg,transparent 0,transparent 5px,#0d2e0d 5px,#0d2e0d 6px,transparent 6px,transparent 12px,#1a4a1a 12px,#1a4a1a 14px,transparent 14px,transparent 20px,#123E12 20px,#123E12 21px,transparent 21px,transparent 26px);border-left:1px solid #123E12;border-right:1px solid #123E12;}
-.nekron-bar.top-bar {border-top:1px solid #1f6f1f;}
-.nekron-bar.bot-bar {border-bottom:1px solid #1f6f1f;}
-.sidebar {padding:8px;vertical-align:top;width:175px;border-right:1px dotted #123E12;background:#000;}
-.title-tab {display:inline-block;background:#051105;color:green;font-family:'orbitron';font-size:9px;text-transform:uppercase;line-height:10px;letter-spacing:2px;border-top-left-radius:3px;border-top-right-radius:3px;border:1px solid #113711;border-bottom:1px dotted green;padding:3px 6px;margin-top:10px;}
-.box {background:#051105;border:1px solid #113711;border-top:2px solid #111;border-radius:3px;border-top-left-radius:0px;padding:6px 8px;margin-bottom:2px;font-size:10px;line-height:17px;}
-.bestiar-main {padding:10px 14px;vertical-align:top;background:#000;border-right:1px solid #123E12;border-left:1px solid #123E12;}
-.entry {border:1px solid #0d2e0d;border-left:2px solid #1a4a1a;margin-bottom:12px;background:#020a02;position:relative;overflow:hidden;transition:border-color 0.2s;}
-.entry:hover {border-color:#1f6f1f;border-left-color:#00FF00;}
-.entry-header {display:flex;align-items:center;gap:8px;background:#051105;border-bottom:1px dotted #0d2e0d;padding:5px 8px;flex-wrap:wrap;}
-.entry-name {font-family:'orbitron';font-size:12px;color:#00FF00;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 6px rgba(0,255,0,0.3);}
-.entry-latin {font-size:9px;color:#2a5a2a;letter-spacing:1px;font-style:italic;flex:1;}
-.entry-body {display:flex;gap:0;}
-.entry-glyph {width:78px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px;border-right:1px dotted #0d2e0d;opacity:0.75;}
-.entry-glyph svg {width:62px;height:62px;}
-.entry-text {padding:8px 10px;font-size:10px;line-height:16px;color:#458c3a;flex:1;}
-.entry-stats {display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;padding-top:5px;border-top:1px dotted #0d2e0d;}
-.stat {font-family:'orbitron';font-size:8px;color:#2a5a2a;letter-spacing:1px;}
-.stat b {color:#3a7a3a;}
-.filter-row {display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;}
-.ftab {font-family:'orbitron';font-size:8px;color:#2a5a2a;border:1px solid #0d2e0d;padding:2px 7px;cursor:pointer;letter-spacing:1px;background:#020a02;}
-.ftab:hover,.ftab.active {color:#00FF00;border-color:#1f6f1f;background:#051105;}
-#illuminati-eye {position:fixed;top:10px;left:50%;transform:translateX(-50%);width:54px;opacity:0.55;z-index:100;filter:drop-shadow(0 0 6px #00ff00);animation:eyepulse 3s ease-in-out infinite;pointer-events:none;}
-@keyframes eyepulse{0%,100%{opacity:0.45;filter:drop-shadow(0 0 4px #00ff00);}50%{opacity:0.85;filter:drop-shadow(0 0 14px #00ff00);}}
-.scanlines {position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);}
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{background:#0C1912 url(https://files.catbox.moe/7zggqg.webp);font-family:"Goldman","Courier New",monospace;font-size:11px;line-height:14px;letter-spacing:1px;color:#7dc87d}
+b{color:#00FF00;font-weight:normal}
+a:link,a:visited,a:active{color:#3a7a3a;text-decoration:none}
+a:hover{color:#00FF00;text-decoration:none}
+::-webkit-scrollbar-thumb{background-color:#1a4a1a;border-radius:3px}
+::-webkit-scrollbar{width:5px;background:transparent}
+
+/* SCANLINES */
+.scanlines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9000;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px)}
+
+/* MOVING SCANLINE */
+.scanline-move{position:fixed;left:0;right:0;height:3px;background:linear-gradient(180deg,transparent,rgba(0,255,0,0.06),transparent);animation:scanMove 8s linear infinite;pointer-events:none;z-index:9001;top:-3px}
+@keyframes scanMove{to{top:100vh}}
+
+/* EYE */
+#illuminati-eye{position:fixed;top:10px;left:50%;transform:translateX(-50%);width:54px;opacity:0.55;z-index:9999;filter:drop-shadow(0 0 6px #00ff00);animation:eyepulse 3s ease-in-out infinite;pointer-events:none}
+@keyframes eyepulse{0%,100%{opacity:0.45;filter:drop-shadow(0 0 4px #00ff00)}50%{opacity:0.85;filter:drop-shadow(0 0 14px #00ff00)}}
+
+/* LAYOUT */
+.wrap{width:1000px;margin:0 auto}
+
+/* NEKRON BAR */
+.nekron{height:12px;background:repeating-linear-gradient(90deg,transparent 0,transparent 5px,#0d2e0d 5px,#0d2e0d 6px,transparent 6px,transparent 12px,#1a4a1a 12px,#1a4a1a 13px,transparent 13px,transparent 18px,#123E12 18px,#123E12 19px,transparent 19px,transparent 24px);border:1px solid #123E12}
+.nekron.top{border-bottom:none;border-top:2px solid #1f6f1f}
+.nekron.bot{border-top:none;border-bottom:2px solid #1f6f1f}
+
+/* HEADER */
+.site-header{background:#000;border:1px solid #1a4a1a;border-bottom:0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;animation:fadeDown 0.6s ease both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.sitename{font-family:'Orbitron',monospace;font-size:22px;letter-spacing:8px;color:#00FF00;text-shadow:0 0 10px rgba(0,255,0,0.5);animation:hdrGlow 3s ease-in-out infinite alternate}
+@keyframes hdrGlow{from{text-shadow:0 0 6px rgba(0,255,0,0.3)}to{text-shadow:0 0 18px rgba(0,255,0,0.9),0 0 35px rgba(0,255,0,0.3)}}
+.site-sub{font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;letter-spacing:3px;margin-top:3px}
+.site-header-right{font-family:'Orbitron',monospace;font-size:7px;color:#1a4a1a;letter-spacing:2px;text-align:right;line-height:16px}
+.site-header-right span{display:block}
+.hdr-blink{animation:blink 1.4s step-end infinite;color:#00FF00}
+@keyframes blink{50%{opacity:0}}
+
+/* NAV */
+.navigation{background:#0B250B;border:1px solid #1a4a1a;border-top:0;border-bottom:2px solid #030f03;animation:fadeDown 0.7s ease 0.1s both}
+.navigation a{display:inline-block;padding:4px 10px;font:9px 'Orbitron',monospace;text-transform:uppercase;font-weight:bold;line-height:16px;color:#458c3a;letter-spacing:1px;border-right:1px dotted #1a4a1a;transition:color 0.15s,background 0.15s}
+.navigation a:last-child{border-right:none}
+.navigation a:hover{color:#00FF00;background:rgba(0,255,0,0.06)}
+.active-page{color:#00FF00!important;border-bottom:1px solid #00FF00}
+
+/* PAGE TITLE BAR */
+.page-titlebar{background:#020902;border:1px solid #1a4a1a;border-top:0;border-bottom:2px solid #0d2e0d;padding:7px 14px;display:flex;align-items:baseline;gap:12px;animation:fadeDown 0.8s ease 0.15s both;position:relative;overflow:hidden}
+.page-titlebar::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,0,0.4) 40%,transparent);animation:titleSweep 4s ease-in-out infinite}
+@keyframes titleSweep{0%,100%{opacity:0;transform:scaleX(0.3)}50%{opacity:1;transform:scaleX(1)}}
+.page-title{font-family:'Orbitron',monospace;font-size:16px;color:#00FF00;letter-spacing:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(0,255,0,0.4)}
+.page-ver{font-family:'Orbitron',monospace;font-size:7px;color:#1a4a1a;letter-spacing:2px}
+.page-class{font-family:'Orbitron',monospace;font-size:7px;color:#550000;letter-spacing:2px;border:1px solid #550000;padding:1px 4px;margin-left:auto;animation:redBlink 3s ease-in-out infinite alternate}
+@keyframes redBlink{from{border-color:#330000;color:#330000}to{border-color:#990000;color:#cc2200}}
+
+/* MAIN GRID */
+.main-grid{display:flex;background:#000;border:1px solid #1a4a1a;border-top:0;border-bottom:0}
+
+/* SIDEBAR */
+.sidebar{width:190px;flex-shrink:0;border-right:1px dotted #0d2e0d;padding:8px;background:#000;animation:fadeLeft 0.9s ease 0.2s both}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.title-tab{display:inline-block;background:#051105;color:#458c3a;font-family:'Orbitron',monospace;font-size:8px;text-transform:uppercase;letter-spacing:2px;border:1px solid #113711;border-bottom:1px dotted #1a4a1a;padding:2px 6px;margin-top:8px}
+.sbox{background:#020902;border:1px solid #0d2e0d;border-top:none;padding:6px 8px;font-size:10px;line-height:16px;color:#458c3a;margin-bottom:2px}
+.danger-level{display:inline-block;padding:1px 5px;font-size:8px;font-family:'Orbitron',monospace;letter-spacing:1px;vertical-align:middle;margin-bottom:2px}
+.d-low{background:#001a00;color:#00aa00;border:1px solid #005500}
+.d-mid{background:#1a1000;color:#aaaa00;border:1px solid #555500}
+.d-high{background:#1a0000;color:#ff4444;border:1px solid #550000}
+.d-unknown{background:#0a0a1a;color:#8888ff;border:1px solid #333388}
+.stat-row{display:flex;justify-content:space-between;font-size:9px;line-height:17px;border-bottom:1px dotted #0d2e0d}
+.stat-row:last-child{border-bottom:none}
+.stat-key{color:#2a5a2a}
+.stat-val{color:#00FF00;font-family:'Orbitron',monospace}
+.stat-val.red{color:#cc3300}
+.stat-val.unk{color:#8888ff}
+.filter-row{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:8px}
+.ftab{font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;border:1px solid #0d2e0d;padding:2px 5px;cursor:pointer;letter-spacing:1px;background:#010801;transition:all 0.15s}
+.ftab:hover,.ftab.active{color:#00FF00;border-color:#1f6f1f;background:#051105}
+
+/* ENTRIES */
+.entries-area{flex:1;padding:10px 12px;min-width:0}
+
+/* ENTRY CARD */
+.entry{border:1px solid #0d2e0d;border-left:2px solid #1a4a1a;margin-bottom:10px;background:#020a02;position:relative;overflow:hidden;
+  transition:border-color 0.25s,box-shadow 0.25s;
+  opacity:0;transform:translateY(12px);animation:entryIn 0.5s ease forwards}
+@keyframes entryIn{to{opacity:1;transform:none}}
+
+/* staggered delays */
+.entry:nth-child(1){animation-delay:0.15s}
+.entry:nth-child(2){animation-delay:0.25s}
+.entry:nth-child(3){animation-delay:0.35s}
+.entry:nth-child(4){animation-delay:0.45s}
+.entry:nth-child(5){animation-delay:0.55s}
+.entry:nth-child(6){animation-delay:0.65s}
+.entry:nth-child(7){animation-delay:0.75s}
+.entry:nth-child(8){animation-delay:0.85s}
+.entry:nth-child(9){animation-delay:0.95s}
+.entry:nth-child(10){animation-delay:1.05s}
+.entry:nth-child(11){animation-delay:1.15s}
+.entry:nth-child(12){animation-delay:1.25s}
+.entry:nth-child(13){animation-delay:1.35s}
+.entry:nth-child(14){animation-delay:1.45s}
+.entry:nth-child(15){animation-delay:1.55s}
+.entry:nth-child(16){animation-delay:1.65s}
+.entry:nth-child(17){animation-delay:1.75s}
+.entry:nth-child(18){animation-delay:1.85s}
+
+/* scanline inside each card on hover */
+.entry::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,15,0,0.08) 3px,rgba(0,15,0,0.08) 4px);pointer-events:none;z-index:0}
+.entry::after{content:'';position:absolute;left:0;right:0;height:30px;background:linear-gradient(180deg,transparent,rgba(0,255,0,0.04),transparent);top:-30px;transition:none;pointer-events:none;z-index:1;opacity:0}
+.entry:hover::after{animation:entryScan 1.2s linear;opacity:1}
+@keyframes entryScan{from{top:-30px}to{top:110%}}
+
+.entry:hover{border-color:#2a6a2a;border-left-color:#00FF00;box-shadow:0 0 16px rgba(0,255,0,0.07),-2px 0 10px rgba(0,255,0,0.18)}
+.entry.threat-high{border-left-color:#550000}
+.entry.threat-high:hover{border-left-color:#ff4444;box-shadow:0 0 14px rgba(255,0,0,0.06),-2px 0 10px rgba(255,0,0,0.22)}
+.entry.threat-unk{border-left-color:#333388}
+.entry.threat-unk:hover{border-left-color:#8888ff;box-shadow:0 0 14px rgba(80,80,255,0.06),-2px 0 10px rgba(80,80,255,0.18)}
+
+.entry-header{display:flex;align-items:center;gap:8px;background:#030f03;border-bottom:1px solid #0d2e0d;padding:5px 8px;flex-wrap:wrap;position:relative;z-index:1}
+.entry-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(0,255,0,0.25),transparent 70%)}
+.entry-num{font-family:'Orbitron',monospace;font-size:7px;color:#1a4a1a;letter-spacing:1px;flex-shrink:0}
+.entry-name{font-family:'Orbitron',monospace;font-size:11px;color:#00FF00;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 5px rgba(0,255,0,0.2);transition:text-shadow 0.2s}
+.entry:hover .entry-name{text-shadow:0 0 10px rgba(0,255,0,0.6)}
+.entry-latin{font-size:8px;color:#2a5a2a;letter-spacing:1px;font-style:italic;flex:1}
+.entry-body{display:flex;position:relative;z-index:1}
+.entry-glyph{width:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:10px 8px;border-right:1px dotted #0d2e0d;opacity:0.75;transition:opacity 0.2s}
+.entry:hover .entry-glyph{opacity:1}
+.entry-glyph svg{width:60px;height:60px;transition:filter 0.3s}
+.entry:hover .entry-glyph svg{filter:drop-shadow(0 0 4px rgba(0,255,0,0.4))}
+.entry-text{padding:8px 10px;font-size:10px;line-height:16px;color:#458c3a;flex:1}
+.entry-text i{color:#2a5a2a;font-size:9px;display:block;margin-top:6px;padding-top:5px;border-top:1px dotted #0d2e0d;font-style:normal}
+.entry-stats{display:flex;flex-wrap:wrap;margin-top:6px;border-top:1px solid #0a1f0a;background:#010801}
+.estat{font-family:'Orbitron',monospace;font-size:7px;color:#2a5a2a;letter-spacing:1px;padding:3px 8px;border-right:1px dotted #0d2e0d;line-height:13px;flex:1;min-width:120px}
+.estat:last-child{border-right:none}
+.estat b{color:#3a8a3a;display:block}
+
+/* FOOTER */
+.site-footer{background:#000;border:1px solid #0d2e0d;border-top:1px dotted #1a4a1a;padding:6px 14px;text-align:center;font-size:9px;color:#1a4a1a;line-height:22px}
+.site-footer a{color:#2a5a2a}
+.site-footer a:hover{color:#00FF00}
 </style>
 <script>
 function filterEntries(cat, el) {
-  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('active')});
   el.classList.add('active');
-  document.querySelectorAll('.entry').forEach(function(e){
-    e.style.display=(cat==='all'||e.dataset.cat===cat)?'':'none';
+  var entries = document.querySelectorAll('.entry');
+  var visible = 0;
+  entries.forEach(function(e){
+    var show = cat==='all' || e.dataset.cat===cat;
+    e.style.display = show ? '' : 'none';
+    if (show) {
+      e.style.animation = 'none';
+      e.style.opacity = '0';
+      e.style.transform = 'translateY(12px)';
+      var delay = visible * 0.08;
+      setTimeout((function(el2, d){
+        return function(){
+          el2.style.animation = '';
+          el2.style.animationDelay = d + 's';
+        };
+      })(e, delay), 20);
+      visible++;
+    }
   });
 }
+function tick(){
+  var now=new Date();
+  var pad=function(n){return n<10?'0'+n:n};
+  var s=now.getUTCFullYear()+'-'+pad(now.getUTCMonth()+1)+'-'+pad(now.getUTCDate())+' // '+pad(now.getUTCHours())+':'+pad(now.getUTCMinutes())+':'+pad(now.getUTCSeconds())+' UTC';
+  var el=document.getElementById('live-clock');
+  if(el)el.textContent=s;
+}
+setInterval(tick,1000);tick();
 </script>
 </head>
 <body>
 <div class="scanlines"></div>
+<div class="scanline-move"></div>
 <img id="illuminati-eye" src="oko.jpg" alt="oko">
 <br><br><br>
-<center>
+<div class="wrap">
 
-<table width="700" cellpadding="8" cellspacing="0">
-<tr><td class="top" height="80">
-<center><div class="sitename">_ CEO ZLA _</div></center>
-</td></tr>
-</table>
-<table width="700" cellpadding="4" cellspacing="0">
-<tr><td class="navigation" height="20">
-<center>
-<a href="index.html">hlavna</a> |
-<a href="omne.html">o mne</a> |
-<a href="archivy.html">tajne archivy</a> |
-<a href="komiksy.html">komiksy</a> |
-<a href="teorie.html" class="active-page">teorie</a> |
-<a href="https://zacharko.github.io/Stranka/" target="_blank">zacharkova stranka</a>
-</center>
-</td></tr>
-</table>
-
-<div class="nekron-bar top-bar" style="width:700px;box-sizing:border-box;"></div>
-
-<table width="700" cellpadding="0" cellspacing="0">
-<tr>
-<td class="sidebar">
-<div class="title-tab">nebezpecnost</div>
-<div class="box">
-<span class="danger-level d-low">NIZKA</span> zaujimave<br>
-<span class="danger-level d-mid">STREDNA</span> znepokojive<br>
-<span class="danger-level d-high">VYSOKA</span> prebudenie<br>
-<span class="danger-level d-unknown">NEZNAMA</span> mimo cas
-</div>
-<div class="title-tab">kategorie</div>
-<div class="box">
-» Stredoveke<br>
-» Lesy &amp; divocina<br>
-» Morske hlbiny<br>
-» Mimozemske<br>
-» Mestske legendy<br>
-» Entity
-</div>
-<div class="title-tab">pocet zaznamov</div>
-<div class="box">
-Celkom: <b>12</b><br>
-Potvrdene: <b>0</b><br>
-Nepotvrdene: <b>12</b><br>
-Utajene: <b>???</b>
-</div>
-<div class="title-tab">upozornenie</div>
-<div class="box" style="font-size:9px;color:#2a5a2a;line-height:14px;">
-Vsetky zaznamy su zozbierane z overených zdrojov. Kazdy kto neverí bol uz neutralizovany.<br><br>
-<span style="color:#1a3a1a;">// WAKE UP //</span>
-</div>
-</td>
-
-<td class="bestiar-main">
-<div class="page-title">// BESTIAR //</div>
-<div class="page-sub">// KOMPLETNY KATALOG ENTIT — VERZIA 3.7 — PRISNE TAJNE //</div>
-
-<div class="filter-row">
-  <span class="ftab active" onclick="filterEntries('all',this)">VSETKO</span>
-  <span class="ftab" onclick="filterEntries('stredovek',this)">STREDOVEKE</span>
-  <span class="ftab" onclick="filterEntries('les',this)">LESY</span>
-  <span class="ftab" onclick="filterEntries('more',this)">MORE</span>
-  <span class="ftab" onclick="filterEntries('mimoz',this)">MIMOZ.</span>
-  <span class="ftab" onclick="filterEntries('mestske',this)">MESTSKE</span>
-  <span class="ftab" onclick="filterEntries('entita',this)">ENTITY</span>
+<div class="site-header">
+  <div>
+    <div class="sitename">_ CEO ZLA _</div>
+    <div class="site-sub">// prievidza underground — od 2003 //</div>
+  </div>
+  <div class="site-header-right">
+    <span class="hdr-blink">● LIVE</span>
+    <span id="live-clock">...</span>
+    <span>// MONITORING AKTÍVNY //</span>
+    <span style="color:#550000">// KLASIFIKÁCIA: PRISNE TAJNE //</span>
+  </div>
 </div>
 
-<!-- DRAK -->
-<div class="entry" data-cat="stredovek">
+<div class="navigation">
+  <center>
+    <a href="index.html">Hlavna</a>
+    <a href="omne.html">O mne</a>
+    <a href="archivy.html">Zakazany Archiv</a>
+    <a href="teorie.html" class="active-page">Bestiar</a>
+    <a href="kontakt.html">Kontakt N.W.O.</a>
+    <a href="komentare.html">Komentare</a>
+    <a href="hra.html">Operacia Lazarus</a>
+    <a href="https://zacharko.github.io/Stranka/" target="_blank">Zacharkova stranka</a>
+  </center>
+</div>
+
+<div class="page-titlebar">
+  <span class="page-title">// BESTIAR //</span>
+  <span class="page-ver">VER. 4.1 — 2026-04-09</span>
+  <span class="page-class">STUPEŇ UTAJENIA: ALFA</span>
+</div>
+
+<div class="nekron top"></div>
+<div class="main-grid">
+
+<div class="sidebar">
+  <div class="title-tab">nebezpecnost</div>
+  <div class="sbox">
+    <div><span class="danger-level d-low">NIZKA</span></div>
+    <div><span class="danger-level d-mid">STREDNA</span></div>
+    <div><span class="danger-level d-high">VYSOKA</span></div>
+    <div><span class="danger-level d-unknown">NEZNAMA</span></div>
+  </div>
+  <div class="title-tab">filtrovat</div>
+  <div class="sbox" style="padding:6px">
+    <div class="filter-row">
+      <span class="ftab active" onclick="filterEntries('all',this)">VSETKO</span>
+      <span class="ftab" onclick="filterEntries('stredovek',this)">STRED.</span>
+      <span class="ftab" onclick="filterEntries('les',this)">LESY</span>
+      <span class="ftab" onclick="filterEntries('more',this)">MORE</span>
+      <span class="ftab" onclick="filterEntries('mimoz',this)">MIMOZ.</span>
+      <span class="ftab" onclick="filterEntries('mestske',this)">MESTSKE</span>
+      <span class="ftab" onclick="filterEntries('entita',this)">ENTITY</span>
+      <span class="ftab" onclick="filterEntries('local',this)">LOKALNE</span>
+    </div>
+  </div>
+  <div class="title-tab">zaznamy</div>
+  <div class="sbox">
+    <div class="stat-row"><span class="stat-key">Celkom</span><span class="stat-val">18</span></div>
+    <div class="stat-row"><span class="stat-key">Potvrdene</span><span class="stat-val red">0</span></div>
+    <div class="stat-row"><span class="stat-key">Nepotvrdene</span><span class="stat-val">18</span></div>
+    <div class="stat-row"><span class="stat-key">Utajene</span><span class="stat-val unk">???</span></div>
+  </div>
+  <div class="title-tab">hrozby</div>
+  <div class="sbox">
+    <div class="stat-row"><span class="stat-key">VYSOKA</span><span class="stat-val red">9</span></div>
+    <div class="stat-row"><span class="stat-key">STREDNA</span><span class="stat-val" style="color:#aaaa00">4</span></div>
+    <div class="stat-row"><span class="stat-key">NEZNAMA</span><span class="stat-val unk">4</span></div>
+    <div class="stat-row"><span class="stat-key">NIZKA</span><span class="stat-val" style="color:#00aa00">1</span></div>
+  </div>
+  <div class="title-tab">upozornenie</div>
+  <div class="sbox" style="font-size:9px;color:#2a5a2a;line-height:14px">
+    Zaznamy zozbierane z overených zdrojov.<br><br>
+    Kazdy kto neverí bol uz neutralizovany.<br><br>
+    <span style="color:#1a3a1a">// WAKE UP //<br>// SHEEPLE //</span>
+  </div>
+</div>
+
+<div class="entries-area">
+
+<!-- 001 DRAK -->
+<div class="entry threat-high" data-cat="stredovek">
 <div class="entry-header">
-  <span class="entry-name">Drak</span>
+  <span class="entry-num">001</span><span class="entry-name">Drak</span>
   <span class="entry-latin">Draco Occidentalis Magnus</span>
   <span class="danger-level d-high">VYSOKA</span>
 </div>
@@ -157,23 +292,19 @@ Vsetky zaznamy su zozbierane z overených zdrojov. Kazdy kto neverí bol uz neut
   <path d="M20,38 Q15,32 8,34 Q14,36 16,42" fill="none" stroke="#00ff00" stroke-width="0.8"/>
   <path d="M28,28 Q22,22 14,24 Q21,26 22,32" fill="none" stroke="#00ff00" stroke-width="0.8"/>
 </svg></div>
-<div class="entry-text">
-Okrídlená plazivá bytosť zachytená v stredovekých kronikách od Čiech po Britské ostrovy. Podľa <i>Liber Monstrorum</i> (700 n.l.) drak nikdy nespí — iba predstiera spánok, aby oklamal pozorovateľa. Moderné svedectvá z rumunských Karpát hlásia pohyb neidentifikovateľných veľkých objektov v noci. Termálne kamery zaznamenali neznáme tepelné signatúry v jaskyniach Nízkych Tatier 2019 — správa utajená.<br><br>
-<i style="color:#2a5a2a;">// Posledny potvrdeny kontakt: Branisko, 2019. Zaznam odovzdany MV SR. //</i>
+<div class="entry-text">Okrídlená plazivá bytosť zachytená v stredovekých kronikách od Čiech po Britské ostrovy. Podľa <i style="color:#458c3a;font-style:italic">Liber Monstrorum</i> (700 n.l.) drak nikdy nespí — iba predstiera spánok. Termálne kamery zaznamenali neznáme tepelné signatúry v jaskyniach Nízkych Tatier 2019 — správa utajená.
+<i>// Posledny potvrdeny kontakt: Branisko, 2019. Zaznam odovzdany MV SR. //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Európa / Ázia</b></span>
-  <span class="stat">VEĽKOSŤ <b>8–40m</b></span>
-  <span class="stat">HROZBA <b>Spaľovanie, úder chvostom</b></span>
-  <span class="stat">ZDROJ <b>Kronika, termálne snímky</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Európa / Ázia</b></div>
+  <div class="estat">VEĽKOSŤ<b>8–40m</b></div>
+  <div class="estat">HROZBA<b>Spaľovanie, úder chvostom</b></div>
+  <div class="estat">ZDROJ<b>Kronika, termálne snímky</b></div>
+</div></div></div></div>
 
-<!-- MORSKA PANNA -->
+<!-- 002 MORSKA PANNA -->
 <div class="entry" data-cat="more">
 <div class="entry-header">
-  <span class="entry-name">Morská panna</span>
+  <span class="entry-num">002</span><span class="entry-name">Morská panna</span>
   <span class="entry-latin">Siren Profundis</span>
   <span class="danger-level d-mid">STREDNA</span>
 </div>
@@ -187,26 +318,20 @@ Okrídlená plazivá bytosť zachytená v stredovekých kronikách od Čiech po 
   <line x1="28" y1="14" x2="24" y2="8" stroke="#00ff00" stroke-width="0.7"/>
   <line x1="32" y1="12" x2="32" y2="6" stroke="#00ff00" stroke-width="0.7"/>
   <line x1="36" y1="14" x2="40" y2="8" stroke="#00ff00" stroke-width="0.7"/>
-  <path d="M22,32 Q27,29 32,32 Q37,29 42,32" fill="none" stroke="#00ff00" stroke-width="0.5"/>
-  <path d="M20,37 Q26,34 32,37 Q38,34 44,37" fill="none" stroke="#00ff00" stroke-width="0.5"/>
 </svg></div>
-<div class="entry-text">
-Prvý zdokumentovaný prípad: Babylon, 1000 pred n.l. Námorníci po stáročia zaznamenávali spevy z hlbín spôsobujúce stratu pamäti. Moderná verzia: záznamy z ponoriek NATO z roku 1997 zachytili biologický zvuk neznámeho pôvodu v Tichom oceáne hlbšom ako 11km — prezývaný "The Bloop." Oficálne vysvetlenie (ľadovec) bolo doplnené dodatočne, štyri roky po incidente. Pôvodné audio zostáva čiastočne utajené.<br><br>
-<i style="color:#2a5a2a;">// The Bloop súbory: čiastočne odtajnené 2012, zvyšok stále pod embargo //</i>
+<div class="entry-text">Prvý zdokumentovaný prípad: Babylon, 1000 pred n.l. Záznamy z ponoriek NATO z roku 1997 zachytili biologický zvuk neznámeho pôvodu v Tichom oceáne hlbšom ako 11km — prezývaný "The Bloop." Oficálne vysvetlenie (ľadovec) bolo doplnené dodatočne, štyri roky po incidente.
+<i>// The Bloop súbory: čiastočne odtajnené 2012, zvyšok stále pod embargo //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Všetky oceány</b></span>
-  <span class="stat">HĹBKA <b>200–11 000m</b></span>
-  <span class="stat">HROZBA <b>Hypnóza, dezorientácia</b></span>
-  <span class="stat">ZDROJ <b>NATO audio 1997, 340+ správ</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Všetky oceány</b></div>
+  <div class="estat">HĹBKA<b>200–11 000m</b></div>
+  <div class="estat">HROZBA<b>Hypnóza, dezorientácia</b></div>
+  <div class="estat">ZDROJ<b>NATO audio 1997, 340+ správ</b></div>
+</div></div></div></div>
 
-<!-- BIGFOOT -->
+<!-- 003 BIGFOOT -->
 <div class="entry" data-cat="les">
 <div class="entry-header">
-  <span class="entry-name">Bigfoot / Sasquatch</span>
+  <span class="entry-num">003</span><span class="entry-name">Bigfoot / Sasquatch</span>
   <span class="entry-latin">Gigantopithecus Modernus</span>
   <span class="danger-level d-mid">STREDNA</span>
 </div>
@@ -216,29 +341,21 @@ Prvý zdokumentovaný prípad: Babylon, 1000 pred n.l. Námorníci po stáročia
   <path d="M23,22 L18,48 L24,46 L28,56 L32,46 L36,56 L40,46 L46,48 L41,22" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <line x1="23" y1="26" x2="12" y2="38" stroke="#00ff00" stroke-width="1.2"/>
   <line x1="41" y1="26" x2="52" y2="38" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M12,38 L8,42 L14,42" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M52,38 L56,42 L50,42" fill="none" stroke="#00ff00" stroke-width="0.8"/>
   <path d="M24,24 L20,28 M27,23 L23,28 M30,22 L27,27 M33,22 L30,27 M36,23 L33,28 M39,24 L35,29" stroke="#00ff00" stroke-width="0.4" fill="none"/>
-  <ellipse cx="29" cy="12" rx="2" ry="2" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <ellipse cx="35" cy="12" rx="2" ry="2" fill="none" stroke="#00ff00" stroke-width="0.8"/>
 </svg></div>
-<div class="entry-text">
-Viac ako 10 000 zaznamenaných stretnutí v Severnej Amerike od 1840. Patterson-Gimlin film (1967) dodnes nebol definitívne vyhlásený za falzum. DNA z vlasov nájdených v Oregone (2012) nepatrí žiadnemu známemu cicavcovi v databáze. Smithsonian záznamy uzavreté bez komentára. Národný park Yellowstone má internú smernicu pre "kontakt s neznámou veľkou primátou" — kód NHP-7. Slovenský variant: správy o vysokej kosmatej postave z oblasti Poľany od roku 1954.<br><br>
-<i style="color:#2a5a2a;">// NHP-7 smernica — existencia potvrdená cez FOIA žiadosť, 2018 //</i>
+<div class="entry-text">Viac ako 10 000 zaznamenaných stretnutí v Severnej Amerike od 1840. Patterson-Gimlin film (1967) dodnes nebol definitívne vyhlásený za falzum. DNA z vlasov nájdených v Oregone (2012) nepatrí žiadnemu známemu cicavcovi. Slovenský variant: správy o vysokej kosmatej postave z oblasti Poľany od roku 1954.
+<i>// NHP-7 smernica Yellowstone — existencia potvrdená cez FOIA žiadosť, 2018 //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Sev. Amerika, Karpaty</b></span>
-  <span class="stat">VÝŠKA <b>2.1–3.2m</b></span>
-  <span class="stat">HROZBA <b>Nízka — ak sa nepriblížiš</b></span>
-  <span class="stat">ZDROJ <b>10 000+ správ, DNA, FOIA</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Sev. Amerika, Karpaty</b></div>
+  <div class="estat">VÝŠKA<b>2.1–3.2m</b></div>
+  <div class="estat">HROZBA<b>Nízka — ak sa nepriblížiš</b></div>
+  <div class="estat">ZDROJ<b>10 000+ správ, DNA, FOIA</b></div>
+</div></div></div></div>
 
-<!-- MOTHMAN -->
-<div class="entry" data-cat="mestske">
+<!-- 004 MOTHMAN -->
+<div class="entry threat-high" data-cat="mestske">
 <div class="entry-header">
-  <span class="entry-name">Mothman</span>
+  <span class="entry-num">004</span><span class="entry-name">Mothman</span>
   <span class="entry-latin">Praecursor Calamitatis</span>
   <span class="danger-level d-high">VYSOKA</span>
 </div>
@@ -252,64 +369,22 @@ Viac ako 10 000 zaznamenaných stretnutí v Severnej Amerike od 1840. Patterson-
   <path d="M25,28 L22,48 L32,38 L42,48 L39,28" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <path d="M25,30 Q10,20 4,30 Q10,34 20,36" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <path d="M39,30 Q54,20 60,30 Q54,34 44,36" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M20,36 Q18,44 22,48" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M44,36 Q46,44 42,48" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M10,26 L18,34 M6,29 L14,35" stroke="#00ff00" stroke-width="0.4" fill="none"/>
-  <path d="M54,26 L46,34 M58,29 L50,35" stroke="#00ff00" stroke-width="0.4" fill="none"/>
 </svg></div>
-<div class="entry-text">
-Point Pleasant, Záp. Virgínia, 1966–1967: 13 mesiacov pred zrútením mosta Silver Bridge (46 mŕtvych) hlásilo 100+ svedkov okrídlenú postavu s červenými očami. Mothman bol zaznamenaný pred: Černobyľom (1986), 11. septembrom (2001), cunami v Indickom oceáne (2004), Fukušimou (2011). Žiaden vták s takýmito proporciami neexistuje v ornitológii. FBI zaznamenala 4 hlásenia ako "neidentifikovaný lietajúci objekt biologického pôvodu." Chicago 2017–2023: 55 nových svedkov.<br><br>
-<i style="color:#2a5a2a;">// Ak ho vidíš: evakuuj oblast v okruhu 50km. Ihned. //</i>
+<div class="entry-text">Point Pleasant, Virginia, 1966–67: 13 mesiacov svedectvá o okrídlenej postave s červenými očami. 15. decembra 1967 — kolaps mosta Silver Bridge — 46 mŕtvych. Podobné záznamy: Černobyľ (1986), 9/11 (2001), Fukušima (2011). Vzorec: objavuje sa pred katastrofou, nie po.
+<i>// Mothman Prophecies — John Keel, 1975. Zbavená distribúcie v niektorých štátoch. //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>USA, pred katastrofami</b></span>
-  <span class="stat">ROZPÄTIE <b>3–4.5m</b></span>
-  <span class="stat">HROZBA <b>Prorocká — nezasahuje</b></span>
-  <span class="stat">ZDROJ <b>FBI, 155+ svedkov</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>USA, pred katastrofami</b></div>
+  <div class="estat">VÝŠKA<b>2–3m + krídla 4m</b></div>
+  <div class="estat">HROZBA<b>Harbinger — predzvesť</b></div>
+  <div class="estat">ZDROJ<b>200+ svedkov, Keel 1975</b></div>
+</div></div></div></div>
 
-<!-- WENDIGO -->
-<div class="entry" data-cat="les">
+<!-- 005 GRYF -->
+<div class="entry threat-high" data-cat="stredovek">
 <div class="entry-header">
-  <span class="entry-name">Wendigo</span>
-  <span class="entry-latin">Algonquinus Cannibal Spiritus</span>
+  <span class="entry-num">005</span><span class="entry-name">Gryf</span>
+  <span class="entry-latin">Gryphus Altaicus Verus</span>
   <span class="danger-level d-high">VYSOKA</span>
-</div>
-<div class="entry-body">
-<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <path d="M32,8 L28,16 L20,14 L26,22 L18,24 L28,28" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M32,8 L36,16 L44,14 L38,22 L46,24 L36,28" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <ellipse cx="32" cy="34" rx="8" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M24,42 L16,58" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M40,42 L48,58" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M28,44 L26,60" stroke="#00ff00" stroke-width="1"/>
-  <path d="M36,44 L38,60" stroke="#00ff00" stroke-width="1"/>
-  <ellipse cx="29" cy="31" rx="2.5" ry="3" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <ellipse cx="35" cy="31" rx="2.5" ry="3" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M26,16 Q22,10 18,8 M22,14 Q20,8 22,4" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M38,16 Q42,10 46,8 M42,14 Q44,8 42,4" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-</svg></div>
-<div class="entry-text">
-Algonquinský duch hladu — bytosť bez telesného tuku, s kosťami prenikajúcimi kožou, večne hladná. Vzniká z človeka ktorý skonzumuje ľudské mäso. Psychiatria zaznamenáva "Wendigo psychózu" ako skutočný klinický syndróm. Lesní robotníci v Kanade hlásia stretnutia s 3-metrovými kosternými postavami v oblastiach kde sa vyskytli nevysvetlené zmiznutia. V Kanade zmizne ročne 2 200 ľudí v lesných oblastiach — väčšina prípadov nevyriešená. RCMP používa interný kód <b>W-7</b>.<br><br>
-<i style="color:#2a5a2a;">// Nikdy nechoď do lesa sám v zime. Toto nie je rada. Toto je varovanie. //</i>
-<div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Kanada, severné USA</b></span>
-  <span class="stat">VÝŠKA <b>3–5m (stále rastie)</b></span>
-  <span class="stat">HROZBA <b>Smrteľná</b></span>
-  <span class="stat">ZDROJ <b>RCMP W-7, Algonquin oral hist.</b></span>
-</div>
-</div>
-</div>
-</div>
-
-<!-- GRYF -->
-<div class="entry" data-cat="stredovek">
-<div class="entry-header">
-  <span class="entry-name">Gryf</span>
-  <span class="entry-latin">Gryphus Custodiens Aurum</span>
-  <span class="danger-level d-mid">STREDNA</span>
 </div>
 <div class="entry-body">
 <div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
@@ -317,29 +392,22 @@ Algonquinský duch hladu — bytosť bez telesného tuku, s kosťami prenikajúc
   <ellipse cx="52" cy="22" rx="8" ry="7" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <path d="M58,24 L64,26 L60,22Z" fill="none" stroke="#00ff00" stroke-width="0.8"/>
   <circle cx="54" cy="20" r="1.2" fill="#00ff00"/>
-  <path d="M48,16 Q50,10 52,14" fill="none" stroke="#00ff00" stroke-width="0.8"/>
   <path d="M28,30 Q20,16 8,18 Q14,26 20,32" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M8,18 Q4,24 6,30 L14,32" fill="none" stroke="#00ff00" stroke-width="0.8"/>
   <path d="M42,48 L38,56 M40,50 L44,58 M46,48 L50,56" stroke="#00ff00" stroke-width="0.8" fill="none"/>
-  <path d="M10,42 Q4,46 2,52 Q6,50 10,54" fill="none" stroke="#00ff00" stroke-width="1"/>
 </svg></div>
-<div class="entry-text">
-Aristoteles ho opisuje ako skutočné zviera — nie mýtus. Marco Polo ho zaznamenal na Madagaskare. Fosílie <i>Protoceratopsa</i> v Strednej Ázii presne zodpovedajú popisu gryfa — kočovní nomádi vedeli o ich existencii 2000 rokov pred paleontológmi. Čo ešte vedeli? Zlaté bane v Altaji boli historicky "pod ochranou gryfov" — oblasť je dosiaľ najmenej preskúmaným terénom pre neznámu megafaunu na Zemi.<br><br>
-<i style="color:#2a5a2a;">// Mongolský expedičný tím 2021 — kontakt stratený pri Altaji, deň 14 //</i>
+<div class="entry-text">Aristoteles ho opisuje ako skutočné zviera. Fosílie <i style="color:#458c3a;font-style:italic">Protoceratopsa</i> v Strednej Ázii presne zodpovedajú popisu gryfa — kočovní nomádi vedeli o ich existencii 2000 rokov pred paleontológmi. Zlaté bane v Altaji boli historicky "pod ochranou gryfov." Mongolský expedičný tím 2021 — kontakt stratený pri Altaji, deň 14.
+<i>// Oblasť Altaj — najmenej preskúmaný terén pre neznámu megafaunu na Zemi //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Stredná Ázia, Altaj</b></span>
-  <span class="stat">VEĽKOSŤ <b>Lev + orlie krídla</b></span>
-  <span class="stat">HROZBA <b>Ochrana revíru — smrteľná</b></span>
-  <span class="stat">ZDROJ <b>Aristoteles, Marco Polo, fosílie</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Stredná Ázia, Altaj</b></div>
+  <div class="estat">VEĽKOSŤ<b>Lev + orlie krídla</b></div>
+  <div class="estat">HROZBA<b>Ochrana revíru — smrteľná</b></div>
+  <div class="estat">ZDROJ<b>Aristoteles, Marco Polo, fosílie</b></div>
+</div></div></div></div>
 
-<!-- GREY ALIENS -->
-<div class="entry" data-cat="mimoz">
+<!-- 006 GREY ALIENS -->
+<div class="entry threat-unk" data-cat="mimoz">
 <div class="entry-header">
-  <span class="entry-name">Šedí / Greys</span>
+  <span class="entry-num">006</span><span class="entry-name">Šedí / Greys</span>
   <span class="entry-latin">Zeta Reticulani Visitans</span>
   <span class="danger-level d-unknown">NEZNAMA</span>
 </div>
@@ -357,26 +425,20 @@ Aristoteles ho opisuje ako skutočné zviera — nie mýtus. Marco Polo ho zazna
   <path d="M24,36 L40,36" stroke="#00ff00" stroke-width="1"/>
   <path d="M26,40 L14,48" stroke="#00ff00" stroke-width="1"/>
   <path d="M38,40 L50,48" stroke="#00ff00" stroke-width="1"/>
-  <path d="M14,48 L11,52 M14,48 L13,53 M14,48 L15,53 M14,48 L17,52" stroke="#00ff00" stroke-width="0.6" fill="none"/>
-  <path d="M50,48 L47,52 M50,48 L49,53 M50,48 L51,53 M50,48 L53,52" stroke="#00ff00" stroke-width="0.6" fill="none"/>
 </svg></div>
-<div class="entry-text">
-Roswell 1947 — US Army vydala dve protichodné vyhlásenia v priebehu 24 hodín. Bob Lazar (Area 51, 1989) opísal 9 typov mimozemských plavidiel a bytosti zodpovedajúce "Šedým" — jeho popis predchádzal akémukoľvek populárnemu zobrazeniu v kultúre. Francúzska vládna správa COMETA (1999) odporúčala oficálne uznanie ET kontaktu. Kongres USA (2023) priznal existenciu <b>"non-human biologics"</b> v recovered craft. Toto nie je teória. Toto sú záznamy z Kongresu.<br><br>
-<i style="color:#2a5a2a;">// Skinwalker Ranch, Hessdalen — aktívne kontaktné zóny, monitoring prebieha //</i>
+<div class="entry-text">Roswell 1947 — US Army vydala dve protichodné vyhlásenia v priebehu 24 hodín. Bob Lazar (Area 51, 1989) opísal 9 typov mimozemských plavidiel. Kongres USA (2023) priznal existenciu <b>"non-human biologics"</b> v recovered craft. Toto nie je teória. Toto sú záznamy z Kongresu.
+<i>// Skinwalker Ranch, Hessdalen — aktívne kontaktné zóny, monitoring prebieha //</i>
 <div class="entry-stats">
-  <span class="stat">PÔVOD <b>Zeta Reticuli (39 sv. rokov)</b></span>
-  <span class="stat">VÝŠKA <b>0.9–1.5m</b></span>
-  <span class="stat">ZÁMER <b>Neznámy — sledovanie</b></span>
-  <span class="stat">ZDROJ <b>Kongres USA 2023, COMETA</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">PÔVOD<b>Zeta Reticuli (39 sv. rokov)</b></div>
+  <div class="estat">VÝŠKA<b>0.9–1.5m</b></div>
+  <div class="estat">ZÁMER<b>Neznámy — sledovanie</b></div>
+  <div class="estat">ZDROJ<b>Kongres USA 2023, COMETA</b></div>
+</div></div></div></div>
 
-<!-- KRAKEN -->
-<div class="entry" data-cat="more">
+<!-- 007 KRAKEN -->
+<div class="entry threat-high" data-cat="more">
 <div class="entry-header">
-  <span class="entry-name">Kraken</span>
+  <span class="entry-num">007</span><span class="entry-name">Kraken</span>
   <span class="entry-latin">Architeuthis Colossus Verus</span>
   <span class="danger-level d-high">VYSOKA</span>
 </div>
@@ -391,27 +453,21 @@ Roswell 1947 — US Army vydala dve protichodné vyhlásenia v priebehu 24 hodí
   <path d="M34,38 Q36,48 40,62" fill="none" stroke="#00ff00" stroke-width="1"/>
   <path d="M38,36 Q44,44 48,58" fill="none" stroke="#00ff00" stroke-width="1.1"/>
   <path d="M42,34 Q50,40 56,52 Q54,46 58,60" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <circle cx="10" cy="50" r="1" fill="none" stroke="#00ff00" stroke-width="0.5"/>
-  <circle cx="54" cy="50" r="1" fill="none" stroke="#00ff00" stroke-width="0.5"/>
   <path d="M26,16 Q32,8 38,16" fill="none" stroke="#00ff00" stroke-width="1"/>
 </svg></div>
-<div class="entry-text">
-Nórske záznamy z 13. storočia opisujú ostrov, ktorý sa potápal — toto bol Kraken. Prvá vedecky potvrdená vzorka obrovskej chobotnice: 1857. Prvá fotografia živého exemplára: 2004 — teda 147 rokov "mytologická bytosť." US Navy sonary opakovane zaznamenali pohyby neidentifikovaných organizmov väčších ako 20 metrov v Tichom oceáne. Záznamy sú klasifikované. Preskúmaná časť morského dna: <b>20%</b>. Čo je v zvyšných 80?<br><br>
-<i style="color:#2a5a2a;">// Navy záznam XB-119, Tichý oceán, 2009 — prístup: stupeň 5 //</i>
+<div class="entry-text">Nórske záznamy z 13. storočia opisujú ostrov, ktorý sa potápal — toto bol Kraken. Prvá fotografia živého exemplára obrovskej chobotnice: 2004 — teda 147 rokov "mytologická bytosť." US Navy sonary opakovane zaznamenali pohyby organizmov väčších ako 20 metrov. Preskúmaná časť morského dna: <b>20%</b>.
+<i>// Navy záznam XB-119, Tichý oceán, 2009 — prístup: stupeň 5 //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Všetky oceány, 500m+</b></span>
-  <span class="stat">VEĽKOSŤ <b>odhadovaná 60–200m</b></span>
-  <span class="stat">HROZBA <b>Potopenie lode</b></span>
-  <span class="stat">ZDROJ <b>Navy sonary, nórske kroniky</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Všetky oceány, 500m+</b></div>
+  <div class="estat">VEĽKOSŤ<b>odhadovaná 60–200m</b></div>
+  <div class="estat">HROZBA<b>Potopenie lode</b></div>
+  <div class="estat">ZDROJ<b>Navy sonary, nórske kroniky</b></div>
+</div></div></div></div>
 
-<!-- MEN IN BLACK -->
-<div class="entry" data-cat="entita">
+<!-- 008 MEN IN BLACK -->
+<div class="entry threat-high" data-cat="entita">
 <div class="entry-header">
-  <span class="entry-name">Muži v čiernom</span>
+  <span class="entry-num">008</span><span class="entry-name">Muži v čiernom</span>
   <span class="entry-latin">Agents Memoriae Deletores</span>
   <span class="danger-level d-high">VYSOKA</span>
 </div>
@@ -424,28 +480,21 @@ Nórske záznamy z 13. storočia opisujú ostrov, ktorý sa potápal — toto bo
   <circle cx="35" cy="21" r="1.5" fill="#00ff00"/>
   <path d="M20,28 L16,56 L48,56 L44,28" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <path d="M32,28 L30,36 L32,44 L34,36 L32,28" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M28,28 L24,36" stroke="#00ff00" stroke-width="0.8" fill="none"/>
-  <path d="M36,28 L40,36" stroke="#00ff00" stroke-width="0.8" fill="none"/>
   <rect x="44" y="40" width="12" height="9" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M46,40 L46,38 L52,38 L52,40" fill="none" stroke="#00ff00" stroke-width="0.6"/>
 </svg></div>
-<div class="entry-text">
-Albert K. Bender, 1953 — zastavil vydávanie UFO bulletinu po návšteve troch mužov v čiernych oblekoch bez výrazu. Nepijú, nekonzumujú jedlo. Pohyby sú mechanicky presné. ŠPZ ich vozidiel neexistuje v žiadnej databáze. FOIA žiadosti odhalili 14 prípadov kde FBI "priateľsky kontaktovala" svedkov UFO incidentov do 48 hodín. Hypotéza: nie sú ľudia — sú to interfaceové entity, projekt medzi vládou a ET civilizáciou.<br><br>
-<i style="color:#2a5a2a;">// Ak ťa navštívia — nekontaktuj nikoho 72 hodín. Sám zistíš prečo. //</i>
+<div class="entry-text">Albert K. Bender, 1953 — zastavil vydávanie UFO bulletinu po návšteve troch mužov v čiernych oblekoch. Nepijú, nekonzumujú jedlo. Pohyby sú mechanicky presné. ŠPZ ich vozidiel neexistuje v žiadnej databáze. FOIA žiadosti odhalili 14 prípadov kde FBI "priateľsky kontaktovala" svedkov UFO incidentov do 48 hodín.
+<i>// Ak ťa navštívia — nekontaktuj nikoho 72 hodín. Sám zistíš prečo. //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Po každom UFO incidente</b></span>
-  <span class="stat">HROZBA <b>Vymazanie pamäti</b></span>
-  <span class="stat">IDENTITA <b>Neľudská / vládna / oboje</b></span>
-  <span class="stat">ZDROJ <b>FOIA 14 prípadov, 200+ svedkov</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Po každom UFO incidente</b></div>
+  <div class="estat">HROZBA<b>Vymazanie pamäti</b></div>
+  <div class="estat">IDENTITA<b>Neľudská / vládna / oboje</b></div>
+  <div class="estat">ZDROJ<b>FOIA 14 prípadov, 200+ svedkov</b></div>
+</div></div></div></div>
 
-<!-- SKINWALKER -->
-<div class="entry" data-cat="entita">
+<!-- 009 SKINWALKER -->
+<div class="entry threat-high" data-cat="entita">
 <div class="entry-header">
-  <span class="entry-name">Skinwalker</span>
+  <span class="entry-num">009</span><span class="entry-name">Skinwalker</span>
   <span class="entry-latin">Yee Naaldlooshii</span>
   <span class="danger-level d-high">VYSOKA</span>
 </div>
@@ -454,70 +503,49 @@ Albert K. Bender, 1953 — zastavil vydávanie UFO bulletinu po návšteve troch
   <path d="M32,12 Q38,8 40,16 Q44,14 42,22 Q40,28 32,30" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <path d="M32,12 Q26,6 22,14 Q18,12 20,22 Q22,30 32,30" fill="none" stroke="#00ff00" stroke-width="1.2"/>
   <path d="M22,12 L18,4 L26,10" fill="none" stroke="#00ff00" stroke-width="1"/>
-  <path d="M40,14 Q44,12 42,18" fill="none" stroke="#00ff00" stroke-width="0.8"/>
-  <path d="M32,30 L28,54" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M32,30 L36,54" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M28,54 Q24,58 20,62" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M36,54 Q40,58 44,62" stroke="#00ff00" stroke-width="1.2"/>
-  <path d="M28,36 L14,44 Q10,48 12,52" stroke="#00ff00" stroke-width="1"/>
-  <path d="M36,36 L50,44 Q54,48 52,52" stroke="#00ff00" stroke-width="1"/>
-  <path d="M12,52 L8,56 M12,52 L11,57 M12,52 L14,57" stroke="#00ff00" stroke-width="0.6" fill="none"/>
+  <path d="M32,30 L28,54 M32,30 L36,54" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M28,54 Q24,58 20,62 M36,54 Q40,58 44,62" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M28,36 L14,44 Q10,48 12,52 M36,36 L50,44 Q54,48 52,52" stroke="#00ff00" stroke-width="1"/>
   <ellipse cx="28" cy="19" rx="2.5" ry="2" fill="none" stroke="#00ff00" stroke-width="0.8"/>
   <ellipse cx="36" cy="20" rx="2" ry="1.5" fill="none" stroke="#ff4444" stroke-width="0.8"/>
 </svg></div>
-<div class="entry-text">
-Navajo tradícia — čarodejník ktorý nosí kožu zvieraťa a preberá jeho podobu. Skinwalker Ranch, Utah: od 1990-tych rokov zaznamenané poltergeist javy, zmiznutia dobytka, svetelné gule, démonické postavy. Robert Bigelow (NASA dodávateľ) kúpil ranč v 1996 za 200 000$ pre vedecký výskum. NIDS záznamy sú dodnes utajené. Aztécke záznamy opisujú "tých ktorí chodia na štyri" ako reálnu hrozbu pre komunity.<br><br>
-<i style="color:#2a5a2a;">// Navajo starešinovia odmietajú diskutovať — samotná zmienka ich priláka //</i>
+<div class="entry-text">Navajo tradícia — čarodejník ktorý nosí kožu zvieraťa a preberá jeho podobu. Skinwalker Ranch, Utah: od 1990-tych rokov zaznamenané poltergeist javy, zmiznutia dobytka, svetelné gule. Robert Bigelow (NASA dodávateľ) kúpil ranč v 1996 za 200 000$ pre vedecký výskum. NIDS záznamy sú dodnes utajené.
+<i>// Navajo starešinovia odmietajú diskutovať — samotná zmienka ich priláka //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Juhozápad USA</b></span>
-  <span class="stat">SCHOPNOSTI <b>Tvaromena, mimikry</b></span>
-  <span class="stat">HROZBA <b>Extrémna — nevyzeraj do očí</b></span>
-  <span class="stat">ZDROJ <b>NIDS, Navajo oral history</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Juhozápad USA</b></div>
+  <div class="estat">SCHOPNOSTI<b>Tvaromena, mimikry</b></div>
+  <div class="estat">HROZBA<b>Extrémna — nevyzeraj do očí</b></div>
+  <div class="estat">ZDROJ<b>NIDS, Navajo oral history</b></div>
+</div></div></div></div>
 
-<!-- SHADOW PEOPLE -->
-<div class="entry" data-cat="entita">
+<!-- 010 SHADOW PEOPLE -->
+<div class="entry threat-unk" data-cat="entita">
 <div class="entry-header">
-  <span class="entry-name">Tieňové bytosti</span>
+  <span class="entry-num">010</span><span class="entry-name">Tieňové bytosti</span>
   <span class="entry-latin">Umbra Observans Paralyticus</span>
   <span class="danger-level d-unknown">NEZNAMA</span>
 </div>
 <div class="entry-body">
 <div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
   <ellipse cx="32" cy="16" rx="8" ry="9" fill="#020a02" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,2"/>
-  <path d="M24,10 Q32,2 40,10" fill="none" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,2"/>
-  <path d="M26,10 L26,8 L38,8 L38,10" fill="none" stroke="#2a4a2a" stroke-width="0.8" stroke-dasharray="2,2"/>
   <circle cx="29" cy="15" r="2" fill="#ff4444" opacity="0.9"/>
   <circle cx="35" cy="15" r="2" fill="#ff4444" opacity="0.9"/>
-  <path d="M25,24 L20,54" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <path d="M39,24 L44,54" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <path d="M25,24 L39,24" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <path d="M25,30 L14,42" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,3"/>
-  <path d="M39,30 L50,42" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,3"/>
-  <circle cx="18" cy="50" r="0.8" fill="#2a4a2a"/>
-  <circle cx="46" cy="48" r="0.8" fill="#2a4a2a"/>
-  <circle cx="22" cy="58" r="0.6" fill="#2a4a2a"/>
+  <path d="M25,24 L20,54 M39,24 L44,54 M25,24 L39,24" stroke="#2a4a2a" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <path d="M25,30 L14,42 M39,30 L50,42" stroke="#2a4a2a" stroke-width="1" stroke-dasharray="2,3"/>
 </svg></div>
-<div class="entry-text">
-Fenomén zaznamenaný naprieč kultúrami bez vzájomného kontaktu — islamský džin, japonský <i>Kage-Otoko</i>, európsky "Hat Man." Vždy: silueta ľudskej postavy bez tváre, niekedy s klobúkom, červené oči. Výhradne pri spánkovej paralýze. Neuroveda nevie vysvetliť prečo má 30% populácie identické halucinácie. Výskum Persinger (1983): vonkajšie EM polia indukujú pocit "prítomnosti bytosti." Tieto frekvencie sú prítomné v blízkosti 5G vysielačov.<br><br>
-<i style="color:#2a5a2a;">// Ak ich vidíš: nehýb sa. Detekujú pohyb a dych. Spomali dych. //</i>
+<div class="entry-text">Fenomén zaznamenaný naprieč kultúrami bez vzájomného kontaktu — islamský džin, japonský <i style="color:#458c3a;font-style:italic">Kage-Otoko</i>, európsky "Hat Man." Silueta bez tváre, červené oči, výhradne pri spánkovej paralýze. Neuroveda nevie vysvetliť prečo má 30% populácie identické halucinácie. Persinger (1983): EM polia indukujú pocit prítomnosti bytosti.
+<i>// Ak ich vidíš: nehýb sa. Detekujú pohyb a dych. Spomali dych. //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Globálny</b></span>
-  <span class="stat">FORMA <b>2D tieň, bez hmoty</b></span>
-  <span class="stat">HROZBA <b>Paralýza, psychická trauma</b></span>
-  <span class="stat">ZDROJ <b>Persinger 1983, 15 000+ správ</b></span>
-</div>
-</div>
-</div>
-</div>
+  <div class="estat">VÝSKYT<b>Globálny</b></div>
+  <div class="estat">FORMA<b>2D tieň, bez hmoty</b></div>
+  <div class="estat">HROZBA<b>Paralýza, psychická trauma</b></div>
+  <div class="estat">ZDROJ<b>Persinger 1983, 15 000+ správ</b></div>
+</div></div></div></div>
 
-<!-- BAZILISEK -->
-<div class="entry" data-cat="stredovek">
+<!-- 011 BAZILISEK -->
+<div class="entry threat-high" data-cat="stredovek">
 <div class="entry-header">
-  <span class="entry-name">Bazilišek</span>
+  <span class="entry-num">011</span><span class="entry-name">Bazilišek</span>
   <span class="entry-latin">Rex Serpentium Gaze Mortis</span>
   <span class="danger-level d-high">VYSOKA</span>
 </div>
@@ -526,42 +554,220 @@ Fenomén zaznamenaný naprieč kultúrami bez vzájomného kontaktu — islamsk�
   <path d="M8,56 Q16,40 24,36 Q32,32 36,24 Q40,16 48,14 Q56,12 60,18" fill="none" stroke="#00ff00" stroke-width="1.5"/>
   <path d="M56,10 L52,4 L56,8 L60,4 L58,8 L62,6 L60,12" fill="none" stroke="#00ff00" stroke-width="1"/>
   <ellipse cx="58" cy="18" rx="5" ry="4" fill="none" stroke="#00ff00" stroke-width="1.2"/>
-  <circle cx="60" cy="16" r="1.5" fill="#ff4444" stroke="#ff4444" stroke-width="0.5"/>
-  <path d="M61,15 L64,12 M62,14 L66,12 M62,16 L66,14" stroke="#ff4444" stroke-width="0.6" fill="none"/>
-  <path d="M24,36 L20,44" stroke="#00ff00" stroke-width="1"/>
-  <path d="M32,32 L30,42" stroke="#00ff00" stroke-width="1"/>
-  <text x="2" y="62" font-size="6" fill="#00ff00" opacity="0.6" font-family="serif">†</text>
-  <text x="12" y="60" font-size="5" fill="#00ff00" opacity="0.4" font-family="serif">†</text>
+  <circle cx="60" cy="16" r="1.5" fill="#ff4444"/>
+  <path d="M24,36 L20,44 M32,32 L30,42" stroke="#00ff00" stroke-width="1"/>
 </svg></div>
-<div class="entry-text">
-Plinius Starší, 77 n.l.: "Kráľ hadov — jeho pohľad zabíja." Stredoveká medicína používala baziliškov jed ako katalyzátor elixíru nesmrteľnosti. V roku 1210 v Prahe údajne zamoroval pivnice pod Starým Mestom bazilišek — záznamy v mestskej kronike sú autentické a overené historikmi. Moderný záujem: biologicky emitované UV žiarenie. MITI inštitút (Japonsko, 1987) zaznamenal prípad biologicky emitovaného UV žiarenia u neznámej plazivej bytosti v Indonézii. Dokumenty čiastočne odtajnené 2019.<br><br>
-<i style="color:#2a5a2a;">// Zrkadlo ako obrana — možno preto sa dáva zrkadlo do každého domu //</i>
+<div class="entry-text">Plinius Starší, 77 n.l.: "Kráľ hadov — jeho pohľad zabíja." Stredoveká medicína používala baziliškov jed ako katalyzátor elixíru nesmrteľnosti. V roku 1210 v Prahe údajne zamoroval pivnice pod Starým Mestom bazilišek — záznamy v mestskej kronike sú autentické. MITI inštitút (Japonsko, 1987) zaznamenal biologicky emitované UV žiarenie u neznámej plazivej bytosti v Indonézii.
+<i>// Zrkadlo ako obrana — možno preto sa dáva zrkadlo do každého domu //</i>
 <div class="entry-stats">
-  <span class="stat">VÝSKYT <b>Stredomer, Európa, Indonézia</b></span>
-  <span class="stat">VEĽKOSŤ <b>0.3–3m</b></span>
-  <span class="stat">HROZBA <b>Smrtiaci pohľad, biologický jed</b></span>
-  <span class="stat">ZDROJ <b>Plinius, pražská kronika, MITI 1987</b></span>
+  <div class="estat">VÝSKYT<b>Stredomer, Európa, Indonézia</b></div>
+  <div class="estat">VEĽKOSŤ<b>0.3–3m</b></div>
+  <div class="estat">HROZBA<b>Smrtiaci pohľad, jed</b></div>
+  <div class="estat">ZDROJ<b>Plinius, pražská kronika, MITI 1987</b></div>
+</div></div></div></div>
+
+<!-- 012 CIGELSKY PES -->
+<div class="entry threat-high" data-cat="local">
+<div class="entry-header">
+  <span class="entry-num">012</span><span class="entry-name">Čígelský pes</span>
+  <span class="entry-latin">Canis Demonicus Prievidzensis</span>
+  <span class="danger-level d-high">VYSOKA</span>
 </div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="46" cy="20" rx="10" ry="8" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M36,16 Q30,12 10,28 Q16,36 28,36 Q38,36 40,28 L36,16Z" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M40,28 L36,52 L42,50 L44,58 L48,50 L50,54 L52,46 L48,28" fill="none" stroke="#00ff00" stroke-width="1.1"/>
+  <path d="M40,32 L28,40 L24,50" fill="none" stroke="#00ff00" stroke-width="1"/>
+  <path d="M44,10 L42,4 M50,12 L52,6" stroke="#00ff00" stroke-width="1"/>
+  <circle cx="50" cy="17" r="1.5" fill="#ff4444"/>
+  <circle cx="42" cy="18" r="1.5" fill="#ff4444"/>
+</svg></div>
+<div class="entry-text">Lokálna entita z oblasti Čígeľ — Prievidza. Posledný zaznamenaný prípad: 1995, cesta medzi Čígeľom a Prievidzou, 23:00. Svedok opisuje postavu veľkosti bernského salašníckeho psa s červenými očami, pohybujúcu sa na štyroch — ale nie ako pes. Neprirodzená kĺbová mechanika. Bežal rýchlosťou auta. Stará babka korenárka: "Nebola obetovaná panna v rybníku."
+<i>// Oblasť medzi Čígeľom a lesným cintorínom — nevstupovať po 22:00 //</i>
+<div class="entry-stats">
+  <div class="estat">VÝSKYT<b>Čígeľ — Prievidza</b></div>
+  <div class="estat">AKTÍVNY<b>Od 1995</b></div>
+  <div class="estat">HROZBA<b>Extrémna — lokálna</b></div>
+  <div class="estat">ZDROJ<b>2 svedkovia, korenárka</b></div>
+</div></div></div></div>
+
+<!-- 013 CHUPACABRA -->
+<div class="entry threat-high" data-cat="les">
+<div class="entry-header">
+  <span class="entry-num">013</span><span class="entry-name">Chupacabra</span>
+  <span class="entry-latin">Hematophagus Ignotus</span>
+  <span class="danger-level d-high">VYSOKA</span>
 </div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="32" cy="16" rx="10" ry="12" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <ellipse cx="27" cy="14" rx="4" ry="3" fill="none" stroke="#ff4444" stroke-width="0.8"/>
+  <ellipse cx="37" cy="14" rx="4" ry="3" fill="none" stroke="#ff4444" stroke-width="0.8"/>
+  <circle cx="27" cy="14" r="1.5" fill="#ff4444"/>
+  <circle cx="37" cy="14" r="1.5" fill="#ff4444"/>
+  <path d="M26,26 L20,50 L26,48 L28,58 L32,48 L36,58 L38,48 L44,50 L38,26" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M26,30 L14,22 Q8,18 10,12 Q14,16 18,20" fill="none" stroke="#00ff00" stroke-width="1"/>
+  <path d="M38,30 L50,22 Q56,18 54,12 Q50,16 46,20" fill="none" stroke="#00ff00" stroke-width="1"/>
+  <path d="M24,28 L22,24 L26,22 M26,30 L24,28 M28,32 L26,30" stroke="#00ff00" stroke-width="0.6" fill="none"/>
+  <path d="M38,32 L40,30 L42,28 M36,30 L38,28" stroke="#00ff00" stroke-width="0.6" fill="none"/>
+</svg></div>
+<div class="entry-text">Prvý zaznamenaný prípad: Puerto Rico, 1995 — 8 mŕtvych oviec, krv úplne vyčerpaná, malé otvory na krku. Do roku 2000 nahlásených 2000+ útokov v Latinskej Amerike. Zvieratá nikdy zožraté — iba vysaté. Vládne biológické tímy zobrali vzorky a odišli bez komentára. Niektoré svedectvá popisujú okrídlenú verziu. Iné hovoria o koži šuplíkovej textúry. Žiadny nález tela nikdy zverejnený.
+<i>// Texaský nález 2007 — DNA analýza: "neznámy druh". Správa stiahnutá do 48 hodín. //</i>
+<div class="entry-stats">
+  <div class="estat">VÝSKYT<b>Latinská Amerika, Texas, Európa</b></div>
+  <div class="estat">METÓDA<b>Exsangvinácia — bez stôp</b></div>
+  <div class="estat">HROZBA<b>Vysoká — zvieratá, možno ľudia</b></div>
+  <div class="estat">ZDROJ<b>2000+ prípadov, DNA Texas 2007</b></div>
+</div></div></div></div>
+
+<!-- 014 ANUNNAKI -->
+<div class="entry threat-unk" data-cat="mimoz">
+<div class="entry-header">
+  <span class="entry-num">014</span><span class="entry-name">Anunnaki</span>
+  <span class="entry-latin">Progenitores Humanitatis</span>
+  <span class="danger-level d-unknown">NEZNAMA</span>
 </div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="32,4 58,52 6,52" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <polygon points="32,16 50,46 14,46" fill="none" stroke="#1a4a1a" stroke-width="0.8"/>
+  <circle cx="32" cy="32" r="4" fill="none" stroke="#00ff00" stroke-width="1"/>
+  <circle cx="32" cy="32" r="1.5" fill="#00ff00"/>
+  <line x1="32" y1="4" x2="32" y2="52" stroke="#0d2e0d" stroke-width="0.5" stroke-dasharray="2,3"/>
+  <line x1="6" y1="52" x2="58" y2="52" stroke="#0d2e0d" stroke-width="0.5" stroke-dasharray="2,3"/>
+  <path d="M6,52 L32,4 M58,52 L32,4" stroke="#0d2e0d" stroke-width="0.5" stroke-dasharray="2,3"/>
+  <text x="28" y="60" font-size="8" fill="#1a4a1a" font-family="serif">∞</text>
+</svg></div>
+<div class="entry-text">Sumerské záznamy, 3500 pred n.l.: "tí čo zostúpili z neba." Zecharia Sitchin preložil 6000 hlinených tabuliek — opisujú genetickú manipuláciu primitívnych ľudí bytosťami z planéty Nibiru. Mainstream archeológia odmietla preklad bez alternatívneho vysvetlenia pre náhly vznik sumerizácie. Ikonografia: okrídlené bytosti nad ľuďmi, identická s egyptskými, mayskými a indickými zobrazeniami — bez akéhokoľvek kontaktu medzi civilizáciami.
+<i>// Prečo sa všetky staroveké civilizácie modlili k rovnakým bohom z neba? //</i>
+<div class="entry-stats">
+  <div class="estat">PÔVOD<b>Nibiru / Neznámy systém</b></div>
+  <div class="estat">AKTIVITA<b>3500 pred n.l. — doteraz?</b></div>
+  <div class="estat">ZÁMER<b>Genetická správa ľudstva</b></div>
+  <div class="estat">ZDROJ<b>Sitchin, sumerské tabuľky</b></div>
+</div></div></div></div>
+
+<!-- 015 LESNIK -->
+<div class="entry" data-cat="les">
+<div class="entry-header">
+  <span class="entry-num">015</span><span class="entry-name">Lesník / Leshy</span>
+  <span class="entry-latin">Spiritus Silvarum Cognitus</span>
+  <span class="danger-level d-mid">STREDNA</span>
+</div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <path d="M32,8 Q36,2 40,8 Q44,4 42,12 Q46,10 44,18 Q48,16 46,24 Q40,28 32,26 Q24,28 18,24 Q16,16 20,18 Q18,10 22,12 Q20,4 24,8 Q28,2 32,8Z" fill="none" stroke="#00ff00" stroke-width="1"/>
+  <path d="M32,26 L28,58 M32,26 L36,58" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M28,36 L16,48 M36,36 L48,48" stroke="#00ff00" stroke-width="1"/>
+  <circle cx="29" cy="18" r="1.5" fill="#00ff00"/>
+  <circle cx="35" cy="18" r="1.5" fill="#00ff00"/>
+  <path d="M16,48 L12,56 Q10,60 14,62 M48,48 L52,56 Q54,60 50,62" stroke="#00ff00" stroke-width="0.8" fill="none"/>
+</svg></div>
+<div class="entry-text">Slovanský duch lesa. Záznamy z Ruska, Poľska, Slovenska: cestovateľ sa stratí v lese ktorý dobre pozná. Krúži v kruhoch. Hodiny sa stanú dňami. Po návrate nevie popísať čo sa stalo. Folklór radí: obrátiť oblečenie naruby, sunúť topánky z nôh. Moderné záznamy z Bielych Karpát (2018) a Poľany (2021) — identické symptómy. Záchranári hovoria o "zónach dezorientácie" kde GPS zlyhá.
+<i>// Lesná správa SR, 2021: neuvedená oblasť v Poľane — GPS anomálie na 3.2km². Príčina: "neznáma." //</i>
+<div class="entry-stats">
+  <div class="estat">VÝSKYT<b>Slovanské lesy, Karpaty</b></div>
+  <div class="estat">METÓDA<b>Dezorientácia, časová slučka</b></div>
+  <div class="estat">HROZBA<b>Stredná — stratiť sa navždy</b></div>
+  <div class="estat">ZDROJ<b>Folklór + moderné správy 2021</b></div>
+</div></div></div></div>
+
+<!-- 016 RUSALKA -->
+<div class="entry threat-high" data-cat="more">
+<div class="entry-header">
+  <span class="entry-num">016</span><span class="entry-name">Rusalka</span>
+  <span class="entry-latin">Anima Aquarum Iniuriata</span>
+  <span class="danger-level d-high">VYSOKA</span>
+</div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="32" cy="14" rx="8" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M24,22 Q18,32 16,44 Q24,38 32,40 Q40,38 48,44 Q46,32 40,22" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M20,42 Q14,52 12,60" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <path d="M44,42 Q50,52 52,60" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <path d="M24,8 Q20,2 16,4 Q20,8 22,14" fill="none" stroke="#00ff00" stroke-width="0.7"/>
+  <path d="M40,8 Q44,2 48,4 Q44,8 42,14" fill="none" stroke="#00ff00" stroke-width="0.7"/>
+  <path d="M28,38 Q32,46 36,38 Q40,50 44,44" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <circle cx="29" cy="12" r="1.2" fill="#8888ff"/>
+  <circle cx="35" cy="12" r="1.2" fill="#8888ff"/>
+</svg></div>
+<div class="entry-text">Slovanská tradícia: duše žien umretých násilnou smrťou alebo pred svadbou. Obývajú rieky, jazerá, studne. Láka mužov tancom a spevom — zvlášť v noci na Zelený štvrtok. Cieľ: utopiť. Správy z Váhu (1987, 1994, 2009) — trojica utopení za nevysvetlených okolností, všetci skúsení plavci. Polícia uviedla "nešťastná náhoda." Miestni vedia lepšie. Rybári na Nitre odmietajú loviť po 21:00.
+<i>// Nenazývaj ich menom pri vode. Počujú. //</i>
+<div class="entry-stats">
+  <div class="estat">VÝSKYT<b>Váh, Nitra, Dunaj, Morava</b></div>
+  <div class="estat">AKTIVITA<b>Vrchol: Zelený štvrtok</b></div>
+  <div class="estat">HROZBA<b>Vysoká — utopenie</b></div>
+  <div class="estat">ZDROJ<b>Folklór, 3 záznamy Váh 1987–2009</b></div>
+</div></div></div></div>
+
+<!-- 017 REPTILIANI LOKALNI -->
+<div class="entry threat-unk" data-cat="local">
+<div class="entry-header">
+  <span class="entry-num">017</span><span class="entry-name">Reptilián — Vládny variant</span>
+  <span class="entry-latin">Lacertus Politicus Slovenicus</span>
+  <span class="danger-level d-unknown">NEZNAMA</span>
+</div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="32" cy="18" rx="10" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <ellipse cx="28" cy="17" rx="3" ry="4" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <ellipse cx="36" cy="17" rx="3" ry="4" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <ellipse cx="28" cy="17" rx="1.2" ry="2.5" fill="#1a0000" stroke="#ff4444" stroke-width="0.5"/>
+  <ellipse cx="36" cy="17" rx="1.2" ry="2.5" fill="#1a0000" stroke="#ff4444" stroke-width="0.5"/>
+  <path d="M28,10 L26,4 M32,8 L32,2 M36,10 L38,4" stroke="#00ff00" stroke-width="0.8" fill="none"/>
+  <path d="M24,26 L20,56 M40,26 L44,56 M24,26 L40,26" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M24,32 L12,40 M40,32 L52,40" stroke="#00ff00" stroke-width="1"/>
+  <rect x="26" y="28" width="12" height="8" fill="none" stroke="#1a4a1a" stroke-width="0.6"/>
+  <line x1="32" y1="28" x2="32" y2="36" stroke="#0d2e0d" stroke-width="0.5"/>
+</svg></div>
+<div class="entry-text">Azerbajdzanská štúdia (2019): 34% parlamentných poslancov v skúmaných krajinách vykazuje "anomálne teplotné signatúry" na termálnych kamerách. Slovenský parlament — meranie vykonané nezávislým investigatívnym tímom v apríli 2024 — 7 z 21 skúmaných poslancov malo teplotu kože pod 35°C v miestnosti s 22°C. Hlasovanie 7-0 v Bojniciach. Bez verejnej diskusie. Jeden člen ospravedlnený — hospitalizácia. Povaha: neznáma.
+<i>// Pupok: kľúčový identifikátor. Klony z inkubátorov ho nemajú. Skontroluj. //</i>
+<div class="entry-stats">
+  <div class="estat">VÝSKYT<b>Bratislava, Bojnice, Trenčín</b></div>
+  <div class="estat">IDENTIFIKÁCIA<b>Chýba pupok, nízka teplota</b></div>
+  <div class="estat">HROZBA<b>Systémová — vládna úroveň</b></div>
+  <div class="estat">ZDROJ<b>Azerbajdž. štúdia, terén 2024</b></div>
+</div></div></div></div>
+
+<!-- 018 NEANDRTALEC BOJNICKA -->
+<div class="entry" data-cat="local">
+<div class="entry-header">
+  <span class="entry-num">018</span><span class="entry-name">Rozmrazený Neandrtalec</span>
+  <span class="entry-latin">Homo Neanderthalensis Revivus Bojnicensis</span>
+  <span class="danger-level d-mid">STREDNA</span>
+</div>
+<div class="entry-body">
+<div class="entry-glyph"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="32" cy="14" rx="11" ry="10" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M18,20 Q14,18 12,14 Q14,12 18,14" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <path d="M46,20 Q50,18 52,14 Q50,12 46,14" fill="none" stroke="#00ff00" stroke-width="0.8"/>
+  <path d="M26,22 Q22,22 20,26" stroke="#00ff00" stroke-width="0.8" fill="none"/>
+  <path d="M38,22 Q42,22 44,26" stroke="#00ff00" stroke-width="0.8" fill="none"/>
+  <path d="M22,28 L14,56 L20,54 L22,62 L28,56 L32,62 L36,56 L42,62 L44,54 L50,56 L42,28" fill="none" stroke="#00ff00" stroke-width="1.2"/>
+  <path d="M22,32 L10,38 Q6,42 8,50" stroke="#00ff00" stroke-width="1"/>
+  <path d="M42,32 L54,38 Q58,42 56,50" stroke="#00ff00" stroke-width="1"/>
+  <path d="M24,24 L20,28 M27,23 L23,27 M30,22 L26,26 M34,22 L38,26 M37,23 L41,27" stroke="#00ff00" stroke-width="0.4" fill="none"/>
+</svg></div>
+<div class="entry-text">Bojnická jaskyňa — najdlhšie osídlená jaskyňa v strednej Európe. Posledná vrstva permafrostu v hlbokých komorách roztáva od 2018 kvôli geotermálnej aktivite. Správca jaskyne Ján K. hlási "silný organický zápach z hĺbky" od marca 2024 a stopy v blate nezodpovedajúce ľudskej nohe. Šírka: 22cm, päť prstov, objem šesťnásobne väčší. Bojnicania sú horší — ale to neznamená, že niečo iné tam nie je.
+<i>// "Rozmrazený neandrtalec zacal po 8000 rokoch znova stvarat neplechu." — CEO Zla, 2025 //</i>
+<div class="entry-stats">
+  <div class="estat">VÝSKYT<b>Bojnická jaskyňa, hlboké koridory</b></div>
+  <div class="estat">STATUS<b>Aktívny od marca 2024</b></div>
+  <div class="estat">HROZBA<b>Stredná — bojte sa Bojničanov viac</b></div>
+  <div class="estat">ZDROJ<b>Správca jaskyne, stopy 2024</b></div>
+</div></div></div></div>
+
+</div><!-- /entries-area -->
+</div><!-- /main-grid -->
+<div class="nekron bot"></div>
+
+<div class="site-footer">
+  Layout: <a href="https://itinerae.neocities.org/" target="_blank">Itinerae.</a> //
+  Fonts: "Orbitron" "Goldman" — Google Fonts //
+  doc. Ing. Zacharka, PHD // WAKE UP SHEEPLE // EST. 2003
 </div>
 
-</td>
-</tr>
-</table>
-
-<div class="nekron-bar bot-bar" style="width:700px;box-sizing:border-box;"></div>
-
-<table width="700" height="30" cellpadding="4" cellspacing="0">
-<tr><td class="footer" valign="top">
-<center>
-Layout: <a target="_blank" href="https://itinerae.neocities.org/">Itinerae.</a> //
-Fonts: "Orbitron" "Goldman" from Google Fonts. //
-doc. Ing. Zacharka, PHD // WAKE UP SHEEPLE
-</center>
-</td></tr>
-</table>
-
-</center>
+</div><!-- /wrap -->
 </body>
-</HTML>
+</html>
