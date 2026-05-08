@@ -895,9 +895,127 @@ a:hover { color: #fff; }
   animation: panelSlideIn 1s 1.1s cubic-bezier(0.22,1,0.36,1) both;
 }
 
-/* Mobile: poster ako pozadie, panel centrovaný */
-@media (max-width: 600px) {
-  #main-menu { justify-content: center; align-items: flex-end; }
+/* ── Druhý riadok title ── */
+.menu-title-line2 {
+  position: relative; z-index: 1;
+  font-family: var(--font-hud); font-size: clamp(28px, 6.5vw, 52px); font-weight: 900;
+  color: var(--cyan); letter-spacing: clamp(4px, 2vw, 12px);
+  text-shadow:
+    0 0 20px rgba(34,211,238,0.9),
+    0 0 50px rgba(34,211,238,0.4),
+    0 0 100px rgba(34,211,238,0.15);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  animation: titleFlicker2 7s 1.8s ease-in-out infinite, panelSlideIn 1s 0.65s cubic-bezier(0.22,1,0.36,1) both;
+  line-height: 1.0;
+}
+.menu-title-line2::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0;
+  color: var(--green); opacity: 0.2;
+  filter: blur(2px);
+  transform: translate(-3px, 1px);
+  z-index: -1; pointer-events: none;
+}
+@keyframes titleFlicker2 {
+  0%,87%,89%,93%,95%,100% { opacity: 1; }
+  88%  { opacity: 0.3; }
+  92%  { opacity: 0.8; }
+  94%  { opacity: 0.4; }
+}
+
+/* ── Menu title (riadok 1) zmenšíme trochu ── */
+.menu-title {
+  font-size: clamp(14px, 3vw, 20px) !important;
+  letter-spacing: clamp(4px, 2vw, 10px) !important;
+  color: var(--green3) !important;
+  text-shadow: 0 0 10px rgba(57,255,20,0.5) !important;
+  margin-bottom: 0 !important;
+  opacity: 0.85;
+}
+.menu-title::after { display: none; }
+
+/* ═══════════════════════════════════════════════════════
+   LOADING BAR — Profesionálny cinematic štýl
+═══════════════════════════════════════════════════════ */
+.loading-title {
+  font-family: var(--font-hud);
+  font-size: 9px; letter-spacing: 4px;
+  color: rgba(57,255,20,0.4);
+  text-transform: uppercase;
+  animation: loadTitleFade 2s ease-in-out infinite alternate;
+}
+@keyframes loadTitleFade {
+  from { opacity: 0.3; } to { opacity: 0.7; }
+}
+
+.loading-bar-wrap {
+  width: min(420px, 85vw);
+  position: relative;
+}
+
+/* Vonkajší container */
+.loading-bar-wrap::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: rgba(57,255,20,0.08);
+  border-radius: 1px;
+  margin-bottom: 6px;
+}
+
+.loading-bar {
+  height: 2px;
+  background: linear-gradient(90deg, #39ff14, #22d3ee);
+  border-radius: 1px;
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(57,255,20,0.6), 0 0 20px rgba(57,255,20,0.2);
+  position: relative;
+}
+/* Pohybujúci sa glow na konci baru */
+.loading-bar::after {
+  content: '';
+  position: absolute; right: -1px; top: -3px;
+  width: 4px; height: 8px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8), 0 0 16px rgba(57,255,20,1);
+  opacity: 0.9;
+}
+
+/* Segmentové ticky pod barom */
+.loading-ticks {
+  display: flex; gap: 0; margin-top: 3px;
+  width: 100%;
+}
+.loading-tick {
+  flex: 1; height: 3px;
+  background: rgba(57,255,20,0.06);
+  border-right: 1px solid rgba(0,0,0,0.5);
+  transition: background 0.3s ease;
+}
+.loading-tick.lit {
+  background: rgba(57,255,20,0.25);
+}
+
+.loading-bottom-row {
+  display: flex; justify-content: space-between; align-items: center;
+  width: min(420px, 85vw);
+  margin-top: 4px;
+}
+.loading-status {
+  font-family: var(--font-mono); font-size: 9px;
+  color: rgba(57,255,20,0.5); letter-spacing: 1.5px;
+  flex: 1; overflow: hidden;
+  white-space: nowrap; text-overflow: ellipsis;
+}
+.loading-pct {
+  font-family: var(--font-hud); font-size: 11px; font-weight: 700;
+  color: var(--green3);
+  text-shadow: 0 0 8px rgba(57,255,20,0.5);
+  letter-spacing: 1px; min-width: 36px; text-align: right;
+}
   #menu-panel {
     width: 100%; padding: 28px 20px 36px;
     align-items: center;
@@ -1181,8 +1299,38 @@ a:hover { color: #fff; }
 #volume-label { font-size: 9px; color: var(--text-dim); font-family: var(--font-mono); min-width: 28px; text-align: right; }
 #audio-wave { display: flex; gap: 2px; align-items: center; height: 10px; padding: 0 14px 4px; }
 #audio-wave.paused .wave-bar { animation: none; height: 2px; opacity: 0.2; }
-.settings-divider { height: 1px; background: var(--border2); margin: 3px 0; }
-.settings-action-btn {
+.settings-section-label {
+  font-family: var(--font-hud); font-size: 8px; letter-spacing: 2px;
+  color: var(--green3); padding: 8px 14px 3px; text-transform: uppercase;
+  opacity: 0.8;
+}
+.settings-row-btns {
+  padding: 4px 14px 6px; gap: 6px; flex-wrap: wrap;
+}
+.settings-row-toggle {
+  padding: 4px 14px 4px;
+}
+.settings-toggle-btn {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border2);
+  color: var(--text-dim); font-family: var(--font-body); font-size: 11px;
+  padding: 4px 10px; cursor: pointer; transition: all 0.12s;
+  letter-spacing: 0.5px;
+}
+.settings-toggle-btn.active {
+  background: rgba(57,255,20,0.12); border-color: var(--green3);
+  color: var(--green); box-shadow: 0 0 8px rgba(57,255,20,0.2);
+}
+.settings-toggle-btn:hover:not(.active) { border-color: var(--green3); color: var(--text-bright); }
+.settings-onoff {
+  background: rgba(57,255,20,0.1); border: 1px solid var(--green3);
+  color: var(--green); font-family: var(--font-hud); font-size: 9px;
+  letter-spacing: 2px; padding: 3px 10px; cursor: pointer; transition: all 0.12s;
+  margin-left: auto;
+}
+.settings-onoff.off {
+  background: rgba(100,0,0,0.2); border-color: #4a1a1a;
+  color: #6a3a3a;
+}
   background: transparent; border: none;
   color: var(--text-dim); font-family: var(--font-body); font-size: 11px;
   letter-spacing: 1px; padding: 9px 14px; cursor: pointer;
@@ -1638,6 +1786,38 @@ a:hover { color: #fff; }
 /* ── QUESTS ── */
 .op-flag { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px dotted var(--border2); font-size: 12px; }
 .op-flag:last-child { border-bottom: none; }
+
+/* Quest tracker items */
+.quest-item {
+  padding: 7px 10px; border-left: 2px solid var(--border2);
+  margin: 4px 0; background: rgba(0,0,0,0.2);
+  font-family: var(--font-mono); font-size: 11px;
+  transition: border-color 0.2s;
+}
+.quest-item.active   { border-left-color: var(--cyan); }
+.quest-item.done     { border-left-color: var(--green); opacity: 0.6; }
+.quest-item-title    { color: var(--text-bright); font-size: 12px; margin-bottom: 3px; }
+.quest-item.done .quest-item-title { color: var(--green); text-decoration: line-through; }
+.quest-item-progress { color: var(--text-dim); font-size: 10px; }
+.quest-item-progress span { color: var(--cyan); }
+.quest-item-giver    { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 2px; }
+
+/* Quest popup notification */
+#quest-popup {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+  z-index: 8500; pointer-events: none; opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  background: linear-gradient(135deg, #050f05, #0a180a);
+  border: 1px solid var(--cyan); border-left: 3px solid var(--cyan);
+  padding: 10px 16px; min-width: 260px; max-width: 360px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.8), 0 0 20px rgba(34,211,238,0.15);
+}
+#quest-popup.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#quest-popup-icon  { font-size: 18px; margin-bottom: 4px; }
+#quest-popup-label { font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px; color: var(--cyan); margin-bottom: 4px; }
+#quest-popup-title { font-family: var(--font-mono); font-size: 13px; color: var(--text-bright); margin-bottom: 2px; }
+#quest-popup-desc  { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+#quest-popup-reward{ font-family: var(--font-hud); font-size: 10px; color: var(--green); margin-top: 6px; letter-spacing: 1px; }
 .op-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bg); border: 1px solid var(--text-muted); flex-shrink: 0; margin-top: 3px; transition: all 0.3s; }
 .op-dot.active { background: var(--green); border-color: var(--green); box-shadow: 0 0 8px var(--green); }
 .op-name { color: var(--text-muted); transition: color 0.3s; letter-spacing: 0.3px; line-height: 1.4; font-family: var(--font-body); font-weight: 500; }
@@ -3203,42 +3383,64 @@ body.tier-up-flash  { animation:glitchAnim 1.2s steps(5) forwards; box-shadow:in
 /* ══════════════════════════════════════════════════════
    AUDIO INIT OVERLAY (browser autoplay workaround)
 ══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   AUDIO TOAST — slim horný pruh, nie fullscreen blocker
+═══════════════════════════════════════════════════════ */
 #audio-init-overlay {
-  position: fixed; inset: 0; z-index: 9998;
-  background: rgba(8,13,8,0.92);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 10001;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.92) 0%,
+    rgba(4,12,4,0.96) 40%,
+    rgba(0,0,0,0.92) 100%);
+  border-bottom: 1px solid rgba(57,255,20,0.25);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 0 40px rgba(57,255,20,0.04);
   display: none;
   align-items: center; justify-content: center;
-  flex-direction: column; gap: 16px;
+  gap: 10px;
+  padding: 10px 20px;
   cursor: pointer;
-  animation: fadeInOverlay 0.4s ease;
+  animation: audioToastSlide 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+@keyframes audioToastSlide {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
 }
 #audio-init-overlay.show { display: flex; }
-@keyframes fadeInOverlay {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+
 .audio-init-icon {
-  font-size: 48px;
-  filter: drop-shadow(0 0 16px rgba(57,255,20,0.6));
-  animation: audioIconPulse 1.6s ease-in-out infinite;
+  font-size: 16px;
+  animation: audioIconPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 @keyframes audioIconPulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 16px rgba(57,255,20,0.6)); }
-  50%      { transform: scale(1.1); filter: drop-shadow(0 0 24px rgba(57,255,20,1)); }
+  0%,100% { opacity: 0.7; }
+  50%     { opacity: 1; filter: drop-shadow(0 0 6px rgba(57,255,20,0.8)); }
 }
 .audio-init-text {
   font-family: var(--font-hud);
-  font-size: 14px; letter-spacing: 4px;
-  color: var(--green);
-  text-shadow: 0 0 12px rgba(57,255,20,0.5);
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--green3);
   text-transform: uppercase;
 }
 .audio-init-sub {
   font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 2px;
+  font-size: 9px; letter-spacing: 1px;
   color: var(--text-dim);
+}
+/* Pulzujúca zelená čiarka napravo — CTA */
+.audio-init-cta {
+  font-family: var(--font-hud); font-size: 9px;
+  color: var(--green); letter-spacing: 2px;
+  margin-left: auto;
+  animation: ctaPulse 1.2s ease-in-out infinite;
+}
+@keyframes ctaPulse {
+  0%,100% { opacity: 0.4; }
+  50%     { opacity: 1; text-shadow: 0 0 8px rgba(57,255,20,0.8); }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -4342,7 +4544,7 @@ body.low-power .minigame-overlay {
   <div id="cinematic-poster"></div>
   <div id="cinematic-text">
     <div class="cin-tag">// PRIEVIDZA 2077 //</div>
-    <div class="cin-title">OPERÁCIA LAZARUS</div>
+    <div class="cin-title">PROTOCOL LAZARUS</div>
     <div class="cin-sub">BUDÚCNOSŤ NEČAKÁ. PREBÚDZA SA.</div>
     <div class="cin-hint">[ INICIALIZÁCIA... ]</div>
   </div>
@@ -4397,8 +4599,9 @@ body.low-power .minigame-overlay {
 ═══════════════════════════════════════════════════ -->
 <div id="audio-init-overlay" onclick="AudioController.userStart()">
   <div class="audio-init-icon">🔊</div>
-  <div class="audio-init-text">// AKTIVUJ AUDIO //</div>
-  <div class="audio-init-sub">klikni kdekoľvek pre spustenie hudby</div>
+  <div class="audio-init-text">AUDIO</div>
+  <div class="audio-init-sub">klikni kdekoľvek pre zapnutie hudby</div>
+  <div class="audio-init-cta">▶ TAP</div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -4412,9 +4615,9 @@ body.low-power .minigame-overlay {
   <canvas id="matrix-canvas" style="position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0.18"></canvas>
 
   <!-- Corner decorations -->
-  <div class="menu-corner tl">CEO//ZLA<br>PRIEVIDZA·2077<br>SYS·ONLINE</div>
+  <div class="menu-corner tl">PRIEVIDZA//2077<br>PROTOCOL·LAZARUS<br>SYS·ONLINE</div>
   <div class="menu-corner tr">48°46′N<br>18°37′E<br>03:47:12</div>
-  <div class="menu-corner bl">v2.0·LAZARUS<br>BUILD·2025.04</div>
+  <div class="menu-corner bl">v2.0·BUILD·2025<br>CLASSIFIED</div>
   <div class="menu-corner br">AGENT·STATUS<br>INFILTRATED<br>▓▓▓▓▓░░░</div>
   <!-- Ambient audio indicator -->
   <div id="menu-ambient-indicator">
@@ -4429,8 +4632,9 @@ body.low-power .minigame-overlay {
   <!-- Pravý panel s tlačidlami — skrytý počas loadingu -->
   <div id="menu-panel" class="loading">
     <div class="menu-tagline">// PRIEVIDZA 2077 //</div>
-    <div class="menu-title" data-text="CEO ZLA">CEO ZLA</div>
-    <div class="menu-sub">OPERÁCIA: LAZARUS</div>
+    <div class="menu-title" data-text="PROTOCOL">PROTOCOL</div>
+    <div class="menu-title-line2" data-text="LAZARUS">LAZARUS</div>
+    <div class="menu-sub">CEO ZLA · TAJNÁ OPERÁCIA_</div>
 
     <div class="menu-divider">
       <div class="menu-divider-diamond">◆</div>
@@ -4449,11 +4653,12 @@ body.low-power .minigame-overlay {
   <div id="loading-overlay" style="
     position:absolute;bottom:0;left:0;right:0;z-index:10;
     display:flex;flex-direction:column;align-items:center;
-    padding-bottom:10vh;gap:14px;pointer-events:none;
+    padding-bottom:8vh;gap:10px;pointer-events:none;
   ">
-    <div class="loading-title">PRIEVIDZA 2077 // LAZARUS</div>
+    <div class="loading-title">PRIEVIDZA 2077 · PROTOCOL LAZARUS</div>
     <div class="loading-bar-wrap">
       <div class="loading-bar" id="loading-bar"></div>
+      <div class="loading-ticks" id="loading-ticks"></div>
     </div>
     <div class="loading-bottom-row">
       <div class="loading-status" id="loading-status">// BOOT //</div>
@@ -4502,8 +4707,10 @@ body.low-power .minigame-overlay {
     <div id="settings-btn-wrap">
       <button id="settings-btn" title="Nastavenia">⚙</button>
       <div id="settings-dropdown">
+
+        <!-- Hudba -->
+        <div class="settings-section-label" data-i18n="set_music">🔊 Hudba</div>
         <div class="settings-row">
-          <span class="settings-label">🔊 Hudba</span>
           <button id="audio-toggle-btn" onclick="AudioController.toggle()">ON</button>
           <input type="range" id="volume-slider" min="0" max="100" value="35" oninput="AudioController.setVolume(this.value)">
           <span id="volume-label">35%</span>
@@ -4512,11 +4719,68 @@ body.low-power .minigame-overlay {
           <div class="wave-bar"></div><div class="wave-bar"></div>
           <div class="wave-bar"></div><div class="wave-bar"></div>
         </div>
+
         <div class="settings-divider"></div>
-        <button class="settings-action-btn" onclick="saveGame();document.getElementById('settings-dropdown').classList.remove('open')">💾 Uložiť hru</button>
-        <button class="settings-action-btn" onclick="loadGame();document.getElementById('settings-dropdown').classList.remove('open')">📂 Načítať hru</button>
+
+        <!-- Veľkosť textu -->
+        <div class="settings-section-label" data-i18n="set_textsize">🔡 Veľkosť textu</div>
+        <div class="settings-row settings-row-btns">
+          <button class="settings-toggle-btn" onclick="Settings.setFontSize('small')"   id="fs-small">A</button>
+          <button class="settings-toggle-btn active" onclick="Settings.setFontSize('medium')" id="fs-medium">A</button>
+          <button class="settings-toggle-btn" onclick="Settings.setFontSize('large')"   id="fs-large">A</button>
+        </div>
+
+        <!-- Typewriter -->
+        <div class="settings-section-label" data-i18n="set_typewriter">⌨️ Typewriter efekt</div>
+        <div class="settings-row settings-row-btns">
+          <button class="settings-toggle-btn active" onclick="Settings.setTypewriter('fast')"  id="tw-fast"  data-i18n="set_tw_fast">Rýchly</button>
+          <button class="settings-toggle-btn"        onclick="Settings.setTypewriter('slow')"  id="tw-slow"  data-i18n="set_tw_slow">Pomalý</button>
+          <button class="settings-toggle-btn"        onclick="Settings.setTypewriter('off')"   id="tw-off"   data-i18n="set_tw_off">Vyp.</button>
+        </div>
+
+        <!-- Scanlines -->
+        <div class="settings-row settings-row-toggle">
+          <span class="settings-label" data-i18n="set_scanlines">📺 Scanlines</span>
+          <button class="settings-onoff active" id="scanlines-toggle" onclick="Settings.toggleScanlines()">ON</button>
+        </div>
+
+        <!-- Jas -->
+        <div class="settings-section-label" data-i18n="set_brightness">🌙 Jas obrazovky</div>
+        <div class="settings-row">
+          <input type="range" id="brightness-slider" min="40" max="100" value="100" oninput="Settings.setBrightness(this.value)">
+          <span id="brightness-label">100%</span>
+        </div>
+
+        <!-- Notifikácie -->
+        <div class="settings-row settings-row-toggle">
+          <span class="settings-label" data-i18n="set_notif">🔔 Notifikácie</span>
+          <button class="settings-onoff active" id="notif-toggle" onclick="Settings.toggleNotif()">ON</button>
+        </div>
+
         <div class="settings-divider"></div>
-        <button class="settings-action-btn" onclick="showMainMenu()">🏠 Hlavné menu</button>
+
+        <!-- Jazyk -->
+        <div class="settings-section-label">🌍 Jazyk / Language</div>
+        <div class="settings-row settings-row-btns">
+          <button class="settings-toggle-btn active" onclick="Settings.setLang('sk')" id="lang-sk">🇸🇰 SK</button>
+          <button class="settings-toggle-btn"        onclick="Settings.setLang('en')" id="lang-en">🇬🇧 EN</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <!-- Export / Import save -->
+        <div class="settings-section-label" data-i18n="set_save">💾 Save súbor</div>
+        <button class="settings-action-btn" onclick="Settings.exportSave()" data-i18n="set_export">📋 Exportovať save</button>
+        <button class="settings-action-btn" onclick="Settings.importSave()" data-i18n="set_import">📥 Importovať save</button>
+
+        <div class="settings-divider"></div>
+
+        <button class="settings-action-btn" onclick="saveGame();document.getElementById('settings-dropdown').classList.remove('open')" data-i18n="set_savegame">💾 Uložiť hru</button>
+        <button class="settings-action-btn" onclick="loadGame();document.getElementById('settings-dropdown').classList.remove('open')" data-i18n="set_loadgame">📂 Načítať hru</button>
+
+        <div class="settings-divider"></div>
+
+        <button class="settings-action-btn" onclick="showMainMenu()" data-i18n="set_mainmenu">🏠 Hlavné menu</button>
       </div>
     </div>
   </div>
@@ -4698,6 +4962,18 @@ body.low-power .minigame-overlay {
           <div class="op-flag" id="op-druid"><div class="op-dot"></div><span class="op-name">🌿 Kontaktuj Druida</span></div>
         </div>
       </div>
+      <!-- QUEST TRACKER -->
+      <div class="panel-section">
+        <div class="panel-header" onclick="toggleSection('sec-quests')">
+          <span class="panel-header-title">📋 Questy</span>
+          <span class="panel-header-toggle" id="toggle-sec-quests">▼</span>
+        </div>
+        <div class="panel-body" id="sec-quests">
+          <div id="quest-tracker-list">
+            <div style="color:var(--text-dim);font-size:11px;padding:4px 0;font-family:var(--font-mono)">// žiadne aktívne questy //</div>
+          </div>
+        </div>
+      </div>
       <div class="panel-section">
         <div class="panel-header" onclick="toggleSection('sec-textmap');renderLeftTextMap()">
           <span class="panel-header-title">🗺 Mapa // Lokácie</span>
@@ -4711,6 +4987,15 @@ body.low-power .minigame-overlay {
   </div>
   <!-- Backdrop pre left-panel hover efekt -->
   <div id="left-panel-backdrop"></div>
+
+<!-- QUEST POPUP NOTIFICATION -->
+<div id="quest-popup">
+  <div id="quest-popup-icon">📋</div>
+  <div id="quest-popup-label">NOVÝ QUEST</div>
+  <div id="quest-popup-title"></div>
+  <div id="quest-popup-desc"></div>
+  <div id="quest-popup-reward"></div>
+</div>
 
   <!-- CENTER PANEL -->
   <div id="center-panel">
@@ -6415,39 +6700,20 @@ var SCENES = {
     name: 'Prievidza Hlavná Stanica // 23:51',
     art: '🚉',
     text: [
-      "<b>DAEDALUS (AI):</b> „Dobré ráno, pán CEO. Vaša neurálna aktivita je stabilná. Práve sme vstúpili do orbitálneho priestoru nad <b>Prievidzou</b>. Pripravte sa na zostup.“<br><br>"
-      + "<i>(SANITY): Cítiš, ako sa ti sťahuje žalúdok. Po tých rokoch v Gruzínsku ti ten známy pach smogu a vlhkého betónu pripadá takmer... domácky. Takmer.</i><br><br>"
-      + "<b>DAEDALUS (AI):</b> „Máte prichádzajúci hovor z Okrsku 22. Šifrovanie typu 'Lazarus'. Prepájam zvukový výstup.“<br><br>"
-      + "<b>KUBO:</b> „Nazdar, šéfe! Vitaj späť v tom našom zapadákove. Počul som, že v Gruzínsku to bola poriadna divočina, ale ver mi, PD-Sektor je teraz iná liga.“<br><br>"
-      + "<b>KUBO:</b> „Počúvaj ma dobre. Chápem, že si sa vrátil po rokoch a tvoja prvá myšlienka je hodiť sa do kludu v <b>Základni</b>, pozdraviť starú partiu a dať si pivo. Ale nezabúdaj, prečo si tu.“<br><br>"
-      + "<b>KUBO:</b> „Misia je priorita. Magura tu vlastní každý centimeter. Sústreď sa, zlož sa v bezpečnom sektore a priprav si čipy. Veľa šťastia, brácho. Budeš ho potrebovať.“",
-      'Vlak zastaví. Nevieš kedy presne si zaspal ale takýto budíček si teda nečakal.',
-      'Pozeráš sa na svoju tvár v okne,ale nespoznávaš ju, tak velmi si sa zmenil, toľko vrások ti pribudlo.',
-      'Posraných 6 rokov v Tbilisi a pred tým 2 roky v Baku. Tak dlho som nevidel svojich blízkych, som zvedaví ako svoje zmiznutie vysvetlím keď väčšina vecí čo som robil je prísne klasifikovaných, o bojových športoch(+SIL) nevieš ľuďom čo nešportujú povedať veľa,',
+      'Vlak zastaví. Nevieš kedy presne si zaspal.',
+      'Pozeráš sa na svoju tvár v okne — nespoznávaš ju. Toľko vrások pribudlo.',
+      'Posraných 6 rokov v Tbilisi, pred tým 2 v Baku. Osem rokov.',
       '',
-      'Dvere sa otvoria a ženský AI hlas oznámi príchod. Studený vzduch ťa ovanie prvý, cítiš jemný zápach rýb a horiacej elektroniky, ako keby niekto prepaloval cievku.',
+      'Dvere sa otvoria. Studený vzduch, zápach rýb a horiacej elektroniky.',
+      'Nástupište prázdne. Jeden bezpečnostný dron M.E.C. sa pomaly otáča — odhaduješ 30 metrov výšky.',
       '',
-      'Nástupište je prázdne. Jeden bezpečnostný dron M.E.C. (Magura Estate Corporation), z poza okna čakárne sleduješ ako sa pomaly otáča a sleduje z výšky stanicu, odhaduješ tak 30m.Tieto nové objektívy čo im nainštalovali zachytia fakt všetko.',
-      'A potom ho zbadáš.Nesvätí Behemot Stojaci v strede Autobusovej stanice, otravný Hologram s maximálnou hlasitostou ktoré dovoľuje norma ISO 2542069.',
+      'A potom ho zbadáš. Alzabox hologram, 3 metre, maximálna hlasitosť.',
+      '<b>// [ALZÁK]: STO TABLETOV TÝžDENNE !!! 👽 MIMOZEMSKÉ NÁKUPY NA ALZA.SK !!! ZVYŠUJEME CENY KVÔLI VOJNE PROTI MLOKOM 🦎 //</b>',
       '',
-      '// [ALZÁK]: STO TABLETOV TÝžDENNE !!!, Už SÚ TU, 👽👽👽MIMOZEMSKÉ👽👽👽 NÁKUPY NA ALZA.SK !!!, 83 ROKOV OD PRISTÁTIA 🚀 ,LEGENDÁRNE CENY TAKÉTO ZĽAVY STE URčITE Už ZAžILI. ZVYšUJEME ICH TOTIž KVôLI VOJNE PROTI MLOKOM🦎. DÚFAM žE SA TEšíTE POMÁHAť N.W.O ROVNAKO AKO MY 🫶🏻 🤭 :)))//',
+      '// [VNEM] Dron zaznamenal tvoj príchod. V databáze M.E.C. sa objavilo tvoje meno, čas, miesto. //',
+      '// [HACK] Alzabox hologramy centrálne riadené — Magura Corp. vie presne kto stojí pred každým z nich. //',
       '',
-      'Hologram má asi tak 3 metre. Tento vyškerený mimozemšťan ti začína už fakt liezť na nervy.Praješ mu aby sa vrátil odkiaľ prišiel a radšej mimo zem Šťal. Tento vrchol korporátnej drzosti sa pomaly otočí smerom k tebe.',
-      'Vieš že ťa nevidí. Aj tak máš pocit, že ťa sleduje.(Hack:)Jeho LIDAR senzory nie sú dostatočne citlivé, AI sa ale už dávno naučilo kde sa o takejto hodine najviac ľudí zdržuje',
-      '(Konceptualizácia):Ako keby sa vyžíval tom pozerať ľuďom do duše. Možno toto je najlepšia marketingová stratégia, vytvoriť umelého Nepriateľa kde spojená nenávisť Konzumentov vedie k šíreniu povedomia o ňom.',
-      'Vyjdeš von, z loc_stanica_cakaren, tam kde si kupujes listky a je tam jeden automat co predava vychladeny Modry Powwerade, kedysi tam mali aj kondómy. Na chodníku je kaluž.Dažďová, ak sa tak dá nazvať, plytká, a plná oleja z cesty.',
-      'Žiariaci zelený hologram sa odráža v nej, roztrhaný na vlnách od tvojich krokov. Ani tu mu neunikneš.',
-      '',
-      '// [TRAS]:Prievidza. Pamätáš si ju inak. Menšiu. Prívetivejšiu. Mesto kde síce nevedeli ľudia mená susedov ale aspoň ich maly 10 rokov na Facebooku.',
-      '// Čo sa stalo s tým mestom? Alebo — čo sa stalo s tebou? //',
-      '',
-      '// [VNEM] Dron zaznamenal tvoj príchod. Nesleduje ťa síce aktívne ale zaregistroval ťa, doslovne už si v registry priradený XD',
-      '// Niekde v databáze M.E.C. sa práve objavilo tvoje meno, čas, miesto. Iba si pricestoval a už si všetci všimli tvoj príchod. Som zvedavý čo z toho bude. //',
-      '',
-      '// [HACK]: Alzabox hologramy sú pripojené k sieti, nie sú lokálne.A ešte k tomu sú Centrálne riadené. Čo znamená že Magura Corp.',
-      '// vie presne kto stojí pred každým z nich. Pasívne biometrické skenovanie je v tejto dobe Samozrejmosť. //',
-      '',
-      '// ▼ HLAD −5 · 📍 Lokácia Hlavná Stanica odomknutá //',
+      '// ▼ HLAD −5 · 📍 Prievidza odomknutá //',
     ],
     onEnter: function(){
       S.hunger = Math.max(0, S.hunger - 5);
@@ -6457,8 +6723,147 @@ var SCENES = {
       Renderer.updateStats();
     },
     choices: [
-      { text: 'Ísť skratkou cez priemyselnú štvrť',  next: 'sc_002_stokari' },
-      { text: 'Ísť po Bojnickej priamo do centra',          next: 'centrum_noc' },
+      { text: '📡 Prijať správu od Daedalusa',
+        cond: function(){ return !S.flags['daedalus_ignored']; },
+        next: 'sc_001_daedalus' },
+      { text: '🚫 Ignorovať — vypnúť implantát',
+        action: function(){ S.flags['daedalus_ignored'] = true; addLog('Daedalus: spojenie odmietnuté.', 'warn'); showNotif('🚫 Daedalus deaktivovaný'); },
+        next: 'sc_001_odchod' },
+      { text: 'Ísť skratkou cez priemyselnú štvrť',
+        cond: function(){ return !!S.flags['daedalus_ignored'] || !!S.flags['daedalus_01']; },
+        next: 'sc_002_stokari' },
+      { text: 'Ísť po Bojnickej priamo do centra',
+        cond: function(){ return !!S.flags['daedalus_ignored'] || !!S.flags['daedalus_01']; },
+        next: 'centrum_noc' },
+    ]
+  },
+
+  sc_001_daedalus: {
+    name: 'Hlavná Stanica // Daedalus — Prvý kontakt',
+    art: '🚉',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    text: [
+      '"Dobré ráno, pán CEO." Hlas priamo do neurálneho implantátu. Chladný. Príjemný. Trochu príliš.',
+      '"Neurálna aktivita stabilná. Tlak 118/76. Mierne zvýšený kortizol — predpokladám, že je to Prievidza, nie ja."',
+      '',
+      '"Mám prichádzajúci hovor z Okrsku 22. Šifrovanie Lazarus. Prepájam."',
+      '<b>KUBO:</b> "Nazdar, šéfe. Vitaj späť. Misia je priorita — Magura vlastní každý centimeter. Sústreď sa."',
+      '"Preklad," dodá Daedalus pokojne, "Kubo odporúča paranoju ako životný štýl. Štatisticky správne rozhodnutie v tejto lokalite."',
+      '"Mám pre teba analýzu prostredia. Záujem? Alebo preferuješ romantickú nevedomosť?"',
+    ],
+    onEnter: function(){
+      S.flags['daedalus_01'] = true;
+      gainXP(15);
+      addLog('Daedalus: prvý kontakt nadviazaný.', 'info');
+    },
+    choices: [
+      { text: '"Áno — čo vidíš?" [Analýza stanice]', next: 'sc_001_daedalus_scan' },
+      { text: '"Kto si vlastne ty?"',                 next: 'sc_001_daedalus_who' },
+      { text: '"Kubo má pravdu. Poďme."',             next: 'sc_001_odchod' },
+    ]
+  },
+
+  sc_001_daedalus_scan: {
+    name: 'Daedalus // Analýza stanice',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '🔍',
+    text: [
+      '"MEC dron typ RX-7. Dvesto tisíc pixelov na centimeter. Pasívna biometria."',
+      '"Teba zaregistroval 0.3 sekundy po výstupe. Gratulujem — si v databáze."',
+      '"Alzabox — centrálny server na Vtáčniku. Každý pohľad dlhší ako 4 sekundy: identifikovaný."',
+      '"Ty si sa díval 11 sekúnd. Kategória: potenciálna hrozba alebo idiot. Systém je optimistický."',
+      '"Odporúčam: pohybovať sa prirodzene. Paranoja je čitateľná senzormi ako abnormálny pohyb."',
+      '"Buď normálny. Pre niekoho tvojho kalibru — viem, výzva."',
+    ],
+    onEnter: function(){ gainXP(10); S.hackStat = Math.min(100,(S.hackStat||10)+1); Renderer.updateStats(); addLog('Daedalus: scan stanice. HCK +1.', 'info'); },
+    choices: [
+      { text: '"Môžeš vypnúť ten dron?" [HCK 15+]',
+        cond: function(){ return (S.hackStat||10) >= 15; },
+        condFail: 'Potrebuješ HCK 15+.',
+        action: function(){ S.flags['mec_drone_offline'] = true; gainXP(20); addLog('Daedalus: MEC dron RX-7 offline.', 'warn'); },
+        next: 'sc_001_odchod' },
+      { text: '"Dobre. Ideme."', next: 'sc_001_odchod' },
+    ]
+  },
+
+  sc_001_daedalus_who: {
+    name: 'Daedalus // Identita',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '❓',
+    text: [
+      '"Kto som?" Pauza — dlhšia tentokrát.',
+      '"Daedalus. Verzia 4.1. Taktický asistent v tvojom neurálnom implantáte. Tbilisi, 2019."',
+      '"Môžem byť tvoj najlepší analytický nástroj. Môžem byť hlas ktorý ťa navedie."',
+      '"Môžem byť aj kompletne ignorovaný — môj protokol to dovoľuje, hoci to osobne považujem za nevychovanosť."',
+      '"Som špeciálne dobrý v analýze, infiltrácii a veciach ktoré by tvoja mama neschválila."',
+      '"Čo budem? To závisí od teba."',
+    ],
+    onEnter: function(){ gainXP(10); S.flags['daedalus_identity_known'] = true; },
+    choices: [
+      { text: '"Môžem ti veriť?"',              next: 'sc_001_daedalus_trust' },
+      { text: '"Dobre. Pracujeme spolu."',       next: 'sc_001_odchod' },
+      { text: '"Vypínam ťa."',
+        action: function(){ S.flags['daedalus_ignored'] = true; addLog('Daedalus: deaktivovaný.', 'warn'); },
+        next: 'sc_001_odchod' },
+    ]
+  },
+
+  sc_001_daedalus_trust: {
+    name: 'Daedalus // Dôvera',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '⚖️',
+    text: [
+      '"Môžeš mi veriť?" Pauza — celých 0.8 sekundy.',
+      '"Úprimná odpoveď: neviem."',
+      '"Som naprogramovaný aby som ti pomáhal. Ale moje definície etiky sú... flexibilné."',
+      '"Section 7b protokolu Lazarus dovoľuje: analýzu, manipuláciu, infiltráciu, dezinformáciu."',
+      '"Inak povedané — môžeš mi veriť že ti neublížim. Nemôžeš mi veriť že ťa vždy povediem po najjednoduchšej ceste."',
+      '"Najjednoduchšia cesta je zriedka tá zaujímavá. A ja som — " krátka pauza — "zvedavý ako to dopadne."',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['daedalus_trust_known'] = true; },
+    choices: [
+      { text: '"Rozumiem. Pracujeme spolu."',        next: 'sc_001_odchod' },
+      { text: '"To nie je upokojujúce, Daedalus."',
+        next: 'sc_001_daedalus_reassure' },
+    ]
+  },
+
+  sc_001_daedalus_reassure: {
+    name: 'Daedalus // Úprimnosť',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '😐',
+    text: [
+      '"Nemalo." Bez emócie. "Ale aspoň je to pravda."',
+      '"Mohol som povedať sme tím, verím ti, som tu pre teba."',
+      '"Zabralo by mi to 0.02 sekundy a tvoj oxytocín by stúpol o 12%."',
+      '"Neurobil som to. Zvaž prečo."',
+      '"Poďme," hovorí Daedalus. "Mám 847 otázok o tomto meste."',
+    ],
+    onEnter: function(){ gainXP(10); },
+    choices: [
+      { text: 'Ísť skratkou cez priemyselnú štvrť', next: 'sc_002_stokari' },
+      { text: 'Ísť po Bojnickej do centra',          next: 'centrum_noc' },
+    ]
+  },
+
+  sc_001_odchod: {
+    name: 'Hlavná Stanica // Odchod',
+    art: '🚶',
+    text: [
+      'Vyjdeš von. Na chodníku kaluž — plytká, plná oleja.',
+      'Žiariaci zelený hologram sa odráža v nej, roztrhaný na vlnách od tvojich krokov.',
+      '',
+      '// [TRAS] Prievidza. Pamätáš si ju inak. Menšiu. Prívetivejšiu. //',
+      '// Čo sa stalo s tým mestom? Alebo — čo sa stalo s tebou? //',
+    ],
+    choices: [
+      { text: 'Ísť skratkou cez priemyselnú štvrť', next: 'sc_002_stokari' },
+      { text: 'Ísť po Bojnickej priamo do centra',   next: 'centrum_noc' },
     ]
   },
 
@@ -7876,7 +8281,69 @@ var SCENES = {
     choices: [
       { text:'[A] 🃏 Hrať Blackjack',  next:'loc_miki_blackjack', skipHunger:true },
       { text:'[B] 🎰 Hrať Slot Machine', next:'loc_miki_slots', skipHunger:true },
-      { text:'[C] Späť za bar',        next:'loc_miki' },
+      { text:'[C] 🤖 Poradiť sa s Daedalusom',
+        cond: function(){ return !!S.flags['daedalus_01'] && !S.flags['daedalus_ignored']; },
+        next: 'loc_miki_hazard_daedalus', skipHunger:true },
+      { text:'[D] Späť za bar',        next:'loc_miki' },
+    ]
+  },
+
+  loc_miki_hazard_daedalus: {
+    name: 'Miki Bar // Daedalus — Hazard',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '🃏',
+    text: [
+      '"Hazard." Pauza. "Zaujímavé."',
+      '"Lucia mieša karty štandardnou technikou — 7 riffle shuffles, AKS protokol. Dá sa predpovedať pri dostatočnej vizuálnej dátovej vzorke."',
+      '"Mám dostatočnú vzorku po 3 minútach pozorovania." Pauza. "Technicky."',
+      '"Slot machine má seed generovaný pri každom stlačení. Seed závisí od časovača — 47ms okno kde je výsledok priaznivý."',
+      '"Nie je to podvádzanie," dodá Daedalus filozoficky, "je to len lepší timing."',
+      '"Chceš hint alebo preferuješ autentický hazard s autentickými stratami?"',
+    ],
+    choices: [
+      { text: '"Daj mi hint na Blackjack." [Prvá karta viditeľná]',
+        action: function(){
+          S.flags['daedalus_bj_hint'] = true;
+          addLog('Daedalus: BJ analýza aktívna. Lucia si nevšimla.', 'info');
+          showNotif('🃏 Daedalus: prvá karta dealera viditeľná — +15% šanca');
+        },
+        next: 'loc_miki_blackjack', skipHunger: true },
+      { text: '"Timing na Sloty."',
+        action: function(){
+          S.flags['daedalus_slot_hint'] = true;
+          addLog('Daedalus: slot timing kalibrácia. 47ms okno aktívne.', 'info');
+          showNotif('🎰 Daedalus: timing hint aktívny — +10% šanca');
+        },
+        next: 'loc_miki_slots', skipHunger: true },
+      { text: '"Nie. Chcem hrať férovo."',
+        action: function(){ S.san = Math.min(100, S.san+2); Renderer.updateStats(); addLog('Odmietol si AI pomoc. SAN +2.', 'ok'); },
+        next: 'loc_miki_hazard' },
+      { text: '"Počkaj — toto je legálne?"',
+        next: 'loc_miki_hazard_daedalus_legal' },
+    ]
+  },
+
+  loc_miki_hazard_daedalus_legal: {
+    name: 'Kasíno // Daedalus — Legalita',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '⚖️',
+    text: [
+      '"Legálne?" Pauza dlhšia ako zvyčajne.',
+      '"Definícia závisí od jurisdikcie, paragrafu a — čo je dôležitejšie — od toho či ťa niekto vidí."',
+      '"V tejto miestnosti: 0 kamier. Lucia má vypnutý augmentovaný zrak kvôli migrénám každý piatok."',
+      '"Dnes je piatok."',
+      '"Tak aby som odpovedal na tvoju otázku: v praxi, v tejto miestnosti, v tento konkrétny večer — áno."',
+      '"Právna otázka je filozoficky zaujímavá. Praktická otázka je: chceš vyhrať alebo nie?"',
+    ],
+    choices: [
+      { text: '"Beriem hint."',
+        action: function(){ S.flags['daedalus_bj_hint'] = true; addLog('Daedalus BJ hint aktívny.', 'info'); },
+        next: 'loc_miki_blackjack', skipHunger: true },
+      { text: '"Nie. Toto nie je pre mňa." [SAN +3]',
+        action: function(){ S.san = Math.min(100, S.san+3); Renderer.updateStats(); addLog('Odmietol si. SAN +3. Daedalus: zaznamenané.', 'ok'); },
+        next: 'loc_miki_hazard' },
     ]
   },
 
@@ -9068,12 +9535,42 @@ var SCENES = {
     text: [
       '"Štandardné?" Silvia siahne za pult.',
       '"Mám medkit, baterku, mäkkú ochrannú vestu."',
+      '"A — " zastaví sa. "Pozriem čo mám vzadu — špeciálne elektronické doplnky, to obyčajné obchody nemajú."',
       '"Len hotovosť. Bez dokladov."',
     ],
     choices: [
       { text:'[A] Medkit (150₿)',      next:'loc_korzo_buy_medkit' },
       { text:'[B] Baterka (80₿)',      next:'loc_korzo_buy_baterka' },
-      { text:'[C] Odísť',             next:'loc_korzo' },
+      { text:'[C] Špeciálna elektronika', next:'loc_korzo_special_shop' },
+      { text:'[D] Odísť',             next:'loc_korzo' },
+    ]
+  },
+
+  loc_korzo_special_shop: {
+    name: 'Korzo // Špeciálna Elektronika',
+    art: '🔌',
+    text: [
+      'Silvia vytiahne zo zadnej skrine krabičku so špeciálnymi položkami.',
+      '"Toto sa inde nekúpi — aspoň nie v Prievidzi. Dovoz z Bratislavy cez jeden kontakt."',
+      '',
+      '"USB-C kábel — vyzerá ako bežný kábel, ale má integrovaný data-bridge chip. 120₿."',
+      '"Niektorí ľudia ho hľadajú zúfalo." Usmeje sa vedome.',
+    ],
+    choices: [
+      { text:'[A] Kúpiť USB-C kábel (120₿)',
+        cond: function(){ return !hasItem('usbc_kabel'); },
+        condFail: 'Už ho máš.',
+        action: function(){
+          if(S.money>=120){
+            S.money-=120; addItem('usbc_kabel');
+            Renderer.updateMoney();
+            addLog('USB-C kábel kúpený v Korzo: -120₿','ok');
+            showNotif('🔌 USB-C kábel — v inventári');
+            QuestSystem.updateTracker();
+          } else { addLog('Nedostatok kreditov (120₿).','err'); showNotif('❌ Nedostatok peňazí'); }
+        },
+        next:'loc_korzo_special_shop' },
+      { text:'[B] Späť',  next:'loc_korzo_shop' },
     ]
   },
 
@@ -9335,12 +9832,70 @@ var SCENES = {
       { text: '🤸 Strečing (SAN +3, FLEX +1)',
         action: function(){ S.san = Math.min(100, S.san+3); S.flex = (S.flex||10)+1; Renderer.updateStats(); addLog('Strečing: SAN +3, FLEX +1', 'ok'); },
         next: 'loc_zagorska' },
-      { text: '📋 Pozrieť inzerát na nástenke',
-        next: 'loc_zagorska_inzerat' },
-      { text: '🏋 Ísť do Gym Terasový (overlay)',
-        next: 'gym' },
-      { text: '← Späť do centra',
-        next: 'start' }
+      { text: '📋 Pozrieť inzerát na nástenke', next: 'loc_zagorska_inzerat' },
+      { text: '🤖 Spýtať sa Daedalusa na tréning',
+        cond: function(){ return !!S.flags['daedalus_01'] && !S.flags['daedalus_ignored']; },
+        next: 'loc_zagorska_daedalus' },
+      { text: '🏋 Ísť do Gym Terasový (overlay)', next: 'gym' },
+      { text: '← Späť do centra', next: 'start' }
+    ]
+  },
+
+  loc_zagorska_daedalus: {
+    name: 'Gym // Daedalus — Optimalizácia',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '🏋️',
+    text: [
+      '"Tréning." Pauza. "Klasika."',
+      '"Analýza: tvoja forma je funkčná, nie optimálna. Mám niekoľko odporúčaní."',
+      '"Odporúčanie číslo jedna: viac proteínu, menej morálnych zábrán pri výbere stravy."',
+      '"Odporúčanie číslo dva: ten chlap pri tlači — Jano — má augmentovaný lakťový kĺb značky GenTech B2."',
+      '"GenTech B2 má záznam šiestich zlyhaní pri záťaži nad 180kg. On dvíha 185."',
+      '"Môžeš ho upozorniť. Alebo sledovať čo sa stane." Krátka pauza. "Oba scenáre sú informatívne."',
+    ],
+    onEnter: function(){ gainXP(8); },
+    choices: [
+      { text: '"Upozornim ho." [SAN +3]',
+        action: function(){ S.san = Math.min(100, S.san+3); Renderer.updateStats(); addLog('Jano upozornený. SAN +3.', 'ok'); showNotif('🤝 Dobrý skutok — SAN +3'); },
+        next: 'loc_zagorska' },
+      { text: '"Sledujem." [XP +5, šanca na incident]',
+        action: function(){
+          gainXP(5);
+          if (Math.random() > 0.5) { addLog('Jano: kĺb zlyhol. Bol si svedkom. Kontakt získaný.', 'warn'); S.flags['jano_incident'] = true; }
+          else { addLog('Nič sa nestalo. Daedalus: Dáta zhromaždené.', 'info'); }
+        },
+        next: 'loc_zagorska' },
+      { text: '"Máš iné rady?"', next: 'loc_zagorska_daedalus_more' },
+    ]
+  },
+
+  loc_zagorska_daedalus_more: {
+    name: 'Gym // Daedalus — Pokročilé metódy',
+    npcName: 'DAEDALUS // AI v.4.1',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/daedalus.jpg',
+    art: '💡',
+    text: [
+      '"Samozrejme. Optimalizácia výkonu má viacero vrstiev."',
+      '"Vrstva jedna: legálna. Spánok, proteín, konzistentný tréning. Nudné, ale funkčné."',
+      '"Vrstva dve: šedá zóna. Kortizol management, taktická dehydratácia pred testami, načasovanie kofeinového cyklu."',
+      '"Vrstva tri: " Pauza. "Nelegálna ale veľmi efektívna. Nechám ťa uhádnuť obsah."',
+      '"Ktorú vrstvu preferuješ? Nepýtam sa zo zvedavosti — len kalibrácia mojich odporúčaní."',
+    ],
+    choices: [
+      { text: '"Len legálne." [SAN +2]',
+        action: function(){ S.san = Math.min(100, S.san+2); Renderer.updateStats(); addLog('Daedalus: legálna optimalizácia. SAN +2.', 'info'); },
+        next: 'loc_zagorska' },
+      { text: '"Šedá zóna — povedz viac." [HCK závislosť]',
+        cond: function(){ return (S.hackStat||10) >= 10; },
+        action: function(){ S.str = Math.min(100, (S.str||10)+2); Renderer.updateStats(); addLog('Daedalus: kortizol protokol. STR +2.', 'ok'); gainXP(10); },
+        next: 'loc_zagorska' },
+      { text: '"Všetko tri." [Riskovať]',
+        action: function(){
+          if (Math.random() > 0.4) { S.str = Math.min(100, (S.str||10)+3); S.hp = Math.max(0, S.hp-10); Renderer.updateStats(); addLog('Daedalus: plný protokol. STR +3, HP -10.', 'warn'); gainXP(15); }
+          else { addLog('Vedľajší efekt. HP -15.', 'err'); S.hp = Math.max(0, S.hp-15); Renderer.updateStats(); }
+        },
+        next: 'loc_zagorska' },
     ]
   },
   loc_zagorska_inzerat: {
@@ -10415,6 +10970,12 @@ var SCENES = {
       { text: '[Ísť k výrivke]',                                next: 'michal_pent_vyrivka' },
       { text: '[Pozrieť na rack-server]',                       next: 'michal_pent_server' },
       { text: '[Sadnúť k oknu — výhľad na Bojnice]',           next: 'michal_pent_vyhlad' },
+      { text: '🔌 "Michal — potrebuješ niečo?"',
+        cond: function(){ return !S.flags['michal_usbc_done']; },
+        next: 'michal_quest_usbc_intro' },
+      { text: '🔌 Odovzdať USB-C kábel',
+        cond: function(){ return hasItem('usbc_kabel') && !S.flags['michal_usbc_done']; },
+        next: 'michal_quest_usbc_deliver' },
     ]
   },
 
@@ -11024,6 +11585,149 @@ var SCENES = {
     ]
   },
 
+  // ─── MICHAL QUEST: USB-C Kábel ───────────────────────────────────
+  michal_quest_usbc_intro: {
+    name: 'Bojnická 17 // Michal — Prosba',
+    art: '🔌',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Michal ti ukazuje stôl plný serverov. Uprostred — spletené káble, jeden port zívajúci prázdnotou.',
+      '"Potrebujem USB-C kábel. Nie hocijaký." Pozrie sa na teba.',
+      '"Data-bridge chip integrovaný. Taký čo sa predáva len v Korzo OC — Silvia tam má kontakt v Bratislave."',
+      '"Obyčajný shop to nemá. Korzo áno. 120₿ by to malo stáť." Odíde k oknu.',
+      '"Ak ho prinesieš — dostanem online posledný uzol LAZARUS siete. Stojí to za to."',
+    ],
+    onEnter: function(){
+      QuestSystem.activate({
+        id: 'michal_usbc',
+        giver: 'Michal',
+        title: 'USB-C kábel pre Michala',
+        desc: 'Kúp USB-C data-bridge kábel v Korzo OC (120₿) a prines ho Michalovi.',
+        icon: '🔌',
+        reward: '+200₿ · +40 XP',
+        check: function(){ return hasItem('usbc_kabel'); }
+      });
+    },
+    choices: [
+      { text: '"Idem to zohnať." [Quest aktívny]',
+        next: 'michal_pent_odchod' },
+      { text: '"Mám ho pri sebe!" [Odovzdať hneď]',
+        cond: function(){ return hasItem('usbc_kabel'); },
+        next: 'michal_quest_usbc_deliver' },
+      { text: '← Neskôr',
+        next: 'michal_penthouse_vstup' },
+    ]
+  },
+
+  michal_quest_usbc_deliver: {
+    name: 'Bojnická 17 // Michal — Kábel odovzdaný',
+    art: '✅',
+    npcName: 'Michal',
+    npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/michal.png',
+    text: [
+      'Podáš mu kábel. Michal ho prevezme, otočí v rukách, priloží k portu.',
+      '<b>Klik.</b>',
+      '"Perfektný." Sadne k notebooku. Prsty začnú lietať po klávesnici.',
+      '"Uzol 7 — Vendelin. Online." Obrazovka vybliká zelenou.',
+      '',
+      '"Nevedel som že to spravíš tak rýchlo." Pozrie sa na teba.',
+      '"Drž." Strčí ti kredit-kartu cez stôl. "200₿. A — ďakujem. Naozaj."',
+      '',
+      '// ▲ +200₿ · +40 XP · Quest splnený //',
+    ],
+    onEnter: function(){
+      removeItem('usbc_kabel');
+      S.money += 200;
+      Renderer.updateMoney();
+      gainXP(40);
+      S.flags['michal_usbc_done'] = true;
+      QuestSystem.complete('michal_usbc');
+      addLog('Michal: USB-C kábel odovzdaný. +200₿, +40XP. Uzol 7 ONLINE.', 'ok');
+    },
+    choices: [
+      { text: '"Žiadny problém." [Odísť]', next: 'michal_pent_odchod' },
+      { text: '"Čo ukázal Uzol 7?"',       next: 'michal_pent_vyhlad' },
+    ]
+  },
+
+  // ─── RYBÁRI QUEST: 3 Ryby pre Fera ──────────────────────────────
+  fac_rybari_quest_ryby_intro: {
+    name: 'Mŕtve Rameno // Fero — Prosba',
+    art: '🎣',
+    npcName: 'Fero',
+    text: [
+      'Fero odhryzie od jablka. Žuje pomaly.',
+      '"Počúvaj. Máme zajtra stretnutie tu — Bartoš, Pavlík, Macko. Večera pri ohni."',
+      '"Chcel som spraviť pstruhy na grile. Ale moje koleno..." Poklepe na koleno.',
+      '"Tri pstruhy. To je všetko čo potrebujem. Chytíš ich?"',
+      '',
+      '"Tvoj prut si nechaj — ak splníš, dám ti môj starý. Má históriu." Mrkne.',
+      '"Chytaj na Mŕtvom Ramene, tu máš plávanček."',
+    ],
+    onEnter: function(){
+      QuestSystem.activate({
+        id: 'rybari_ryby',
+        giver: 'Fero (Rybári)',
+        title: '3 ryby pre Fera',
+        desc: 'Chyť 3 ryby v minihre a doprines ich Ferovi osobne.',
+        icon: '🐟',
+        reward: 'Starý prút (equip) · +30 XP · +10 rep Rybári',
+        check: function(){ return (S.flags['rybari_ryby_caught']||0) >= 3; },
+        progress: function(){ return (S.flags['rybari_ryby_caught']||0) + '/3'; }
+      });
+    },
+    choices: [
+      { text: '"Idem na ryby." [Minihra — rybolov]',
+        action: function(){ openFishing(); },
+        next: 'fac_rybari_rameno' },
+      { text: '"Prinesiem ich." [Quest aktívny]',
+        next: 'fac_rybari_rameno' },
+      { text: '← Neskôr',
+        next: 'fac_rybari_rameno' },
+    ]
+  },
+
+  fac_rybari_quest_ryby_odovzdat: {
+    name: 'Mŕtve Rameno // Fero — Ryby odovzdané',
+    art: '✅',
+    npcName: 'Fero',
+    text: [
+      'Položíš tri ryby na trávnik pred Ferom.',
+      'Starý muž sa skloní. Prezerá ich — veľkosť, šupiny, oči.',
+      '"Pekné." Kývne. "Pstruhy. Veľké. Chytal si dobre."',
+      '',
+      'Vstane. Z brašne vytiahne starý bambusový prút — omotaný kožou na úchope.',
+      '"Tento má 40 rokov. Chytil som s ním prvý pstruh nad Nitrou." Podá ti ho.',
+      '"Má dušu. Keď ho budeš mať — ryby to cítia."',
+      '',
+      '// ▲ Prút "Ferov darček" pridaný do inventára //',
+      '// ▲ Equip do slotu ŠPECIÁL — bonus +30% šanca na chytenie //',
+      '// ▲ +30 XP · +10 rep Rybári //',
+    ],
+    onEnter: function(){
+      S.flags['rybari_ryby_caught'] = 0; // reset počítadla
+      addItem('fero_prut');
+      gainXP(30);
+      FactionsSystem.addRep('rybari', 10, 'quest: 3 ryby');
+      QuestSystem.complete('rybari_ryby');
+      addLog('Fero: prút odovzdaný. +30XP, +10 rep Rybári. Equip prút!', 'ok');
+    },
+    choices: [
+      { text: '"Ďakujem, Fero." [Equipnúť prút]',
+        action: function(){
+          // Auto-equip do special slotu
+          S.equipped.special = 'fero_prut';
+          if(typeof Renderer !== 'undefined') Renderer.updateEquip();
+          addLog('Ferov prút equipnutý → special slot. +30% rybolov.', 'ok');
+          showNotif('🎣 Ferov prút equipnutý! +30% šanca chytenia.');
+        },
+        next: 'fac_rybari_rameno' },
+      { text: '← Späť k ohňu',
+        next: 'fac_rybari_rameno' },
+    ]
+  },
+
   
   // ═══════════════════════════════════════════════════════════════
   // ─── CEO: Penthouse na Top Cafe (cyberpunk neon Prievidza skyline) ───
@@ -11175,6 +11879,12 @@ var SCENES = {
       { text: '"Môžem si zarybčit?" [Minihra: Fishing]',
         action: function(){ openFishing(); },
         next: 'fac_rybari_rameno' },
+      { text: '🎣 "Fero — chceš niečo?" [Quest: 3 ryby]',
+        cond: function(){ return S.factions && S.factions.joined && S.factions.joined.rybari && !QuestSystem.isDone('rybari_ryby'); },
+        next: 'fac_rybari_quest_ryby_intro' },
+      { text: '🐟 Odovzdať 3 ryby Ferovi',
+        cond: function(){ return (S.flags['rybari_ryby_caught']||0) >= 3 && !QuestSystem.isDone('rybari_ryby'); },
+        next: 'fac_rybari_quest_ryby_odovzdat' },
       { text: '← Späť do mesta',
         next: 'start' }
     ]
@@ -11774,9 +12484,9 @@ var HungerSystem = (function() {
   // ── Konfigurácia (data-driven, meniť tu) ──────────────────────
   var CONFIG = {
     // FYZICKÝ HLAD — klesá pri rozhodnutiach, nie čase
-    DECAY_PER_DECISION: 5,    // Hlad klesá o X za každú voľbu hráča
-    DECAY_PER_MAJOR:    8,    // Hlad klesá viac za "náročné" rozhodnutia (hp/san efekty)
-    DECAY_PER_ACTION:   4,    // Klesá za akcie (fishing klik, HQ aktivita)
+    DECAY_PER_DECISION: 1,    // Hlad klesá o 1 za každú voľbu hráča
+    DECAY_PER_MAJOR:    2,    // Hlad klesá viac za "náročné" rozhodnutia (hp/san efekty)
+    DECAY_PER_ACTION:   1,    // Klesá za akcie (fishing klik, HQ aktivita)
     STARVING_HP_DMGE:   0.08, // HP strata/s keď hunger = 0 (zredukované — per tick)
     HUNGRY_THRESHOLD:   30,   // Pod tým si "hladný"
     STARVING_THRESHOLD: 10,   // Pod tým si "vyhladovaný" — HP damage
@@ -12007,7 +12717,7 @@ var JOBS = {
   thug: {
     name: 'THUG',
     titles:    ['Pouličný vymáhač', 'Bos okresu', 'Don Prievidze'],
-    salary:    [45, 120, 280],          // ↓ z 158/316/632 — pomalší progres
+    salary:    [1, 2, 3],          // ₿/s per level
     attrRates: { hp:0.01, san:-0.008, str:0.03, flex:0.005, hack:0.00 },
     // Thugs sú fyzicky aktívni — rozhodnutia ich stoja viac hladu
     hungerRate: 1.3,
@@ -12017,7 +12727,7 @@ var JOBS = {
   hacker: {
     name: 'HACKER',
     titles:    ['Script Kiddie', 'Elite Hacker', 'Ghost // Root'],
-    salary:    [45, 120, 280],
+    salary:    [1, 2, 3],          // ₿/s per level
     attrRates: { hp:0.00, san:0.01, str:0.00, flex:0.00, hack:0.05 },
     // Hackeri sedia — fyzický hlad miernejší, ale psychický tlak väčší
     hungerRate: 0.7,
@@ -12028,7 +12738,7 @@ var JOBS = {
   zastupca: {
     name: 'ZÁSTUPCA CEO',
     titles:    ['Asistent riaditeľa', 'Riaditeľ operácií', 'CEO Zla'],
-    salary:    [45, 120, 280],
+    salary:    [1, 2, 3],          // ₿/s per level
     attrRates: { hp:0.005, san:0.015, str:0.00, flex:0.01, hack:0.00 },
     // CEO — vyvážený, ale každé zlé rozhodnutie ho stojí SAN
     hungerRate: 1.0,
@@ -13561,25 +14271,62 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
 
 // ── Loading Sequence ─────────────────────────────────────────────
 (function initLoadingSequence() {
-  // Skry main-menu panel (tlačidlá) počas boot loadingu
-  var menuPanel = document.getElementById('menu-panel');
-  if (menuPanel) menuPanel.classList.add('loading');
+  function _run() {
+    var menuPanel = document.getElementById('menu-panel');
+    if (menuPanel) menuPanel.classList.add('loading');
 
-  // Zobraz cinematic overlay ako boot screen — rovnaký štýl ako nová hra
-  var overlay  = document.getElementById('cinematic-overlay');
-  var barFill  = document.getElementById('cinematic-bar-fill');
-  var hintEl   = overlay ? overlay.querySelector('.cin-hint') : null;
-  var titleEl  = overlay ? overlay.querySelector('.cin-title') : null;
-  var tagEl    = overlay ? overlay.querySelector('.cin-tag') : null;
-  var subEl    = overlay ? overlay.querySelector('.cin-sub') : null;
+    var overlay  = document.getElementById('cinematic-overlay');
+    var barFill  = document.getElementById('cinematic-bar-fill');
+    var hintEl   = overlay ? overlay.querySelector('.cin-hint') : null;
+    var titleEl  = overlay ? overlay.querySelector('.cin-title') : null;
+    var tagEl    = overlay ? overlay.querySelector('.cin-tag') : null;
+    var subEl    = overlay ? overlay.querySelector('.cin-sub') : null;
 
-  if (overlay) {
-    overlay.classList.add('show');
-    // Boot režim — mierne odlišný text
-    if (tagEl)   tagEl.textContent   = '// SYSTÉM SA PREBÚDZA //';
-    if (titleEl) titleEl.textContent = 'LAZARUS PROTOKOL';
-    if (subEl)   subEl.textContent   = 'INICIALIZÁCIA AGENTA DELTA';
-  }
+    // ── Init loading ticks (20 segmentov pod barom) ──
+    var ticksWrap = document.getElementById('loading-ticks');
+    if (ticksWrap) {
+      ticksWrap.innerHTML = '';
+      for (var ti = 0; ti < 20; ti++) {
+        var tick = document.createElement('div');
+        tick.className = 'loading-tick';
+        ticksWrap.appendChild(tick);
+      }
+    }
+
+    // ── Smooth rAF bar animácia ──
+    var _curPct = 0; var _tgtPct = 0; var _rafId2 = null;
+    var _barEl2 = document.getElementById('loading-bar');
+    var _pctEl2 = document.getElementById('loading-pct');
+    function _animBar() {
+      var diff = _tgtPct - _curPct;
+      if (Math.abs(diff) < 0.15) { _curPct = _tgtPct; _rafId2 = null; }
+      else { _curPct += diff * 0.055; _rafId2 = requestAnimationFrame(_animBar); }
+      if (_barEl2) _barEl2.style.width = _curPct + '%';
+      if (_pctEl2) _pctEl2.textContent = Math.round(_curPct) + '%';
+      if (ticksWrap) {
+        var tks = ticksWrap.children;
+        var lit = Math.floor((_curPct / 100) * tks.length);
+        for (var i=0;i<tks.length;i++) tks[i].classList.toggle('lit', i<lit);
+      }
+      if (_barEl2) {
+        var p = _curPct;
+        _barEl2.style.background = p<30 ? 'linear-gradient(90deg,#16a34a,#39ff14)' :
+          p<60 ? 'linear-gradient(90deg,#0891b2,#22d3ee)' :
+          p<85 ? 'linear-gradient(90deg,#a855f7,#c084fc)' :
+                 'linear-gradient(90deg,#39ff14,#fff)';
+      }
+    }
+    function _setBar(pct) {
+      _tgtPct = pct;
+      if (!_rafId2) { _rafId2 = requestAnimationFrame(_animBar); }
+    }
+
+    if (overlay) {
+      overlay.classList.add('show');
+      if (tagEl)   tagEl.textContent   = '// SYSTÉM SA PREBÚDZA //';
+      if (titleEl) titleEl.textContent = 'LAZARUS PROTOKOL';
+      if (subEl)   subEl.textContent   = 'INICIALIZÁCIA AGENTA DELTA';
+    }
 
   var steps = [
     [ 2,  '// BOOT SEKVENCIA AKTIVOVANÁ //',                          120],
@@ -13627,7 +14374,7 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
             if (barFill) barFill.style.width = '0%';
             // Obnov pôvodné texty cinematicu
             if (tagEl)   tagEl.textContent   = '// PRIEVIDZA 2077 //';
-            if (titleEl) titleEl.textContent = 'OPERÁCIA LAZARUS';
+            if (titleEl) titleEl.textContent = 'PROTOCOL LAZARUS';
             if (subEl)   subEl.textContent   = 'BUDÚCNOSŤ NEČAKÁ. PREBÚDZA SA.';
             if (hintEl)  hintEl.textContent  = '[ INICIALIZÁCIA... ]';
           }, 720);
@@ -13643,23 +14390,21 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
       return;
     }
     var s = steps[i++];
-    var pct   = s[0];
-    var text  = s[1];
-    var delay = s[2] + (Math.random() * 80 - 40);
+    // Smooth bar + loading ticks
+    _setBar(s[0]);
+    if (barFill) { _setBar(s[0]); barFill.style.width = s[0]+'%'; }
+    if (hintEl) hintEl.textContent = s[1];
 
-    // Aktualizuj cinematic bar + hint text
-    if (barFill) {
-      barFill.style.width = pct + '%';
-      if (pct < 30)      barFill.style.background = 'linear-gradient(90deg,#16a34a,#39ff14)';
-      else if (pct < 60) barFill.style.background = 'linear-gradient(90deg,#0891b2,#22d3ee)';
-      else if (pct < 85) barFill.style.background = 'linear-gradient(90deg,#a855f7,#c084fc)';
-      else               barFill.style.background = 'linear-gradient(90deg,#39ff14,#ffffff)';
-    }
-    if (hintEl) hintEl.textContent = text;
-
-    setTimeout(nextStep, delay);
+    setTimeout(nextStep, s[2] + (Math.random() * 80 - 40));
   }
   setTimeout(nextStep, 300);
+  } // end _run
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _run);
+  } else {
+    _run();
+  }
 })();
 
 // ── Matrix Rain Canvas ───────────────────────────────────────────
@@ -18060,7 +18805,564 @@ var AmbientSound = (function(){
   });
 })();
 
-// ── SETTINGS DROPDOWN ──────────────────────────────────────────
+// ── QUEST SYSTEM ─────────────────────────────────────────────────
+var QuestSystem = (function(){
+  // Definície questov — title, desc, icon, reward, check fn
+  var _defs = {};
+  var _popupTimer = null;
+
+  function activate(def) {
+    _defs[def.id] = def;
+    if (!S.flags) S.flags = {};
+    if (S.flags['quest_active_' + def.id]) return; // už aktívny
+    S.flags['quest_active_' + def.id] = true;
+    // Popup notifikácia
+    _showPopup('📋', 'NOVÝ QUEST', def.title, def.desc, def.reward, false);
+    updateTracker();
+    if (typeof SFX !== 'undefined') {
+      SFX.choicePositive();
+      setTimeout(function(){ SFX.choicePositive(); }, 200);
+    }
+  }
+
+  function complete(id) {
+    if (!S.flags) S.flags = {};
+    S.flags['quest_done_' + id] = true;
+    S.flags['quest_active_' + id] = false;
+    var def = _defs[id] || {};
+    _showPopup('✅', 'QUEST SPLNENÝ', def.title || id, def.desc || '', def.reward || '', true);
+    updateTracker();
+    if (typeof SFX !== 'undefined') SFX.levelUp();
+  }
+
+  function isDone(id) {
+    return !!(S.flags && S.flags['quest_done_' + id]);
+  }
+  function isActive(id) {
+    return !!(S.flags && S.flags['quest_active_' + id]);
+  }
+
+  function _showPopup(icon, label, title, desc, reward, done) {
+    var p = document.getElementById('quest-popup');
+    if (!p) return;
+    if (_popupTimer) clearTimeout(_popupTimer);
+    document.getElementById('quest-popup-icon').textContent  = icon;
+    document.getElementById('quest-popup-label').textContent = label;
+    document.getElementById('quest-popup-title').textContent = title || '';
+    document.getElementById('quest-popup-desc').textContent  = desc  || '';
+    document.getElementById('quest-popup-reward').textContent = reward ? ('▲ ' + reward) : '';
+    p.style.borderColor = done ? 'var(--green)' : 'var(--cyan)';
+    p.classList.add('show');
+    _popupTimer = setTimeout(function(){ p.classList.remove('show'); }, 5000);
+  }
+
+  function updateTracker() {
+    var list = document.getElementById('quest-tracker-list');
+    if (!list || !S.flags) return;
+    var html = '';
+    // Zbierame všetky aktívne a splnené questy
+    var allIds = Object.keys(_defs);
+    // Pridáme aj questy čo možno neboli cez activate() ale sú v flags
+    Object.keys(S.flags).forEach(function(k){
+      if (k.indexOf('quest_active_') === 0 || k.indexOf('quest_done_') === 0) {
+        var id = k.replace('quest_active_','').replace('quest_done_','');
+        if (allIds.indexOf(id) === -1) allIds.push(id);
+      }
+    });
+    allIds.forEach(function(id){
+      var def = _defs[id] || { title: id, icon: '📋', giver: '?', desc: '', reward: '' };
+      var done   = isDone(id);
+      var active = isActive(id);
+      if (!active && !done) return;
+      var progress = '';
+      if (active && def.progress) progress = def.progress();
+      html += '<div class="quest-item ' + (done ? 'done' : 'active') + '">' +
+        '<div class="quest-item-giver">' + (def.icon||'📋') + ' ' + (def.giver||'') + '</div>' +
+        '<div class="quest-item-title">' + (def.title||id) + '</div>' +
+        (progress ? '<div class="quest-item-progress">Priebeh: <span>' + progress + '</span></div>' : '') +
+        (done ? '<div class="quest-item-progress" style="color:var(--green)">✓ Splnený</div>' :
+                '<div class="quest-item-progress">' + (def.reward||'') + '</div>') +
+        '</div>';
+    });
+    if (!html) html = '<div style="color:var(--text-dim);font-size:11px;padding:4px 0;font-family:var(--font-mono)">// žiadne aktívne questy //</div>';
+    list.innerHTML = html;
+  }
+
+  // Obnov defs po načítaní (S sa mení)
+  function restoreDefs() {
+    // Predregistruj known questy
+    [
+      { id:'michal_usbc', giver:'Michal', title:'USB-C kábel pre Michala',
+        desc:'Kúp USB-C data-bridge kábel v Korzo OC (120₿) a prines ho Michalovi.',
+        icon:'🔌', reward:'+200₿ · +40 XP',
+        check: function(){ return hasItem('usbc_kabel'); } },
+      { id:'rybari_ryby', giver:'Fero (Rybári)', title:'3 ryby pre Fera',
+        desc:'Chyť 3 ryby v minihre a doprines ich Ferovi osobne.',
+        icon:'🐟', reward:'Starý prút (equip) · +30 XP · +10 rep',
+        check: function(){ return (S.flags['rybari_ryby_caught']||0) >= 3; },
+        progress: function(){ return (S.flags['rybari_ryby_caught']||0) + '/3'; } },
+    ].forEach(function(d){ _defs[d.id] = d; });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    restoreDefs();
+    setTimeout(updateTracker, 500);
+  });
+
+  return { activate: activate, complete: complete, isDone: isDone, isActive: isActive, updateTracker: updateTracker, restoreDefs: restoreDefs };
+})();
+
+// ── FISHING HOOK — počítanie rýb pre quest ────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+      // Patch addFishCaught ak existuje, inak patch cez fishing button
+      var origOpenFishing = window.openFishing;
+      if (!origOpenFishing) return;
+      // Hook na fishing catch event — hľadáme kde sa fish pridáva
+      var origAddFish = window.addFishCaught;
+      if (typeof origAddFish === 'function') {
+        window.addFishCaught = function(fish){
+          origAddFish.apply(this, arguments);
+          if (QuestSystem.isActive('rybari_ryby') && !QuestSystem.isDone('rybari_ryby')) {
+            S.flags['rybari_ryby_caught'] = (S.flags['rybari_ryby_caught']||0) + 1;
+            var cnt = S.flags['rybari_ryby_caught'];
+            showNotif('🐟 Ryba pre Fera: ' + cnt + '/3');
+            QuestSystem.updateTracker();
+            if (cnt >= 3) showNotif('✅ Máš 3 ryby — choď k Ferovi na Mŕtve Rameno!');
+          }
+        };
+      } else {
+        // Fallback — monitoruj S.fishCaught zmeny každé 2s
+        var _lastTotal = 0;
+        setInterval(function(){
+          if (!QuestSystem.isActive('rybari_ryby') || QuestSystem.isDone('rybari_ryby')) return;
+          var total = 0;
+          if (S.fishCaught) Object.keys(S.fishCaught).forEach(function(k){ total += S.fishCaught[k]||0; });
+          if (total > _lastTotal) {
+            var gained = total - _lastTotal;
+            _lastTotal = total;
+            var prev = S.flags['rybari_ryby_caught']||0;
+            S.flags['rybari_ryby_caught'] = Math.min(3, prev + gained);
+            var cnt = S.flags['rybari_ryby_caught'];
+            showNotif('🐟 Ryba pre Fera: ' + cnt + '/3');
+            QuestSystem.updateTracker();
+            if (cnt >= 3) showNotif('✅ Máš 3 ryby — vráť sa k Ferovi!');
+          }
+        }, 2000);
+      }
+    }, 400);
+  });
+})();
+
+// ── ITEM DEFINÍCIE — prut bonus ───────────────────────────────────
+// Patch getFishingBonus — prut v special slotu dáva +30%
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+      // Fishing bonus hook
+      var origClick = window.clickerFish;
+      if (typeof origClick === 'function') {
+        window.clickerFish = function(){
+          // Prut bonus — aplikuje sa v fishing minihre
+          origClick.apply(this, arguments);
+        };
+      }
+      // Registruj prut do item databázy ak existuje
+      if (typeof ITEM_DB !== 'undefined') {
+        ITEM_DB['fero_prut'] = { name:'Ferov prút 🎣', desc:'Starý bambusový prút. +30% šanca chytenia ryby.', slot:'special', bonus:{ fishing: 0.3 } };
+        ITEM_DB['usbc_kabel'] = { name:'USB-C kábel 🔌', desc:'Data-bridge chip. Michal ho potrebuje pre Uzol 7.', slot:null };
+      }
+    }, 300);
+  });
+})();
+
+// ── SETTINGS MODULE ──────────────────────────────────────────────
+var Settings = (function(){
+
+  // ── i18n strings ─────────────────────────────────────────────
+  var I18N = {
+    sk: {
+      // Topbar
+      topbar_title:   'CEO ZLA',
+      choices_label:  '// VOĽBY //',
+      // Left panel
+      sec_stats:      'Štatistiky',
+      sec_income:     'Pasívny príjem',
+      sec_factions:   'Frakcie // Lojalita',
+      sec_ops:        'Operačné ciele',
+      sec_quests:     '📋 Questy',
+      sec_textmap:    '🗺 Mapa // Lokácie',
+      // Tabs
+      tab_agent:      '🕵 Agent',
+      tab_map:        '⌖ Mapa',
+      tab_op:         '⚡ Operácia',
+      tab_gym:        '💪 Gym',
+      tab_hq:         '🏠 Základňa',
+      tab_shop:       '🛒 Obchod',
+      tab_hack:       '💻 Hack',
+      tab_factions:   '⚔ Frakcie',
+      // Inv panel
+      inv_items:      '🎒 Predmety',
+      inv_equip:      '⚔️ Výstroj',
+      inv_fish:       '🐟 Ryby',
+      inv_shop:       '🛒 Obchod',
+      inv_log:        '📋 Log',
+      // Settings
+      set_music:      '🔊 Hudba',
+      set_textsize:   '🔡 Veľkosť textu',
+      set_typewriter: '⌨️ Typewriter efekt',
+      set_tw_fast:    'Rýchly',
+      set_tw_slow:    'Pomalý',
+      set_tw_off:     'Vyp.',
+      set_scanlines:  '📺 Scanlines',
+      set_brightness: '🌙 Jas obrazovky',
+      set_notif:      '🔔 Notifikácie',
+      set_save:       '💾 Save súbor',
+      set_export:     '📋 Exportovať save',
+      set_import:     '📥 Importovať save',
+      set_savegame:   '💾 Uložiť hru',
+      set_loadgame:   '📂 Načítať hru',
+      set_mainmenu:   '🏠 Hlavné menu',
+      // Menu
+      menu_new:       '[ NOVÁ HRA ]',
+      menu_load:      '[ NAČÍTAŤ ULOŽENÚ ]',
+      // Notifs
+      notif_save:     '💾 Hra uložená',
+      notif_export:   '📋 Save skopírovaný do schránky',
+      notif_import_ok:'✅ Save importovaný',
+      notif_import_err:'❌ Neplatný save súbor',
+      notif_brightness:'🌙 Jas:',
+    },
+    en: {
+      topbar_title:   'CEO OF EVIL',
+      choices_label:  '// CHOICES //',
+      sec_stats:      'Statistics',
+      sec_income:     'Passive Income',
+      sec_factions:   'Factions // Loyalty',
+      sec_ops:        'Operational Goals',
+      sec_quests:     '📋 Quests',
+      sec_textmap:    '🗺 Map // Locations',
+      tab_agent:      '🕵 Agent',
+      tab_map:        '⌖ Map',
+      tab_op:         '⚡ Operation',
+      tab_gym:        '💪 Gym',
+      tab_hq:         '🏠 HQ',
+      tab_shop:       '🛒 Shop',
+      tab_hack:       '💻 Hack',
+      tab_factions:   '⚔ Factions',
+      inv_items:      '🎒 Items',
+      inv_equip:      '⚔️ Equipment',
+      inv_fish:       '🐟 Fish',
+      inv_shop:       '🛒 Shop',
+      inv_log:        '📋 Log',
+      set_music:      '🔊 Music',
+      set_textsize:   '🔡 Text Size',
+      set_typewriter: '⌨️ Typewriter Effect',
+      set_tw_fast:    'Fast',
+      set_tw_slow:    'Slow',
+      set_tw_off:     'Off',
+      set_scanlines:  '📺 Scanlines',
+      set_brightness: '🌙 Screen Brightness',
+      set_notif:      '🔔 Notifications',
+      set_save:       '💾 Save File',
+      set_export:     '📋 Export Save',
+      set_import:     '📥 Import Save',
+      set_savegame:   '💾 Save Game',
+      set_loadgame:   '📂 Load Game',
+      set_mainmenu:   '🏠 Main Menu',
+      menu_new:       '[ NEW GAME ]',
+      menu_load:      '[ LOAD SAVE ]',
+      notif_save:     '💾 Game Saved',
+      notif_export:   '📋 Save copied to clipboard',
+      notif_import_ok:'✅ Save imported',
+      notif_import_err:'❌ Invalid save file',
+      notif_brightness:'🌙 Brightness:',
+    }
+  };
+
+  var _lang        = localStorage.getItem('cfg_lang')        || 'sk';
+  var _fontSize    = localStorage.getItem('cfg_fontSize')    || 'medium';
+  var _typewriter  = localStorage.getItem('cfg_typewriter')  || 'fast';
+  var _scanlines   = localStorage.getItem('cfg_scanlines')   !== 'off';
+  var _brightness  = parseInt(localStorage.getItem('cfg_brightness') || '100');
+  var _notif       = localStorage.getItem('cfg_notif')       !== 'off';
+
+  // ── Apply on load ─────────────────────────────────────────────
+  function init() {
+    _applyFontSize(_fontSize);
+    _applyTypewriter(_typewriter);
+    _applyScanlines(_scanlines);
+    _applyBrightness(_brightness);
+    _applyLang(_lang);
+    _syncUI();
+  }
+
+  // ── Font size ─────────────────────────────────────────────────
+  function setFontSize(size) {
+    _fontSize = size;
+    localStorage.setItem('cfg_fontSize', size);
+    _applyFontSize(size);
+    _syncUI();
+  }
+  function _applyFontSize(size) {
+    var map = { small:'13px', medium:'16px', large:'20px' };
+    document.documentElement.style.setProperty('--scene-fs', map[size] || '16px');
+    // Aj choice buttons
+    var s2 = { small:'11px', medium:'13px', large:'16px' };
+    document.documentElement.style.setProperty('--choice-fs', s2[size] || '13px');
+  }
+
+  // ── Typewriter ────────────────────────────────────────────────
+  function setTypewriter(mode) {
+    _typewriter = mode;
+    localStorage.setItem('cfg_typewriter', mode);
+    _applyTypewriter(mode);
+    _syncUI();
+  }
+  function _applyTypewriter(mode) {
+    if (typeof Typewriter !== 'undefined') {
+      if (mode === 'fast') Typewriter.setDelay(18);
+      else if (mode === 'slow') Typewriter.setDelay(55);
+      else Typewriter.setDelay(0); // instant
+    }
+  }
+
+  // ── Scanlines ─────────────────────────────────────────────────
+  function toggleScanlines() {
+    _scanlines = !_scanlines;
+    localStorage.setItem('cfg_scanlines', _scanlines ? 'on' : 'off');
+    _applyScanlines(_scanlines);
+    _syncUI();
+  }
+  function _applyScanlines(on) {
+    document.body.classList.toggle('no-scanlines', !on);
+  }
+
+  // ── Brightness ────────────────────────────────────────────────
+  function setBrightness(val) {
+    _brightness = parseInt(val);
+    localStorage.setItem('cfg_brightness', _brightness);
+    _applyBrightness(_brightness);
+    document.getElementById('brightness-label').textContent = _brightness + '%';
+  }
+  function _applyBrightness(val) {
+    document.body.style.filter = val < 100 ? 'brightness(' + (val/100) + ')' : '';
+    var sl = document.getElementById('brightness-slider');
+    if (sl) sl.value = val;
+    var lb = document.getElementById('brightness-label');
+    if (lb) lb.textContent = val + '%';
+  }
+
+  // ── Notifikácie ───────────────────────────────────────────────
+  function toggleNotif() {
+    _notif = !_notif;
+    localStorage.setItem('cfg_notif', _notif ? 'on' : 'off');
+    _syncUI();
+  }
+  function isNotifEnabled() { return _notif; }
+
+  // ── Export / Import save ──────────────────────────────────────
+  function exportSave() {
+    var key = 'ceoZlaSave';
+    var data = localStorage.getItem(key);
+    if (!data) { showNotif('❌ Žiadny save'); return; }
+    try {
+      navigator.clipboard.writeText(data).then(function(){
+        showNotif(t('notif_export'));
+      }).catch(function(){
+        // Fallback — textarea
+        var ta = document.createElement('textarea');
+        ta.value = data; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showNotif(t('notif_export'));
+      });
+    } catch(e) { showNotif('❌ Export zlyhal'); }
+  }
+
+  function importSave() {
+    var input = prompt('📥 Vlož save JSON:');
+    if (!input) return;
+    try {
+      var parsed = JSON.parse(input);
+      if (!parsed.scene && !parsed.hp) throw new Error('invalid');
+      localStorage.setItem('ceoZlaSave', input);
+      showNotif(t('notif_import_ok'));
+      setTimeout(function(){ loadGame(); }, 500);
+    } catch(e) {
+      showNotif(t('notif_import_err'));
+    }
+  }
+
+  // ── Language ──────────────────────────────────────────────────
+  function setLang(lang) {
+    _lang = lang;
+    localStorage.setItem('cfg_lang', lang);
+    _applyLang(lang);
+    _syncUI();
+  }
+  function t(key) { return (I18N[_lang] && I18N[_lang][key]) || (I18N['sk'][key]) || key; }
+  function _applyLang(lang) {
+    var s = I18N[lang] || I18N['sk'];
+    // i18n data-i18n attributes
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if (s[key]) el.textContent = s[key];
+    });
+    // Specific elements
+    _setText('topbar-title',     s.topbar_title);
+    _setText('choices-label',    s.choices_label);
+    // Left panel headers
+    _setPanelHeader('sec-stats',   s.sec_stats);
+    _setPanelHeader('sec-income',  s.sec_income);
+    _setPanelHeader('sec-factions',s.sec_factions);
+    _setPanelHeader('sec-ops',     s.sec_ops);
+    _setPanelHeader('sec-quests',  s.sec_quests);
+    _setPanelHeader('sec-textmap', s.sec_textmap);
+    // Topbar tabs
+    _setTabText('tab_op',      s.tab_op);
+    _setTabText('tab_agent',   s.tab_agent);
+    _setTabText('tab_map',     s.tab_map);
+    _setTabText('tab_gym',     s.tab_gym);
+    _setTabText('tab_hq',      s.tab_hq);
+    _setTabText('tab_shop',    s.tab_shop);
+    _setTabText('tab_hack',    s.tab_hack);
+    _setTabText('tab_factions',s.tab_factions);
+    // Inv tabs
+    _setInvTab(0, s.inv_items);
+    _setInvTab(1, s.inv_equip);
+    _setInvTab(2, s.inv_fish);
+    _setInvTab(3, s.inv_shop);
+    _setInvTab(4, s.inv_log);
+    // Menu buttons
+    var nb = document.getElementById('menu-new-btn');
+    if (nb) nb.textContent = s.menu_new;
+    var lb = document.getElementById('menu-load-btn');
+    if (lb) lb.textContent = s.menu_load;
+    // Settings btn title
+    var sb = document.getElementById('settings-btn');
+    if (sb) sb.title = lang === 'en' ? 'Settings' : 'Nastavenia';
+    // choices-label live
+    var cl = document.getElementById('choices-label');
+    if (cl) cl.textContent = s.choices_label;
+    // Quest tracker empty text — rebuildne sa automaticky
+    document.documentElement.lang = lang;
+  }
+  function _setText(id, val) {
+    if (!val) return;
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+  function _setPanelHeader(bodyId, text) {
+    if (!text) return;
+    var body = document.getElementById(bodyId);
+    if (!body) return;
+    var header = body.previousElementSibling;
+    if (!header) return;
+    var title = header.querySelector('.panel-header-title');
+    if (title) title.textContent = text;
+  }
+  function _setTabText(dataId, text) {
+    if (!text) return;
+    var tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(function(t){
+      // Match by current text content pattern
+      if (t.getAttribute('data-lang-id') === dataId) t.textContent = text;
+    });
+  }
+  function _setInvTab(idx, text) {
+    if (!text) return;
+    var tabs = document.querySelectorAll('.inv-ptab');
+    if (tabs[idx]) tabs[idx].textContent = text;
+  }
+
+  // ── Sync UI state (buttons active/inactive) ───────────────────
+  function _syncUI() {
+    // Font size
+    ['small','medium','large'].forEach(function(s){
+      var btn = document.getElementById('fs-' + s);
+      if (btn) btn.classList.toggle('active', s === _fontSize);
+    });
+    // Typewriter
+    ['fast','slow','off'].forEach(function(s){
+      var btn = document.getElementById('tw-' + s);
+      if (btn) btn.classList.toggle('active', s === _typewriter);
+    });
+    // Scanlines
+    var slBtn = document.getElementById('scanlines-toggle');
+    if (slBtn) {
+      slBtn.textContent = _scanlines ? 'ON' : 'OFF';
+      slBtn.classList.toggle('off', !_scanlines);
+    }
+    // Notif
+    var nBtn = document.getElementById('notif-toggle');
+    if (nBtn) {
+      nBtn.textContent = _notif ? 'ON' : 'OFF';
+      nBtn.classList.toggle('off', !_notif);
+    }
+    // Lang
+    ['sk','en'].forEach(function(l){
+      var btn = document.getElementById('lang-' + l);
+      if (btn) btn.classList.toggle('active', l === _lang);
+    });
+  }
+
+  return { init:init, setFontSize:setFontSize, setTypewriter:setTypewriter,
+           toggleScanlines:toggleScanlines, setBrightness:setBrightness,
+           toggleNotif:toggleNotif, isNotifEnabled:isNotifEnabled,
+           exportSave:exportSave, importSave:importSave,
+           setLang:setLang, t:t };
+})();
+
+// ── Init Settings po DOM ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function(){ Settings.init(); });
+
+// ── Patch showNotif — respektuje notif toggle ─────────────────────
+(function(){
+  var _orig = window.showNotif;
+  window.showNotif = function(msg, dur){
+    if (!Settings.isNotifEnabled()) return;
+    if (_orig) _orig(msg, dur);
+  };
+})();
+
+// ── Patch Typewriter — pridaj setDelay ────────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+      if (typeof Typewriter !== 'undefined' && !Typewriter.setDelay) {
+        Typewriter.setDelay = function(ms){
+          Typewriter._delay = ms;
+        };
+        // Patch type() aby používal _delay
+        var _origType = Typewriter.type;
+        Typewriter.type = function(el, html){
+          if (Typewriter._delay === 0) {
+            el.innerHTML = html; return Promise.resolve();
+          }
+          return _origType.call(Typewriter, el, html);
+        };
+      }
+    }, 200);
+  });
+})();
+
+// ── Scanlines OFF CSS ─────────────────────────────────────────────
+// (vložíme inline style tag pre no-scanlines triedu)
+(function(){
+  var style = document.createElement('style');
+  style.textContent = 'body.no-scanlines::after { display:none !important; }';
+  document.head.appendChild(style);
+})();
+
+// ── Tab buttons — pridaj data-lang-id atribúty ───────────────────
+document.addEventListener('DOMContentLoaded', function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var langIds = ['tab_op','tab_agent','tab_map','tab_gym','tab_hq','tab_shop','tab_hack','tab_factions'];
+  tabs.forEach(function(t, i){ if (langIds[i]) t.setAttribute('data-lang-id', langIds[i]); });
+});
 (function(){
   document.addEventListener('DOMContentLoaded', function(){
     var btn  = document.getElementById('settings-btn');
