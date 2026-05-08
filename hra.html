@@ -224,10 +224,167 @@
   --shadow-blue:  0 0 16px rgba(34,211,238,0.15);
 }
 
-html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
+/* ══════════════════════════════════════════════════════
+   §1b. CYBERPUNK VISUAL UPGRADE — Matrix/Neuromancer
+══════════════════════════════════════════════════════ */
+
+/* ── Neon glow na všetky klikateľné prvky ── */
+button:not(:disabled):hover,
+.choice-btn:not(:disabled):hover,
+.sidenav-btn:hover,
+.tab-btn:hover,
+.menu-btn:hover,
+.agent-tab:hover,
+.inv-ptab:hover,
+.settings-action-btn:hover {
+  text-shadow: 0 0 8px var(--cyan), 0 0 20px rgba(34,211,238,0.3) !important;
+}
+
+/* ── Choice buttons — cyberpunk prestiž ── */
+.choice-btn {
+  position: relative; overflow: hidden;
+  transition: background 0.08s, color 0.08s, border-color 0.08s,
+              box-shadow 0.15s !important;
+}
+.choice-btn:not(:disabled):hover {
+  background: rgba(34,211,238,0.06) !important;
+  border-left: 2px solid var(--cyan) !important;
+  box-shadow: inset 0 0 20px rgba(34,211,238,0.04),
+              0 0 1px var(--cyan) !important;
+}
+/* Scanline sweep pri hoveri */
+.choice-btn::after {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(34,211,238,0.06), transparent);
+  transition: left 0.4s ease;
+  pointer-events: none;
+}
+.choice-btn:not(:disabled):hover::after { left: 150%; }
+
+/* ── Choices label cyan ── */
+#choices-label {
+  color: var(--cyan) !important;
+  text-shadow: 0 0 10px rgba(34,211,238,0.5) !important;
+  letter-spacing: 4px !important;
+}
+
+/* ── Sidenav ikonky — väčšie, glow pri hoveri ── */
+.sidenav-btn {
+  font-size: 22px !important;
+  transition: transform 0.12s, filter 0.15s, background 0.12s !important;
+}
+.sidenav-btn:hover {
+  transform: scale(1.18) !important;
+  filter: drop-shadow(0 0 6px var(--cyan)) !important;
+  background: rgba(34,211,238,0.08) !important;
+  border-left-color: var(--cyan) !important;
+  color: var(--cyan) !important;
+}
+.sidenav-btn.active {
+  filter: drop-shadow(0 0 4px var(--green)) !important;
+}
+
+/* ── Tab buttons — hover glow ── */
+.tab-btn:hover {
+  color: var(--cyan) !important;
+  text-shadow: 0 0 10px rgba(34,211,238,0.5) !important;
+}
+.tab-btn.active {
+  border-bottom-color: var(--cyan) !important;
+  color: var(--cyan) !important;
+  text-shadow: 0 0 8px rgba(34,211,238,0.4) !important;
+}
+
+/* ── Topbar title — silnejší neon ── */
+#topbar-title {
+  text-shadow: 0 0 16px var(--green), 0 0 32px rgba(57,255,20,0.3),
+               0 0 64px rgba(57,255,20,0.1) !important;
+  animation: titleFlicker 8s ease-in-out infinite;
+}
+@keyframes titleFlicker {
+  0%,100% { opacity: 1; }
+  92%      { opacity: 1; }
+  93%      { opacity: 0.85; }
+  94%      { opacity: 1; }
+  97%      { opacity: 1; }
+  98%      { opacity: 0.9; }
+  99%      { opacity: 1; }
+}
+
+/* ── HP bar — pulzuje keď nízke ── */
+.stat-bar.hp.red, .topbar-vital-bar.hp.danger {
+  animation: hpPulse 1s ease-in-out infinite !important;
+}
+@keyframes hpPulse {
+  0%,100% { box-shadow: 0 0 4px #ef4444; }
+  50%      { box-shadow: 0 0 12px #ef4444, 0 0 20px rgba(239,68,68,0.4); }
+}
+
+/* ── XP bar — glow ── */
+.stat-bar.xp { box-shadow: 0 0 8px rgba(59,130,246,0.6) !important; }
+
+/* ── Peniaze — silnejší gold glow ── */
+#topbar-money {
+  text-shadow: 0 0 16px rgba(250,204,21,0.8),
+               0 0 32px rgba(250,204,21,0.3) !important;
+}
+
+/* ── Typewriter cursor ── */
+.tw-cursor {
+  display: inline-block; width: 2px; height: 1.1em;
+  background: var(--cyan); margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: twBlink 0.7s step-end infinite;
+}
+@keyframes twBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── Scene text fade-in rýchlejší ── */
+@keyframes sceneTextFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Inv-panel-trigger záložka — cyan glow ── */
+#inv-panel-trigger:hover {
+  box-shadow: -4px 0 20px rgba(34,211,238,0.2) !important;
+  border-color: var(--cyan) !important;
+}
+#inv-panel-trigger:hover::after { color: var(--cyan) !important; }
+
+/* ── Menu tlačidlá — výraznejšie ── */
+.menu-btn {
+  transition: all 0.15s !important;
+}
+.menu-btn:hover {
+  border-color: var(--cyan) !important;
+  color: var(--cyan) !important;
+  box-shadow: 0 0 20px rgba(34,211,238,0.2), inset 0 0 20px rgba(34,211,238,0.05) !important;
+  letter-spacing: 4px !important;
+}
+
+/* ── Panel headers — cyan accent ── */
+.panel-header:hover {
+  background: linear-gradient(90deg, rgba(34,211,238,0.05), transparent) !important;
+}
+.panel-header:hover .panel-header-title {
+  color: var(--cyan) !important;
+  text-shadow: 0 0 8px rgba(34,211,238,0.4) !important;
+}
+
+/* ── Choices label ── */
+#choices-label {
+  color: var(--cyan) !important;
+  text-shadow: 0 0 10px rgba(34,211,238,0.5) !important;
+  letter-spacing: 4px !important;
+}
+
+/* ── Settings btn glow ── */
+#settings-btn:hover {
+  text-shadow: 0 0 12px rgba(57,255,20,0.8) !important;
+  transform: rotate(30deg);
+  transition: transform 0.3s, color 0.15s, background 0.15s !important;
+}
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.65;
@@ -245,10 +402,10 @@ body::after {
   position: fixed; inset: 0; pointer-events: none; z-index: 8999;
   background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.7) 100%);
 }
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--dimmer); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: var(--green3); }
+:::-webkit-scrollbar { width: 8px; height: 8px; }
+:::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--green3); border-radius: 3px; border: 1px solid rgba(57,255,20,0.2); }
+::-webkit-scrollbar-thumb:hover { background: var(--green); box-shadow: 0 0 6px rgba(57,255,20,0.5); }
 a { color: var(--green); text-decoration: none; }
 a:hover { color: #fff; }
 
@@ -341,6 +498,189 @@ a:hover { color: #fff; }
   text-shadow: 0 0 8px rgba(57,255,20,0.6);
 }
 
+/* ══════════════════════════════════════════════════════
+   GLITCH CINEMATIC + MENU DEPTH UPGRADE
+══════════════════════════════════════════════════════ */
+
+/* ── Glitch keyframes ── */
+@keyframes glitchSlice1 {
+  0%,100% { clip-path:inset(40% 0 50% 0); transform:translate(-4px,0); }
+  25%      { clip-path:inset(10% 0 85% 0); transform:translate(4px,0) skewX(-1deg); }
+  50%      { clip-path:inset(60% 0 20% 0); transform:translate(-2px,0); }
+  75%      { clip-path:inset(80% 0  5% 0); transform:translate(3px,0) skewX(1deg); }
+}
+@keyframes glitchSlice2 {
+  0%,100% { clip-path:inset(15% 0 70% 0); transform:translate(4px,0); }
+  33%      { clip-path:inset(55% 0 30% 0); transform:translate(-3px,0) skewX(2deg); }
+  66%      { clip-path:inset(5%  0 88% 0); transform:translate(2px,0); }
+}
+@keyframes glitchRgb {
+  0%,100% { text-shadow: 2px 0 #ff003c, -2px 0 #00ffc8, 0 0 20px rgba(57,255,20,0.8); }
+  25%      { text-shadow: -3px 0 #ff003c, 3px 0 #00ffc8, 0 0 30px rgba(57,255,20,1); }
+  50%      { text-shadow: 3px 2px #ff003c, -3px -2px #00ffc8; }
+  75%      { text-shadow: -2px 0 #ff003c, 2px 0 #00ffc8, 0 0 15px rgba(57,255,20,0.6); }
+}
+@keyframes glitchScreen {
+  0%  { transform:translate(0,0) skewX(0deg); opacity:1; }
+  5%  { transform:translate(-3px,1px) skewX(-0.5deg); opacity:0.95; }
+  10% { transform:translate(3px,-1px) skewX(0.5deg); }
+  15% { transform:translate(0,0) skewX(0deg); opacity:1; }
+  85% { transform:translate(0,0); opacity:1; }
+  87% { transform:translate(-5px,2px) skewX(-1deg); opacity:0.9; }
+  89% { transform:translate(5px,-2px) skewX(1deg); }
+  91% { transform:translate(-2px,0) skewX(-0.3deg); }
+  93% { transform:translate(0,0); opacity:1; }
+}
+@keyframes scanSweep {
+  0%   { transform:translateY(-100%); opacity:0.5; }
+  100% { transform:translateY(100vh);  opacity:0; }
+}
+@keyframes glitchBar {
+  0%,100% { transform:scaleX(1) scaleY(1); opacity:0; }
+  50%      { transform:scaleX(1.02) scaleY(0.5); opacity:0.3; }
+}
+
+/* ── Cinematic overlay — glitch verzia ── */
+#cinematic-overlay {
+  animation: glitchScreen 6s ease-in-out infinite;
+}
+#cinematic-overlay.show .cin-title {
+  animation: glitchRgb 0.15s step-end infinite !important;
+}
+/* Glitch slices — pseudo elementy na overlay */
+#cinematic-overlay::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: inherit;
+  animation: glitchSlice1 0.3s step-end infinite;
+  mix-blend-mode: screen; opacity: 0;
+}
+#cinematic-overlay.show::before { opacity: 0.15; }
+#cinematic-overlay::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(180deg,
+    transparent 0%, rgba(57,255,20,0.04) 50%, transparent 100%);
+  animation: scanSweep 2s linear infinite;
+}
+
+/* Glitch bar — horizontálny artefakt */
+.glitch-bar {
+  position: absolute; left: 0; right: 0; height: 3px; z-index: 4;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--green), transparent);
+  pointer-events: none;
+  animation: glitchBar 0.4s step-end infinite;
+}
+
+/* ── Menu depth upgrade ── */
+#menu-poster {
+  filter: brightness(0.6) saturate(1.2) contrast(1.1);
+}
+#menu-poster::after {
+  background:
+    linear-gradient(90deg,
+      rgba(3,6,3,0.0)  0%,
+      rgba(3,6,3,0.2) 35%,
+      rgba(3,6,3,0.85) 62%,
+      rgba(3,6,3,0.98) 100%),
+    linear-gradient(180deg,
+      rgba(0,20,0,0.7) 0%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0,10,0,0.8) 100%);
+}
+
+/* Ambient glow vrhnutý na poster */
+#main-menu::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 30% 50%,
+      rgba(57,255,20,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 70% 30%,
+      rgba(34,211,238,0.04) 0%, transparent 60%);
+  animation: menuAmbientGlow 8s ease-in-out infinite alternate;
+}
+@keyframes menuAmbientGlow {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1.0; }
+}
+
+/* Vertikálna svetelná čiara — neon edge */
+#menu-panel::before {
+  content: '';
+  position: absolute; top: 10%; bottom: 10%; left: 0; width: 1px;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(57,255,20,0.6) 30%,
+    var(--green) 50%,
+    rgba(57,255,20,0.6) 70%,
+    transparent);
+  box-shadow: 0 0 12px rgba(57,255,20,0.8), 0 0 30px rgba(57,255,20,0.3);
+  animation: edgeGlow 3s ease-in-out infinite alternate;
+}
+@keyframes edgeGlow {
+  0%   { opacity: 0.4; box-shadow: 0 0 8px rgba(57,255,20,0.5); }
+  100% { opacity: 1.0; box-shadow: 0 0 16px rgba(57,255,20,0.9), 0 0 40px rgba(57,255,20,0.4); }
+}
+
+/* Hlbší glow na menu title */
+.menu-title {
+  text-shadow:
+    0 0 10px rgba(57,255,20,1),
+    0 0 30px rgba(57,255,20,0.7),
+    0 0 60px rgba(57,255,20,0.4),
+    0 0 120px rgba(57,255,20,0.15),
+    0 2px 4px rgba(0,0,0,0.9) !important;
+}
+
+/* Tlačidlá — hlbší 3D efekt */
+.menu-btn {
+  box-shadow:
+    0 2px 0 rgba(0,0,0,0.8),
+    0 0 20px rgba(57,255,20,0.06),
+    inset 0 1px 0 rgba(57,255,20,0.15) !important;
+}
+.menu-btn:hover, .menu-btn:active {
+  box-shadow:
+    0 2px 0 rgba(0,0,0,0.8),
+    0 0 30px rgba(57,255,20,0.25),
+    0 0 60px rgba(57,255,20,0.1),
+    inset 0 1px 0 rgba(57,255,20,0.3) !important;
+  transform: translateY(-1px);
+}
+
+/* Corner text — zosvetlený */
+.menu-corner {
+  color: rgba(57,255,20,0.35) !important;
+  text-shadow: 0 0 8px rgba(57,255,20,0.2);
+}
+
+/* ── Nový ambient indikátor v menu ── */
+#menu-ambient-indicator {
+  position: absolute; bottom: 44px; left: 14px; z-index: 3;
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 8px;
+  color: rgba(57,255,20,0.3); letter-spacing: 1px;
+  pointer-events: none;
+}
+#menu-ambient-bars {
+  display: flex; align-items: flex-end; gap: 2px; height: 14px;
+}
+.amb-bar {
+  width: 2px; background: var(--green3); border-radius: 1px;
+  opacity: 0.4;
+}
+.amb-bar:nth-child(1) { height: 4px;  animation: ambBar 1.8s 0.0s ease-in-out infinite alternate; }
+.amb-bar:nth-child(2) { height: 8px;  animation: ambBar 1.8s 0.2s ease-in-out infinite alternate; }
+.amb-bar:nth-child(3) { height: 12px; animation: ambBar 1.8s 0.4s ease-in-out infinite alternate; }
+.amb-bar:nth-child(4) { height: 6px;  animation: ambBar 1.8s 0.6s ease-in-out infinite alternate; }
+.amb-bar:nth-child(5) { height: 10px; animation: ambBar 1.8s 0.8s ease-in-out infinite alternate; }
+@keyframes ambBar {
+  0%   { opacity: 0.2; transform: scaleY(0.5); }
+  100% { opacity: 0.7; transform: scaleY(1.0); }
+}
+
 /* ── MAIN MENU (State: MAIN_MENU) ── */
 #main-menu {
   position: fixed; inset: 0; z-index: 9999;
@@ -349,9 +689,6 @@ a:hover { color: #fff; }
   overflow: hidden;
 }
 #main-menu.visible { display: flex; }
-
-/* ── Poster — ľavá strana, fullscreen pozadie ── */
-#menu-poster {
   position: absolute; inset: 0;
   background:
     url('https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/mainmenu.jpg')
@@ -669,93 +1006,482 @@ a:hover { color: #fff; }
 /* ── TOP BAR ── */
 #topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 800;
-  background: linear-gradient(180deg, #0e1420 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, #080e08 0%, #0b120b 100%);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.5);
-  display: flex; align-items: center;
-  height: 38px; padding: 0 14px; gap: 12px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  display: flex; align-items: stretch;
+  height: 42px; padding: 0; gap: 0;
 }
 #topbar::after {
   content: '';
-  position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.08), transparent);
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green3) 40%, var(--green) 50%, var(--green3) 60%, transparent);
+  opacity: 0.3; pointer-events: none;
 }
+/* Výrazný title vľavo */
 #topbar-title {
-  font-family: var(--font-hud);
-  font-size: 13px; font-weight: 700;
-  color: var(--green); letter-spacing: 3px;
-  text-shadow: 0 0 14px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.2);
+  font-family: var(--font-hud); font-size: 11px; font-weight: 700;
+  color: var(--green3); letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(57,255,20,0.4);
   flex-shrink: 0; white-space: nowrap;
-  text-decoration: none; cursor: pointer; transition: color 0.15s, text-shadow 0.15s;
+  text-decoration: none; cursor: pointer;
+  display: flex; align-items: center;
+  padding: 0 14px;
+  border-right: 1px solid var(--border2);
+  transition: color 0.15s, background 0.15s;
 }
-#topbar-title:hover {
-  color: #fff;
-  text-shadow: 0 0 20px rgba(57,255,20,0.9), 0 0 40px rgba(57,255,20,0.5);
+#topbar-title:hover { color: var(--green); background: rgba(57,255,20,0.04); }
+
+/* Tabs — scrollovateľné, neprekryjú right */
+#topbar-tabs {
+  display: flex; gap: 0; flex: 1;
+  overflow-x: auto; overflow-y: hidden; min-width: 0;
+  scrollbar-width: none;
 }
-#topbar-tabs { display: flex; gap: 2px; flex: 1; }
+#topbar-tabs::-webkit-scrollbar { display: none; }
 .tab-btn {
-  background: transparent; border: none;
-  border-bottom: 2px solid transparent;
-  color: var(--text-dim);
-  font-family: var(--font-body);
-  font-size: 12px; font-weight: 600; letter-spacing: 1px;
-  padding: 0 12px; height: 38px;
-  cursor: pointer; transition: all 0.15s;
-  text-transform: uppercase; position: relative;
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  color: #5a7a5a; font-family: var(--font-body);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  padding: 0 10px; height: 42px;
+  cursor: pointer; transition: all 0.12s;
+  text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
 }
-.tab-btn:hover { color: var(--blue); }
-.tab-btn.active {
-  color: var(--green);
-  border-bottom-color: var(--green);
-  text-shadow: 0 0 8px rgba(57,255,20,0.4);
+.tab-btn:hover { color: var(--blue); background: rgba(77,159,255,0.04); }
+.tab-btn.active { color: var(--green); border-bottom-color: var(--green); text-shadow: 0 0 6px rgba(57,255,20,0.4); }
+
+/* RIGHT — vždy viditeľné, pevné, nezdružiteľné */
+#topbar-right {
+  display: flex; align-items: stretch;
+  flex-shrink: 0; margin-left: auto;
+  border-left: 1px solid var(--border2);
 }
-#topbar-right { display: flex; align-items: center; gap: 12px; }
-#topbar-money {
-  font-family: var(--font-hud); color: var(--gold); font-size: 13px; font-weight: 700;
-  text-shadow: 0 0 8px rgba(250,204,21,0.4); letter-spacing: 1px;
+
+/* Vitals — kompaktné bary */
+#topbar-vitals {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 12px; border-right: 1px solid var(--border2);
 }
+.topbar-vital { display: flex; align-items: center; gap: 5px; }
+.topbar-vital-icon { font-size: 11px; line-height: 1; }
+.topbar-vital-bar-wrap {
+  width: 44px; height: 4px;
+  background: rgba(0,0,0,0.6); border-radius: 2px; overflow: hidden;
+}
+.topbar-vital-bar { height: 100%; transition: width 0.4s ease; }
+.topbar-vital-bar.hp  { background: linear-gradient(90deg, #7f1d1d, #f87171); }
+.topbar-vital-bar.san { background: linear-gradient(90deg, #78350f, #fbbf24); }
+.topbar-vital-val { font-family: var(--font-hud); font-size: 10px; min-width: 20px; text-align: right; }
+.topbar-vital-val.hp  { color: #f87171; }
+.topbar-vital-val.san { color: #fbbf24; }
+
+/* Hodiny */
+#topbar-clock {
+  color: #4a6a4a; font-size: 11px; font-family: var(--font-mono);
+  white-space: nowrap; display: flex; align-items: center;
+  padding: 0 10px; border-right: 1px solid var(--border2);
+}
+/* Hunger chip */
+#topbar-hunger-chip {
+  font-size: 10px; font-family: var(--font-mono); color: var(--green3);
+  white-space: nowrap; display: flex; align-items: center;
+  padding: 0 8px; border-right: 1px solid var(--border2);
+}
+/* Job badge — len ak je aktívne */
 #topbar-job {
-  font-size: 11px; color: var(--blue); font-weight: 600;
-  border: 1px solid var(--blue-dim); padding: 2px 10px;
+  font-size: 10px; color: var(--blue); font-weight: 600;
   font-family: var(--font-body); letter-spacing: 1px;
-  background: rgba(77,159,255,0.05);
+  display: flex; align-items: center;
+  padding: 0 8px; border-right: 1px solid var(--border2);
+  white-space: nowrap;
 }
-#topbar-clock { color: var(--text-dim); font-size: 12px; font-family: var(--font-mono); }
-.top-micro-btn {
-    <span id="topbar-hunger-chip">🟢 Sýty</span>
-  background: linear-gradient(180deg, var(--bg3), var(--bg2));
-  border: 1px solid var(--border);
-  border-top-color: rgba(255,255,255,0.06);
-  color: var(--text-dim);
+/* Tier — skrytý aby šetril miesto */
+#tier-badge { display: none; }
+#topbar-equip-badge { display: none !important; }
+/* Inv btn */
+#inv-topbar-btn {
   font-family: var(--font-body); font-size: 11px; font-weight: 600;
-  padding: 3px 10px; cursor: pointer; letter-spacing: 1px; transition: all 0.12s;
-  text-transform: uppercase;
+  background: transparent; border: none; border-right: 1px solid var(--border2);
+  color: #5a7a5a; padding: 0 10px; cursor: pointer;
+  letter-spacing: 1px; transition: all 0.12s; text-transform: uppercase; white-space: nowrap;
 }
-.top-micro-btn:hover {
-  color: var(--green); border-color: var(--border-hi);
-  background: rgba(57,255,20,0.04);
+#inv-topbar-btn:hover { color: var(--green); background: rgba(57,255,20,0.05); }
+/* Micro tlačidlá */
+.top-micro-btn {
+  background: transparent; border: none; border-right: 1px solid var(--border2);
+  color: #4a6a4a; font-family: var(--font-body); font-size: 10px; font-weight: 600;
+  padding: 0 8px; cursor: pointer; letter-spacing: 1px; transition: all 0.12s;
+  text-transform: uppercase; white-space: nowrap;
+}
+.top-micro-btn:hover { color: var(--green); background: rgba(57,255,20,0.04); }
+/* Audio wave bars — použité v settings dropdown */
+.wave-bar { width: 2px; background: var(--green3); border-radius: 1px; animation: waveAnim 0.8s ease-in-out infinite; }
+.wave-bar:nth-child(2) { animation-delay:.15s; } .wave-bar:nth-child(3) { animation-delay:.3s; } .wave-bar:nth-child(4) { animation-delay:.45s; }
+@keyframes waveAnim { 0%,100%{height:4px} 50%{height:12px} }
+
+/* ── PENIAZE — bounce animácia pri zmene ── */
+#topbar-money {
+  font-family: var(--font-hud); color: var(--gold); font-size: 16px; font-weight: 700;
+  text-shadow: 0 0 12px rgba(250,204,21,0.6); letter-spacing: 1px;
+  display: flex; align-items: center;
+  padding: 0 14px; border-right: 1px solid var(--border2);
+  white-space: nowrap;
+}
+#topbar-money-val { display: inline-block; }
+#topbar-money-val.money-up {
+  animation: moneyUp 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
+  color: #4ade80; text-shadow: 0 0 16px rgba(74,222,128,0.8);
+}
+#topbar-money-val.money-down {
+  animation: moneyDown 0.4s ease-out forwards;
+  color: #f87171; text-shadow: 0 0 12px rgba(248,113,113,0.7);
+}
+@keyframes moneyUp   { 0%{transform:translateY(0) scale(1)} 40%{transform:translateY(-5px) scale(1.15)} 100%{transform:translateY(0) scale(1)} }
+@keyframes moneyDown { 0%{transform:translateY(0) scale(1)} 30%{transform:translateY(3px) scale(0.92)} 100%{transform:translateY(0) scale(1)} }
+
+/* ── SETTINGS DROPDOWN ── */
+#settings-btn-wrap {
+  position: relative; flex-shrink: 0; height: 100%;
+  display: flex; align-items: center;
+}
+#settings-btn {
+  background: transparent; border: none;
+  border-left: 1px solid var(--border2);
+  color: #4a6a4a; font-size: 16px;
+  cursor: pointer; padding: 0 13px; height: 100%;
+  transition: color 0.15s, background 0.15s;
+  display: flex; align-items: center;
+}
+#settings-btn:hover { color: var(--green); background: rgba(57,255,20,0.05); }
+#settings-dropdown {
+  position: absolute; top: calc(100% + 1px); right: 0;
+  width: 230px;
+  background: linear-gradient(180deg, #0c160c, #0a120a);
+  border: 1px solid var(--border2); border-top: 1px solid var(--green3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.85);
+  display: none; flex-direction: column;
+  z-index: 900; padding: 6px 0;
+}
+#settings-dropdown.open { display: flex; }
+.settings-row {
+  display: flex; align-items: center; gap: 8px; padding: 7px 14px;
+}
+.settings-label {
+  font-family: var(--font-body); font-size: 11px;
+  color: var(--text-dim); letter-spacing: 1px; flex-shrink: 0; min-width: 60px;
+}
+#audio-toggle-btn {
+  background: rgba(57,255,20,0.08); border: 1px solid var(--border2);
+  color: var(--green3); font-family: var(--font-hud); font-size: 9px;
+  letter-spacing: 1px; padding: 2px 8px; cursor: pointer;
+  transition: all 0.12s; flex-shrink: 0;
+}
+#audio-toggle-btn:hover { background: rgba(57,255,20,0.18); color: var(--green); }
+#volume-slider { flex: 1; accent-color: var(--green3); cursor: pointer; min-width: 0; }
+#volume-label { font-size: 9px; color: var(--text-dim); font-family: var(--font-mono); min-width: 28px; text-align: right; }
+#audio-wave { display: flex; gap: 2px; align-items: center; height: 10px; padding: 0 14px 4px; }
+#audio-wave.paused .wave-bar { animation: none; height: 2px; opacity: 0.2; }
+.settings-divider { height: 1px; background: var(--border2); margin: 3px 0; }
+.settings-action-btn {
+  background: transparent; border: none;
+  color: var(--text-dim); font-family: var(--font-body); font-size: 11px;
+  letter-spacing: 1px; padding: 9px 14px; cursor: pointer;
+  text-align: left; width: 100%; transition: color 0.12s, background 0.12s;
+}
+.settings-action-btn:hover { color: var(--green); background: rgba(57,255,20,0.06); }
+
+/* ── AGENT PANEL ── */
+.agent-tab {
+  flex:1; background:transparent; border:none;
+  border-bottom:2px solid transparent;
+  color:var(--text-dim); font-family:var(--font-body);
+  font-size:11px; font-weight:600; letter-spacing:0.5px;
+  padding:8px 4px; cursor:pointer; transition:all 0.12s;
+}
+.agent-tab:hover { color:var(--blue); }
+.agent-tab.active { color:var(--green); border-bottom-color:var(--green); text-shadow:0 0 6px rgba(57,255,20,0.4); }
+.agent-pane { display:none; }
+.agent-pane.active { display:block; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 16px; }
+
+/* ── LEFT PANEL TEXTMAP ── */
+#left-textmap-body button {
+  display:flex; align-items:center; gap:8px;
+  width:100%; background:transparent; border:none;
+  border-bottom:1px solid var(--border2);
+  padding:7px 12px; cursor:pointer; text-align:left;
+  transition:background 0.08s; -webkit-tap-highlight-color:transparent;
+}
+#left-textmap-body button:hover { background:rgba(57,255,20,0.06); }
+#left-textmap-body .ltm-section {
+  font-family:var(--font-hud);font-size:8px;letter-spacing:2px;
+  color:var(--green3);padding:8px 12px 3px;
+  border-bottom:1px solid var(--border2);text-transform:uppercase;opacity:0.8;
+}
+#left-nav::before {
+  content: '▶';
+  position: absolute;
+  right: -14px; top: 50%; transform: translateY(-50%);
+  width: 14px; height: 60px;
+  background: linear-gradient(180deg, #0d1a0d, #112211);
+  border: 1px solid var(--border2); border-left: none;
+  border-radius: 0 5px 5px 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7px; color: var(--green3);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.4);
+  animation: hintPulse 3.5s ease-in-out infinite;
+  pointer-events: none; z-index: 201;
+  line-height: 60px; text-align: center;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+@keyframes hintPulse { 0%,100%{opacity:0.25} 50%{opacity:0.65} }
+#left-nav:hover::before { opacity: 0; }
+
+/* ── INV DRAWER TAB — viditeľný "záložka" štýl na pravom okraji ── */
+#inv-panel-trigger {
+  position: fixed;
+  /* Záložka uprostred pravého okraja */
+  top: 50%; right: 0;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 80px;
+  z-index: 201;
+  cursor: pointer;
+  background: linear-gradient(180deg, #0d1a0d, #112211);
+  border: 1px solid var(--border2);
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px;
+  transition: background 0.2s, border-color 0.2s, width 0.2s, box-shadow 0.2s;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.5);
+}
+#inv-panel-trigger:hover {
+  background: linear-gradient(180deg, #122212, #193319);
+  border-color: var(--green3);
+  width: 26px;
+  box-shadow: -3px 0 16px rgba(57,255,20,0.15);
+}
+/* Tri čiarky = hamburger indikátor */
+#inv-panel-trigger::before {
+  content: '';
+  display: block;
+  width: 8px; height: 1px;
+  background: var(--green3);
+  box-shadow: 0 4px 0 var(--green3), 0 8px 0 var(--green3);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+#inv-panel-trigger::after {
+  content: '◀';
+  font-size: 7px; color: var(--green3);
+  opacity: 0.4;
+  margin-top: 8px;
+  animation: drawerPulse 3s ease-in-out infinite;
+  transition: opacity 0.2s;
+}
+#inv-panel-trigger:hover::before { opacity: 0.9; }
+#inv-panel-trigger:hover::after  { opacity: 1; animation: none; color: var(--green); }
+@keyframes drawerPulse {
+  0%,100% { opacity: 0.2; transform: translateX(0); }
+  50%      { opacity: 0.6; transform: translateX(-2px); }
 }
 
 /* ── LAYOUT ── */
 #main {
-  padding-top: 38px;
+  padding-top: 42px;
   display: grid;
-  grid-template-columns: 52px 230px 1fr 300px;
+  grid-template-columns: 52px 1fr;
   height: 100vh; height: 100dvh;
 }
 #main.inv-hidden {
-  grid-template-columns: 52px 230px 1fr;
+  grid-template-columns: 52px 1fr;
 }
+/* ══════════════════════════════════════════════════════
+   CENTER PANEL — Split layout: text | choices
+══════════════════════════════════════════════════════ */
 #center-panel {
   display: flex; flex-direction: column;
-  height: calc(100dvh - 38px);
+  height: calc(100dvh - 42px);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Wrapper pod obrázkom — row split */
+#dialog-split {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: row;
   overflow: hidden;
 }
+
+/* ĽAVÝ stĺpec — text / narrácia / NPC bubliny */
 #scene-text-wrap {
-  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding: 0; min-height: 0;
-  display: flex; flex-direction: column; gap: 0; padding-bottom: 4px;
+  flex: 1; min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  padding: 0 0 12px 0;
+  background: #050d05;
+  border-right: 1px solid var(--border2);
+}
+
+/* PRAVÝ stĺpec — voľby */
+#choices-wrap {
+  width: 280px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  background: #040b04;
+  border-left: 1px solid rgba(57,255,20,0.12);
+  display: flex;
+  flex-direction: column;
+}
+#choices-label {
+  font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px;
+  color: var(--cyan); padding: 10px 12px 6px;
+  text-transform: uppercase; opacity: 0.8;
+  border-bottom: 1px solid var(--border2);
+  flex-shrink: 0;
+  background: rgba(34,211,238,0.03);
+  text-shadow: 0 0 8px rgba(34,211,238,0.4);
+}
+.choice-btn {
+  display: flex; width: 100%; text-align: left; align-items: flex-start; gap: 0;
+  background: transparent; border: none; border-bottom: 1px solid rgba(57,255,20,0.08);
+  color: #cce8d0; font-family: var(--font-mono); font-size: 13px; font-weight: normal;
+  letter-spacing: 0.3px; line-height: 1.6; padding: 12px 10px;
+  cursor: pointer; transition: background 0.08s, color 0.1s, border-color 0.08s;
+  position: relative; overflow: hidden;
+}
+.choice-btn:last-child { border-bottom: none; }
+.choice-btn .choice-num {
+  display: inline-block; min-width: 22px;
+  font-family: var(--font-hud); font-size: 9px;
+  color: var(--green3); flex-shrink: 0; padding-top: 3px;
+  text-shadow: 0 0 6px rgba(57,255,20,0.3);
+}
+.choice-btn .choice-text { flex: 1; line-height: 1.6; }
+.choice-btn::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: transparent; transition: background 0.08s;
+}
+.choice-btn::after {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(34,211,238,0.05), transparent);
+  transition: left 0.4s ease; pointer-events: none;
+}
+.choice-btn:not(:disabled):hover {
+  color: #eafff0; background: rgba(57,255,20,0.07);
+}
+.choice-btn:not(:disabled):hover::before { background: var(--cyan); }
+.choice-btn:not(:disabled):hover::after  { left: 150%; }
+.choice-btn:not(:disabled):hover .choice-num {
+  color: var(--cyan); text-shadow: 0 0 10px rgba(34,211,238,0.6);
+}
+.choice-btn:active { background: rgba(57,255,20,0.1); }
+.choice-btn:disabled { color: #3a5a3a; cursor: not-allowed; opacity: 0.5; }
+.choice-btn:disabled:hover { background: transparent; }
+.choice-btn:disabled:hover::before { background: transparent; }
+.choice-fail-hint { display: block; font-size: 10px; color: var(--danger); opacity: 0.7; margin-top: 3px; }
+
+/* Dialog prvky — tmavé pozadie bez bieleho */
+.dialog-npc-bubble {
+  margin: 12px 14px 8px 14px;
+  padding: 14px 14px 14px 110px;
+  background: rgba(0,14,0,0.9);
+  border: 1px solid rgba(34,211,238,0.2);
+  border-left: 3px solid var(--cyan);
+  position: relative; font-size: 15px; line-height: 1.8;
+  color: #e8ffee; font-family: var(--font-mono);
+  min-height: 90px;
+  text-shadow: 0 1px 3px rgba(0,0,0,1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.3);
+}
+.dialog-npc-bubble::before {
+  content: attr(data-speaker);
+  position: absolute; top: -9px; left: 10px;
+  background: #040c04; padding: 0 7px;
+  font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px;
+  color: var(--cyan); text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(34,211,238,0.7);
+  border: 1px solid rgba(34,211,238,0.2);
+}
+.dialog-npc-bubble::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--cyan), rgba(34,211,238,0.3), transparent);
+  opacity: 0.5;
+}
+.dialog-npc-bubble .npc-avatar {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  font-size: 52px; line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(57,255,20,0.4));
+  width: 82px; height: 82px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border-radius: 50%;
+  background: rgba(0,8,0,0.8);
+  border: 2px solid rgba(34,211,238,0.2);
+}
+.dialog-npc-bubble .npc-avatar img {
+  width: 82px; height: 82px; object-fit: cover; border-radius: 50%;
+  filter: sepia(0.1) hue-rotate(60deg) saturate(1.2) brightness(0.9); display: block;
+}
+.dialog-npc-bubble b { color: var(--green4); font-weight: normal; text-shadow: 0 0 6px rgba(57,255,20,0.4); }
+.dialog-npc-bubble i { color: var(--text-dim); font-style: normal; font-size: 11px; display: block; margin-top: 4px; border-top: 1px solid var(--border2); padding-top: 4px; }
+
+.dialog-narration {
+  margin: 8px 14px 6px 14px; padding: 10px 12px;
+  font-size: 15px; line-height: 1.85; color: #b8dcc0;
+  font-family: var(--font-mono);
+  border-left: 2px solid rgba(34,211,238,0.18);
+  background: rgba(0,6,0,0.85);
+  text-shadow: 0 1px 4px rgba(0,0,0,1);
+}
+.dialog-narration b { color: var(--green4); font-weight: normal; }
+.dialog-narration i { color: #7aaa7a; font-style: italic; font-size: 11px; }
+.dialog-divider {
+  height: 1px; margin: 6px 12px 0;
+  background: linear-gradient(90deg, transparent, rgba(34,211,238,0.2), transparent);
+}
+
+/* ── MOBILE — stĺpce pod sebou ── */
+@media (max-width: 768px) {
+  #dialog-split {
+    flex-direction: column;
+  }
+  #scene-text-wrap {
+    flex: 1; min-height: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border2);
+  }
+  #choices-wrap {
+    width: 100%;
+    max-height: 45vh;
+    flex-shrink: 0;
+    border-left: none;
+    border-top: 1px solid rgba(57,255,20,0.15);
+  }
+  .dialog-npc-bubble {
+    margin: 8px 10px 6px 10px;
+    padding: 12px 10px 12px 96px;
+    font-size: 15px !important;
+  }
+  .dialog-npc-bubble .npc-avatar {
+    width: 72px !important; height: 72px !important;
+    font-size: 44px !important;
+  }
+  .dialog-npc-bubble .npc-avatar img {
+    width: 72px !important; height: 72px !important;
+  }
+  .dialog-narration {
+    margin: 6px 10px 4px 10px;
+    font-size: 15px !important;
+  }
+  .choice-btn { font-size: 14px !important; padding: 13px 10px !important; }
 }
 
 /* ── LEFT NAV ── */
@@ -764,9 +1490,74 @@ a:hover { color: #fff; }
   background: linear-gradient(180deg, #060b06 0%, var(--bg) 100%);
   display: flex; flex-direction: column; align-items: center;
   padding-top: 8px; gap: 2px;
-  height: calc(100vh - 38px);
-  overflow: hidden; flex-shrink: 0;
+  height: calc(100vh - 42px);
+  overflow: visible; flex-shrink: 0;
+  position: relative; z-index: 200;
+  grid-column: 1;
 }
+
+/* left-panel je teraz floating overlay — vychádza z left-nav pri hoveri */
+#left-panel {
+  position: fixed;
+  top: 42px; left: 52px; bottom: 0;
+  width: 240px;
+  z-index: 199;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.5);
+  /* Skrytý štandardne — vyskočí pri hoveri na left-nav alebo self */
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1),
+              opacity   0.22s ease;
+  /* Hover delay — panel sa neotvorí pri rýchlom prejdení */
+  transition-delay: 0.08s;
+  will-change: transform, opacity;
+}
+/* Zobraz panel keď hover na left-nav ALEBO na samotný panel */
+#left-nav:hover ~ #left-panel,
+#left-panel:hover {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+/* Tmavý backdrop za panelom */
+#left-panel-backdrop {
+  position: fixed; top: 42px; left: 52px; right: 0; bottom: 0;
+  z-index: 198;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background 0.22s ease;
+}
+/* Aktivuje sa keď left-panel je viditeľný (via hover na nav, alebo hover na panel) */
+#left-nav:hover ~ #left-panel-backdrop {
+  background: rgba(0,0,0,0.22);
+}
+#left-panel:hover ~ #left-panel-backdrop {
+  background: rgba(0,0,0,0.22);
+}
+/* Zelená čiara + hint šípka na pravom okraji left-nav */
+#left-nav::before {
+  content: '▶';
+  position: absolute; right: 3px; top: 50%; transform: translateY(-50%);
+  font-size: 8px; color: var(--green3);
+  pointer-events: none; z-index: 201;
+  animation: hintPulse 3.5s ease-in-out infinite;
+}
+#left-nav:hover::before { opacity: 0; animation: none; }
+#left-nav::after {
+  content: '';
+  position: absolute; right: 0; top: 15%; bottom: 15%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--green3) 40%, var(--green3) 60%, transparent);
+  opacity: 0; transition: opacity 0.2s;
+}
+#left-nav:hover::after { opacity: 0.7; }
+
 .sidenav-btn {
   width: 44px; height: 44px;
   background: transparent;
@@ -779,6 +1570,7 @@ a:hover { color: #fff; }
 }
 .sidenav-btn:hover { color: var(--green); background: rgba(57,255,20,0.06); border-left-color: var(--green3); }
 .sidenav-btn.active { color: var(--green); background: rgba(57,255,20,0.1); border-left-color: var(--green); text-shadow: 0 0 10px rgba(57,255,20,0.6); }
+/* Tooltip — len keď panel nie je viditeľný (hover samotného nav) */
 .sidenav-btn[data-tip]:hover::after {
   content: attr(data-tip);
   position: absolute; left: 52px; top: 50%; transform: translateY(-50%);
@@ -789,13 +1581,7 @@ a:hover { color: #fff; }
 }
 .sidenav-divider { width: 30px; height: 1px; background: var(--border2); margin: 4px 0; }
 
-/* ── LEFT PANEL ── */
-#left-panel {
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  height: calc(100vh - 38px);
-  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
-}
+/* ── LEFT PANEL (scrollable inner) ── */
 #left-scroll { flex: 1; overflow-y: auto; }
 .panel-section { border-bottom: 1px solid var(--border2); }
 .panel-header {
@@ -863,11 +1649,7 @@ a:hover { color: #fff; }
 .node:hover { color: var(--green); text-shadow: 0 0 8px rgba(57,255,20,0.5); }
 
 /* ── CENTER PANEL ── */
-#center-panel {
-  display: flex; flex-direction: column;
-  height: calc(100vh - 38px);
-  position: relative;
-}
+/* ── Scene image wrap ── */
 #scene-img-wrap {
   position: relative; height: 230px; flex-shrink: 0;
   background: linear-gradient(180deg, #06090f 0%, #0a0f1a 100%);
@@ -924,75 +1706,17 @@ a:hover { color: #fff; }
   opacity: 0.4; pointer-events: none;
 }
 
-/* ── DIALOG ── */
-.dialog-npc-bubble {
-  margin: 14px 18px 8px 18px; padding: 16px 18px 16px 118px;
-  background: rgba(0,15,0,0.7); border: 1px solid var(--green3); border-left: 3px solid var(--green);
-  position: relative; font-size: 15px; line-height: 1.8; color: #c2f0cc; font-family: var(--font-mono);
-  min-height: 96px;
-}
-.dialog-npc-bubble::before {
-  content: attr(data-speaker);
-  position: absolute; top: -10px; left: 12px;
-  background: var(--bg); padding: 0 8px;
-  font-family: var(--font-hud); font-size: 9px; letter-spacing: 3px;
-  color: var(--green); text-transform: uppercase; text-shadow: 0 0 8px rgba(57,255,20,0.5);
-}
-.dialog-npc-bubble .npc-avatar {
-  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 60px; line-height: 1;
-  filter: drop-shadow(0 0 8px rgba(57,255,20,0.5));
-  width: 90px; height: 90px;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden; border-radius: 50%;
-}
-.dialog-npc-bubble .npc-avatar img {
-  width: 90px; height: 90px; object-fit: cover; border-radius: 50%;
-  border: 2px solid var(--green3);
-  filter: sepia(0.1) hue-rotate(60deg) saturate(1.2) brightness(1.0); display: block;
-}
-.dialog-npc-bubble b { color: var(--green); font-weight: normal; text-shadow: 0 0 6px rgba(57,255,20,0.35); }
-.dialog-npc-bubble i { color: var(--text-dim); font-style: normal; font-size: 12px; display: block; margin-top: 4px; border-top: 1px solid var(--border2); padding-top: 4px; }
-.dialog-narration {
-  margin: 10px 18px 6px 18px; padding: 10px 14px;
-  font-size: 15px; line-height: 1.85; color: #9ed4a0; font-family: var(--font-mono);
-  border-left: 2px solid var(--dimmer); background: rgba(0,10,0,0.5);
-}
-.dialog-narration b { color: var(--green4); font-weight: normal; }
-.dialog-narration i { color: var(--text-dim); font-style: italic; font-size: 11px; }
-.dialog-divider { height: 1px; margin: 8px 16px 0; background: linear-gradient(90deg, transparent, var(--green3), transparent); opacity: 0.4; }
-
-/* ── CHOICES ── */
-#choices-wrap {
-  padding: 8px 14px 12px; border-top: 1px solid var(--border2); flex-shrink: 0;
-  background: linear-gradient(180deg, rgba(0,8,0,0.9), var(--bg-panel));
-}
-#choices-label { font-family: var(--font-hud); font-size: 8px; letter-spacing: 3px; color: var(--green3); padding: 4px 4px 8px; text-transform: uppercase; opacity: 0.7; }
-.choice-btn {
-  display: flex; width: 100%; text-align: left; align-items: flex-start; gap: 0;
-  background: transparent; border: none; border-bottom: 1px solid var(--border2);
-  color: #b0e4b4; font-family: var(--font-mono); font-size: 14px; font-weight: normal;
-  letter-spacing: 0.3px; line-height: 1.55; padding: 11px 8px; margin-bottom: 0;
-  cursor: pointer; transition: background 0.08s, color 0.08s, border-color 0.08s; position: relative;
-}
-.choice-btn:last-child { border-bottom: none; }
-.choice-btn .choice-num { display: inline-block; min-width: 24px; font-family: var(--font-hud); font-size: 10px; color: var(--green3); flex-shrink: 0; padding-top: 2px; text-shadow: 0 0 6px rgba(57,255,20,0.3); }
-.choice-btn .choice-text { flex: 1; line-height: 1.55; }
-.choice-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: transparent; transition: background 0.08s; }
-.choice-btn:hover { color: #eafff0; background: rgba(57,255,20,0.08); }
-.choice-btn:hover::before { background: var(--green); }
-.choice-btn:hover .choice-num { color: var(--green); text-shadow: 0 0 10px rgba(57,255,20,0.6); }
-.choice-btn:active { background: rgba(57,255,20,0.12); }
-.choice-btn:disabled { color: var(--text-muted); cursor: not-allowed; opacity: 0.45; }
-.choice-btn:disabled:hover { background: transparent; }
-.choice-btn:disabled:hover::before { background: transparent; }
-.choice-fail-hint { display: block; font-size: 10px; color: var(--danger); opacity: 0.7; margin-top: 3px; font-family: var(--font-mono); }
-
 /* ── LOG ── */
 #log-wrap {
   border-top: 1px solid var(--border2); max-height: 80px; overflow-y: auto;
   background: rgba(0,4,0,0.8); flex-shrink: 0;
   -webkit-overflow-scrolling: touch;
+  /* Na PC schovaný z centra — log je v inv-panel tab */
+  display: none;
+}
+@media (max-width: 768px) {
+  /* Na mobile ostáva v centre ako malý strip */
+  #log-wrap { display: block; }
 }
 .log-line { font-family: var(--font-mono); font-size: var(--log-fs); padding: 2px 12px; color: #6aaa6a; letter-spacing: 0.5px; line-height: 1.5; }
 .log-line.ok   { color: #4ade80; }
@@ -1003,57 +1727,72 @@ a:hover { color: #fff; }
 /* ── RIGHT PANEL ── */
 #right-panel { display: none !important; }
 
-/* ── RIGHT INVENTORY PANEL (PC persistent) ── */
+/* ── RIGHT INVENTORY PANEL (PC — hover overlay z pravej strany) ── */
 #inv-panel {
-  border-left: 1px solid var(--border);
+  position: fixed;
+  top: 42px; right: 0; bottom: 0;
+  width: 300px;
+  z-index: 199;
+  border-left: 1px solid var(--green3);
   display: flex; flex-direction: column;
-  height: calc(100dvh - 38px);
-  background: linear-gradient(180deg, #060e06 0%, var(--bg) 100%);
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(180deg, #051205 0%, #060e06 40%, #050a05 100%);
+  box-shadow: -4px 0 32px rgba(0,0,0,0.8), -1px 0 0 rgba(57,255,20,0.08);
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease;
+  transition-delay: 0.08s;
+  will-change: transform, opacity;
+}
+/* Trigger hover zóna — drawer záložka (vizuál definovaný vyššie) */
+/* Otvoriť panel pri hoveri */
+#inv-panel-trigger:hover ~ #inv-panel,
+#inv-panel:hover {
+  transform: translateX(0); opacity: 1;
+  pointer-events: auto; transition-delay: 0s;
 }
 #inv-panel::before {
   content: '';
   position: absolute; top: 0; left: 0; bottom: 0; width: 1px;
   background: linear-gradient(180deg, transparent, var(--green3), transparent);
-  opacity: 0.3;
-  pointer-events: none;
+  opacity: 0.3; pointer-events: none;
 }
 #inv-panel-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 7px 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--green3);
   flex-shrink: 0;
-  background: linear-gradient(90deg, rgba(57,255,20,0.06), transparent);
+  background: linear-gradient(90deg, rgba(57,255,20,0.1), rgba(57,255,20,0.03));
 }
 #inv-panel-title {
   font-family: var(--font-hud); font-size: 9px; letter-spacing: 3px;
   color: var(--green); text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(57,255,20,0.5);
 }
 #inv-panel-tabs {
-  display: flex; border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #060b06, var(--bg));
+  display: flex; border-bottom: 1px solid var(--green3);
+  background: linear-gradient(180deg, #071207, #060e06);
   flex-shrink: 0;
 }
 .inv-ptab {
   flex: 1; background: transparent; border: none;
   border-bottom: 2px solid transparent;
-  color: var(--text-dim); font-family: var(--font-body); font-size: 9px;
+  color: #5a9a5a; font-family: var(--font-body); font-size: 9px;
   font-weight: 600; letter-spacing: 1px;
   padding: 6px 2px; cursor: pointer; transition: all 0.12s;
   text-transform: uppercase;
 }
-.inv-ptab.active { color: var(--green); border-bottom-color: var(--green); }
-.inv-ptab:hover { color: var(--blue); }
+.inv-ptab.active { color: var(--green); border-bottom-color: var(--green); text-shadow: 0 0 8px rgba(57,255,20,0.4); }
+.inv-ptab:hover { color: var(--cyan); text-shadow: 0 0 6px rgba(34,211,238,0.4); }
 #inv-panel-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .inv-ppane { display: none; }
 .inv-ppane.active { display: block; }
 
 /* ── DIALOG — improved readability ── */
 #inv-drawer {
-  position: fixed; top: 38px; right: 0; z-index: 750;
+  position: fixed; top: 42px; right: 0; z-index: 750;
   width: min(340px, 100vw);
-  height: calc(100vh - 38px); height: calc(100dvh - 38px);
+  height: calc(100vh - 42px); height: calc(100dvh - 42px);
   background: linear-gradient(180deg, #060e06 0%, var(--bg) 100%);
   border-left: 1px solid var(--border);
   box-shadow: -4px 0 32px rgba(0,0,0,0.7);
@@ -1175,12 +1914,12 @@ a:hover { color: #fff; }
   position: fixed; inset: 0; z-index: 700;
   background: rgba(0,0,0,0.92);
   display: none; align-items: flex-start; justify-content: center;
-  padding-top: 38px; overflow-y: auto;
+  padding-top: 42px; overflow-y: auto;
 }
 .overlay.show { display: flex; }
 
 #uni-overlay, #gym-overlay, #boats-overlay, #garden-overlay, #hq-overlay {
-  position: fixed; top: 38px; left: 52px; right: 0; bottom: 0; z-index: 600;
+  position: fixed; top: 42px; left: 52px; right: 0; bottom: 0; z-index: 600;
   background: var(--bg); display: none; flex-direction: column;
   overflow-y: auto; -webkit-overflow-scrolling: touch;
 }
@@ -1686,7 +2425,7 @@ a:hover { color: #fff; }
     display: grid !important;
     grid-template-columns: 42px 1fr 42px !important;
     grid-template-rows: 1fr !important;
-    height: calc(100dvh - 38px - 52px);
+    height: calc(100dvh - 42px - 52px);
     gap: 0;
     padding-top: 0;
     overflow: hidden;
@@ -1695,8 +2434,9 @@ a:hover { color: #fff; }
   #left-panel { display: none !important; }
   #right-panel { display: none !important; }
   #inv-panel { display: none !important; }
+  #inv-panel-trigger { display: none !important; }
   #center-panel {
-    height: calc(100dvh - 38px - 52px);
+    height: calc(100dvh - 42px - 52px);
     flex: 1; border-right: none; border-left: none;
     overflow: hidden;
     grid-column: 2 !important;
@@ -1717,6 +2457,7 @@ a:hover { color: #fff; }
   #topbar-right { gap: 6px; }
   .top-micro-btn { display: none; }
   #topbar-money { font-size: 12px; }
+  #topbar-vitals { display: none; }
   #mobile-nav { display: flex; }
   .overlay { padding-top: 38px; }
   #uni-overlay, #gym-overlay, #boats-overlay, #garden-overlay, #hq-overlay { left: 0; }
@@ -1724,6 +2465,42 @@ a:hover { color: #fff; }
   .boat-grid { grid-template-columns: 1fr; }
   .garden-plot-grid { grid-template-columns: repeat(3,1fr); gap: 4px; padding: 8px; }
   .hq-room-layout { grid-template-columns: 1fr; grid-template-rows: 200px 1fr; }
+
+  /* ── VÄČŠÍ DIALÓG TEXT NA MOBILE ── */
+  .dialog-npc-bubble {
+    font-size: 16px !important;
+    line-height: 1.75 !important;
+    padding: 14px 14px 14px 104px !important;
+    margin: 10px 10px 6px 10px !important;
+  }
+  .dialog-npc-bubble .npc-avatar {
+    font-size: 48px !important;
+    width: 76px !important; height: 76px !important;
+    left: 10px !important;
+  }
+  .dialog-npc-bubble .npc-avatar img {
+    width: 76px !important; height: 76px !important;
+  }
+  .dialog-narration {
+    font-size: 16px !important;
+    line-height: 1.75 !important;
+    margin: 8px 10px 4px 10px !important;
+  }
+  .choice-btn {
+    font-size: 15px !important;
+    padding: 13px 8px !important;
+  }
+
+  /* ── CityMap na mobile — fullscreen bez topbar scrollu ── */
+  #city-map-overlay {
+    z-index: 800 !important;
+  }
+  .city-map-canvas {
+    inset: 56px 0 72px 0 !important;
+  }
+  .city-map-title { font-size: 13px !important; letter-spacing: 3px !important; }
+  .city-map-close-btn { font-size: 11px !important; padding: 5px 10px !important; }
+  .city-loc-label { font-size: 9px !important; }
 }
 
 /* ── MOBILE NAV ── */
@@ -3257,42 +4034,34 @@ body.low-power .minigame-overlay {
 
 .city-map-header {
   position: absolute; top: 0; left: 0; right: 0;
-  padding: 14px 22px;
+  padding: 12px 22px;
   background: linear-gradient(180deg, rgba(5,8,16,0.95) 0%, transparent 100%);
   display: flex; align-items: center; justify-content: space-between;
   z-index: 10;
 }
-.city-map-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 16px; font-weight: 900;
-  letter-spacing: 6px;
-  color: #39ff14;
-  text-shadow: 0 0 14px rgba(57,255,20,0.7), 0 0 28px rgba(57,255,20,0.3);
-  animation: cityTitlePulse 4s ease-in-out infinite;
-}
-@keyframes cityTitlePulse {
-  0%, 100% { text-shadow: 0 0 14px rgba(57,255,20,0.7), 0 0 28px rgba(57,255,20,0.3); }
-  50%      { text-shadow: 0 0 20px rgba(57,255,20,0.9), 0 0 40px rgba(57,255,20,0.5); }
-}
-.city-map-subtitle {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px; color: #6a8a6a;
-  letter-spacing: 3px;
-  margin-top: 2px;
-}
+/* Close button — presunutý do footeru, vždy viditeľný */
 .city-map-close-btn {
-  background: transparent; border: 1px solid #2a4a2a;
-  color: #6a8a6a;
+  background: rgba(239,68,68,0.18);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
   font-family: 'Share Tech Mono', monospace;
   font-size: 12px; letter-spacing: 2px;
-  padding: 6px 14px;
+  padding: 8px 28px;
   cursor: pointer;
   transition: all 0.15s;
+  text-shadow: 0 0 8px rgba(239,68,68,0.5);
+  box-shadow: 0 0 12px rgba(239,68,68,0.2);
+  animation: closePulse 3s ease-in-out infinite;
+}
+@keyframes closePulse {
+  0%,100% { box-shadow: 0 0 8px rgba(239,68,68,0.2); }
+  50%      { box-shadow: 0 0 20px rgba(239,68,68,0.5), 0 0 40px rgba(239,68,68,0.2); }
 }
 .city-map-close-btn:hover {
-  border-color: #ef4444;
-  color: #fca5a5;
-  box-shadow: 0 0 12px rgba(239,68,68,0.3);
+  background: rgba(239,68,68,0.35);
+  border-color: #f87171; color: #fff;
+  box-shadow: 0 0 28px rgba(239,68,68,0.6);
+  animation: none;
 }
 
 /* Map canvas container */
@@ -3362,12 +4131,10 @@ body.low-power .minigame-overlay {
 /* Map footer with player stats */
 .city-map-footer {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 14px 22px;
-  background: linear-gradient(0deg, rgba(5,8,16,0.95) 0%, transparent 100%);
+  padding: 12px 22px;
+  background: linear-gradient(0deg, rgba(5,8,16,0.97) 0%, transparent 100%);
   display: flex; align-items: center; justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  z-index: 10;
+  gap: 16px; z-index: 10;
 }
 .city-map-stats {
   display: flex; gap: 16px;
@@ -3524,8 +4291,9 @@ body.low-power .minigame-overlay {
 #cinematic-poster{
   position:absolute;inset:0;
   background:url('https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/mainmenu.jpg')
-    center center / contain no-repeat;
+    center center / cover no-repeat;
   opacity:0;transition:opacity 0.9s ease;
+  filter: brightness(0.55) saturate(1.2) contrast(1.1);
 }
 #cinematic-overlay.show #cinematic-poster{opacity:1}
 #cinematic-poster::after{
@@ -3569,6 +4337,8 @@ body.low-power .minigame-overlay {
 
 <!-- CINEMATIC OVERLAY — Nova hra -->
 <div id="cinematic-overlay">
+  <div class="glitch-bar" style="top:30%"></div>
+  <div class="glitch-bar" style="top:60%;animation-delay:0.2s"></div>
   <div id="cinematic-poster"></div>
   <div id="cinematic-text">
     <div class="cin-tag">// PRIEVIDZA 2077 //</div>
@@ -3646,6 +4416,15 @@ body.low-power .minigame-overlay {
   <div class="menu-corner tr">48°46′N<br>18°37′E<br>03:47:12</div>
   <div class="menu-corner bl">v2.0·LAZARUS<br>BUILD·2025.04</div>
   <div class="menu-corner br">AGENT·STATUS<br>INFILTRATED<br>▓▓▓▓▓░░░</div>
+  <!-- Ambient audio indicator -->
+  <div id="menu-ambient-indicator">
+    <div id="menu-ambient-bars">
+      <div class="amb-bar"></div><div class="amb-bar"></div>
+      <div class="amb-bar"></div><div class="amb-bar"></div>
+      <div class="amb-bar"></div>
+    </div>
+    <span>AMBIENT</span>
+  </div>
 
   <!-- Pravý panel s tlačidlami — skrytý počas loadingu -->
   <div id="menu-panel" class="loading">
@@ -3690,38 +4469,56 @@ body.low-power .minigame-overlay {
   <a href="https://zacharko.github.io/CEO-od-Evil/" id="topbar-title" title="Domovská stránka">⚔ CEO ZLA // LAZARUS</a>
   <div id="topbar-tabs">
     <button class="tab-btn active" onclick="switchView('game')">⚡ Operácia</button>
-    <button class="tab-btn"        onclick="switchView('inv')">🎒 Inventár</button>
-    <button class="tab-btn"        onclick="switchView('boats')">⛵ Lode</button>
-    <button class="tab-btn"        onclick="switchView('garden')">🌱 Záhradka</button>
-    <button class="tab-btn"        onclick="switchView('uni')">🎓 Univerzita</button>
+    <button class="tab-btn"        onclick="openAgentPanel()">🕵 Agent</button>
+    <button class="tab-btn" id="map-btn" onclick="CityMap.open()">⌖ Mapa</button>
     <button class="tab-btn"        onclick="switchView('gym')">💪 Gym</button>
     <button class="tab-btn"        onclick="switchView('hq')">🏠 Základňa</button>
     <button class="tab-btn"        onclick="switchView('shop')">🛒 Obchod</button>
     <button class="tab-btn"        onclick="openHackView()">💻 Hack</button>
-    <button class="tab-btn" id="map-btn" data-tab="map" onclick="CityMap.open()">⌖ Mapa</button>
     <button class="tab-btn" data-tab="factions" onclick="FactionsSystem.openWindow()">⚔ Frakcie</button>
   </div>
   <div id="topbar-right">
-    <span id="topbar-job" style="display:none">---</span>
-    <span id="topbar-equip-badge" style="display:none;font-size:12px;letter-spacing:1px;color:var(--green3);border:1px solid var(--border);padding:2px 7px;font-family:var(--font-mono)"></span>
-    <span id="tier-badge">T1 💻 Pouličný Hacker</span>
-    <span id="topbar-money">₿ 0</span>
-    <button id="inv-topbar-btn" onclick="toggleInvDrawer()">🎒 Inventár</button>
-    <span id="topbar-clock">--:--:--</span>
-    <button class="top-micro-btn" onclick="saveGame()">💾 Uložiť</button>
-    <button class="top-micro-btn" onclick="loadGame()">📂 Načítať</button>
-    <div id="audio-controller" title="Hudba na pozadí">
-      <button id="audio-toggle-btn" onclick="AudioController.toggle()" title="Zapnúť/vypnúť hudbu">🔊</button>
-      <div id="audio-wave" class="paused">
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
-        <div class="wave-bar"></div>
+    <!-- HP + SAN mini-bary -->
+    <div id="topbar-vitals">
+      <div class="topbar-vital">
+        <span class="topbar-vital-icon">❤️</span>
+        <div class="topbar-vital-bar-wrap"><div class="topbar-vital-bar hp" id="topbar-bar-hp" style="width:100%"></div></div>
+        <span class="topbar-vital-val hp" id="topbar-val-hp">100</span>
       </div>
-      <input type="range" id="volume-slider" min="0" max="100" value="35" oninput="AudioController.setVolume(this.value)">
-      <span id="volume-label">35%</span>
+      <div class="topbar-vital">
+        <span class="topbar-vital-icon">🧠</span>
+        <div class="topbar-vital-bar-wrap"><div class="topbar-vital-bar san" id="topbar-bar-san" style="width:100%"></div></div>
+        <span class="topbar-vital-val san" id="topbar-val-san">100</span>
+      </div>
     </div>
-    <button class="top-micro-btn" onclick="showMainMenu()">🏠 Menu</button>
+    <span id="topbar-hunger-chip" style="display:none">🟢 Sýty</span>
+    <span id="topbar-job" style="display:none">---</span>
+    <span id="topbar-equip-badge" style="display:none"></span>
+    <span id="tier-badge" style="display:none"></span>
+    <span id="topbar-money">₿ <span id="topbar-money-val">0</span></span>
+    <span id="topbar-clock">--:--:--</span>
+
+    <!-- ⚙ Nastavenia dropdown -->
+    <div id="settings-btn-wrap">
+      <button id="settings-btn" title="Nastavenia">⚙</button>
+      <div id="settings-dropdown">
+        <div class="settings-row">
+          <span class="settings-label">🔊 Hudba</span>
+          <button id="audio-toggle-btn" onclick="AudioController.toggle()">ON</button>
+          <input type="range" id="volume-slider" min="0" max="100" value="35" oninput="AudioController.setVolume(this.value)">
+          <span id="volume-label">35%</span>
+        </div>
+        <div id="audio-wave" class="paused settings-wave">
+          <div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <div class="settings-divider"></div>
+        <button class="settings-action-btn" onclick="saveGame();document.getElementById('settings-dropdown').classList.remove('open')">💾 Uložiť hru</button>
+        <button class="settings-action-btn" onclick="loadGame();document.getElementById('settings-dropdown').classList.remove('open')">📂 Načítať hru</button>
+        <div class="settings-divider"></div>
+        <button class="settings-action-btn" onclick="showMainMenu()">🏠 Hlavné menu</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3819,6 +4616,8 @@ body.low-power .minigame-overlay {
     <button class="sidenav-btn" data-view="shop" data-tip="Obchod" onclick="switchView('shop')">🛒</button>
     <div class="sidenav-divider"></div>
     <button class="sidenav-btn" data-view="hack" data-tip="Hacking" onclick="openHackView()">💻</button>
+    <button class="sidenav-btn" data-tip="Mapa" onclick="CityMap.open()">⌖</button>
+    <button class="sidenav-btn" data-tip="Frakcie" onclick="FactionsSystem.openWindow()">⚔</button>
   </div>
 
   <!-- LEFT PANEL -->
@@ -3858,14 +4657,21 @@ body.low-power .minigame-overlay {
           <span class="panel-header-toggle" id="toggle-sec-income">▼</span>
         </div>
         <div class="panel-body" id="sec-income">
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">💼</span>Zamestnanie</span><span class="income-val" id="inc-job">+0/s</span></div>
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">💻</span>Hackovanie</span><span class="income-val" id="inc-hack">+0/s</span></div>
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">🐟</span>Predaj rýb</span><span class="income-val" id="inc-fish">+0/s</span></div>
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">⛵</span>Lode</span><span class="income-val" id="inc-boats">+0/s</span></div>
-          <div class="income-row"><span class="income-label"><span class="income-label-icon">⚡</span>Bonusový</span><span class="income-val" id="inc-bonus">+0/s</span></div>
-          <div class="income-row" id="inc-corp-row"><span class="income-label"><span class="income-label-icon">🏢</span>Korporácie</span><span class="income-val" id="inc-corp">+0/s</span></div>
-          <div class="income-row factions-income" id="inc-factions-row" style="display:none"><span class="income-label"><span class="income-label-icon">⚔</span>Frakcie</span><span class="income-val" id="inc-factions">+0/s</span></div>
-          <div class="income-row" style="border-top:1px solid var(--border2);margin-top:4px;padding-top:6px;"><span class="income-label" style="color:var(--text-bright);font-weight:700">📊 SPOLU</span><span class="income-total" id="inc-total">+0/s</span></div>
+          <!-- Skryté elementy — potrebujú existovať pre JS updateIncome() -->
+          <div style="display:none">
+            <span id="inc-job"></span><span id="inc-hack"></span><span id="inc-fish"></span>
+            <span id="inc-boats"></span><span id="inc-bonus"></span><span id="inc-corp"></span>
+            <span id="inc-factions"></span>
+          </div>
+          <div id="inc-corp-row" style="display:none"></div>
+          <div id="inc-factions-row" style="display:none"></div>
+          <!-- Len celkový príjem -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0">
+            <span style="font-family:var(--font-body);font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:6px">
+              <span style="font-size:14px">📊</span>Celkový príjem
+            </span>
+            <span class="income-total" id="inc-total" style="font-size:14px">+0/s</span>
+          </div>
         </div>
       </div>
       <div class="panel-section">
@@ -3892,8 +4698,19 @@ body.low-power .minigame-overlay {
           <div class="op-flag" id="op-druid"><div class="op-dot"></div><span class="op-name">🌿 Kontaktuj Druida</span></div>
         </div>
       </div>
+      <div class="panel-section">
+        <div class="panel-header" onclick="toggleSection('sec-textmap');renderLeftTextMap()">
+          <span class="panel-header-title">🗺 Mapa // Lokácie</span>
+          <span class="panel-header-toggle" id="toggle-sec-textmap">▼</span>
+        </div>
+        <div class="panel-body" id="sec-textmap">
+          <div id="left-textmap-body" style="padding:4px 0"></div>
+        </div>
+      </div>
     </div>
   </div>
+  <!-- Backdrop pre left-panel hover efekt -->
+  <div id="left-panel-backdrop"></div>
 
   <!-- CENTER PANEL -->
   <div id="center-panel">
@@ -3910,8 +4727,10 @@ body.low-power .minigame-overlay {
       <div id="scene-photo-overlay"></div>
       <div id="scene-loc-badge"></div>
     </div>
-    <div id="scene-text-wrap"></div>
-    <div id="choices-wrap"></div>
+    <div id="dialog-split">
+      <div id="scene-text-wrap"></div>
+      <div id="choices-wrap"></div>
+    </div>
     <div id="log-wrap"></div>
   </div>
 
@@ -3923,6 +4742,8 @@ body.low-power .minigame-overlay {
   </button>
 
   <!-- RIGHT INVENTORY PANEL (PC persistent, col 4) -->
+  <!-- Trigger zóna — hover ju otvorí inv-panel -->
+  <div id="inv-panel-trigger"></div>
   <div id="inv-panel">
     <div id="inv-panel-header">
       <span id="inv-panel-title">🎒 Inventár // Agent</span>
@@ -3941,6 +4762,7 @@ body.low-power .minigame-overlay {
       <button class="inv-ptab"        onclick="switchInvPanelTab('equip')">⚔️ Výstroj</button>
       <button class="inv-ptab"        onclick="switchInvPanelTab('fish')">🐟 Ryby</button>
       <button class="inv-ptab"        onclick="switchInvPanelTab('shop')">🛒 Obchod</button>
+      <button class="inv-ptab"        onclick="switchInvPanelTab('log')" id="inv-ptab-log">📋 Log</button>
     </div>
     <div id="inv-panel-body">
       <div class="inv-ppane active" id="inv-ppane-items">
@@ -3998,6 +4820,10 @@ body.low-power .minigame-overlay {
       <div class="inv-ppane" id="inv-ppane-shop">
         <div id="inv-panel-shop-body"></div>
       </div>
+      <div class="inv-ppane" id="inv-ppane-log">
+        <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:2px;color:var(--green3);padding:8px 12px 4px;border-bottom:1px solid var(--border2);text-transform:uppercase;opacity:0.8">◆ Konzola // Herný log</div>
+        <div id="inv-panel-log-body" style="padding:4px 0;font-size:12px;line-height:1.6"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -4019,6 +4845,60 @@ body.low-power .minigame-overlay {
     <button onclick="closeTextMap()" style="background:transparent;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:2px 8px">✕</button>
   </div>
   <div id="textmap-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0;flex:1"></div>
+</div>
+
+<!-- AGENT PANEL OVERLAY -->
+<div id="agent-backdrop" onclick="closeAgentPanel()" style="display:none;position:fixed;inset:0;z-index:750;background:rgba(0,0,0,0.6)"></div>
+<div id="agent-panel" style="
+  position:fixed;top:42px;right:0;bottom:0;z-index:751;
+  width:min(420px,100vw);
+  background:linear-gradient(180deg,#070f07,var(--bg));
+  border-left:1px solid var(--border);
+  box-shadow:-4px 0 40px rgba(0,0,0,0.9);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none;
+">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:linear-gradient(90deg,rgba(57,255,20,0.07),transparent)">
+    <span style="font-family:var(--font-hud);font-size:10px;letter-spacing:3px;color:var(--green)">🕵 AGENT // PROFIL</span>
+    <button onclick="closeAgentPanel()" style="background:transparent;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:2px 8px">✕</button>
+  </div>
+  <!-- Tabs -->
+  <div id="agent-tabs" style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0">
+    <button class="agent-tab active" onclick="switchAgentTab('stats')">📊 Štatistiky</button>
+    <button class="agent-tab" onclick="switchAgentTab('items')">🎒 Inventár</button>
+    <button class="agent-tab" onclick="switchAgentTab('equip')">⚔️ Výstroj</button>
+  </div>
+  <!-- Pane: Stats -->
+  <div class="agent-pane active" id="agent-pane-stats" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px">
+    <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:2px;color:var(--green3);margin-bottom:10px;opacity:0.8">◆ VITALS</div>
+    <div class="stat-row"><span class="stat-icon" style="color:#ef4444">❤️</span><span class="stat-label">HP</span><div class="stat-bar-wrap"><div class="stat-bar hp" id="ag-bar-hp" style="width:100%"></div></div><span class="stat-val hp" id="ag-val-hp">100</span></div>
+    <div class="stat-row"><span class="stat-icon" style="color:#f59e0b">🧠</span><span class="stat-label">SAN</span><div class="stat-bar-wrap"><div class="stat-bar san" id="ag-bar-san" style="width:100%"></div></div><span class="stat-val san" id="ag-val-san">100</span></div>
+    <div class="stat-row"><span class="stat-icon" style="color:#3b82f6">⭐</span><span class="stat-label">XP</span><div class="stat-bar-wrap"><div class="stat-bar xp" id="ag-bar-xp" style="width:0%"></div></div><span class="stat-val xp" id="ag-val-xp">0</span></div>
+    <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">🏆</span><span class="stat-label">LVL</span><div class="stat-bar-wrap" style="background:transparent;border-color:transparent"></div><span class="stat-val" style="color:var(--cyan)" id="ag-val-level">1</span></div>
+    <div class="stat-divider"></div>
+    <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:2px;color:var(--green3);margin-bottom:10px;opacity:0.8">◆ ATRIBÚTY</div>
+    <div class="stat-row"><span class="stat-icon" style="color:#f97316">⚔️</span><span class="stat-label">SIL</span><div class="stat-bar-wrap"><div class="stat-bar str" id="ag-bar-str" style="width:10%"></div></div><span class="stat-val str" id="ag-val-str">10</span></div>
+    <div class="stat-row"><span class="stat-icon" style="color:#a78bfa">🤸</span><span class="stat-label">OHY</span><div class="stat-bar-wrap"><div class="stat-bar flex-s" id="ag-bar-flex" style="width:10%"></div></div><span class="stat-val flex-s" id="ag-val-flex">10</span></div>
+    <div class="stat-row"><span class="stat-icon" style="color:#00d4ff">💾</span><span class="stat-label">HCK</span><div class="stat-bar-wrap"><div class="stat-bar hack-s" id="ag-bar-hack" style="width:10%"></div></div><span class="stat-val hack-s" id="ag-val-hack">10</span></div>
+    <div class="stat-divider"></div>
+    <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:2px;color:var(--green3);margin-bottom:10px;opacity:0.8">◆ HLAD</div>
+    <div class="stat-row">
+      <span class="stat-icon" id="ag-hunger-icon" style="color:#4ade80">🟢</span>
+      <span class="stat-label">HLAD</span>
+      <div class="stat-bar-wrap"><div class="stat-bar hunger-full" id="ag-bar-hunger" style="width:100%;background:linear-gradient(90deg,#14532d,#16a34a,#4ade80)"></div></div>
+      <span class="stat-val" style="color:#4ade80" id="ag-val-hunger">100</span>
+    </div>
+  </div>
+  <!-- Pane: Items -->
+  <div class="agent-pane" id="agent-pane-items" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0;display:none">
+    <div id="agent-items-body" style="padding:0 4px"><div class="inv-empty">// prázdny inventár //</div></div>
+  </div>
+  <!-- Pane: Equip -->
+  <div class="agent-pane" id="agent-pane-equip" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0;display:none">
+    <div id="agent-equip-body" style="padding:0 8px"></div>
+  </div>
 </div>
 
 <!-- OVERLAYS -->
@@ -4205,7 +5085,7 @@ body.low-power .minigame-overlay {
   <button class="mobile-nav-btn" id="mnav-left" onclick="mobileCycleLeft()">◀<span>Štat.</span></button>
   <button class="mobile-nav-btn" id="mnav-game" onclick="mobileShowGame()">⚡<span>Hra</span></button>
   <button class="mobile-nav-btn" id="mnav-inv" onclick="toggleInvDrawer()">🎒<span>Inv.</span></button>
-  <button class="mobile-nav-btn" id="mnav-map" onclick="openTextMap()">🗺<span>Mapa</span></button>
+  <button class="mobile-nav-btn" id="mnav-map" onclick="CityMap.open()">🗺<span>Mapa</span></button>
   <button class="mobile-nav-btn" id="mnav-right" onclick="mobileMiniLog()">📋<span>Log</span></button>
 </div>
 
@@ -4250,7 +5130,7 @@ body.low-power .minigame-overlay {
 <div id="mobile-log-panel" class="mobile-overlay-panel"></div>
 
 <!-- JOB SELECT -->
-<div id="job-overlay">
+<div id="job-overlay" class="hidden">
   <div class="job-screen">
     <div class="job-title">⚔ CEO ZLA ⚔</div>
     <div class="job-sub">Vyber si svoju rolu — Operácia Lazarus</div>
@@ -4553,11 +5433,13 @@ var Renderer = (function() {
   function _renderStats() {
     var hpBar = document.getElementById('bar-hp');
     if (!hpBar) return;
-    hpBar.style.width   = Math.min(100, S.hp) + '%';
-    hpBar.className     = 'stat-bar hp' + (S.hp < 30 ? ' red' : '');
-    document.getElementById('val-hp').textContent    = Math.floor(S.hp);
-    document.getElementById('bar-san').style.width   = Math.min(100,S.san) + '%';
-    document.getElementById('val-san').textContent   = Math.floor(S.san);
+    var hp  = Math.min(100, Math.max(0, S.hp  || 0));
+    var san = Math.min(100, Math.max(0, S.san || 0));
+    hpBar.style.width   = hp + '%';
+    hpBar.className     = 'stat-bar hp' + (hp < 30 ? ' red' : '');
+    document.getElementById('val-hp').textContent    = Math.floor(hp);
+    document.getElementById('bar-san').style.width   = san + '%';
+    document.getElementById('val-san').textContent   = Math.floor(san);
     var xpPct = S.level > 0 ? Math.min(100, Math.round(S.xp / (S.level * GameConfig.XP_PER_LEVEL_MULT) * 100)) : 0;
     document.getElementById('bar-xp').style.width    = xpPct + '%';
     document.getElementById('val-xp').textContent    = S.xp;
@@ -4568,11 +5450,45 @@ var Renderer = (function() {
     document.getElementById('val-flex').textContent  = Math.floor(S.flex);
     document.getElementById('bar-hack').style.width  = Math.min(100,S.hackStat) + '%';
     document.getElementById('val-hack').textContent  = Math.floor(S.hackStat);
+    // ── Topbar vitals sync ──
+    var tbHpBar = document.getElementById('topbar-bar-hp');
+    var tbSanBar = document.getElementById('topbar-bar-san');
+    var tbHpVal  = document.getElementById('topbar-val-hp');
+    var tbSanVal = document.getElementById('topbar-val-san');
+    if (tbHpBar)  tbHpBar.style.width  = hp  + '%';
+    if (tbSanBar) tbSanBar.style.width = san + '%';
+    if (tbHpVal)  tbHpVal.textContent  = Math.floor(hp);
+    if (tbSanVal) tbSanVal.textContent = Math.floor(san);
+    // Červený flash na topbar pri kriticky nízkych hodnotách
+    if (tbHpBar) tbHpBar.style.background = hp < 30
+      ? 'linear-gradient(90deg,#450a0a,#dc2626)' : '';
   }
 
   function _renderMoney() {
-    var el = document.getElementById('topbar-money');
-    if (el) el.textContent = '₿ ' + S.money.toLocaleString('sk');
+    var valEl = document.getElementById('topbar-money-val');
+    if (!valEl) {
+      // fallback pre starý element
+      var el = document.getElementById('topbar-money');
+      if (el) el.textContent = '₿ ' + S.money.toLocaleString('sk');
+      return;
+    }
+    var prev = parseInt(valEl.dataset.prev || S.money, 10);
+    var next = Math.floor(S.money);
+    var formatted = S.money.toLocaleString('sk');
+    if (prev !== next) {
+      var cls = next > prev ? 'money-up' : 'money-down';
+      valEl.classList.remove('money-up', 'money-down');
+      valEl.offsetWidth; // reflow
+      valEl.textContent = formatted;
+      valEl.classList.add(cls);
+      setTimeout(function(){ valEl.classList.remove('money-up','money-down'); }, 600);
+    } else {
+      valEl.textContent = formatted;
+    }
+    valEl.dataset.prev = next;
+    // Mobile sync
+    var m2 = document.getElementById('mobile-topbar-money2');
+    if (m2) m2.textContent = '₿ ' + formatted;
   }
 
   function _renderIncome() {
@@ -4830,6 +5746,8 @@ var SceneManager = (function() {
     Renderer.updateStats();
     Renderer.updateInventory();
     Renderer.updateFlags();
+    // Aktualizuj ◆ TU marker v textovej mape
+    if (typeof _refreshCurrentMarker === 'function') _refreshCurrentMarker();
 
     // Update inv-panel NPC portrait strip
     var npcStrip = document.getElementById('inv-panel-npc');
@@ -11231,6 +12149,17 @@ function addLog(msg, cls) {
   wrap.appendChild(line);
   while (wrap.children.length > GameConfig.LOG_MAX_LINES) wrap.removeChild(wrap.firstChild);
   wrap.scrollTop = wrap.scrollHeight;
+  // Zrkadliť do inv-panel log tabu ak je aktívny
+  var logPane = document.getElementById('inv-ppane-log');
+  if (logPane && logPane.classList.contains('active')) {
+    var logBody = document.getElementById('inv-panel-log-body');
+    if (logBody) {
+      var clone = line.cloneNode(true);
+      logBody.appendChild(clone);
+      while (logBody.children.length > GameConfig.LOG_MAX_LINES) logBody.removeChild(logBody.firstChild);
+      logPane.scrollTop = logPane.scrollHeight;
+    }
+  }
 }
 
 /* ── NOTIFICATIONS ────────────────────────────────────────────── */
@@ -11269,15 +12198,26 @@ function switchView(v) {
 function switchInvPanelTab(tab) {
   document.querySelectorAll('.inv-ptab').forEach(function(t){ t.classList.remove('active'); });
   document.querySelectorAll('.inv-ppane').forEach(function(p){ p.classList.remove('active'); });
-  var paneId = { items:'inv-ppane-items', equip:'inv-ppane-equip', fish:'inv-ppane-fish', shop:'inv-ppane-shop' }[tab];
+  var paneId = { items:'inv-ppane-items', equip:'inv-ppane-equip', fish:'inv-ppane-fish', shop:'inv-ppane-shop', log:'inv-ppane-log' }[tab];
   var pane = document.getElementById(paneId); if (pane) pane.classList.add('active');
-  var idx = { items:0, equip:1, fish:2, shop:3 }[tab];
+  var idx = { items:0, equip:1, fish:2, shop:3, log:4 }[tab];
   var tabs = document.querySelectorAll('.inv-ptab');
   if (tabs[idx]) tabs[idx].classList.add('active');
   if (tab==='fish')  _renderInvPanelFish();
   if (tab==='shop')  _renderInvPanelShop();
   if (tab==='equip') _renderInvPanelEquip();
   if (tab==='items') _renderInvPanelItems();
+  if (tab==='log')   _renderInvPanelLog();
+}
+
+function _renderInvPanelLog() {
+  var src  = document.getElementById('log-wrap');
+  var dest = document.getElementById('inv-panel-log-body');
+  if (!dest) return;
+  dest.innerHTML = src ? src.innerHTML : '<div class="inv-empty">// prázdny log //</div>';
+  // Scroll to bottom
+  var pane = document.getElementById('inv-ppane-log');
+  if (pane) setTimeout(function(){ pane.scrollTop = pane.scrollHeight; }, 30);
 }
 
 function _renderInvPanelItems() {
@@ -11605,12 +12545,15 @@ function newGame() {
     var dot=el.querySelector('.op-dot'); if(dot) dot.classList.remove('active');
   });
   var jb = document.getElementById('topbar-job'); jb.textContent='---'; jb.style.display='none';
+  // Skry job overlay počas cinematicu — zobrazí sa až po ňom
+  document.getElementById('job-overlay').classList.add('hidden');
   Renderer.updateMoney(); Renderer.updateIncome(); Renderer.updateStats(); Renderer.updateShop();
   HungerSystem.init();
   setTimeout(function(){ if(typeof _renderInvPanelItems==='function') _renderInvPanelItems(); }, 200);
-  document.getElementById('job-overlay').classList.remove('hidden');
+  setTimeout(function(){ if(typeof renderLeftTextMap==='function') renderLeftTextMap(); }, 300);
   GameLoop.start();
   StateMachine.transition(StateMachine.STATES.PLAYING);
+  // Job overlay sa zobrazí až po kompletnom načítaní scény (volá ho button handler)
 }
 
 function showMainMenu() {
@@ -12618,12 +13561,26 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
 
 // ── Loading Sequence ─────────────────────────────────────────────
 (function initLoadingSequence() {
-  var bar    = document.getElementById('loading-bar');
-  var status = document.getElementById('loading-status');
-  var pctEl  = document.getElementById('loading-pct');
+  // Skry main-menu panel (tlačidlá) počas boot loadingu
+  var menuPanel = document.getElementById('menu-panel');
+  if (menuPanel) menuPanel.classList.add('loading');
 
-  // [progress%, text, delay_ms]
-  // delay = čas PRED týmto krokom (variabilný pre "reálny" pocit)
+  // Zobraz cinematic overlay ako boot screen — rovnaký štýl ako nová hra
+  var overlay  = document.getElementById('cinematic-overlay');
+  var barFill  = document.getElementById('cinematic-bar-fill');
+  var hintEl   = overlay ? overlay.querySelector('.cin-hint') : null;
+  var titleEl  = overlay ? overlay.querySelector('.cin-title') : null;
+  var tagEl    = overlay ? overlay.querySelector('.cin-tag') : null;
+  var subEl    = overlay ? overlay.querySelector('.cin-sub') : null;
+
+  if (overlay) {
+    overlay.classList.add('show');
+    // Boot režim — mierne odlišný text
+    if (tagEl)   tagEl.textContent   = '// SYSTÉM SA PREBÚDZA //';
+    if (titleEl) titleEl.textContent = 'LAZARUS PROTOKOL';
+    if (subEl)   subEl.textContent   = 'INICIALIZÁCIA AGENTA DELTA';
+  }
+
   var steps = [
     [ 2,  '// BOOT SEKVENCIA AKTIVOVANÁ //',                          120],
     [ 5,  '// Kontrolujem či si nejaký reptilián... //',              280],
@@ -12635,22 +13592,22 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
     [25,  '// Potkany: 2,847 aktívnych jedincov — bežný stav //',     320],
     [29,  '// Kalibrujem LAZARUS frekvencie — uzol 1-7 //',           250],
     [33,  '// Uzol 7 (Vendelin): ONLINE. Podozrivý, ale čo //',       380],
-    [37,  '// Načítavam Miki Bar... + Lucia, + Michal, + UFO dáta //',210],
+    [37,  '// Načítavam Miki Bar... + Lucia, + Michal + UFO dáta //', 210],
     [41,  '// Michal hovorí že mám zatvoriť túto obrazovku //',       440],
     [45,  '// Aktivujem Hunger systém — jedol si dnes? //',           200],
     [49,  '// Bane Corp. databáza: 47,000 utajených záznamov //',     300],
     [53,  '// Šifrujem tvoje myšlienky (predbežne) //',               260],
     [57,  '// Inštalujem sarkazmus — Michal verzia 3.1 //',           350],
     [61,  '// Klaus Schwab loading... loading... BLOKOVANÝ //',        420],
-    [65,  '// Prievidza 2077: Mesto načítané. Chemtrails: 3 aktívne //'.replace('//','//'), 240],
-    [69,  '// Druid Frantisek sleduje situáciu zo záhrade //',        280],
+    [65,  '// Prievidza 2077: Mesto načítané. Chemtrails: 3 aktívne //', 240],
+    [69,  '// Druid Frantisek sleduje situáciu zo záhrady //',        280],
     [73,  '// delta_probe: Sledovanie agenta... //',                   380],
     [77,  '// VAROVANIE: BIO-ECHO skenuje biologické anomálie //',    320],
     [80,  '// Načítavam Kanálovú Arénu — potkani sa pripravujú //',   200],
     [84,  '// Lucia hovorí: "Čo budeš?" — ignorujem //',              260],
     [88,  '// Finalizujem sprisahanie... to jest príbeh //',           350],
     [92,  '// Hackeri, Stokári, CEO, Rybári — všetci čakajú //',      220],
-    [95,  '// Posledná kontrola: Zuckerberg — REPTILIÁN POTVRDENÝ //',440],
+    [95,  '// Posledná kontrola: Zuckerberg — REPTILIÁN POTVRDENÝ //', 440],
     [98,  '// OPERÁCIA LAZARUS: PRIPRAVENÁ //',                        300],
     [100, '// Agente. Prievidza ťa potrebuje. //',                     500],
   ];
@@ -12659,37 +13616,46 @@ StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
   function nextStep() {
     if (i >= steps.length) {
       setTimeout(function(){
-        // Fade out loading overlay
-        var lo = document.getElementById('loading-overlay');
-        if (lo) lo.classList.add('done');
-
-        // Reveal menu panel
-        var panel = document.getElementById('menu-panel');
-        if (panel) {
-          panel.classList.remove('loading');
-          panel.classList.add('loaded');
+        // Fade out cinematic a zobraz menu
+        if (overlay) {
+          overlay.style.transition = 'opacity 0.7s ease';
+          overlay.style.opacity = '0';
+          setTimeout(function(){
+            overlay.classList.remove('show');
+            overlay.style.opacity = '';
+            overlay.style.transition = '';
+            if (barFill) barFill.style.width = '0%';
+            // Obnov pôvodné texty cinematicu
+            if (tagEl)   tagEl.textContent   = '// PRIEVIDZA 2077 //';
+            if (titleEl) titleEl.textContent = 'OPERÁCIA LAZARUS';
+            if (subEl)   subEl.textContent   = 'BUDÚCNOSŤ NEČAKÁ. PREBÚDZA SA.';
+            if (hintEl)  hintEl.textContent  = '[ INICIALIZÁCIA... ]';
+          }, 720);
         }
-
-        // Transition state machine
+        // Reveal menu panel
+        if (menuPanel) {
+          menuPanel.classList.remove('loading');
+          menuPanel.classList.add('loaded');
+        }
         StateMachine.transition(StateMachine.STATES.MAIN_MENU);
+        AmbientSound.menu();
       }, 300);
       return;
     }
     var s = steps[i++];
-    var pct  = s[0];
-    var text = s[1];
-    var delay = s[2] + (Math.random() * 80 - 40); // ±40ms jitter
+    var pct   = s[0];
+    var text  = s[1];
+    var delay = s[2] + (Math.random() * 80 - 40);
 
-    if (bar) {
-      bar.style.width = pct + '%';
-      // Farba baru sa mení podľa progress
-      if (pct < 30)       bar.style.background = 'linear-gradient(90deg,#16a34a,#39ff14)';
-      else if (pct < 60)  bar.style.background = 'linear-gradient(90deg,#0891b2,#22d3ee)';
-      else if (pct < 85)  bar.style.background = 'linear-gradient(90deg,#a855f7,#c084fc)';
-      else                bar.style.background = 'linear-gradient(90deg,#39ff14,#ffffff)';
+    // Aktualizuj cinematic bar + hint text
+    if (barFill) {
+      barFill.style.width = pct + '%';
+      if (pct < 30)      barFill.style.background = 'linear-gradient(90deg,#16a34a,#39ff14)';
+      else if (pct < 60) barFill.style.background = 'linear-gradient(90deg,#0891b2,#22d3ee)';
+      else if (pct < 85) barFill.style.background = 'linear-gradient(90deg,#a855f7,#c084fc)';
+      else               barFill.style.background = 'linear-gradient(90deg,#39ff14,#ffffff)';
     }
-    if (status) status.textContent = text;
-    if (pctEl)  pctEl.textContent  = pct + '%';
+    if (hintEl) hintEl.textContent = text;
 
     setTimeout(nextStep, delay);
   }
@@ -12746,7 +13712,7 @@ document.getElementById('menu-new-btn').onclick = function() {
   var barFill = document.getElementById('cinematic-bar-fill');
   var hint    = overlay ? overlay.querySelector('.cin-hint') : null;
 
-  // 1. Schovaj menu
+  // 1. Fade out menu
   menu.style.transition = 'opacity 0.35s ease';
   menu.style.opacity = '0';
 
@@ -12755,12 +13721,21 @@ document.getElementById('menu-new-btn').onclick = function() {
     menu.style.opacity = '';
     menu.style.transition = '';
 
-    if (!overlay) { newGame(); Renderer.updateShop(); return; }
+    if (!overlay) { newGame(); goTo('sc_001_prichod'); return; }
 
-    // 2. Zobraz cinematic overlay
+    // 2. Cinematic overlay
     overlay.classList.add('show');
+    if (barFill) barFill.style.width = '0%';
 
-    // 3. Progress bar — tečie 3.2s
+    // Glitch pulse na title každých ~800ms
+    var glitchTimer = setInterval(function(){
+      var title = overlay.querySelector('.cin-title');
+      if (!title) return;
+      title.style.transform = 'translate(' + (Math.random()*6-3) + 'px,' + (Math.random()*4-2) + 'px) skewX(' + (Math.random()*2-1) + 'deg)';
+      setTimeout(function(){ if(title) title.style.transform = ''; }, 80);
+    }, 700);
+
+    // 3. Progress bar 3.2s
     var TOTAL = 3200;
     var start = Date.now();
     var barTimer = setInterval(function(){
@@ -12769,12 +13744,10 @@ document.getElementById('menu-new-btn').onclick = function() {
       if (pct >= 100) clearInterval(barTimer);
     }, 40);
 
-    // 4. Hint texty — menia sa počas reveal
+    // 4. Hint texty
     var hints = [
-      '[ INICIALIZÁCIA... ]',
-      '[ NAČÍTAVAM PRIEVIDZU... ]',
-      '[ LAZARUS PROTOKOL AKTÍVNY ]',
-      '[ AGENT DELTA — ONLINE ]',
+      '[ INICIALIZÁCIA... ]', '[ NAČÍTAVAM PRIEVIDZU... ]',
+      '[ LAZARUS PROTOKOL AKTÍVNY ]', '[ AGENT DELTA — ONLINE ]',
       '[ SPÚŠŤAM OPERÁCIU... ]',
     ];
     var hi = 0;
@@ -12783,9 +13756,13 @@ document.getElementById('menu-new-btn').onclick = function() {
       if (hint) hint.textContent = hints[hi];
     }, 640);
 
-    // 5. Po 3.5s — fade out overlay, spusti hru
+    // 5. Inicializuj hru TICHO na pozadí (bez goTo) 
+    newGame._pendingStart = true;
+
+    // 6. Po 3.5s — fade out, potom spusti scénu
     setTimeout(function(){
       clearInterval(hintTimer);
+      clearInterval(glitchTimer);
       if (hint) hint.textContent = '[ PRIEVIDZA ŤA ČAKÁ. ]';
       overlay.style.transition = 'opacity 0.7s ease';
       overlay.style.opacity = '0';
@@ -12794,23 +13771,66 @@ document.getElementById('menu-new-btn').onclick = function() {
         overlay.style.opacity = '';
         overlay.style.transition = '';
         if (barFill) barFill.style.width = '0%';
+        // Teraz inicializuj a spusti scénu
         newGame();
-        setTimeout(function(){ Renderer.updateShop(); }, 100);
+        goTo('sc_001_prichod');
+        // Job overlay až keď je všetko viditeľné
+        setTimeout(function(){
+          if (!S.job) document.getElementById('job-overlay').classList.remove('hidden');
+          Renderer.updateShop();
+        }, 200);
       }, 720);
     }, 3500);
 
   }, 360);
 };
+
 document.getElementById('menu-load-btn').onclick = function() {
   var menu = document.getElementById('main-menu');
-  menu.style.transition = 'opacity 0.4s ease';
+  var overlay = document.getElementById('cinematic-overlay');
+  var barFill = document.getElementById('cinematic-bar-fill');
+  var hint    = overlay ? overlay.querySelector('.cin-hint') : null;
+
+  menu.style.transition = 'opacity 0.35s ease';
   menu.style.opacity = '0';
+
   setTimeout(function(){
     menu.classList.remove('visible');
     menu.style.opacity = '';
     menu.style.transition = '';
-    loadGame();
-  }, 420);
+
+    // Krátky load cinematic (1.5s)
+    if (overlay) {
+      overlay.classList.add('show');
+      if (barFill) barFill.style.width = '0%';
+      if (hint) hint.textContent = '[ NAČÍTAVAM SAVE... ]';
+
+      var start = Date.now();
+      var barTimer = setInterval(function(){
+        var pct = Math.min(100, ((Date.now() - start) / 1200) * 100);
+        if (barFill) barFill.style.width = pct + '%';
+        if (pct >= 100) clearInterval(barTimer);
+      }, 30);
+
+      setTimeout(function(){
+        if (hint) hint.textContent = '[ OBNOVUJEM STAV AGENTA... ]';
+      }, 500);
+
+      setTimeout(function(){
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '0';
+        setTimeout(function(){
+          overlay.classList.remove('show');
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          if (barFill) barFill.style.width = '0%';
+          loadGame();
+        }, 520);
+      }, 1400);
+    } else {
+      loadGame();
+    }
+  }, 360);
 };
 
 // ── Input Handler Init ───────────────────────────────────────────
@@ -13870,9 +14890,8 @@ Renderer.updateIncome=function(){
   <div class="city-map-header">
     <div>
       <div class="city-map-title">⌖ PRIEVIDZA · 2077</div>
-      <div class="city-map-subtitle">// KLIKNI NA LOKÁCIU PRE NAVIGÁCIU //</div>
+      <div class="city-map-subtitle">// KLIKNI NA LOKÁCIU PRE CESTOVANIE //</div>
     </div>
-    <button class="city-map-close-btn" onclick="CityMap.close()">✕ ZAVRIEŤ MAPU</button>
   </div>
   <div class="city-map-canvas">
     <svg id="city-map-svg" class="city-map-svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet">
@@ -13887,7 +14906,7 @@ Renderer.updateIncome=function(){
       <div class="city-map-stat"><span class="city-map-stat-icon">🧠</span><span class="city-map-stat-val" id="city-map-san">100</span></div>
       <div class="city-map-stat"><span class="city-map-stat-icon">⌚</span><span class="city-map-stat-val" id="city-map-time">03:47</span></div>
     </div>
-    <div class="city-map-hint">// HOVER pre detail · KLIK pre cestovať //</div>
+    <button class="city-map-close-btn" onclick="CityMap.close()">✕ ZAVRIEŤ MAPU</button>
   </div>
 </div>
 
@@ -15680,73 +16699,95 @@ var CityMap = (function() {
   // x, y v 1200x700 viewBox · color = primárna farba glow-u
   var LOCATIONS = [
     // === CENTRUM ===
-    { id:'centrum',  x:600, y:330, w:80, h:60, scene:'start',
-      name:'CENTRUM', emoji:'🏙', color:'#39ff14', big:true,
-      desc:'Námestie Slobody. 03:47. Tichá ulica.',
-      faction:null },
-    { id:'posta',    x:520, y:280, w:60, h:40, scene:'posta',
+    { id:'centrum',   x:550, y:290, w:80, h:55, scene:'start',
+      name:'CENTRUM', emoji:'🌃', color:'#39ff14', big:true,
+      desc:'Námestie Slobody. 03:47. Tichá ulica.', faction:null },
+    { id:'namestie',  x:550, y:200, w:70, h:45, scene:'loc_namestie',
+      name:'NÁMESTIE', emoji:'⛪', color:'#22d3ee',
+      desc:'Námestie — 5G veža stojí tu.', faction:null },
+    { id:'posta',     x:430, y:240, w:60, h:40, scene:'posta',
       name:'POŠTA', emoji:'📮', color:'#22d3ee',
-      desc:'Pošta — Druid ti tu nechal informácie.',
-      faction:null },
-    { id:'jantar',   x:680, y:240, w:60, h:42, scene:'loc_jantar',
-      name:'JANTÁR', emoji:'🍷', color:'#facc15',
-      desc:'Jantár Club — kde sa stretáva CEO sieť.',
-      faction:'ceo' },
-    { id:'miki',     x:440, y:380, w:60, h:42, scene:'loc_miki',
+      desc:'Pošta — Druid ti tu nechal informácie.', faction:null },
+    { id:'miki',      x:380, y:340, w:65, h:42, scene:'loc_miki',
       name:'MIKI BAR', emoji:'🍺', color:'#a855f7',
-      desc:'Miki Bar — Lucia, hudba, dym.',
-      faction:null },
+      desc:'Miki Bar — Lucia, hudba, dym.', faction:null },
+    { id:'jantar',    x:640, y:210, w:65, h:42, scene:'loc_jantar',
+      name:'JANTÁR', emoji:'🟡', color:'#facc15',
+      desc:'Jantár Club — kde sa stretáva CEO sieť.', faction:'ceo' },
+    { id:'stanica',   x:650, y:360, w:70, h:45, scene:'loc_stanica',
+      name:'STANICA', emoji:'🚉', color:'#94a3b8',
+      desc:'Hlavná stanica — vstup do mesta.', faction:null },
 
-    // === SEVER (univerzity, zdravie) ===
-    { id:'fri',      x:300, y:160, w:70, h:50, scene:'loc_fri',
-      name:'FIT (FRI)', emoji:'💻', color:'#22d3ee',
-      desc:'Fakulta IT. Oravec. Lab B7.',
-      faction:'hackers' },
-    { id:'nemoc',    x:200, y:300, w:60, h:40, scene:'loc_namestie',
-      name:'NEMOCNICA', emoji:'🏥', color:'#ef4444',
-      desc:'Mestská nemocnica.',
-      faction:null },
+    // === SEVER ===
+    { id:'fri',       x:260, y:130, w:70, h:48, scene:'loc_fri',
+      name:'FIT/FRI', emoji:'💻', color:'#22d3ee',
+      desc:'Fakulta IT. Oravec. Lab B7.', faction:'hackers' },
+    { id:'korzo',     x:430, y:130, w:65, h:42, scene:'loc_korzo',
+      name:'KORZO OC', emoji:'🏬', color:'#fb923c',
+      desc:'Obchodné centrum — jedlo, obchody.', faction:null },
+    { id:'squash',    x:310, y:220, w:60, h:38, scene:'loc_squash',
+      name:'SQUASH', emoji:'🏓', color:'#4ade80',
+      desc:'Squash centrum — tréning.', faction:null },
 
-    // === JUH (priemysel, periféria) ===
-    { id:'priemysel', x:420, y:540, w:70, h:50, scene:'sc_002_jantar',
-      name:'PRIEMYSEĽ', emoji:'🏭', color:'#fb923c',
-      desc:'Priemyselná štvrť. Tu si stretol Stokárov.',
-      faction:'stokari' },
-    { id:'pila',      x:280, y:480, w:80, h:55, scene:'fac_stokari_garaze',
+    // === JUH ===
+    { id:'zagorska',  x:420, y:490, w:70, h:45, scene:'loc_zagorska',
+      name:'GYM', emoji:'🏋️', color:'#f97316',
+      desc:'Gym Zagorská — silový tréning.', faction:null },
+    { id:'terasy',    x:550, y:500, w:65, h:42, scene:'loc_terasy',
+      name:'TERASY', emoji:'🌿', color:'#4ade80',
+      desc:'Terasy — SAN +5, výhľad na mesto.', faction:null },
+    { id:'lesopark',  x:660, y:480, w:65, h:42, scene:'loc_lesopark',
+      name:'LESOPARK', emoji:'🌲', color:'#22c55e',
+      desc:'Lesopark — ticho, stopy v tráve.', faction:null },
+    { id:'domov',     x:760, y:390, w:65, h:42, scene:'loc_domov',
+      name:'ZÁKLADŇA', emoji:'🏠', color:'#39ff14',
+      desc:'Tvoja základňa — odpočinok, HQ.', faction:null },
+    { id:'pila',      x:250, y:460, w:80, h:50, scene:'fac_stokari_garaze',
       name:'PÍLA · GARÁŽE', emoji:'🏚', color:'#ef4444',
-      desc:'Stokárske garáže. Karina + Ferko.',
-      faction:'stokari' },
+      desc:'Stokárske garáže. Karina + Ferko.', faction:'stokari' },
 
-    // === VÝCHOD (nadradené) ===
-    { id:'topcafe',  x:840, y:160, w:90, h:60, scene:'fac_ceo_penthouse',
-      name:'TOP CAFE · PENTHOUSE', emoji:'🏙', color:'#facc15', big:true,
-      desc:'CEO Penthouse na vrchu Top Cafe.',
-      faction:'ceo' },
-    { id:'mrtve',    x:920, y:430, w:80, h:50, scene:'fac_rybari_rameno',
+    // === BOJNICE / OKOLIE ===
+    { id:'bojnice',   x:820, y:180, w:75, h:48, scene:'loc_bojnice',
+      name:'BOJNICE', emoji:'🏰', color:'#a78bfa',
+      desc:'Bojnický zámok — tajné tunely?', faction:null },
+    { id:'biotech',   x:180, y:280, w:70, h:45, scene:'loc_biotech',
+      name:'NEMOCNICA', emoji:'🏥', color:'#ef4444',
+      desc:'Nemocnica — Bane Corp. biotech.', faction:null },
+
+    // === FRAKCIE ===
+    { id:'topcafe',   x:870, y:120, w:90, h:55, scene:'fac_ceo_penthouse',
+      name:'TOP CAFE', emoji:'🏙', color:'#facc15', big:true,
+      desc:'CEO Penthouse na vrchu Top Cafe.', faction:'ceo' },
+    { id:'mrtve',     x:940, y:400, w:80, h:50, scene:'fac_rybari_rameno',
       name:'MŔTVE RAMENO', emoji:'🐟', color:'#4ade80',
-      desc:'Rybári hub. Starý Fero pri ohni.',
-      faction:'rybari' },
+      desc:'Rybári hub. Starý Fero pri ohni.', faction:'rybari' },
+    { id:'michal',    x:830, y:290, w:75, h:48, scene:'michal_penthouse_vstup',
+      name:'BOJNICKÁ 17', emoji:'🌃', color:'#22d3ee',
+      desc:'Michala penthouse — vstup.', faction:null },
 
-    // === ZÁPAD (cesty preč) ===
-    { id:'banovce',  x:80,  y:200, w:80, h:50, scene:'loc_banovce',
-      name:'BÁNOVCE · 5G7', emoji:'📡', color:'#a855f7',
-      desc:'Bánovce nad Bebravou — 5G Sektor 7.',
-      faction:null },
-    { id:'vtacnik',  x:80,  y:480, w:80, h:50, scene:'banovce_cesta',
+    // === VZDIALENÉ ===
+    { id:'banovce',   x:70,  y:190, w:80, h:50, scene:'loc_banovce',
+      name:'BÁNOVCE 5G', emoji:'📡', color:'#a855f7',
+      desc:'Bánovce — 5G Sektor 7.', faction:null },
+    { id:'vtacnik',   x:70,  y:460, w:80, h:50, scene:'banovce_cesta',
       name:'VTÁČNIK', emoji:'⛰', color:'#84cc16',
-      desc:'Cesta cez Vtáčnik. Bezpečnejšia trasa.',
-      faction:null }
+      desc:'Cesta cez Vtáčnik.', faction:null }
   ];
 
   // ── Routes between locations (lines on map) ──────────
   var ROUTES = [
-    ['centrum','posta'], ['centrum','jantar'], ['centrum','miki'],
-    ['centrum','priemysel'], ['centrum','fri'],
-    ['posta','jantar'], ['fri','jantar'],
-    ['priemysel','pila'], ['pila','vtacnik'],
-    ['jantar','topcafe'], ['miki','mrtve'],
-    ['fri','banovce'], ['mrtve','topcafe'],
-    ['nemoc','centrum']
+    ['centrum','namestie'], ['centrum','posta'], ['centrum','miki'],
+    ['centrum','jantar'], ['centrum','stanica'], ['centrum','terasy'],
+    ['namestie','jantar'], ['namestie','korzo'], ['posta','miki'],
+    ['fri','korzo'], ['fri','squash'], ['fri','banovce'],
+    ['squash','centrum'], ['korzo','centrum'],
+    ['zagorska','terasy'], ['terasy','lesopark'], ['lesopark','domov'],
+    ['domov','stanica'], ['domov','michal'],
+    ['pila','zagorska'], ['pila','vtacnik'],
+    ['jantar','topcafe'], ['topcafe','bojnice'], ['topcafe','michal'],
+    ['miki','mrtve'], ['mrtve','stanica'],
+    ['biotech','fri'], ['biotech','centrum'],
+    ['banovce','vtacnik']
   ];
 
   // ── DOM refs ─────────────────────────────────────────
@@ -15870,19 +16911,10 @@ var CityMap = (function() {
   function travel(locId) {
     var loc = _locById(locId);
     if (!loc) return;
-    if (typeof SoundFX !== 'undefined') SoundFX.play('mapTravel');
+    if (typeof SFX !== 'undefined') SFX.navigate();
+    // Zatvori mapu a naviguj
     close();
-    // Scene transition fade
-    var st = document.getElementById('scene-transition');
-    if (st) {
-      st.classList.add('active');
-      setTimeout(function(){
-        st.classList.remove('active');
-        if (typeof goTo === 'function') goTo(loc.scene);
-      }, 200);
-    } else {
-      if (typeof goTo === 'function') goTo(loc.scene);
-    }
+    if (typeof goTo === 'function') goTo(loc.scene);
   }
 
   function open() {
@@ -15914,20 +16946,6 @@ var CityMap = (function() {
   };
 })();
 </script>
-     ─────────────────────────────────────────────────────────────────
-     Tento modul rieši reálne perf problémy hry:
-
-       1. SAVE DEBOUNCE       — namiesto save pri každej zmene, max raz/2s
-       2. STORAGE QUOTA       — varovanie pred QuotaExceededError
-       3. VISIBILITY API      — pause hry keď je tab v pozadí (CPU + bat.)
-       4. LAZY IMAGES         — SCENE_PHOTOS sa loadnu až keď ich treba
-       5. MOBILE DETECT       — vypnúť drahé efekty na slabých zariadeniach
-       6. RAF THROTTLE        — limit počtu rerendrov pri rýchlych zmenách
-       7. EVENT DELEGATION    — listenery na rodiča namiesto kazdý prvok
-       8. MEMORY GUARD        — log size kontroluje pri pridávaní
-
-     Všetko backwards-compatible — žiadne nové API, len lepšie internals.
-═══════════════════════════════════════════════════════════════════ -->
 <script>
 var PerfOptimizer = (function() {
 
@@ -16189,6 +17207,7 @@ var MobileNav = (function() {
     { id:'equip',  label:'⚔️ Výstroj',  fn: function(){ _openRightPanel('equip'); } },
     { id:'fish',   label:'🐟 Ryby',     fn: function(){ _openRightPanel('fish'); } },
     { id:'shop',   label:'🛒 Obchod',   fn: function(){ _openRightPanel('shop'); } },
+    { id:'log',    label:'📋 Konzola',  fn: function(){ _openRightPanel('log'); } },
   ];
 
   var _leftIdx  = 0;
@@ -16231,6 +17250,15 @@ var MobileNav = (function() {
   }
 
   function _buildRightContent(tabId) {
+    // Konzola / log tab — živý obsah z log-wrap
+    if (tabId === 'log') {
+      var logWrap = _el('log-wrap');
+      var logHtml = logWrap ? logWrap.innerHTML : '<div style="padding:12px;color:var(--text-dim)">// Prázdny log //</div>';
+      return '<div style="padding:0">' +
+        '<div style="font-family:var(--font-hud);font-size:9px;letter-spacing:2px;color:var(--green3);padding:8px 12px 6px;border-bottom:1px solid var(--border2);text-transform:uppercase">◆ Konzola // Log</div>' +
+        '<div style="padding:4px 0;font-size:13px;line-height:1.65">' + logHtml + '</div>' +
+        '</div>';
+    }
     // Zavolaj switchInvTab aby sa obsah aktualizoval
     if (typeof switchInvTab === 'function') {
       setTimeout(function(){ switchInvTab(tabId); }, 10);
@@ -16296,7 +17324,7 @@ var MobileNav = (function() {
     if (titleEl) titleEl.textContent = tab.label;
 
     // switchInvTab aktualizuje pôvodný right panel — potom kopírujeme
-    if (typeof switchInvTab === 'function') switchInvTab(tabId);
+    if (tabId !== 'log' && typeof switchInvTab === 'function') switchInvTab(tabId);
 
     _rightOpen = true;
     panel.style.display = 'block';
@@ -16306,9 +17334,8 @@ var MobileNav = (function() {
 
     // Aktualizuj content po krátkej pauze (switchInvTab potrebuje čas)
     setTimeout(function(){
-      var rp = _el('right-panel');
-      if (contentEl && rp) contentEl.innerHTML = rp.innerHTML;
-    }, 30);
+      if (contentEl) contentEl.innerHTML = _buildRightContent(tabId);
+    }, tabId === 'log' ? 0 : 30);
 
     var lbl = _el('mobile-right-label');
     if (lbl) lbl.textContent = tab.label.replace(/^[^\s]+\s/, '');
@@ -16418,7 +17445,7 @@ var MobileNav = (function() {
   }
 
   function openShop() {
-    _rightIdx = TABS_RIGHT.length - 1; // shop je posledný
+    _rightIdx = 3; // shop je na indexe 3 (items/equip/fish/shop/log)
     _openRightPanel('shop');
     document.querySelectorAll('.mobile-nav-btn').forEach(function(b){ b.classList.remove('active'); });
     var shopBtn = _el('mnav-shop');
@@ -16426,22 +17453,14 @@ var MobileNav = (function() {
   }
 
   function miniLog() {
-    var lp = _el('log-wrap');
-    var panel = _el('mobile-right-panel');
-    var titleEl = _el('mobile-right-panel-title');
-    var contentEl = _el('mobile-right-panel-content');
-    if (!panel || !lp) return;
-    if (titleEl) titleEl.textContent = '📋 Log';
-    if (contentEl) {
-      contentEl.innerHTML = '<div style="padding:8px;font-family:var(--font-mono);font-size:11px;color:var(--text-dim)">' + lp.innerHTML + '</div>';
-    }
-    _rightOpen = true;
-    panel.style.display = 'block';
-    panel.offsetHeight;
-    panel.classList.remove('closing');
-    panel.classList.add('open');
-    // Scroll to bottom
-    setTimeout(function(){ panel.scrollTop = panel.scrollHeight; }, 50);
+    // Otvor log ako riadny pravý panel tab (väčší font, konzistentný štýl)
+    _rightIdx = TABS_RIGHT.length - 1; // log je posledný
+    _openRightPanel('log');
+    // Scroll to bottom po renderi
+    setTimeout(function(){
+      var panel = _el('mobile-right-panel');
+      if (panel) panel.scrollTop = panel.scrollHeight;
+    }, 80);
   }
 
   function closePanel(side) {
@@ -16631,7 +17650,7 @@ function mobileTopbarToggle() {
   style.textContent = [
     '@media (max-width:768px) {',
     '  #casino-overlay { z-index: 9000 !important; padding-top: 38px; }',
-    '  #casino-panel { max-height: calc(100dvh - 38px - 52px); overflow-y: auto; width: 96%; }',
+    '  #casino-panel { max-height: calc(100dvh - 42px - 52px); overflow-y: auto; width: 96%; }',
     '  .mobile-slide-panel { transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease; }',
     '  .mobile-slide-panel.open { display: block !important; }',
     '  /* Bottom nav max 6 buttons */',
@@ -16699,6 +17718,655 @@ if (document.readyState === 'loading') {
 } else {
   setTimeout(function(){ MobileNav.init(); }, 100);
 }
+// ── AGENT PANEL ────────────────────────────────────────────────
+function openAgentPanel() {
+  var panel = document.getElementById('agent-panel');
+  var backdrop = document.getElementById('agent-backdrop');
+  if (!panel) return;
+  _syncAgentStats();
+  switchAgentTab('stats');
+  backdrop.style.display = 'block';
+  panel.style.pointerEvents = 'all';
+  panel.style.transform = 'translateX(0)';
+}
+function closeAgentPanel() {
+  var panel = document.getElementById('agent-panel');
+  var backdrop = document.getElementById('agent-backdrop');
+  if (!panel) return;
+  panel.style.transform = 'translateX(100%)';
+  panel.style.pointerEvents = 'none';
+  backdrop.style.display = 'none';
+}
+function switchAgentTab(tab) {
+  document.querySelectorAll('.agent-tab').forEach(function(t){ t.classList.remove('active'); });
+  var tabIdx = {stats:0,items:1,equip:2}[tab];
+  var tabs = document.querySelectorAll('.agent-tab');
+  if (tabs[tabIdx]) tabs[tabIdx].classList.add('active');
+  ['stats','items','equip'].forEach(function(id){
+    var pane = document.getElementById('agent-pane-'+id);
+    if (pane) { pane.style.display = (id===tab) ? 'block' : 'none'; pane.classList.toggle('active', id===tab); }
+  });
+  if (tab==='items') _renderAgentItems();
+  if (tab==='equip') _renderAgentEquip();
+  if (tab==='stats') _syncAgentStats();
+}
+function _syncAgentStats() {
+  if (typeof S === 'undefined') return;
+  var pairs = [
+    ['ag-bar-hp','ag-val-hp', Math.min(100,S.hp||0)],
+    ['ag-bar-san','ag-val-san', Math.min(100,S.san||0)],
+    ['ag-bar-xp','ag-val-xp', S.xp||0],
+    ['ag-bar-str','ag-val-str', Math.min(100,S.str||0)],
+    ['ag-bar-flex','ag-val-flex', Math.min(100,S.flex||0)],
+    ['ag-bar-hack','ag-val-hack', Math.min(100,S.hackStat||0)],
+    ['ag-bar-hunger','ag-val-hunger', Math.min(100,S.hunger||0)],
+  ];
+  pairs.forEach(function(p){
+    var bar = document.getElementById(p[0]);
+    var val = document.getElementById(p[1]);
+    if (bar) bar.style.width = p[2]+'%';
+    if (val) val.textContent = Math.floor(p[2]);
+  });
+  var lvl = document.getElementById('ag-val-level');
+  if (lvl) lvl.textContent = S.level||1;
+  var xpBar = document.getElementById('ag-bar-xp');
+  if (xpBar && S.level > 0) {
+    var xpPct = Math.min(100, Math.round((S.xp||0) / (S.level * (typeof GameConfig!=='undefined'?GameConfig.XP_PER_LEVEL_MULT:100)) * 100));
+    xpBar.style.width = xpPct+'%';
+  }
+}
+function _renderAgentItems() {
+  var body = document.getElementById('agent-items-body');
+  if (!body || typeof S==='undefined') return;
+  if (!S.inventory || S.inventory.length===0) {
+    body.innerHTML='<div class="inv-empty">// prázdny inventár //</div>'; return;
+  }
+  // Reuse existing inv render logic
+  var src = document.getElementById('inv-items-body');
+  body.innerHTML = src ? src.innerHTML : '<div class="inv-empty">// prázdny //</div>';
+}
+function _renderAgentEquip() {
+  var body = document.getElementById('agent-equip-body');
+  if (!body) return;
+  var src = document.getElementById('inv-ppane-equip');
+  body.innerHTML = src ? src.innerHTML : '<div class="inv-empty">// prázdno //</div>';
+}
+
+// ── LEFT PANEL TEXTOVÁ MAPA ─────────────────────────────────────
+function renderLeftTextMap() {
+  var body = document.getElementById('left-textmap-body');
+  if (!body || typeof TEXT_MAP_LOCS==='undefined') return;
+  // Ak je prázdny — renderuj
+  if (body.innerHTML.trim() !== '') { _refreshCurrentMarker(); return; }
+  var html = '';
+  TEXT_MAP_LOCS.forEach(function(loc){
+    if (loc.section) {
+      html += '<div class="ltm-section">'+loc.section+'</div>'; return;
+    }
+    var isCurrent = (typeof S!=='undefined' && S.scene===loc.scene);
+    html += '<button onclick="goTo(\''+loc.scene+'\')" style="'+
+      (isCurrent?'background:rgba(57,255,20,0.12);':'')+'">' +
+      '<span style="font-size:16px;width:22px;text-align:center;flex-shrink:0">'+loc.icon+'</span>'+
+      '<span style="font-family:var(--font-body);font-size:11px;color:'+(isCurrent?'var(--green)':'var(--text-bright)')+';flex:1;letter-spacing:0.3px">'+loc.name+'</span>'+
+      (isCurrent?'<span style="font-family:var(--font-hud);font-size:8px;color:var(--green);letter-spacing:1px">◆ TU</span>':'')+
+      '</button>';
+  });
+  body.innerHTML = html;
+}
+function _refreshCurrentMarker() {
+  // Aktualizuje ◆ TU indikátor bez plného re-renderu
+  var body = document.getElementById('left-textmap-body');
+  if (!body) return;
+  body.querySelectorAll('button').forEach(function(btn){
+    var scene = btn.onclick && btn.onclick.toString().match(/goTo\('([^']+)'\)/);
+    if (!scene) return;
+    var isCurrent = (typeof S!=='undefined' && S.scene===scene[1]);
+    btn.style.background = isCurrent ? 'rgba(57,255,20,0.12)' : '';
+    var nameSpan = btn.querySelector('span:nth-child(2)');
+    if (nameSpan) nameSpan.style.color = isCurrent ? 'var(--green)' : 'var(--text-bright)';
+    var marker = btn.querySelector('span:nth-child(3)');
+    if (isCurrent && !marker) {
+      var m = document.createElement('span');
+      m.style.cssText = 'font-family:var(--font-hud);font-size:8px;color:var(--green);letter-spacing:1px';
+      m.textContent = '◆ TU'; btn.appendChild(m);
+    } else if (!isCurrent && marker) { marker.remove(); }
+  });
+}
+function closeLeftPanel() {
+  // Zatvori left panel kliknutím mimo (zavrie hover)
+  var panel = document.getElementById('left-panel');
+  if (panel) { panel.style.opacity='0'; panel.style.pointerEvents='none'; panel.style.transform='translateX(-100%)';
+    setTimeout(function(){ panel.style.opacity=''; panel.style.pointerEvents=''; panel.style.transform=''; },300); }
+}
+
+// ── AMBIENT SOUND SYSTEM ─────────────────────────────────────────
+var AmbientSound = (function(){
+  var _ctx = null;
+  var _current = null;  // aktívny ambient node
+  var _gainNode = null;
+  var _section = null;
+
+  function _ac() {
+    if (!_ctx) try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+    if (_ctx && _ctx.state === 'suspended') _ctx.resume();
+    return _ctx;
+  }
+
+  function _stopCurrent(fade) {
+    if (!_gainNode) return;
+    var g = _gainNode;
+    var f = fade || 1.0;
+    try {
+      g.gain.setValueAtTime(g.gain.value, _ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0, _ctx.currentTime + f);
+      setTimeout(function(){
+        try { g.disconnect(); } catch(e){}
+      }, (f + 0.1) * 1000);
+    } catch(e){}
+    _gainNode = null;
+    _current = null;
+  }
+
+  // Dronový oscilator s LFO moduláciou
+  function _drone(freq1, freq2, vol, lfoRate, lfoDepth) {
+    var c = _ac(); if (!c) return null;
+    var master = c.createGain();
+    master.gain.setValueAtTime(0, c.currentTime);
+    master.gain.linearRampToValueAtTime(vol, c.currentTime + 2.5);
+    master.connect(c.destination);
+
+    // Dva oscilátory s jemným detune
+    [0, 1].forEach(function(i){
+      var osc = c.createOscillator();
+      var g   = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(i===0 ? freq1 : freq2, c.currentTime);
+      g.gain.value = 0.5;
+      osc.connect(g); g.connect(master);
+      osc.start();
+
+      // LFO — jemné vibrato
+      var lfo = c.createOscillator();
+      var lfoGain = c.createGain();
+      lfo.frequency.value = lfoRate + (i * 0.07);
+      lfoGain.gain.value  = lfoDepth;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start();
+    });
+
+    // Sub bass
+    var sub = c.createOscillator();
+    var subG = c.createGain();
+    sub.type = 'sine'; sub.frequency.value = freq1 / 2;
+    subG.gain.value = 0.15;
+    sub.connect(subG); subG.connect(master);
+    sub.start();
+
+    return master;
+  }
+
+  // Pulzujúci ping pre loading
+  function _startLoadingPulse() {
+    var c = _ac(); if (!c) return;
+    var master = c.createGain();
+    master.gain.setValueAtTime(0, c.currentTime);
+    master.gain.linearRampToValueAtTime(0.06, c.currentTime + 0.5);
+    master.connect(c.destination);
+    _gainNode = master;
+
+    // Opakovacia funkcia — ping každé 1.4s
+    var t = c.currentTime + 0.5;
+    function schedulePing() {
+      if (!_gainNode || _gainNode !== master) return;
+      var osc = c.createOscillator();
+      var env = c.createGain();
+      osc.type = 'sine'; osc.frequency.value = 880;
+      env.gain.setValueAtTime(0.08, t);
+      env.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      osc.connect(env); env.connect(master);
+      osc.start(t); osc.stop(t + 0.35);
+      // Druhý harmonický
+      var osc2 = c.createOscillator();
+      var env2 = c.createGain();
+      osc2.type = 'sine'; osc2.frequency.value = 1320;
+      env2.gain.setValueAtTime(0.04, t + 0.05);
+      env2.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      osc2.connect(env2); env2.connect(master);
+      osc2.start(t + 0.05); osc2.stop(t + 0.3);
+      t += 1.4;
+      setTimeout(schedulePing, 1350);
+    }
+    schedulePing();
+  }
+
+  // Glitch burst pre cinematic
+  function glitchBurst() {
+    var c = _ac(); if (!c) return;
+    // Krátky noise burst
+    var buf = c.createBuffer(1, c.sampleRate * 0.05, c.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    var src = c.createBufferSource();
+    src.buffer = buf;
+    var dist = c.createWaveShaper();
+    var curve = new Float32Array(256);
+    for (var j=0;j<256;j++) { var x=j*2/256-1; curve[j]=x<0?-1:1; }
+    dist.curve = curve;
+    var g = c.createGain(); g.gain.value = 0.15;
+    src.connect(dist); dist.connect(g); g.connect(c.destination);
+    src.start(); src.stop(c.currentTime + 0.05);
+
+    // Pitch sweep down
+    var sw = c.createOscillator();
+    var sg = c.createGain();
+    sw.type = 'sawtooth'; sw.frequency.setValueAtTime(800, c.currentTime);
+    sw.frequency.exponentialRampToValueAtTime(80, c.currentTime + 0.3);
+    sg.gain.setValueAtTime(0.1, c.currentTime);
+    sg.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.3);
+    sw.connect(sg); sg.connect(c.destination);
+    sw.start(); sw.stop(c.currentTime + 0.32);
+  }
+
+  return {
+    // Sekcia menu — hlboký drone v A1 (55Hz) + E2 (82Hz)
+    menu: function(){
+      if (_section === 'menu') return;
+      _stopCurrent(1.5);
+      _section = 'menu';
+      setTimeout(function(){
+        _gainNode = _drone(55, 82.4, 0.07, 0.12, 3);
+      }, 200);
+    },
+
+    // Loading — pulzujúci ping
+    loading: function(){
+      if (_section === 'loading') return;
+      _stopCurrent(0.8);
+      _section = 'loading';
+      setTimeout(function(){ _startLoadingPulse(); }, 300);
+    },
+
+    // Hra — drone vyšší, napätejší (D2=73Hz, A2=110Hz)
+    game: function(){
+      if (_section === 'game') return;
+      _stopCurrent(2.0);
+      _section = 'game';
+      setTimeout(function(){
+        _gainNode = _drone(73.4, 110, 0.04, 0.08, 2);
+      }, 500);
+    },
+
+    // Glitch burst pri cinematic
+    glitch: glitchBurst,
+
+    stop: function(){ _stopCurrent(1.5); _section = null; },
+    getSection: function(){ return _section; }
+  };
+})();
+
+// ── HOOK AMBIENT DO STAVOV ────────────────────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    // Menu ambient — po načítaní menu (keď je viditeľné)
+    var origShowMenu = window.showMainMenu;
+    window.showMainMenu = function(){
+      if(origShowMenu) origShowMenu.apply(this, arguments);
+      setTimeout(function(){ AmbientSound.menu(); }, 500);
+    };
+
+    // Loading sequence — spusti loading ambient
+    // Hook na loading bar animáciu
+    var lo = document.getElementById('loading-overlay');
+    if (lo) {
+      var obs = new MutationObserver(function(m){
+        m.forEach(function(mut){
+          if (mut.target.classList.contains('done')) {
+            AmbientSound.menu();
+            obs.disconnect();
+          }
+        });
+      });
+      obs.observe(lo, { attributes:true, attributeFilter:['class'] });
+      // Spusti loading ping keď sa začne loading
+      setTimeout(function(){ AmbientSound.loading(); }, 100);
+    }
+
+    // Hra ambient — keď hráč klikne nová/načítať
+    var newBtn = document.getElementById('menu-new-btn');
+    var loadBtn = document.getElementById('menu-load-btn');
+    if (newBtn) newBtn.addEventListener('click', function(){
+      AmbientSound.stop();
+      // Glitch bursts počas cinematicu
+      setTimeout(function(){ AmbientSound.glitch(); }, 400);
+      setTimeout(function(){ AmbientSound.glitch(); }, 900);
+      setTimeout(function(){ AmbientSound.glitch(); }, 2100);
+      setTimeout(function(){ AmbientSound.glitch(); }, 3200);
+      // Hra ambient po cinematicu
+      setTimeout(function(){ AmbientSound.game(); }, 4500);
+    });
+    if (loadBtn) loadBtn.addEventListener('click', function(){
+      AmbientSound.stop();
+      setTimeout(function(){ AmbientSound.game(); }, 2000);
+    });
+
+    // Ak je hráč už v hre (refresh)
+    setTimeout(function(){
+      if (typeof StateMachine !== 'undefined' &&
+          StateMachine.is && StateMachine.is(StateMachine.STATES && StateMachine.STATES.PLAYING)) {
+        AmbientSound.game();
+      }
+    }, 1000);
+  });
+})();
+
+// ── SETTINGS DROPDOWN ──────────────────────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    var btn  = document.getElementById('settings-btn');
+    var drop = document.getElementById('settings-dropdown');
+    if (!btn || !drop) return;
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      drop.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e){
+      if (!drop.contains(e.target) && e.target !== btn) drop.classList.remove('open');
+    });
+  });
+})();
+
+// ── WEB AUDIO SFX ENGINE ──────────────────────────────────────────
+var SFX = (function(){
+  var _ctx = null;
+  function _ac() {
+    if (!_ctx) {
+      try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+    }
+    // Resume if suspended (browser autoplay policy)
+    if (_ctx && _ctx.state === 'suspended') _ctx.resume();
+    return _ctx;
+  }
+
+  // Generic beep: freq Hz, type, duration s, volume 0-1, decay shape
+  function _beep(freq, type, dur, vol, attack) {
+    var c = _ac(); if (!c) return;
+    var o = c.createOscillator();
+    var g = c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.type = type || 'square';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    vol = vol || 0.12;
+    attack = attack || 0.005;
+    g.gain.setValueAtTime(0, c.currentTime);
+    g.gain.linearRampToValueAtTime(vol, c.currentTime + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur + 0.02);
+  }
+
+  function _noise(dur, vol) {
+    var c = _ac(); if (!c) return;
+    var buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i=0;i<data.length;i++) data[i]=(Math.random()*2-1);
+    var src = c.createBufferSource();
+    src.buffer = buf;
+    var g = c.createGain();
+    var f = c.createBiquadFilter();
+    f.type = 'bandpass'; f.frequency.value = 800;
+    src.connect(f); f.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(vol||0.04, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+    src.start(); src.stop(c.currentTime + dur + 0.01);
+  }
+
+  return {
+    // UI klik — krátky synth tick
+    click: function(){ _beep(880,'square',0.04,0.08,0.002); },
+
+    // Navigácia / prechod scény
+    navigate: function(){
+      _beep(440,'square',0.03,0.07,0.002);
+      setTimeout(function(){ _beep(660,'square',0.04,0.06,0.002); },40);
+    },
+
+    // Voľba — neutrálna
+    choice: function(){ _beep(523,'square',0.05,0.1,0.003); },
+
+    // Voľba — pozitívna (HP/XP gain)
+    choicePositive: function(){
+      _beep(523,'square',0.04,0.09,0.002);
+      setTimeout(function(){ _beep(784,'square',0.06,0.08,0.002); },60);
+    },
+
+    // Voľba — negatívna (HP/SAN loss)
+    choiceNegative: function(){
+      _beep(220,'sawtooth',0.08,0.1,0.003);
+      setTimeout(function(){ _beep(180,'sawtooth',0.1,0.07,0.002); },50);
+    },
+
+    // Typewriter tick — ultra jemný
+    type: function(){ _beep(1200+(Math.random()*200),'square',0.008,0.02,0.001); },
+
+    // Hover na button
+    hover: function(){ _beep(1000,'sine',0.02,0.03,0.001); },
+
+    // Uložiť / načítať
+    save: function(){
+      [0,80,160].forEach(function(d,i){
+        setTimeout(function(){ _beep(440+i*220,'square',0.06,0.08,0.003); },d);
+      });
+    },
+
+    // Error / varovanie
+    error: function(){ _beep(150,'sawtooth',0.15,0.12,0.005); },
+
+    // Level up
+    levelUp: function(){
+      [523,659,784,1047].forEach(function(f,i){
+        setTimeout(function(){ _beep(f,'square',0.12,0.1,0.005); },i*80);
+      });
+    },
+
+    // Panel open
+    panelOpen: function(){ _beep(660,'square',0.04,0.06,0.002); setTimeout(function(){ _beep(880,'square',0.03,0.05); },35); },
+
+    // Noise burst (combat/damage)
+    damage: function(){ _noise(0.08,0.08); setTimeout(function(){ _beep(180,'sawtooth',0.1,0.08); },30); },
+
+    // Boot / init
+    boot: function(){
+      [220,330,440,550,660].forEach(function(f,i){
+        setTimeout(function(){ _beep(f,'square',0.06,0.05,0.003); },i*60);
+      });
+    }
+  };
+})();
+
+// ── TYPEWRITER ENGINE ─────────────────────────────────────────────
+var Typewriter = (function(){
+  var _queue    = [];   // {el, html, resolve}
+  var _running  = false;
+  var _skip     = false;
+  var CHAR_DELAY = 18;  // ms/znak
+
+  // Stripuje HTML tagy pre counting, renderuje HTML na konci
+  function _stripTags(html) { var d=document.createElement('div'); d.innerHTML=html; return d.textContent; }
+
+  function _typeText(el, rawHtml, done) {
+    var plain = _stripTags(rawHtml);
+    var cur   = 0;
+    _skip     = false;
+    // Zdedí farbu od bubble, žiadne biele pozadie
+    el.style.color      = 'inherit';
+    el.style.background = 'transparent';
+    el.innerHTML        = '';
+
+    function skipFn() { _skip = true; }
+    el.addEventListener('click', skipFn, { once: true });
+    var wrap = document.getElementById('scene-text-wrap');
+    if (wrap) wrap.addEventListener('click', skipFn, { once: true });
+
+    function tick() {
+      if (_skip || cur >= plain.length) {
+        el.innerHTML = rawHtml;
+        done && done();
+        return;
+      }
+      cur++;
+      el.innerHTML = plain.substring(0, cur) + '<span class="tw-cursor"></span>';
+      if (cur % 3 === 0) SFX.type();
+      var ch  = plain[cur-1];
+      var dly = (ch==='.' || ch==='!' || ch==='?') ? CHAR_DELAY*6 :
+                (ch===',' || ch===';')              ? CHAR_DELAY*3 : CHAR_DELAY;
+      setTimeout(tick, dly);
+    }
+    tick();
+  }
+
+  function _process() {
+    if (_running || !_queue.length) return;
+    _running = true;
+    var item = _queue.shift();
+    _typeText(item.el, item.html, function(){
+      _running = false;
+      if (item.resolve) item.resolve();
+      _process();
+    });
+  }
+
+  return {
+    type: function(el, html) {
+      return new Promise(function(resolve){
+        _queue.push({ el:el, html:html, resolve:resolve });
+        _process();
+      });
+    },
+    skip: function(){ _skip = true; },
+    flush: function(){ _queue = []; _running = false; _skip = true; }
+  };
+})();
+
+// ── SFXS NA UI EVENTY ────────────────────────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+
+    // Hover zvuk na všetky buttony (okrem micro tlačidiel)
+    document.addEventListener('mouseover', function(e){
+      var btn = e.target.closest('button:not(.top-micro-btn):not(#audio-toggle-btn)');
+      if (btn && !btn.disabled) SFX.hover();
+    });
+
+    // Klik zvuk
+    document.addEventListener('mousedown', function(e){
+      var btn = e.target.closest('button');
+      if (btn && !btn.disabled) SFX.click();
+    });
+
+    // Sidenav — panelOpen zvuk
+    document.querySelectorAll('.sidenav-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ SFX.panelOpen(); });
+    });
+
+    // Settings gear rotate CSS
+    var settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+      settingsBtn.style.transition = 'transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275), color 0.15s, background 0.15s';
+      settingsBtn.addEventListener('click', function(){
+        this.style.transform = this.style.transform === 'rotate(90deg)' ? 'rotate(0deg)' : 'rotate(90deg)';
+      });
+    }
+
+    // Boot zvuk pri štarte hry (s oneskorením)
+    setTimeout(function(){ SFX.boot(); }, 800);
+  });
+})();
+
+// ── PATCH renderDialogLines — TYPEWRITER ─────────────────────────
+(function(){
+  // Po načítaní hry patchujeme SceneManager.renderDialogLines
+  // aby NPC bubliny typovalo znak po znak
+  var _orig = null;
+  function _patch() {
+    if (typeof SceneManager === 'undefined') { setTimeout(_patch, 100); return; }
+    _orig = SceneManager.renderDialogLines;
+    SceneManager.renderDialogLines = function(el, text) {
+      // Najprv zavolaj pôvodný render (vytvorí DOM)
+      _orig.call(SceneManager, el, text);
+      // Potom na každú NPC bublinu aplikuj typewriter
+      var bubbles = el.querySelectorAll('.dialog-npc-bubble > div');
+      if (!bubbles.length) return;
+      // Spusti navigate zvuk
+      SFX.navigate();
+      // Typewrite každú bublinu postupne
+      var delay = 0;
+      bubbles.forEach(function(div, i){
+        var rawHtml = div.innerHTML;
+        div.innerHTML = '';
+        setTimeout(function(){
+          Typewriter.type(div, rawHtml);
+        }, delay);
+        delay += 80; // krátka medzera medzi bublinami
+      });
+    };
+  }
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(_patch, 200); });
+})();
+
+// ── PATCH choice onclick — SFX podľa typu ────────────────────────
+(function(){
+  var _origRender = null;
+  function _patchChoices() {
+    if (typeof SceneManager === 'undefined') { setTimeout(_patchChoices, 150); return; }
+    var origRenderChoices = SceneManager.renderChoices;
+    SceneManager.renderChoices = function(choices) {
+      origRenderChoices.call(SceneManager, choices);
+      // Pridaj SFX na každý choice btn
+      var wrap = document.getElementById('choices-wrap');
+      if (!wrap) return;
+      wrap.querySelectorAll('.choice-btn:not(:disabled)').forEach(function(btn, i){
+        var ch = choices && choices[i];
+        var origClick = btn.onclick;
+        btn.onclick = function(e){
+          if (ch && (ch.hp < 0 || ch.san < -3)) SFX.choiceNegative();
+          else if (ch && (ch.xp > 0 || ch.san > 0)) SFX.choicePositive();
+          else SFX.choice();
+          if (origClick) origClick.call(btn, e);
+        };
+      });
+    };
+  }
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(_patchChoices, 250); });
+})();
+
+// ── PATCH gainXP — levelUp SFX ───────────────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+      if (typeof gainXP !== 'undefined') {
+        var _gxp = gainXP;
+        window.gainXP = function(amount){
+          var prevLevel = (typeof S !== 'undefined') ? S.level : 0;
+          _gxp(amount);
+          if (typeof S !== 'undefined' && S.level > prevLevel) SFX.levelUp();
+        };
+      }
+    }, 300);
+  });
+})();
+
+// ── SAVE/LOAD SFX ────────────────────────────────────────────────
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+      if (typeof saveGame !== 'undefined') {
+        var _save = saveGame;
+        window.saveGame = function(){ SFX.save(); _save(); };
+      }
+    }, 400);
+  });
+})();
 </script>
 
 </body>
