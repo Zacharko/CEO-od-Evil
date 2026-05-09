@@ -305,6 +305,275 @@ var ArenaSystem = (function () {
   }
   .arena-result-btn:hover { background: rgba(57,255,20,0.08); letter-spacing: 4px; }
 
+  /* ══════════════════════════════════════════════════════
+     REWARD & UPGRADE PANEL
+  ══════════════════════════════════════════════════════ */
+
+  /* ── Reward overlay (celá obrazovka po výhre) ─────── */
+  #arena-reward-overlay {
+    display: none; position: fixed; inset: 0; z-index: 950;
+    background: rgba(4,8,4,0.97);
+    flex-direction: column; align-items: center; justify-content: flex-start;
+    overflow-y: auto; padding: 0;
+    font-family: var(--font-body, 'Share Tech Mono', monospace);
+  }
+  #arena-reward-overlay.show { display: flex; }
+
+  /* ── Reward header ─────────────────────────────────── */
+  #reward-header {
+    width: 100%; padding: 18px 24px 14px;
+    border-bottom: 1px solid var(--border, #2a5a2a);
+    background: var(--bg2, #0b120b);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  #reward-title {
+    font-family: var(--font-hud, 'Orbitron', monospace);
+    font-size: 13px; font-weight: 900; letter-spacing: 5px;
+    color: var(--gold, #facc15);
+    text-shadow: 0 0 20px rgba(250,204,21,0.6);
+  }
+  #reward-enemy-badge {
+    font-size: 9px; letter-spacing: 2px; color: var(--text-muted, #3a6a3a);
+  }
+
+  /* ── Reward body ───────────────────────────────────── */
+  #reward-body {
+    display: flex; gap: 0; width: 100%; flex: 1; min-height: 0;
+  }
+
+  /* ── Ľavá kolona: stats + loot ─────────────────────── */
+  #reward-left {
+    flex: 1; min-width: 0; padding: 20px 22px; display: flex;
+    flex-direction: column; gap: 18px; overflow-y: auto;
+    border-right: 1px solid var(--border2, #1a3a1a);
+  }
+
+  /* ── Rewards summary box ───────────────────────────── */
+  #reward-summary {
+    background: var(--bg3, #0f170f); border: 1px solid var(--border, #2a5a2a);
+    padding: 16px;
+  }
+  .reward-summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid var(--border2, #1a3a1a);
+  }
+  .reward-summary-row:last-child { border-bottom: none; }
+  .reward-summary-label {
+    font-size: 9px; letter-spacing: 2px; color: var(--text-muted, #3a6a3a);
+    text-transform: uppercase;
+  }
+  .reward-summary-val {
+    font-family: var(--font-hud, monospace); font-size: 13px; font-weight: 700;
+    color: var(--gold, #facc15);
+  }
+  .reward-summary-val.green { color: var(--green, #39ff14); }
+  .reward-summary-val.red   { color: var(--red2, #e74c3c); }
+
+  /* ── XP bar ────────────────────────────────────────── */
+  #reward-xp-section { }
+  .reward-xp-label {
+    font-size: 9px; letter-spacing: 3px; color: var(--text-muted, #3a6a3a);
+    text-transform: uppercase; margin-bottom: 8px;
+    display: flex; justify-content: space-between;
+  }
+  .reward-xp-bar-wrap {
+    height: 12px; background: var(--bg, #080d08);
+    border: 1px solid var(--border, #2a5a2a); overflow: hidden; position: relative;
+  }
+  .reward-xp-bar-old {
+    height: 100%; background: linear-gradient(90deg, #1a3a5f, #2563eb);
+    position: absolute; top: 0; left: 0; transition: none;
+  }
+  .reward-xp-bar-gain {
+    height: 100%; background: linear-gradient(90deg, #15803d, #4ade80);
+    position: absolute; top: 0; transition: width 1.2s ease;
+  }
+  @keyframes xpPulse {
+    0%,100% { box-shadow: 0 0 4px rgba(74,222,128,0.4); }
+    50%      { box-shadow: 0 0 16px rgba(74,222,128,0.9); }
+  }
+  .reward-xp-bar-gain.anim { animation: xpPulse 1s ease; }
+
+  /* ── LEVEL UP banner ───────────────────────────────── */
+  #reward-levelup {
+    display: none;
+    background: linear-gradient(135deg, rgba(250,204,21,0.08), rgba(250,204,21,0.02));
+    border: 1px solid var(--gold, #facc15);
+    padding: 14px 16px; text-align: center;
+  }
+  #reward-levelup.show { display: block; }
+  #reward-levelup-text {
+    font-family: var(--font-hud, monospace); font-size: 18px; font-weight: 900;
+    letter-spacing: 6px; color: var(--gold, #facc15);
+    text-shadow: 0 0 30px rgba(250,204,21,0.8);
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  @keyframes goldGlow {
+    0%,100% { text-shadow: 0 0 20px rgba(250,204,21,0.6); }
+    50%      { text-shadow: 0 0 50px rgba(250,204,21,1), 0 0 80px rgba(250,204,21,0.4); }
+  }
+  #reward-levelup.show #reward-levelup-text { animation: goldGlow 1.5s ease infinite; }
+  #reward-levelup-sub {
+    font-size: 9px; letter-spacing: 2px; color: var(--text-dim, #5a9a5a);
+  }
+
+  /* ── Loot items ────────────────────────────────────── */
+  #reward-loot { }
+  .loot-item {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    background: var(--bg3, #0f170f); border: 1px solid var(--border2, #1a3a1a);
+    margin-bottom: 6px; cursor: default;
+  }
+  .loot-item-icon { font-size: 18px; flex-shrink: 0; width: 28px; text-align: center; }
+  .loot-item-info { flex: 1; min-width: 0; }
+  .loot-item-name {
+    font-size: 10px; letter-spacing: 1px; color: var(--text-bright, #d8f8e0);
+    margin-bottom: 2px;
+  }
+  .loot-item-desc { font-size: 8px; color: var(--text-muted, #3a6a3a); letter-spacing: 0.5px; }
+  .loot-item-rarity {
+    font-size: 8px; letter-spacing: 2px; font-family: var(--font-hud, monospace);
+    flex-shrink: 0;
+  }
+  .rarity-common   { color: var(--text-dim, #5a9a5a); }
+  .rarity-uncommon { color: #4ade80; }
+  .rarity-rare     { color: #38bdf8; }
+  .rarity-epic     { color: #a855f7; text-shadow: 0 0 8px rgba(168,85,247,0.5); }
+
+  /* ── Pravá kolona: UPGRADE POSTAVY ─────────────────── */
+  #reward-right {
+    width: 320px; flex-shrink: 0; padding: 20px 18px;
+    display: flex; flex-direction: column; gap: 14px;
+    overflow-y: auto;
+  }
+
+  .reward-section-label {
+    font-family: var(--font-hud, monospace); font-size: 9px;
+    letter-spacing: 3px; color: var(--text-muted, #3a6a3a);
+    text-transform: uppercase; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border2, #1a3a1a); margin-bottom: 4px;
+  }
+
+  /* Upgrade karty */
+  #reward-upgrades {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .upgrade-card {
+    background: var(--bg3, #0f170f); border: 1px solid var(--border, #2a5a2a);
+    padding: 12px 14px; cursor: pointer; transition: all 0.18s;
+    position: relative; overflow: hidden;
+  }
+  .upgrade-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--green3, #16a34a);
+    transition: background 0.18s;
+  }
+  .upgrade-card:hover:not(.selected):not(.used) {
+    border-color: var(--green3, #16a34a);
+    background: rgba(22,163,74,0.06);
+  }
+  .upgrade-card:hover:not(.selected):not(.used)::before {
+    background: var(--green, #39ff14);
+  }
+  .upgrade-card.selected {
+    border-color: var(--gold, #facc15);
+    background: rgba(250,204,21,0.06);
+  }
+  .upgrade-card.selected::before { background: var(--gold, #facc15); }
+  .upgrade-card.used {
+    opacity: 0.4; cursor: not-allowed;
+  }
+  .upgrade-card-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  .upgrade-card-icon { font-size: 16px; }
+  .upgrade-card-name {
+    font-family: var(--font-hud, monospace); font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; color: var(--text-bright, #d8f8e0); text-transform: uppercase;
+    flex: 1;
+  }
+  .upgrade-card-cost {
+    font-size: 9px; letter-spacing: 1px; color: var(--gold, #facc15);
+    flex-shrink: 0;
+  }
+  .upgrade-card-desc {
+    font-size: 9px; color: var(--text-dim, #5a9a5a); letter-spacing: 0.5px; line-height: 1.5;
+  }
+  .upgrade-card-effect {
+    margin-top: 5px; font-size: 9px; letter-spacing: 1px;
+    color: var(--green, #39ff14); font-family: var(--font-hud, monospace);
+  }
+
+  /* Confirm upgrade btn */
+  #reward-upgrade-confirm {
+    background: transparent; border: 1px solid var(--green3, #16a34a);
+    color: var(--green, #39ff14); font-family: var(--font-hud, monospace);
+    font-size: 11px; letter-spacing: 3px; padding: 12px; width: 100%;
+    cursor: pointer; transition: all 0.15s; display: none;
+    text-transform: uppercase;
+  }
+  #reward-upgrade-confirm.show { display: block; }
+  #reward-upgrade-confirm:hover { background: rgba(57,255,20,0.08); letter-spacing: 4px; }
+  #reward-upgrade-confirm:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Current stats mini-display */
+  #reward-current-stats {
+    background: var(--bg3, #0f170f); border: 1px solid var(--border2, #1a3a1a);
+    padding: 10px 12px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .stat-mini-row {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .stat-mini-label {
+    font-size: 8px; letter-spacing: 2px; color: var(--text-muted, #3a6a3a);
+    width: 60px; flex-shrink: 0; text-transform: uppercase;
+  }
+  .stat-mini-bar-wrap {
+    flex: 1; height: 5px; background: var(--bg, #080d08);
+    border: 1px solid var(--border2, #1a3a1a); overflow: hidden;
+  }
+  .stat-mini-bar {
+    height: 100%; transition: width 0.6s ease;
+  }
+  .stat-mini-bar.str  { background: linear-gradient(90deg, #7f1d1d, #ef4444); }
+  .stat-mini-bar.flex { background: linear-gradient(90deg, #1a3a5f, #38bdf8); }
+  .stat-mini-bar.hack { background: linear-gradient(90deg, #1e1a3f, #a855f7); }
+  .stat-mini-bar.hp   { background: linear-gradient(90deg, #1a3a1a, #4ade80); }
+  .stat-mini-val {
+    font-family: var(--font-hud, monospace); font-size: 10px; font-weight: 700;
+    color: var(--text-bright, #d8f8e0); min-width: 28px; text-align: right;
+    transition: color 0.4s;
+  }
+  .stat-mini-val.upgraded { color: var(--gold, #facc15); }
+  .stat-mini-delta {
+    font-size: 8px; color: var(--green, #39ff14); min-width: 20px;
+    font-family: var(--font-hud, monospace);
+  }
+
+  /* Close / continue row */
+  #reward-footer {
+    display: flex; gap: 10px; flex-shrink: 0; margin-top: auto;
+    padding-top: 12px; border-top: 1px solid var(--border2, #1a3a1a);
+  }
+  .reward-footer-btn {
+    flex: 1; background: transparent; border: 1px solid var(--border, #2a5a2a);
+    color: var(--text-dim, #5a9a5a); font-family: var(--font-hud, monospace);
+    font-size: 10px; letter-spacing: 2px; padding: 10px;
+    cursor: pointer; transition: all 0.15s; text-transform: uppercase;
+  }
+  .reward-footer-btn:hover { border-color: var(--green3, #16a34a); color: var(--green, #39ff14); }
+  .reward-footer-btn.primary {
+    border-color: var(--gold, #facc15); color: var(--gold, #facc15);
+  }
+  .reward-footer-btn.primary:hover { background: rgba(250,204,21,0.06); }
+
+  /* ── Mobile ─────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    #reward-body { flex-direction: column; }
+    #reward-right { width: 100%; border-top: 1px solid var(--border2); }
+  }
+
   /* ── Stats bar pod fightermi ─────────────────────────── */
   #arena-fight-stats {
     display: flex; gap: 16px; font-size: 10px;
@@ -571,10 +840,167 @@ var ArenaSystem = (function () {
   };
 
   /* ══════════════════════════════════════════════════════
-     §A4. State
+     §A3b. UPGRADE & LOOT DATA
   ══════════════════════════════════════════════════════ */
+
+  // Upgrade karty — ponúknuté po výhre, hráč vyberá jednu
+  var UPGRADES = [
+    {
+      id: 'str_boost',
+      name: 'Svalová augmentácia',
+      icon: '💪',
+      desc: 'Subkutánne vlákna GEN-2. Zvyšuje silu úderov.',
+      effect: '+3 STR',
+      cost: 0,  // zadarmo (z odmien)
+      apply: function(gs) { gs.str = (gs.str || 10) + 3; },
+      preview: { stat: 'str', delta: 3 },
+      minDifficulty: 'easy',
+    },
+    {
+      id: 'flex_boost',
+      name: 'Reflex chip',
+      icon: '⚡',
+      desc: 'Neurálny čip akceleruje motoriku. +3 FLEX.',
+      effect: '+3 FLEX',
+      cost: 0,
+      apply: function(gs) { gs.flex = (gs.flex || 10) + 3; },
+      preview: { stat: 'flex', delta: 3 },
+      minDifficulty: 'easy',
+    },
+    {
+      id: 'hp_boost',
+      name: 'Regeneračné nano-boty',
+      icon: '🩸',
+      desc: 'Nano-boty opravujú tkanivo rýchlejšie. +20 MAX HP.',
+      effect: '+20 Max HP',
+      cost: 0,
+      apply: function(gs) { gs.maxHp = (gs.maxHp || 100) + 20; gs.hp = Math.min(gs.hp || 50, gs.maxHp); },
+      preview: { stat: 'hp', delta: 20 },
+      minDifficulty: 'easy',
+    },
+    {
+      id: 'hack_boost',
+      name: 'Neural-hack rozhranie',
+      icon: '💻',
+      desc: 'Upgradovaný hack protokol. Zvyšuje efektivitu hackovania.',
+      effect: '+5 HACK',
+      cost: 0,
+      apply: function(gs) { gs.hackStat = (gs.hackStat || 10) + 5; },
+      preview: { stat: 'hack', delta: 5 },
+      minDifficulty: 'medium',
+    },
+    {
+      id: 'str_major',
+      name: 'Titanové implantáty',
+      icon: '🔩',
+      desc: 'Kĺbové zosilnenie z tungsténovej zliatiny. Masívny nárast sily.',
+      effect: '+6 STR',
+      cost: 0,
+      apply: function(gs) { gs.str = (gs.str || 10) + 6; },
+      preview: { stat: 'str', delta: 6 },
+      minDifficulty: 'hard',
+    },
+    {
+      id: 'flex_major',
+      name: 'Prediktívny pohyb',
+      icon: '🌀',
+      desc: 'DAEDALUS-odvozený algoritmus. Predvída pohyb súpera.',
+      effect: '+6 FLEX',
+      cost: 0,
+      apply: function(gs) { gs.flex = (gs.flex || 10) + 6; },
+      preview: { stat: 'flex', delta: 6 },
+      minDifficulty: 'hard',
+    },
+    {
+      id: 'hp_major',
+      name: 'Biocell Matrix',
+      icon: '❤️',
+      desc: 'Organická bunková matrix zdvojnásobí kapacitu HP. Drahé. Stojí to za to.',
+      effect: '+40 Max HP',
+      cost: 0,
+      apply: function(gs) { gs.maxHp = (gs.maxHp || 100) + 40; },
+      preview: { stat: 'hp', delta: 40 },
+      minDifficulty: 'boss',
+    },
+    {
+      id: 'all_minor',
+      name: 'Systémová kalibrácia',
+      icon: '⚙️',
+      desc: 'Celkové vyladenie všetkých augmentácií. Malý nárast všetkého.',
+      effect: '+1 STR, +1 FLEX, +1 HACK, +5 HP',
+      cost: 0,
+      apply: function(gs) {
+        gs.str = (gs.str || 10) + 1;
+        gs.flex = (gs.flex || 10) + 1;
+        gs.hackStat = (gs.hackStat || 10) + 1;
+        gs.maxHp = (gs.maxHp || 100) + 5;
+      },
+      preview: { stat: 'str', delta: 1 },
+      minDifficulty: 'easy',
+    },
+  ];
+
+  // Loot pool — náhodné predmety/informácie po boji
+  var LOOT_POOL = [
+    { id: 'medkit',    icon: '💉', name: 'Med-kit GEN-1', desc: 'Núdzová sada. HP +20 okamžite.', rarity: 'common',
+      apply: function(gs) { gs.hp = Math.min(gs.maxHp || 100, (gs.hp || 50) + 20); } },
+    { id: 'credchip',  icon: '💳', name: 'Kredičný čip', desc: 'Prepálený kreditný čip. +50 ₿ bonus.', rarity: 'common',
+      apply: function(gs) { gs.money = (gs.money || 0) + 50; } },
+    { id: 'info_frag', icon: '📁', name: 'Dátový fragment', desc: 'Šifrovaný log. Možno niečo odhalí.', rarity: 'uncommon',
+      apply: function(gs) { gs.flags = gs.flags || {}; gs.flags['arena_data_found'] = true; } },
+    { id: 'stim',      icon: '💊', name: 'Combat Stim', desc: 'Adrenalínový booster. Budúci boj: +15% dmg.', rarity: 'uncommon',
+      apply: function(gs) { gs.flags = gs.flags || {}; gs.flags['arena_stim_ready'] = true; } },
+    { id: 'aug_part',  icon: '🔧', name: 'Aug komponent', desc: 'Náhradný diel. Možno niekde použiteľný.', rarity: 'rare',
+      apply: function(gs) { gs.flags = gs.flags || {}; gs.flags['aug_part_' + Date.now()] = true; } },
+    { id: 'black_key', icon: '🗝️', name: 'Čierny kľúč', desc: 'Prístupový kľúč neznámeho pôvodu. LAZARUS?', rarity: 'epic',
+      apply: function(gs) { gs.flags = gs.flags || {}; gs.flags['black_key_found'] = true; } },
+  ];
+
+  // Pomocná funkcia — XP na ďalší level (exponenciálna krivka)
+  function _xpForNextLevel(level) {
+    return Math.floor(100 * Math.pow(1.45, level - 1));
+  }
+
+  // Výber upgradov pre danú obtiažnosť
+  function _pickUpgrades(difficulty) {
+    var diffOrder = ['easy', 'medium', 'hard', 'boss'];
+    var diffIdx = diffOrder.indexOf(difficulty);
+    var available = UPGRADES.filter(function(u) {
+      return diffOrder.indexOf(u.minDifficulty) <= diffIdx;
+    });
+    // Shuffle
+    for (var i = available.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = available[i]; available[i] = available[j]; available[j] = tmp;
+    }
+    return available.slice(0, 3);
+  }
+
+  // Výber lootu
+  function _rollLoot(difficulty) {
+    var diffOrder = ['easy', 'medium', 'hard', 'boss'];
+    var diffIdx = diffOrder.indexOf(difficulty);
+    var loot = [];
+    // Základný loot — vždy
+    if (Math.random() < 0.6 + diffIdx * 0.1) {
+      loot.push(LOOT_POOL[Math.floor(Math.random() * 2)]); // common
+    }
+    // Uncommon / rare pri vyššej obtiažnosti
+    if (diffIdx >= 1 && Math.random() < 0.5) {
+      loot.push(LOOT_POOL[2 + Math.floor(Math.random() * 2)]);
+    }
+    if (diffIdx >= 2 && Math.random() < 0.35) {
+      loot.push(LOOT_POOL[4]);
+    }
+    if (diffIdx >= 3 && Math.random() < 0.25) {
+      loot.push(LOOT_POOL[5]);
+    }
+    return loot;
+  }
+
+
   var ArenaState = {
-    phase: 'roster',    // 'roster' | 'fight' | 'result'
+    phase: 'roster',    // 'roster' | 'fight' | 'result' | 'reward'
     enemy: null,
     bet: 0,
     round: 0,
@@ -586,6 +1012,11 @@ var ArenaSystem = (function () {
     log: [],
     wins: 0,
     losses: 0,
+    // Reward state
+    rewardUpgrades: [],       // 3 upgrade karty ponúknuté
+    rewardLoot: [],           // loot items získané
+    rewardSelectedUpgrade: null, // id vybraného upgradu
+    rewardApplied: false,     // či bol upgrade potvrdený
   };
 
   /* ══════════════════════════════════════════════════════
@@ -829,7 +1260,8 @@ var ArenaSystem = (function () {
       ArenaState.wins++;
       var xpGain    = enemy.reward.xp;
       var moneyGain = enemy.reward.money + Math.floor(bet * enemy.betMultiplier);
-      if (typeof window.gainXP === 'function') gainXP(xpGain);
+
+      // Apply money immediately
       if (gs) { gs.money = (gs.money || 0) + moneyGain; }
       if (typeof window.Renderer !== 'undefined' && Renderer.updateMoney) Renderer.updateMoney();
       if (typeof window.addLog   === 'function') addLog('Aréna: Výhra vs ' + enemy.name + '. +' + xpGain + 'XP, +₿' + moneyGain, 'ok');
@@ -838,7 +1270,24 @@ var ArenaSystem = (function () {
       // Store win flag
       if (gs) { gs.flags = gs.flags || {}; gs.flags['arena_win_' + enemy.id] = true; }
 
+      // Roll loot & upgrades — show reward screen
+      ArenaState.rewardUpgrades = _pickUpgrades(enemy.difficulty);
+      ArenaState.rewardLoot     = _rollLoot(enemy.difficulty);
+      ArenaState.rewardSelectedUpgrade = null;
+      ArenaState.rewardApplied  = false;
+
+      // Apply loot immediately (passive items)
+      ArenaState.rewardLoot.forEach(function(item) {
+        if (gs && item.apply) item.apply(gs);
+      });
+
       _showResult(true, '+' + xpGain + ' XP   +₿' + moneyGain);
+
+      // After short delay, open reward overlay
+      setTimeout(function() {
+        _openRewardScreen(xpGain, moneyGain, enemy);
+      }, 1200);
+
     } else {
       ArenaState.losses++;
       var hpPenalty  = 15;
@@ -855,6 +1304,182 @@ var ArenaSystem = (function () {
       _showResult(false, 'HP −' + hpPenalty + '   ₿ −' + moneyLoss);
     }
   }
+
+  /* ══════════════════════════════════════════════════════
+     §A5b. REWARD SCREEN
+  ══════════════════════════════════════════════════════ */
+
+  function _openRewardScreen(xpGain, moneyGain, enemy) {
+    var overlay = document.getElementById('arena-reward-overlay');
+    if (!overlay) return;
+
+    var gs = window.S || {};
+    var currentXp = gs.xp || 0;
+    var currentLevel = gs.level || 1;
+    var xpBefore = currentXp;
+
+    // Apply XP now
+    var leveledUp = false;
+    var newLevel = currentLevel;
+    if (typeof window.gainXP === 'function') {
+      gainXP(xpGain);
+    } else if (gs) {
+      gs.xp = (gs.xp || 0) + xpGain;
+    }
+    var xpAfter = gs.xp || 0;
+    if (gs.level && gs.level > currentLevel) {
+      leveledUp = true;
+      newLevel = gs.level;
+    }
+
+    // Build HTML
+    var lootHtml = ArenaState.rewardLoot.length
+      ? ArenaState.rewardLoot.map(function(item) {
+          return '<div class="loot-item">' +
+            '<div class="loot-item-icon">' + item.icon + '</div>' +
+            '<div class="loot-item-info">' +
+              '<div class="loot-item-name">' + item.name + '</div>' +
+              '<div class="loot-item-desc">' + item.desc + '</div>' +
+            '</div>' +
+            '<div class="loot-item-rarity rarity-' + item.rarity + '">' + item.rarity.toUpperCase() + '</div>' +
+          '</div>';
+        }).join('')
+      : '<div style="font-size:9px;color:var(--text-muted);letter-spacing:1px">// Žiadny loot //' + '</div>';
+
+    var xpForNext = _xpForNextLevel(leveledUp ? newLevel : currentLevel);
+    var xpBarOldPct = Math.min(100, (xpBefore / xpForNext) * 100);
+    var xpBarNewPct = Math.min(100, (xpAfter  / xpForNext) * 100);
+    if (leveledUp) { xpBarOldPct = 0; xpBarNewPct = Math.min(100, ((xpAfter - 0) / _xpForNextLevel(newLevel)) * 100); }
+
+    var upgradeHtml = ArenaState.rewardUpgrades.map(function(u) {
+      return '<div class="upgrade-card" id="upg-' + u.id + '" onclick="ArenaSystem.selectUpgrade(\'' + u.id + '\')">' +
+        '<div class="upgrade-card-header">' +
+          '<div class="upgrade-card-icon">' + u.icon + '</div>' +
+          '<div class="upgrade-card-name">' + u.name + '</div>' +
+        '</div>' +
+        '<div class="upgrade-card-desc">' + u.desc + '</div>' +
+        '<div class="upgrade-card-effect">' + u.effect + '</div>' +
+      '</div>';
+    }).join('');
+
+    // Current stats
+    var statRows = [
+      { label: 'STR',  val: gs.str || 10,      max: 60, cls: 'str',  key: 'str' },
+      { label: 'FLEX', val: gs.flex || 10,     max: 60, cls: 'flex', key: 'flex' },
+      { label: 'HACK', val: gs.hackStat || 10, max: 60, cls: 'hack', key: 'hackStat' },
+      { label: 'MAX HP',val: gs.maxHp || 100,  max: 300, cls: 'hp',  key: 'maxHp' },
+    ].map(function(r) {
+      return '<div class="stat-mini-row">' +
+        '<div class="stat-mini-label">' + r.label + '</div>' +
+        '<div class="stat-mini-bar-wrap"><div class="stat-mini-bar ' + r.cls + '" id="statbar-' + r.key + '" style="width:' + Math.min(100,(r.val/r.max)*100) + '%"></div></div>' +
+        '<div class="stat-mini-val" id="statval-' + r.key + '">' + r.val + '</div>' +
+        '<div class="stat-mini-delta" id="statdelta-' + r.key + '"></div>' +
+      '</div>';
+    }).join('');
+
+    overlay.innerHTML =
+      '<div id="reward-header">' +
+        '<div id="reward-title">// POST-FIGHT ODMENA //</div>' +
+        '<div id="reward-enemy-badge">VS. ' + enemy.name.toUpperCase() + ' · ' + enemy.faction.toUpperCase() + '</div>' +
+      '</div>' +
+
+      '<div id="reward-body">' +
+
+        // LEFT
+        '<div id="reward-left">' +
+
+          // Summary
+          '<div class="reward-section-label">VÝSLEDKY ZÁPASU</div>' +
+          '<div id="reward-summary">' +
+            '<div class="reward-summary-row"><span class="reward-summary-label">XP ZÍSKANÉ</span><span class="reward-summary-val green">+' + xpGain + ' XP</span></div>' +
+            '<div class="reward-summary-row"><span class="reward-summary-label">KREDITY</span><span class="reward-summary-val">+₿' + moneyGain + '</span></div>' +
+            '<div class="reward-summary-row"><span class="reward-summary-label">STÁVKA</span><span class="reward-summary-val">' + (bet > 0 ? '₿' + bet + ' × ' + enemy.betMultiplier : '—') + '</span></div>' +
+            '<div class="reward-summary-row"><span class="reward-summary-label">KOLÁ</span><span class="reward-summary-val">' + ArenaState.round + '</span></div>' +
+          '</div>' +
+
+          // XP bar
+          '<div class="reward-section-label">PROGRES — LEVEL ' + (leveledUp ? newLevel : currentLevel) + '</div>' +
+          '<div id="reward-xp-section">' +
+            '<div class="reward-xp-label">' +
+              '<span>XP: ' + xpAfter + '</span>' +
+              '<span>NEXT: ' + xpForNext + '</span>' +
+            '</div>' +
+            '<div class="reward-xp-bar-wrap">' +
+              '<div class="reward-xp-bar-old" id="reward-xpbar-old" style="width:' + xpBarOldPct + '%"></div>' +
+              '<div class="reward-xp-bar-gain" id="reward-xpbar-gain" style="width:' + xpBarOldPct + '%"></div>' +
+            '</div>' +
+          '</div>' +
+
+          // Level up
+          '<div id="reward-levelup" class="' + (leveledUp ? 'show' : '') + '">' +
+            '<div id="reward-levelup-text">⚡ LEVEL UP — ' + newLevel + ' ⚡</div>' +
+            '<div id="reward-levelup-sub">Augmentácie odomknuté · Štatistiky zvýšené</div>' +
+          '</div>' +
+
+          // Loot
+          '<div class="reward-section-label">LOOT</div>' +
+          '<div id="reward-loot">' + lootHtml + '</div>' +
+
+        '</div>' + // /reward-left
+
+        // RIGHT — upgrades
+        '<div id="reward-right">' +
+
+          '<div class="reward-section-label">ŠTATISTIKY POSTAVY</div>' +
+          '<div id="reward-current-stats">' + statRows + '</div>' +
+
+          '<div class="reward-section-label" style="margin-top:4px">VYBER UPGRADE</div>' +
+          '<div style="font-size:8px;color:var(--text-muted);letter-spacing:1px;margin-bottom:8px">// Vyber jedno vylepšenie postavy. Nezvratné. //</div>' +
+          '<div id="reward-upgrades">' + upgradeHtml + '</div>' +
+
+          '<button id="reward-upgrade-confirm" onclick="ArenaSystem.confirmUpgrade()">✓ POTVRDIŤ UPGRADE</button>' +
+
+          '<div id="reward-footer">' +
+            '<button class="reward-footer-btn" onclick="ArenaSystem.closeReward()">↵ Späť do arény</button>' +
+            '<button class="reward-footer-btn primary" onclick="ArenaSystem.closeRewardToMap()">✕ Zavrieť</button>' +
+          '</div>' +
+
+        '</div>' + // /reward-right
+
+      '</div>'; // /reward-body
+
+    overlay.classList.add('show');
+
+    // Animate XP bar after short delay
+    setTimeout(function() {
+      var gainBar = document.getElementById('reward-xpbar-gain');
+      if (gainBar) {
+        gainBar.style.width = xpBarNewPct + '%';
+        gainBar.classList.add('anim');
+      }
+    }, 300);
+  }
+
+  function _updateStatPreviews(upgradeId) {
+    var gs = window.S || {};
+    // Reset all
+    ['str','flex','hackStat','maxHp'].forEach(function(k) {
+      var valEl = document.getElementById('statval-' + k);
+      var deltaEl = document.getElementById('statdelta-' + k);
+      if (valEl) { valEl.textContent = gs[k] || (k === 'maxHp' ? 100 : 10); valEl.classList.remove('upgraded'); }
+      if (deltaEl) deltaEl.textContent = '';
+    });
+
+    if (!upgradeId) return;
+    var upg = UPGRADES.find(function(u){ return u.id === upgradeId; });
+    if (!upg || !upg.preview) return;
+
+    var k = upg.preview.stat === 'hp' ? 'maxHp' : (upg.preview.stat === 'hack' ? 'hackStat' : upg.preview.stat);
+    var valEl = document.getElementById('statval-' + k);
+    var deltaEl = document.getElementById('statdelta-' + k);
+    if (valEl) {
+      valEl.textContent = (gs[k] || (k === 'maxHp' ? 100 : 10)) + upg.preview.delta;
+      valEl.classList.add('upgraded');
+    }
+    if (deltaEl) deltaEl.textContent = '+' + upg.preview.delta;
+  }
+
+
 
   /* ══════════════════════════════════════════════════════
      §A6. UI Renderer
@@ -1192,6 +1817,11 @@ var ArenaSystem = (function () {
       </div><!-- /arena-body -->
     `;
     document.body.appendChild(div);
+
+    // Reward overlay (separate, higher z-index)
+    var rewardDiv = document.createElement('div');
+    rewardDiv.id = 'arena-reward-overlay';
+    document.body.appendChild(rewardDiv);
   }
 
   /* ══════════════════════════════════════════════════════
@@ -1290,6 +1920,72 @@ var ArenaSystem = (function () {
       _updateBetDisplay();
     },
 
-  };
+    selectUpgrade: function(upgradeId) {
+      if (ArenaState.rewardApplied) return;
 
+      ArenaState.rewardSelectedUpgrade = upgradeId;
+
+      // Visual feedback — mark selected card
+      ArenaState.rewardUpgrades.forEach(function(u) {
+        var card = document.getElementById('upg-' + u.id);
+        if (card) card.classList.toggle('selected', u.id === upgradeId);
+      });
+
+      // Show confirm button
+      var btn = document.getElementById('reward-upgrade-confirm');
+      if (btn) btn.classList.add('show');
+
+      // Preview stat changes
+      _updateStatPreviews(upgradeId);
+    },
+
+    confirmUpgrade: function() {
+      if (ArenaState.rewardApplied) return;
+      var upgradeId = ArenaState.rewardSelectedUpgrade;
+      if (!upgradeId) return;
+
+      var upg = UPGRADES.find(function(u){ return u.id === upgradeId; });
+      if (!upg) return;
+
+      var gs = window.S;
+      if (gs && upg.apply) upg.apply(gs);
+
+      ArenaState.rewardApplied = true;
+
+      // Lock all cards
+      ArenaState.rewardUpgrades.forEach(function(u) {
+        var card = document.getElementById('upg-' + u.id);
+        if (card && u.id !== upgradeId) { card.classList.add('used'); }
+      });
+
+      // Disable confirm btn
+      var btn = document.getElementById('reward-upgrade-confirm');
+      if (btn) { btn.textContent = '✓ UPGRADE APLIKOVANÝ'; btn.disabled = true; }
+
+      // Refresh renderer
+      if (typeof window.Renderer !== 'undefined') {
+        if (Renderer.updateStats) Renderer.updateStats();
+        if (Renderer.updateMoney) Renderer.updateMoney();
+      }
+
+      // Confirm stat preview
+      _updateStatPreviews(upgradeId);
+
+      if (typeof window.showNotif === 'function') showNotif('✓ ' + upg.name + ' aplikovaná!');
+      if (typeof window.addLog   === 'function') addLog('Upgrade: ' + upg.name + ' — ' + upg.effect, 'ok');
+    },
+
+    closeReward: function() {
+      var overlay = document.getElementById('arena-reward-overlay');
+      if (overlay) overlay.classList.remove('show');
+      this.backToRoster();
+    },
+
+    closeRewardToMap: function() {
+      var overlay = document.getElementById('arena-reward-overlay');
+      if (overlay) overlay.classList.remove('show');
+      this.close();
+    },
+
+  };
 })();
