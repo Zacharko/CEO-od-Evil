@@ -5564,6 +5564,7 @@ body.low-power .minigame-overlay {
 </div>
 
 
+<script src="scenes.js"></script>
 <script>
 'use strict';
 
@@ -7853,16 +7854,2077 @@ function renderBoatsOverlay() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   §26.  FISHING MINIGAME  — canvas-based, hold-to-reel mechanika
+   ─────────────────────────────────────────────────────────────────
+   FG = global state objekt pre fishing (state machine).
+   Fish data: S.fishCaught = { fishId: count }.
+   Rybári frakcia má +25% bonus na predaj rýb (viď FactionsSystem).
+═══════════════════════════════════════════════════════════════════ */
+var FG = { state:'idle', fishTarget:null, biteTimer:null, barPos:0, barDir:1, playerPos:0.5, catchZonePos:0.4, catchPower:0, animFrame:null, canvas:null, ctx:null, waitTimeout:null, biteTimeout:null };
 
-// ─── fishing, casino, hacking v fishing.js ───
+var reelPressed = false;
+
+function openFishing() {
+  FG.state  = 'idle';
+  FG.canvas = document.getElementById('fishing-canvas');
+  if (!FG.canvas) return;
+  FG.ctx    = FG.canvas.getContext('2d');
+  document.getElementById('fishing-status').textContent      = 'Čakáš na záber... Zahoď udicu!';
+  document.getElementById('fishing-action-btn').textContent  = '[ ZAHOĎ UDICU ]';
+  document.getElementById('fishing-overlay').classList.add('show');
+  drawFishingIdle();
+}
+
+function closeFishing() {
+  clearFishTimeouts();
+  if (FG.animFrame) cancelAnimationFrame(FG.animFrame);
+  FG.state = 'idle';
+  reelPressed = false;
+  document.getElementById('fishing-overlay').classList.remove('show');
+}
+
+function clearFishTimeouts() {
+  if (FG.waitTimeout) clearTimeout(FG.waitTimeout);
+  if (FG.biteTimeout) clearTimeout(FG.biteTimeout);
+}
+
+function fishingAction() {
+  if (FG.state === 'idle') {
+    FG.state = 'waiting';
+    document.getElementById('fishing-action-btn').textContent = '[ ČAKÁŠ... ]';
+    document.getElementById('fishing-status').textContent     = 'Udica hodená. Čakaj na záber...';
+    var wait = 2000 + Math.random() * 3000;
+    FG.waitTimeout = setTimeout(function(){
+      FG.state = 'biting';
+      document.getElementById('fishing-status').textContent    = '!! ZÁBER !! Klikni rýchlo!';
+      document.getElementById('fishing-action-btn').textContent= '[ ! CHYŤ ! ]';
+      drawFishingBite();
+      FG.biteTimeout = setTimeout(function(){
+        if (FG.state === 'biting') {
+          FG.state = 'idle';
+          document.getElementById('fishing-status').textContent    = 'Ušla ti! Skúsiš znova?';
+          document.getElementById('fishing-action-btn').textContent= '[ ZAHOĎ ZNOVA ]';
+          drawFishingFail();
+        }
+      }, 2000);
+    }, wait);
+    drawFishingWait();
+  } else if (FG.state === 'biting') {
+    clearTimeout(FG.biteTimeout);
+    FG.state = 'reeling';
+    startReeling();
+  }
+}
+
+function startReeling() {
+  FG.barPos = 0.5; FG.barDir = 1; FG.playerPos = 0.5;
+  FG.catchZonePos = 0.35 + Math.random()*0.3; FG.catchPower = 0;
+  var roll = Math.random(), cumul = 0;
+  FG.fishTarget = FISH_TYPES[FISH_TYPES.length-1];
+  for (var i=0; i<FISH_TYPES.length; i++) {
+    cumul += FISH_TYPES[i].rarity;
+    if (roll <= cumul) { FG.fishTarget = FISH_TYPES[i]; break; }
+  }
+  document.getElementById('fishing-status').textContent    = 'Ťaháš... Drž zelenú lištu nad rybou!';
+  document.getElementById('fishing-action-btn').textContent= '[ ŤAHAJ HORE ]';
+  reelingLoop();
+}
+
+document.addEventListener('keydown', function(e){
+  if (e.code==='Space' && FG.state==='reeling'){ reelPressed=true; e.preventDefault(); }
+});
+document.addEventListener('keyup', function(e){ if(e.code==='Space') reelPressed=false; });
+
+function _bindFishingBtn() {
+  var btn = document.getElementById('fishing-action-btn');
+  if (!btn) return;
+  btn.addEventListener('mousedown',  function(){ if (FG.state==='reeling') reelPressed=true; });
+  btn.addEventListener('mouseup',    function(){ reelPressed=false; });
+  btn.addEventListener('touchstart', function(e){ if (FG.state==='reeling'){ reelPressed=true; e.preventDefault(); } });
+  btn.addEventListener('touchend',   function(){ reelPressed=false; });
+}
+if (document.readyState !== 'loading') { _bindFishingBtn(); }
+else { document.addEventListener('DOMContentLoaded', _bindFishingBtn); }
+
+function reelingLoop() {
+  if (FG.state !== 'reeling') return;
+  FG.barPos += FG.barDir * (0.008 + Math.random()*0.012);
+  if (Math.random() < 0.04) FG.barDir *= -1;
+  FG.barPos = Math.max(0, Math.min(1, FG.barPos));
+  if (reelPressed) FG.playerPos -= 0.018; else FG.playerPos += 0.012;
+  FG.playerPos = Math.max(0, Math.min(1, FG.playerPos));
+  var overlap = Math.abs(FG.playerPos - FG.barPos) < 0.12;
+  if (overlap) FG.catchPower = Math.min(1, FG.catchPower + 0.012);
+  else         FG.catchPower = Math.max(0, FG.catchPower - 0.008);
+  drawReeling();
+  if (FG.catchPower >= 1) {
+    FG.state = 'caught';
+    if (FG.animFrame) cancelAnimationFrame(FG.animFrame);
+    fishCaught(); return;
+  }
+  FG.animFrame = requestAnimationFrame(reelingLoop);
+}
+
+function fishCaught() {
+  var ft = FG.fishTarget;
+  if (!S.fishCaught[ft.id]) S.fishCaught[ft.id] = 0;
+  S.fishCaught[ft.id]++;
+  S.income.fish = Object.keys(S.fishCaught).reduce(function(a,id){
+    var f = FISH_TYPES.filter(function(x){ return x.id===id; })[0];
+    return a + (f ? Math.floor(f.value/10) : 0);
+  }, 0);
+  Renderer.updateIncome(); Renderer.updateFish();
+  var xpGain = Math.max(5, Math.floor(ft.value/3)); gainXP(xpGain);
+  S.flex     = Math.min(100, S.flex     + 0.5);
+  S.hackStat = Math.min(100, S.hackStat + 0.1);
+  S.san      = Math.min(100, S.san      + 0.5);
+  HungerSystem.tick();
+  Renderer.updateStats(); activityAttrBonus('fishing');
+  document.getElementById('fishing-status').textContent    = 'Chytil si: ' + ft.icon + ' ' + ft.name + ' (' + ft.value + '₿) | XP +' + xpGain;
+  document.getElementById('fishing-action-btn').textContent= '[ ZAHOĎ ZNOVA ]';
+  addLog('Rybolov: ' + ft.icon + ' ' + ft.name + ' chytená!', 'ok');
+  showNotif(ft.icon + ' ' + ft.name + ' — ₿' + ft.value + ' | XP +' + xpGain + ' | Ohybnosť +0.5');
+  drawFishCaught(ft); FG.state = 'idle';
+}
+
+// Canvas drawing
+function drawFishingIdle() {
+  var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
+  c.clearRect(0,0,w,h);
+  var g=c.createLinearGradient(0,0,0,h); g.addColorStop(0,'#020d14'); g.addColorStop(1,'#010a0e');
+  c.fillStyle=g; c.fillRect(0,0,w,h);
+  c.strokeStyle='rgba(34,211,238,0.07)';
+  for(var i=0;i<5;i++){ c.beginPath(); c.ellipse(w/2,h*0.6+i*8,40+i*20,8+i*3,0,0,Math.PI*2); c.stroke(); }
+  c.strokeStyle='rgba(74,222,128,0.3)'; c.lineWidth=1; c.beginPath(); c.moveTo(w/2,0); c.lineTo(w/2,h*0.55); c.stroke();
+  c.fillStyle='#ef4444'; c.beginPath(); c.arc(w/2,h*0.55,5,0,Math.PI*2); c.fill();
+  c.fillStyle='rgba(74,222,128,0.45)'; c.font='10px Share Tech Mono'; c.textAlign='center';
+  c.fillText('// Nitrická rieka — zvláštne ticho //',w/2,h-12);
+}
+function drawFishingWait() {
+  if (FG.state!=='waiting') return;
+  var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
+  c.clearRect(0,0,w,h);
+  var g=c.createLinearGradient(0,0,0,h); g.addColorStop(0,'#020d14'); g.addColorStop(1,'#010a0e');
+  c.fillStyle=g; c.fillRect(0,0,w,h);
+  var t=Date.now()/500, bobY=h*0.55+Math.sin(t)*4;
+  c.strokeStyle='rgba(74,222,128,0.4)'; c.lineWidth=1; c.beginPath(); c.moveTo(w/2,10); c.lineTo(w/2,bobY); c.stroke();
+  c.fillStyle='#ef4444'; c.beginPath(); c.arc(w/2,bobY,5,0,Math.PI*2); c.fill();
+  c.fillStyle='rgba(34,211,238,0.6)'; c.font='10px Share Tech Mono'; c.textAlign='center'; c.fillText('čakáš...',w/2,h-12);
+  FG.animFrame=requestAnimationFrame(drawFishingWait);
+}
+function drawFishingBite() {
+  var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
+  c.clearRect(0,0,w,h);
+  var t=(Date.now()/200)%1;
+  c.fillStyle='rgba(239,68,68,'+(0.3+t*0.4)+')'; c.fillRect(0,0,w,h);
+  c.fillStyle='#010a0e'; c.fillRect(2,2,w-4,h-4);
+  c.fillStyle='#ef4444'; c.font='bold 24px Orbitron,monospace'; c.textAlign='center'; c.fillText('!! ZÁBER !!',w/2,h/2);
+  c.fillStyle='rgba(239,68,68,0.7)'; c.font='10px Share Tech Mono'; c.fillText('klikni TERAZ!',w/2,h/2+22);
+}
+function drawFishingFail() {
+  var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
+  c.clearRect(0,0,w,h); c.fillStyle='#010a0e'; c.fillRect(0,0,w,h);
+  c.fillStyle='rgba(239,68,68,0.5)'; c.font='14px Orbitron'; c.textAlign='center'; c.fillText('UŠLA TI...',w/2,h/2);
+}
+function drawReeling() {
+  var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
+  c.clearRect(0,0,w,h); c.fillStyle='#010a0e'; c.fillRect(0,0,w,h);
+  c.fillStyle='rgba(34,211,238,0.6)'; c.font='9px Share Tech Mono'; c.textAlign='left'; c.fillText('// DRŽI lištu nad rybou //',8,16);
+  var bX=20, bW=w-40;
+  c.fillStyle='rgba(255,255,255,0.05)'; c.fillRect(bX,45,bW,22);
+  c.strokeStyle='rgba(255,255,255,0.1)'; c.strokeRect(bX,45,bW,22);
+  c.font='18px serif'; c.textAlign='left';
+  c.fillText(FG.fishTarget?FG.fishTarget.icon:'🐟', bX+FG.barPos*bW-11, 63);
+  c.fillStyle='rgba(74,222,128,0.07)'; c.fillRect(bX,90,bW,22);
+  c.strokeStyle='rgba(74,222,128,0.18)'; c.strokeRect(bX,90,bW,22);
+  var pX=bX+FG.playerPos*bW, zW=bW*0.22;
+  c.fillStyle='rgba(57,255,20,0.32)'; c.fillRect(pX-zW/2,90,zW,22);
+  c.strokeStyle='#39ff14'; c.lineWidth=2; c.beginPath(); c.moveTo(pX,90); c.lineTo(pX,112); c.stroke();
+  var ov=Math.abs(FG.playerPos-FG.barPos)<0.12;
+  c.fillStyle=ov?'rgba(57,255,20,0.8)':'rgba(239,68,68,0.6)';
+  c.font='9px Share Tech Mono'; c.textAlign='center';
+  c.fillText(ov?'// CATCHING //':'// ALIGN! //',w/2,135);
+  c.fillStyle='rgba(255,255,255,0.05)'; c.fillRect(bX,148,bW,10);
+  var pct=FG.catchPower, pcol=pct>0.7?'#39ff14':pct>0.4?'#facc15':'#ef4444';
+  c.fillStyle=pcol; c.fillRect(bX,148,bW*pct,10);
+  c.strokeStyle='rgba(255,255,255,0.1)'; c.strokeRect(bX,148,bW,10);
+  c.fillStyle='rgba(255,255,255,0.35)'; c.font='8px Share Tech Mono';
+  c.fillText('CATCH POWER',w/2,172);
+  c.fillStyle='rgba(74,222,128,0.4)';
+  c.fillText('[ DRŽI TLAČIDLO ] alebo [ SPACE ] = ísť hore',w/2,190);
+}
+function drawFishCaught(ft) {
+  var c=FG.ctx, w=FG.canvas.width, h=FG.canvas.height;
+  c.clearRect(0,0,w,h);
+  var g=c.createLinearGradient(0,0,0,h); g.addColorStop(0,'#020d14'); g.addColorStop(1,'#010a0e');
+  c.fillStyle=g; c.fillRect(0,0,w,h);
+  c.font='48px serif'; c.textAlign='center'; c.fillText(ft.icon,w/2,h/2-10);
+  c.fillStyle='#39ff14'; c.font='14px Orbitron'; c.fillText(ft.name,w/2,h/2+20);
+  c.fillStyle='#facc15'; c.font='11px Share Tech Mono'; c.fillText('₿'+ft.value,w/2,h/2+38);
+}
+/* ── EQUIP SYSTEM ────────────────────────────────────────────── */
+var EQUIP_BONUSES = {
+  cap_alobal:   { san: 5,        label:'SAN +5' },
+  visor_tech:   { hackStat: 10,  label:'HCK +10' },
+  gas_mask_pro: { san: 8,        label:'SAN +8' },
+  plynomaska:   { san: 3,        label:'SAN +3' },
+  kevlar_vest:  { hp: 20,        label:'HP +20' },
+  trench_coat:  { san: 10,       label:'SAN +10' },
+  cargo_pants:  {                 label:'Inventár +5' },
+  pants_suit:   { san: 3,        label:'SAN +3' },
+  weapon_baton: { str: 15,       label:'SIL +15' },
+  weapon_glock: { str: 25,       label:'SIL +25' },
+  weapon_taser: { flex: 5,       label:'OHY +5' },
+  hack_pwnbox:  { hackStat: 15,  label:'HCK +15' },
+  neural_link:  { hackStat: 30,  label:'HCK +30' },
+  detektor:     { hackStat: 3,   label:'HCK +3' },
+};
+var ITEM_EQUIP_SLOT = {
+  cap_alobal:'head', visor_tech:'head', gas_mask_pro:'head', plynomaska:'head',
+  kevlar_vest:'body', trench_coat:'body',
+  cargo_pants:'pants', pants_suit:'pants',
+  weapon_baton:'weapon', weapon_glock:'weapon', weapon_taser:'weapon',
+  hack_pwnbox:'special', neural_link:'special', detektor:'special',
+  keycard:'feet', baterka:'feet',
+};
+function ensureEquipped() {
+  if (!S.equipped) S.equipped = { head:null, body:null, pants:null, weapon:null, special:null, feet:null };
+}
+function applyEquipBonus(id, sign) {
+  var b = EQUIP_BONUSES[id]; if (!b) return;
+  if (b.san)      S.san      = Math.min(100, Math.max(0, S.san      + sign*b.san));
+  if (b.str)      S.str      = Math.min(100, Math.max(0, S.str      + sign*b.str));
+  if (b.flex)     S.flex     = Math.min(100, Math.max(0, S.flex     + sign*b.flex));
+  if (b.hackStat) S.hackStat = Math.min(100, Math.max(0, S.hackStat + sign*b.hackStat));
+  if (b.hp)       S.hp       = Math.min(100, Math.max(0, S.hp       + sign*b.hp));
+  Renderer.updateStats();
+}
+function equipItem(id) {
+  ensureEquipped();
+  var slot = ITEM_EQUIP_SLOT[id]; if (!slot) { addLog('Tento predmet sa nedá nasadiť.','warn'); return; }
+  if (!hasItem(id)) { addLog('Predmet nemáš v inventári.','warn'); return; }
+  if (S.equipped[slot]) applyEquipBonus(S.equipped[slot], -1);
+  S.equipped[slot] = id; applyEquipBonus(id, +1);
+  var it = ITEMS[id] || {};
+  addLog('Nasadil si: ' + (it.icon||'') + ' ' + (it.name||id), 'ok');
+  showNotif('Nasadené: ' + (it.icon||'⚙') + ' ' + (it.name||id));
+  Renderer.updateEquip(); Renderer.updateShop(); Renderer.updateInventory();
+}
+function unequipSlot(slot) {
+  ensureEquipped();
+  var id = S.equipped[slot]; if (!id) return;
+  applyEquipBonus(id, -1); S.equipped[slot] = null;
+  var it = ITEMS[id] || {};
+  addLog('Zložil si: ' + (it.name||id), 'ok');
+  Renderer.updateEquip(); Renderer.updateShop();
+}
+function eqSlotClick(slot) {
+  ensureEquipped();
+  if (S.equipped[slot]) unequipSlot(slot);
+}
+function buyItem(id) {
+  var si = SHOP_ITEMS.filter(function(s){ return s.id===id; })[0]; if (!si) return;
+  if (S.money < si.price) { addLog('Nedostatok kreditov.','warn'); return; }
+  if (hasItem(id))        { addLog('Tento predmet už vlastníš.','warn'); return; }
+  S.money -= si.price; Renderer.updateMoney();
+  if (si.category === 'boats') {
+    S.inventory.push(id);
+    S.income.boats   = (S.income.boats||0) + (si.boatIncome||0);
+    S.attrRates.flex = (S.attrRates.flex||0) + (si.flexRate||0);
+    Renderer.updateIncome(); Renderer.updateStats();
+    addLog('Kúpil si: ' + si.icon + ' ' + si.name + ' — +'+(si.boatIncome||0)+'₿/s', 'ok');
+    showNotif(si.icon + ' ' + si.name); Renderer.updateShop(); return;
+  }
+  addItem(id);
+  addLog('Kúpil si: ' + si.name + ' za ₿' + si.price, 'ok');
+  Renderer.updateShop();
+}
+function useItem(id) {
+  var it = ITEMS[id]; if (!it || !it.usable || !hasItem(id)) return;
+  if (it.onUse) it.onUse(); else addLog('Predmet použitý.','ok');
+  Renderer.updateInventory();
+}
+function sellAllFish() {
+  var total = 0;
+  Object.keys(S.fishCaught).forEach(function(id) {
+    var ft = FISH_TYPES.filter(function(f){ return f.id===id; })[0];
+    if (ft) total += S.fishCaught[id] * ft.value;
+  });
+  if (!total) { addLog('Nič na predaj.','warn'); return; }
+  S.money += total; S.fishCaught = {};
+  Renderer.updateMoney(); Renderer.updateFish();
+  addLog('Ryby predané za ₿' + total + '.', 'ok');
+  showNotif('Predal si ryby za ₿' + total + '!');
+}
+
+/* ── GARDEN ──────────────────────────────────────────────────── */
+var GARDEN_SEEDS = [
+  { id:'paradajka', name:'Paradajka',  emoji:'🍅', cost:50,  time:120, reward:100, income:0.1, hunger:25, item:null },
+  { id:'mata',      name:'Mäta',       emoji:'🌿', cost:30,  time:90,  reward:60,  income:0.08,hunger:8,  item:'mata_list' },
+  { id:'cibuľa',    name:'Cibuľka',    emoji:'🧅', cost:25,  time:60,  reward:45,  income:0.05,hunger:12, item:null },
+  { id:'cesnak',    name:'Cesnak',     emoji:'🧄', cost:40,  time:100, reward:75,  income:0.08,hunger:10, item:null },
+  { id:'jahoda',    name:'Jahoda',     emoji:'🍓', cost:80,  time:180, reward:160, income:0.2, hunger:30, item:null },
+  { id:'hrib',      name:'Hríb',       emoji:'🍄', cost:130, time:240, reward:280, income:0.3, hunger:35, item:'hrib_magicky' },
+  { id:'jablko',    name:'Jabloň',     emoji:'🍎', cost:200, time:360, reward:450, income:0.5, hunger:45, item:null },
+  { id:'slnecnica', name:'Slnečnica',  emoji:'🌻', cost:65,  time:150, reward:130, income:0.15,hunger:18, item:null },
+];
+
+if (!S.garden) S.garden = { plots: Array(GameConfig.GARDEN_PLOTS).fill(null) };
+
+function openGarden() {
+  if (!S.garden) S.garden = { plots: Array(GameConfig.GARDEN_PLOTS).fill(null) };
+  renderGardenGrid(); renderGardenShop();
+}
+function renderGardenGrid() {
+  var grid = document.getElementById('garden-grid'); if (!grid) return;
+  grid.innerHTML = '';
+  for (var i = 0; i < GameConfig.GARDEN_PLOTS; i++) {
+    var plot = S.garden.plots[i];
+    var div = document.createElement('div');
+    if (!plot) {
+      div.className = 'garden-plot empty';
+      div.innerHTML = '<div class="garden-plot-emoji">🟫</div><div class="garden-plot-name">Prázdny záhon</div><div class="garden-plot-status">Klikni pre výsadbu</div>';
+      (function(idx){ div.onclick = function(){ gardenOpenSeedPicker(idx); }; })(i);
+    } else {
+      var seed = GARDEN_SEEDS.find(function(s){ return s.id === plot.seedId; });
+      var now = Date.now();
+      var elapsed = (now - plot.plantedAt) / 1000;
+      var ready = elapsed >= seed.time;
+      div.className = 'garden-plot' + (ready ? ' ready' : ' growing');
+      var timeLeft = ready ? 'HOTOVÉ!' : formatGardenTime(seed.time - elapsed);
+      div.innerHTML = '<div class="garden-plot-emoji">'+(ready?seed.emoji:'🌱')+'</div><div class="garden-plot-name">'+seed.name+'</div><div class="garden-plot-timer">'+timeLeft+'</div><div class="garden-plot-status">'+(ready?'Klikni pre zber':'+'+seed.income+'₿/s')+'</div>';
+      if (ready) { (function(idx, sd){ div.onclick = function(){ gardenHarvest(idx, sd); }; })(i, seed); }
+    }
+    grid.appendChild(div);
+  }
+}
+function formatGardenTime(secs) {
+  secs = Math.max(0, Math.ceil(secs));
+  var m = Math.floor(secs/60), s = secs%60;
+  return (m>0?m+'m ':'') + s + 's';
+}
+function gardenOpenSeedPicker(plotIdx) {
+  var picker = document.createElement('div');
+  picker.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:flex;align-items:center;justify-content:center;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--bg3);border:1px solid var(--green3);padding:24px;min-width:340px;max-width:500px;max-height:80vh;overflow-y:auto;';
+  box.innerHTML = '<div style="font-family:var(--font-hud);font-size:13px;letter-spacing:3px;color:var(--green);margin-bottom:16px;">🌱 VYBER SEMENO</div>';
+  GARDEN_SEEDS.forEach(function(seed) {
+    var canAfford = S.money >= seed.cost;
+    var btn = document.createElement('button');
+    btn.style.cssText = 'display:flex;width:100%;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);color:'+(canAfford?'var(--text)':'var(--text-dim)')+';padding:8px 12px;margin-bottom:6px;cursor:'+(canAfford?'pointer':'not-allowed')+';font-family:var(--font-body);font-size:12px;letter-spacing:1px;text-align:left;';
+    btn.innerHTML = '<span style="font-size:22px">'+seed.emoji+'</span><span style="flex:1">'+seed.name+'<br><span style="font-size:10px;color:var(--text-dim)">⏱ '+formatGardenTime(seed.time)+' • +'+seed.income+'₿/s • Výnos: '+seed.reward+'₿ • 🍽 Hlad -'+seed.hunger+'</span></span><span style="color:var(--gold);font-size:11px">'+seed.cost+'₿</span>';
+    if (canAfford) {
+      btn.onmouseover = function(){ this.style.borderColor='var(--green3)'; };
+      btn.onmouseout  = function(){ this.style.borderColor='var(--border)'; };
+      btn.onclick = function(){ gardenPlant(plotIdx, seed.id); document.body.removeChild(picker); };
+    }
+    box.appendChild(btn);
+  });
+  var cancel = document.createElement('button');
+  cancel.textContent = '✕ Zrušiť';
+  cancel.style.cssText = 'background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:6px 16px;cursor:pointer;font-family:var(--font-body);font-size:11px;letter-spacing:1px;margin-top:8px;';
+  cancel.onclick = function(){ document.body.removeChild(picker); };
+  box.appendChild(cancel);
+  picker.appendChild(box);
+  document.body.appendChild(picker);
+}
+function gardenPlant(plotIdx, seedId) {
+  var seed = GARDEN_SEEDS.find(function(s){ return s.id === seedId; });
+  if (S.money < seed.cost) { addLog('Nedostatok peňazí pre výsadbu.','warn'); return; }
+  S.money -= seed.cost;
+  S.garden.plots[plotIdx] = { seedId: seedId, plantedAt: Date.now() };
+  if (!S.gardenIncome) S.gardenIncome = 0;
+  S.gardenIncome += seed.income;
+  Renderer.updateMoney();
+  addLog('Vysadil si '+seed.emoji+' '+seed.name+' za '+seed.cost+'₿.','ok');
+  renderGardenGrid(); saveGame();
+}
+function gardenHarvest(plotIdx, seed) {
+  S.money += seed.reward;
+  // Zber ovocia/zeleniny tiež nasýti agenta!
+  if (seed.hunger) { HungerSystem.eat(seed.hunger); addLog(seed.emoji+' '+seed.name+': Hlad -'+seed.hunger+' (zjedol si čerstvú úrodu!)','ok'); }
+  if (seed.item) addItem(seed.item);
+  gainXP(5);
+  if (S.gardenIncome) S.gardenIncome = Math.max(0, S.gardenIncome - seed.income);
+  S.garden.plots[plotIdx] = null;
+  Renderer.updateMoney();
+  addLog('Zozbierané '+seed.emoji+' '+seed.name+' → +'+seed.reward+'₿'+(seed.item?' + predmet!':'') + '.','ok');
+  renderGardenGrid(); saveGame();
+}
+function gardenHarvestAll() {
+  for (var i = 0; i < GameConfig.GARDEN_PLOTS; i++) {
+    var plot = S.garden.plots[i]; if (!plot) continue;
+    var seed = GARDEN_SEEDS.find(function(s){ return s.id === plot.seedId; });
+    if (!seed) continue;
+    var elapsed = (Date.now() - plot.plantedAt) / 1000;
+    if (elapsed >= seed.time) gardenHarvest(i, seed);
+  }
+}
+function renderGardenShop() {
+  var shop = document.getElementById('garden-seed-shop'); if (!shop) return;
+  shop.innerHTML = '';
+  GARDEN_SEEDS.forEach(function(seed) {
+    var btn = document.createElement('button');
+    btn.className = 'garden-seed-btn';
+    btn.innerHTML = '<span style="font-size:20px">'+seed.emoji+'</span><span>'+seed.name+'<br><span style="font-size:10px;color:var(--text-dim)">⏱ '+formatGardenTime(seed.time)+' • Výnos: '+seed.reward+'₿ • 🍽 '+seed.hunger+'</span></span><span class="seed-cost">'+seed.cost+'₿</span>';
+    btn.title = 'Pasívny príjem: +'+seed.income+'₿/s';
+    shop.appendChild(btn);
+  });
+}
+
+/* ── MOBILE PANEL ────────────────────────────────────────────── */
+var _mobileActivePanel = null;
+function mobilePanel(name) {
+  ['stats','map','inv','log'].forEach(function(p){
+    var el = document.getElementById('mobile-'+p+'-panel');
+    if (el) el.classList.remove('open');
+  });
+  if (!name || name === _mobileActivePanel) { _mobileActivePanel = null; return; }
+  _mobileActivePanel = name;
+  var panel = document.getElementById('mobile-'+name+'-panel'); if (!panel) return;
+  if (name === 'stats') {
+    var src = document.getElementById('left-scroll');
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    if (src) panel.appendChild(src.cloneNode(true));
+  } else if (name === 'map') {
+    var src2 = document.getElementById('sec-map');
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    if (src2) panel.appendChild(src2.cloneNode(true));
+  } else if (name === 'inv') {
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    var rp = document.getElementById('right-panel');
+    if (rp) panel.appendChild(rp.cloneNode(true));
+  } else if (name === 'log') {
+    panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
+    var lw = document.getElementById('log-wrap');
+    if (lw) { var clone = lw.cloneNode(true); clone.style.maxHeight='none'; panel.appendChild(clone); }
+  }
+  panel.classList.add('open');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE SIDE-ARROW PANEL SYSTEM
+   Ľavá šípka: Štatistiky / Príjem / Frakcie / Ciele / Mapa
+   Pravá šípka: Predmety / Výstroj / Ryby / Obchod / Log
+══════════════════════════════════════════════════════════════════ */
+var _mobilePanelState = {
+  leftIdx: -1,   // -1 = zatvorený
+  rightIdx: -1,
+  topbarOpen: false
+};
+
+var _leftPanels = [
+  { key: 'stats',    label: 'Štat.',  icon: '📊', title: 'Agent // Štatistiky' },
+  { key: 'income',   label: 'Príjem', icon: '💰', title: 'Pasívny príjem' },
+  { key: 'factions', label: 'Frak.',  icon: '⚔',  title: 'Frakcie // Lojalita' },
+  { key: 'goals',    label: 'Ciele',  icon: '🎯', title: 'Operačné ciele' },
+  { key: 'map',      label: 'Mapa',   icon: '🗺', title: 'Mapa // Prievidza' }
+];
+var _rightPanels = [
+  { key: 'items',  label: 'Inv.',   icon: '🎒', title: 'Inventár' },
+  { key: 'equip',  label: 'Výstroj',icon: '⚔️', title: 'Výstroj' },
+  { key: 'fish',   label: 'Ryby',   icon: '🐟', title: 'Ryby' },
+  { key: 'shop',   label: 'Obchod', icon: '🛒', title: 'Obchod' },
+  { key: 'log',    label: 'Log',    icon: '📋', title: 'Event Log' }
+];
+
+function _mobileIsMobile() {
+  return window.innerWidth <= 768;
+}
+
+function _mobileRenderDots(containerId, panels, activeIdx) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  panels.forEach(function(p, i) {
+    var dot = document.createElement('div');
+    dot.className = 'arrow-dot' + (i === activeIdx ? ' active' : '');
+    el.appendChild(dot);
+  });
+}
+
+function _mobileUpdateArrowLabel(side, idx) {
+  var panels = side === 'left' ? _leftPanels : _rightPanels;
+  var label = idx >= 0 && panels[idx] ? panels[idx].label : (side === 'left' ? 'Štat.' : 'Inv.');
+  var lbl = document.getElementById('mobile-' + side + '-label-main');
+  if (lbl) lbl.textContent = label;
+  _mobileRenderDots('mobile-' + side + '-dots-main', panels, idx);
+}
+
+function _mobileFillLeftPanel(key) {
+  var content = document.getElementById('mobile-left-panel-content');
+  var titleEl = document.getElementById('mobile-left-panel-title');
+  var panel = _leftPanels.find(function(p){ return p.key === key; });
+  if (titleEl && panel) titleEl.textContent = panel.icon + ' ' + panel.title;
+  if (!content) return;
+  content.innerHTML = '';
+  if (key === 'stats') {
+    var src = document.getElementById('sec-stats');
+    if (src) content.appendChild(src.cloneNode(true));
+  } else if (key === 'income') {
+    var src2 = document.getElementById('sec-income');
+    if (src2) content.appendChild(src2.cloneNode(true));
+  } else if (key === 'factions') {
+    var src3 = document.getElementById('sec-factions');
+    if (src3) content.appendChild(src3.cloneNode(true));
+  } else if (key === 'goals') {
+    var src4 = document.getElementById('sec-ops');
+    if (src4) content.appendChild(src4.cloneNode(true));
+  } else if (key === 'map') {
+    var src5 = document.getElementById('sec-map');
+    if (src5) content.appendChild(src5.cloneNode(true));
+  }
+}
+
+function _mobileFillRightPanel(key) {
+  var content = document.getElementById('mobile-right-panel-content');
+  var titleEl = document.getElementById('mobile-right-panel-title');
+  var panel = _rightPanels.find(function(p){ return p.key === key; });
+  if (titleEl && panel) titleEl.textContent = panel.icon + ' ' + panel.title;
+  if (!content) return;
+  content.innerHTML = '';
+  if (key === 'items' || key === 'equip' || key === 'fish' || key === 'shop') {
+    var rp = document.getElementById('right-panel');
+    if (rp) {
+      var clone = rp.cloneNode(true);
+      // Activate the right tab
+      var tabMap = { items:'inv-pane-items', equip:'inv-pane-equip', fish:'inv-pane-fish', shop:'inv-pane-shop' };
+      clone.querySelectorAll('.inv-pane').forEach(function(p){ p.classList.remove('active'); });
+      var target = clone.querySelector('#' + tabMap[key]);
+      if (target) target.classList.add('active');
+      content.appendChild(clone);
+    }
+  } else if (key === 'log') {
+    var lw = document.getElementById('log-wrap');
+    if (lw) {
+      var logClone = lw.cloneNode(true);
+      logClone.style.maxHeight = 'none';
+      content.appendChild(logClone);
+    }
+  }
+}
+
+function _mobileOpenPanel(side, idx) {
+  var panelId = 'mobile-' + side + '-panel';
+  var panel = document.getElementById(panelId);
+  if (!panel) return;
+  var panels = side === 'left' ? _leftPanels : _rightPanels;
+  var key = panels[idx] ? panels[idx].key : null;
+  if (!key) return;
+  if (side === 'left') {
+    _mobileFillLeftPanel(key);
+    _mobilePanelState.leftIdx = idx;
+  } else {
+    _mobileFillRightPanel(key);
+    _mobilePanelState.rightIdx = idx;
+  }
+  panel.classList.remove('closing');
+  panel.classList.add('open');
+  // Dim center
+  var main = document.getElementById('main');
+  if (main) main.classList.add('panel-' + side + '-open');
+  _mobileUpdateArrowLabel(side, idx);
+}
+
+function mobileClosePanel(side) {
+  var panel = document.getElementById('mobile-' + side + '-panel');
+  if (!panel) return;
+  panel.classList.add('closing');
+  setTimeout(function(){
+    panel.classList.remove('open');
+    panel.classList.remove('closing');
+  }, 220);
+  var main = document.getElementById('main');
+  if (main) main.classList.remove('panel-' + side + '-open');
+  if (side === 'left') { _mobilePanelState.leftIdx = -1; _mobileUpdateArrowLabel('left', -1); }
+  else { _mobilePanelState.rightIdx = -1; _mobileUpdateArrowLabel('right', -1); }
+}
+
+function mobileCycleLeft() {
+  if (!_mobileIsMobile()) return;
+  var cur = _mobilePanelState.leftIdx;
+  var panel = document.getElementById('mobile-left-panel');
+  if (cur === -1) {
+    // Open first panel
+    _mobileOpenPanel('left', 0);
+  } else if (cur < _leftPanels.length - 1) {
+    // Next panel
+    _mobileOpenPanel('left', cur + 1);
+  } else {
+    // Close
+    mobileClosePanel('left');
+  }
+}
+
+function mobileCycleRight() {
+  if (!_mobileIsMobile()) return;
+  var cur = _mobilePanelState.rightIdx;
+  if (cur === -1) {
+    _mobileOpenPanel('right', 0);
+  } else if (cur < _rightPanels.length - 1) {
+    _mobileOpenPanel('right', cur + 1);
+  } else {
+    mobileClosePanel('right');
+  }
+}
+
+function mobileShowGame() {
+  mobileClosePanel('left');
+  mobileClosePanel('right');
+  // Highlight game button
+  document.querySelectorAll('.mobile-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.getElementById('mnav-game');
+  if (btn) btn.classList.add('active');
+}
+
+function mobileMiniStats() {
+  // Toggle left panel on stats
+  if (_mobilePanelState.leftIdx === 0) { mobileClosePanel('left'); return; }
+  _mobileOpenPanel('left', 0);
+}
+
+function mobileMiniLog() {
+  // Toggle right panel on log
+  if (_mobilePanelState.rightIdx === 4) { mobileClosePanel('right'); return; }
+  _mobileOpenPanel('right', 4);
+}
+
+// Topbar expand toggle
+function mobileTopbarToggle() {
+  var expand = document.getElementById('mobile-topbar-expand');
+  var toggle = document.getElementById('mobile-topbar-toggle');
+  if (!expand || !toggle) return;
+  _mobilePanelState.topbarOpen = !_mobilePanelState.topbarOpen;
+  if (_mobilePanelState.topbarOpen) {
+    expand.classList.add('show');
+    toggle.classList.add('expanded');
+    // Sync money chip
+    _mobileTopbarSync();
+  } else {
+    expand.classList.remove('show');
+    toggle.classList.remove('expanded');
+  }
+}
+
+function _mobileTopbarSync() {
+  var money = document.getElementById('topbar-money');
+  var dest = document.getElementById('mobile-topbar-money2');
+  if (money && dest) dest.textContent = money.textContent;
+  // Sync stat chips
+  var syncs = [
+    ['val-hp','mchip-hp'],['val-san','mchip-san'],['val-xp','mchip-xp'],
+    ['val-level','mchip-lvl'],['inc-total','mchip-inc'],['val-hunger','mchip-hunger']
+  ];
+  syncs.forEach(function(pair){
+    var src = document.getElementById(pair[0]);
+    var dst = document.getElementById(pair[1]);
+    if (src && dst) dst.textContent = src.textContent;
+  });
+}
+
+function mobileTabSwitch(view) {
+  // Update active mtab
+  document.querySelectorAll('.mtab-btn').forEach(function(b){ b.classList.remove('active'); });
+  switchView(view);
+}
+
+// Initialize mobile arrows on load
+function _mobileInit() {
+  if (!_mobileIsMobile()) return;
+  _mobileUpdateArrowLabel('left', -1);
+  _mobileUpdateArrowLabel('right', -1);
+  // Show toggle button
+  var toggle = document.getElementById('mobile-topbar-toggle');
+  if (toggle) toggle.classList.add('show');
+  // Show expand but collapsed
+  // Touch swipe on center panel
+  var center = document.getElementById('center-panel');
+  if (center) {
+    var _swipeStartX = 0;
+    var _swipeStartY = 0;
+    center.addEventListener('touchstart', function(e){
+      _swipeStartX = e.touches[0].clientX;
+      _swipeStartY = e.touches[0].clientY;
+    }, { passive: true });
+    center.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - _swipeStartX;
+      var dy = e.changedTouches[0].clientY - _swipeStartY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx > 0) mobileCycleLeft();
+        else mobileCycleRight();
+      }
+    }, { passive: true });
+  }
+  // Periodic sync of topbar chips when open
+  setInterval(function(){
+    if (_mobilePanelState.topbarOpen) _mobileTopbarSync();
+  }, 2000);
+}
+
+// Hook into game start
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(_mobileInit, 600);
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   HUNGER SYSTEM INJECTION INTO GAMELOOP TICK
+   (Patch do existujúceho GameLoop._tick — volaný každú sekundu)
+══════════════════════════════════════════════════════════════════ */
+// Patch GameLoop — pridáme HungerSystem.tick() do existujúceho loopa
+// Robíme to bezpečne cez wrapper po inicializácii
+var _originalGameLoopStart = GameLoop.start;
+GameLoop.start = function() {
+  _originalGameLoopStart();
+  // Hunger tick hook je priamo vo _tick() nižšie cez monkey-patch
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   BOOTSTRAP — Inicializácia hry
+══════════════════════════════════════════════════════════════════ */
+
+// Opraviť _tick aby obsahoval hunger
+// GameLoop._tick je privátny — musíme ho rozšíriť cez setInterval
+// (GameLoop.start() používa rAF loop s akumulátorom, takže tick je pri 1s)
+// Pridáme hunger ako sekundárny interval:
+var _hungerTickInterval = null;
+
+function _startHungerTick() {
+  if (_hungerTickInterval) clearInterval(_hungerTickInterval);
+  _hungerTickInterval = setInterval(function(){
+    if (!StateMachine.is(StateMachine.STATES.PLAYING)) return;
+    HungerSystem.tick();
+  }, GameConfig.TICK_INTERVAL_MS);
+}
+
+// ── State Machine transitions ────────────────────────────────────
+StateMachine.on(StateMachine.STATES.PLAYING, function() {
+  _startHungerTick();
+});
+
+StateMachine.on(StateMachine.STATES.MAIN_MENU, function() {
+  if (_hungerTickInterval) { clearInterval(_hungerTickInterval); _hungerTickInterval = null; }
+});
+
+// ── Loading Sequence ─────────────────────────────────────────────
+(function initLoadingSequence() {
+  function _run() {
+    var menuPanel = document.getElementById('menu-panel');
+    if (menuPanel) menuPanel.classList.add('loading');
+
+    var overlay  = document.getElementById('cinematic-overlay');
+    var barFill  = document.getElementById('cinematic-bar-fill');
+    var hintEl   = overlay ? overlay.querySelector('.cin-hint') : null;
+    var titleEl  = overlay ? overlay.querySelector('.cin-title') : null;
+    var tagEl    = overlay ? overlay.querySelector('.cin-tag') : null;
+    var subEl    = overlay ? overlay.querySelector('.cin-sub') : null;
+
+    // ── Init loading ticks (20 segmentov pod barom) ──
+    var ticksWrap = document.getElementById('loading-ticks');
+    if (ticksWrap) {
+      ticksWrap.innerHTML = '';
+      for (var ti = 0; ti < 20; ti++) {
+        var tick = document.createElement('div');
+        tick.className = 'loading-tick';
+        ticksWrap.appendChild(tick);
+      }
+    }
+
+    // ── Smooth rAF bar animácia ──
+    var _curPct = 0; var _tgtPct = 0; var _rafId2 = null;
+    var _barEl2 = document.getElementById('loading-bar');
+    var _pctEl2 = document.getElementById('loading-pct');
+    function _animBar() {
+      var diff = _tgtPct - _curPct;
+      if (Math.abs(diff) < 0.15) { _curPct = _tgtPct; _rafId2 = null; }
+      else { _curPct += diff * 0.055; _rafId2 = requestAnimationFrame(_animBar); }
+      if (_barEl2) _barEl2.style.width = _curPct + '%';
+      if (_pctEl2) _pctEl2.textContent = Math.round(_curPct) + '%';
+      if (ticksWrap) {
+        var tks = ticksWrap.children;
+        var lit = Math.floor((_curPct / 100) * tks.length);
+        for (var i=0;i<tks.length;i++) tks[i].classList.toggle('lit', i<lit);
+      }
+      if (_barEl2) {
+        var p = _curPct;
+        _barEl2.style.background = p<30 ? 'linear-gradient(90deg,#16a34a,#39ff14)' :
+          p<60 ? 'linear-gradient(90deg,#0891b2,#22d3ee)' :
+          p<85 ? 'linear-gradient(90deg,#a855f7,#c084fc)' :
+                 'linear-gradient(90deg,#39ff14,#fff)';
+      }
+    }
+    function _setBar(pct) {
+      _tgtPct = pct;
+      if (!_rafId2) { _rafId2 = requestAnimationFrame(_animBar); }
+    }
+
+    if (overlay) {
+      overlay.classList.add('show');
+      if (tagEl)   tagEl.textContent   = '// SYSTÉM SA PREBÚDZA //';
+      if (titleEl) titleEl.textContent = 'LAZARUS PROTOKOL';
+      if (subEl)   subEl.textContent   = 'INICIALIZÁCIA AGENTA DELTA';
+    }
+
+  var steps = [
+    [ 2,  '// BOOT SEKVENCIA AKTIVOVANÁ //',                          120],
+    [ 5,  '// Kontrolujem či si nejaký reptilián... //',              280],
+    [ 8,  '// Reptiliánsky sken: NEGATÍVNY (zatiaľ) //',             350],
+    [11,  '// Načítavam osobný spis: AGENT DELTA //',                 220],
+    [14,  '// VAROVANIE: Spis obsahuje kompromitujúci materiál //',   400],
+    [17,  '// Mažem stopy... nechávam zálohu pre seba //',            260],
+    [21,  '// Inicializujem kanalizačnú sieť Prievidze //',           180],
+    [25,  '// Potkany: 2,847 aktívnych jedincov — bežný stav //',     320],
+    [29,  '// Kalibrujem LAZARUS frekvencie — uzol 1-7 //',           250],
+    [33,  '// Uzol 7 (Vendelin): ONLINE. Podozrivý, ale čo //',       380],
+    [37,  '// Načítavam Miki Bar... + Lucia, + Michal + UFO dáta //', 210],
+    [41,  '// Michal hovorí že mám zatvoriť túto obrazovku //',       440],
+    [45,  '// Aktivujem Hunger systém — jedol si dnes? //',           200],
+    [49,  '// Bane Corp. databáza: 47,000 utajených záznamov //',     300],
+    [53,  '// Šifrujem tvoje myšlienky (predbežne) //',               260],
+    [57,  '// Inštalujem sarkazmus — Michal verzia 3.1 //',           350],
+    [61,  '// Klaus Schwab loading... loading... BLOKOVANÝ //',        420],
+    [65,  '// Prievidza 2077: Mesto načítané. Chemtrails: 3 aktívne //', 240],
+    [69,  '// Druid Frantisek sleduje situáciu zo záhrady //',        280],
+    [73,  '// delta_probe: Sledovanie agenta... //',                   380],
+    [77,  '// VAROVANIE: BIO-ECHO skenuje biologické anomálie //',    320],
+    [80,  '// Načítavam Kanálovú Arénu — potkani sa pripravujú //',   200],
+    [84,  '// Lucia hovorí: "Čo budeš?" — ignorujem //',              260],
+    [88,  '// Finalizujem sprisahanie... to jest príbeh //',           350],
+    [92,  '// Hackeri, Stokári, CEO, Rybári — všetci čakajú //',      220],
+    [95,  '// Posledná kontrola: Zuckerberg — REPTILIÁN POTVRDENÝ //', 440],
+    [98,  '// OPERÁCIA LAZARUS: PRIPRAVENÁ //',                        300],
+    [100, '// Agente. Prievidza ťa potrebuje. //',                     500],
+  ];
+
+  var i = 0;
+  function nextStep() {
+    if (i >= steps.length) {
+      setTimeout(function(){
+        // Fade out cinematic a zobraz menu
+        if (overlay) {
+          overlay.style.transition = 'opacity 0.7s ease';
+          overlay.style.opacity = '0';
+          setTimeout(function(){
+            overlay.classList.remove('show');
+            overlay.style.opacity = '';
+            overlay.style.transition = '';
+            if (barFill) barFill.style.width = '0%';
+            // Obnov pôvodné texty cinematicu
+            if (tagEl)   tagEl.textContent   = '// PRIEVIDZA 2077 //';
+            if (titleEl) titleEl.textContent = 'PROTOCOL LAZARUS';
+            if (subEl)   subEl.textContent   = 'BUDÚCNOSŤ NEČAKÁ. PREBÚDZA SA.';
+            if (hintEl)  hintEl.textContent  = '[ INICIALIZÁCIA... ]';
+          }, 720);
+        }
+        // Reveal menu panel
+        if (menuPanel) {
+          menuPanel.classList.remove('loading');
+          menuPanel.classList.add('loaded');
+        }
+        StateMachine.transition(StateMachine.STATES.MAIN_MENU);
+        AmbientSound.menu();
+      }, 300);
+      return;
+    }
+    var s = steps[i++];
+    // Smooth bar + loading ticks
+    _setBar(s[0]);
+    if (barFill) { _setBar(s[0]); barFill.style.width = s[0]+'%'; }
+    if (hintEl) hintEl.textContent = s[1];
+
+    setTimeout(nextStep, s[2] + (Math.random() * 80 - 40));
+  }
+  setTimeout(nextStep, 300);
+  } // end _run
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _run);
+  } else {
+    _run();
+  }
+})();
+
+// ── Matrix Rain Canvas ───────────────────────────────────────────
+(function initMatrixRain() {
+  var canvas = document.getElementById('matrix-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var chars = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789LAZARUSΔΨΩ';
+  var cols, drops;
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.offsetHeight || window.innerHeight;
+    cols  = Math.floor(canvas.width / 18);
+    drops = Array(cols).fill(1).map(function(){ return Math.random() * -80 | 0; });
+  }
+
+  function draw() {
+    // Very subtle fade trail — dark with low alpha
+    ctx.fillStyle = 'rgba(3,6,3,0.13)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    var fontSize = 13;
+    ctx.font = fontSize + 'px monospace';
+
+    for (var i = 0; i < drops.length; i++) {
+      var char = chars[Math.floor(Math.random() * chars.length)];
+      var y = drops[i] * fontSize;
+      // Head of column — bright green
+      ctx.fillStyle = 'rgba(200,255,200,0.9)';
+      ctx.fillText(char, i * 18, y);
+      // Body — dim green
+      ctx.fillStyle = 'rgba(57,255,20,0.55)';
+      ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 18, y - fontSize);
+
+      if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i] += 0.5;
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  setInterval(draw, 55);
+})();
+
+// ── Menu Buttons ────────────────────────────────────────────────
+document.getElementById('menu-new-btn').onclick = function() {
+  var menu    = document.getElementById('main-menu');
+  var overlay = document.getElementById('cinematic-overlay');
+  var barFill = document.getElementById('cinematic-bar-fill');
+  var hint    = overlay ? overlay.querySelector('.cin-hint') : null;
+
+  // 1. Fade out menu
+  menu.style.transition = 'opacity 0.35s ease';
+  menu.style.opacity = '0';
+
+  setTimeout(function(){
+    menu.classList.remove('visible');
+    menu.style.opacity = '';
+    menu.style.transition = '';
+
+    if (!overlay) { newGame(); goTo('sc_001_prichod'); return; }
+
+    // 2. Cinematic overlay
+    overlay.classList.add('show');
+    if (barFill) barFill.style.width = '0%';
+
+    // Glitch pulse na title každých ~800ms
+    var glitchTimer = setInterval(function(){
+      var title = overlay.querySelector('.cin-title');
+      if (!title) return;
+      title.style.transform = 'translate(' + (Math.random()*6-3) + 'px,' + (Math.random()*4-2) + 'px) skewX(' + (Math.random()*2-1) + 'deg)';
+      setTimeout(function(){ if(title) title.style.transform = ''; }, 80);
+    }, 700);
+
+    // 3. Progress bar 3.2s
+    var TOTAL = 3200;
+    var start = Date.now();
+    var barTimer = setInterval(function(){
+      var pct = Math.min(100, ((Date.now() - start) / TOTAL) * 100);
+      if (barFill) barFill.style.width = pct + '%';
+      if (pct >= 100) clearInterval(barTimer);
+    }, 40);
+
+    // 4. Hint texty
+    var hints = [
+      '[ INICIALIZÁCIA... ]', '[ NAČÍTAVAM PRIEVIDZU... ]',
+      '[ LAZARUS PROTOKOL AKTÍVNY ]', '[ AGENT DELTA — ONLINE ]',
+      '[ SPÚŠŤAM OPERÁCIU... ]',
+    ];
+    var hi = 0;
+    var hintTimer = setInterval(function(){
+      hi = (hi + 1) % hints.length;
+      if (hint) hint.textContent = hints[hi];
+    }, 640);
+
+    // 5. Inicializuj hru TICHO na pozadí (bez goTo) 
+    newGame._pendingStart = true;
+
+    // 6. Po 3.5s — fade out, potom spusti scénu
+    setTimeout(function(){
+      clearInterval(hintTimer);
+      clearInterval(glitchTimer);
+      if (hint) hint.textContent = '[ PRIEVIDZA ŤA ČAKÁ. ]';
+      overlay.style.transition = 'opacity 0.7s ease';
+      overlay.style.opacity = '0';
+      setTimeout(function(){
+        overlay.classList.remove('show');
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+        if (barFill) barFill.style.width = '0%';
+        // Teraz inicializuj a spusti scénu
+        newGame();
+        goTo('sc_001_prichod');
+        // Job overlay až keď je všetko viditeľné
+        setTimeout(function(){
+          if (!S.job) document.getElementById('job-overlay').classList.remove('hidden');
+          Renderer.updateShop();
+        }, 200);
+      }, 720);
+    }, 3500);
+
+  }, 360);
+};
+
+document.getElementById('menu-load-btn').onclick = function() {
+  var menu = document.getElementById('main-menu');
+  var overlay = document.getElementById('cinematic-overlay');
+  var barFill = document.getElementById('cinematic-bar-fill');
+  var hint    = overlay ? overlay.querySelector('.cin-hint') : null;
+
+  menu.style.transition = 'opacity 0.35s ease';
+  menu.style.opacity = '0';
+
+  setTimeout(function(){
+    menu.classList.remove('visible');
+    menu.style.opacity = '';
+    menu.style.transition = '';
+
+    // Krátky load cinematic (1.5s)
+    if (overlay) {
+      overlay.classList.add('show');
+      if (barFill) barFill.style.width = '0%';
+      if (hint) hint.textContent = '[ NAČÍTAVAM SAVE... ]';
+
+      var start = Date.now();
+      var barTimer = setInterval(function(){
+        var pct = Math.min(100, ((Date.now() - start) / 1200) * 100);
+        if (barFill) barFill.style.width = pct + '%';
+        if (pct >= 100) clearInterval(barTimer);
+      }, 30);
+
+      setTimeout(function(){
+        if (hint) hint.textContent = '[ OBNOVUJEM STAV AGENTA... ]';
+      }, 500);
+
+      setTimeout(function(){
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '0';
+        setTimeout(function(){
+          overlay.classList.remove('show');
+          overlay.style.opacity = '';
+          overlay.style.transition = '';
+          if (barFill) barFill.style.width = '0%';
+          loadGame();
+        }, 520);
+      }, 1400);
+    } else {
+      loadGame();
+    }
+  }, 360);
+};
+
+// ── Input Handler Init ───────────────────────────────────────────
+InputHandler.init();
+
+// ── Casino keyboard controls ─────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  var overlay = document.getElementById('casino-overlay');
+  if (!overlay || !overlay.classList.contains('show')) return;
+  // Detect which casino is open
+  var isSlots = !!document.getElementById('reel0');
+  var isBJ    = !!document.getElementById('bj-player-cards');
+
+  if (isSlots) {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      Slots.spin();
+    }
+    return;
+  }
+
+  if (isBJ) {
+    // ← ArrowLeft = HIT
+    if (e.code === 'ArrowLeft') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        // find HIT button
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        btns.forEach(function(b){ if(b.textContent.trim()==='HIT') b.click(); });
+      }
+    }
+    // ↓ ArrowDown = STAND
+    if (e.code === 'ArrowDown') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        btns.forEach(function(b){ if(b.textContent.trim()==='STAND') b.click(); });
+      }
+    }
+    // → ArrowRight = DOUBLE / NOVÁ HRA
+    if (e.code === 'ArrowRight') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        var found = false;
+        btns.forEach(function(b){
+          if(b.textContent.trim()==='DOUBLE') { b.click(); found=true; }
+        });
+        if (!found) btns.forEach(function(b){
+          if(b.textContent.trim()==='NOVÁ HRA') b.click();
+        });
+      }
+    }
+    // Space = DEAL / NOVÁ HRA
+    if (e.code === 'Space') {
+      e.preventDefault();
+      var actWrap = document.getElementById('bj-actions-wrap');
+      if (actWrap) {
+        var btns = actWrap.querySelectorAll('.bj-btn');
+        btns.forEach(function(b){
+          if(b.textContent.trim()==='ROZDAJ KARTY' || b.textContent.trim()==='NOVÁ HRA') b.click();
+        });
+      }
+    }
+  }
+});
+
+
+// ── Initial render ───────────────────────────────────────────────
+Renderer.updateMoney();
+Renderer.updateIncome();
+Renderer.updateStats();
+Renderer.updateShop();
+HungerSystem.init();
+
+
+/* ══════════════════════════════════════════════════════════════════
+   CASINO — Blackjack & Slot Machine
+══════════════════════════════════════════════════════════════════ */
+
+var Casino = (function() {
+  var overlay = null;
+  var panel   = null;
+
+  function getOverlay() {
+    if (!overlay) overlay = document.getElementById('casino-overlay');
+    if (!panel)   panel   = document.getElementById('casino-panel-inner');
+    return { overlay: overlay, panel: panel };
+  }
+
+  function open(html) {
+    var els = getOverlay();
+    els.panel.innerHTML = html;
+    els.overlay.classList.add('show');
+  }
+
+  function close() {
+    var els = getOverlay();
+    els.overlay.classList.remove('show');
+    els.panel.innerHTML = '';
+    // Stop auto-spin if running
+    if (typeof Slots !== 'undefined' && Slots.stopAuto) Slots.stopAuto();
+  }
+
+  return { open: open, close: close };
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   §27.  CASINO: BLACKJACK
+   ─────────────────────────────────────────────────────────────────
+   Štandardné pravidlá: dealer hits do 17, BJ vypláca 3:2.
+   Hookuje CasinoQuestTracker po každej ruke (laundry quest).
+   Otvoriť: openBlackjack()
+═══════════════════════════════════════════════════════════════════ */
+var BJ = (function() {
+  var SUITS   = ['♠','♥','♦','♣'];
+  var RANKS   = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  var RED_S   = ['♥','♦'];
+
+  var deck, playerHand, dealerHand, bet = 10, gameOver, insuranceTaken;
+
+  function cardVal(rank) {
+    if (['J','Q','K'].indexOf(rank) >= 0) return 10;
+    if (rank === 'A') return 11;
+    return parseInt(rank, 10);
+  }
+
+  function handValue(hand) {
+    var val = 0, aces = 0;
+    hand.forEach(function(c){ if(c.rank==='A') aces++; val += cardVal(c.rank); });
+    while (val > 21 && aces > 0) { val -= 10; aces--; }
+    return val;
+  }
+
+  function shuffle() {
+    var d = [];
+    SUITS.forEach(function(s){ RANKS.forEach(function(r){ d.push({suit:s,rank:r}); }); });
+    for(var i=d.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=d[i];d[i]=d[j];d[j]=t; }
+    return d;
+  }
+
+  function draw() { return deck.pop(); }
+
+  function renderCard(c, hidden) {
+    if (hidden) return '<div class="bj-card hidden"></div>';
+    var isRed = RED_S.indexOf(c.suit) >= 0;
+    return '<div class="bj-card'+(isRed?' red':'')+'"><span class="card-rank">'+c.rank+'</span><span class="card-suit">'+c.suit+'</span></div>';
+  }
+
+  function renderHand(hand, hideSecond) {
+    return hand.map(function(c,i){ return renderCard(c, hideSecond && i===1); }).join('');
+  }
+
+  function getBetChips() {
+    var chips = [10,25,50,100,200];
+    return chips.map(function(v){
+      return '<button class="bj-bet-chip'+(bet===v?' active':'')+'" onclick="BJ.setBet('+v+')">'+v+'₿</button>';
+    }).join('');
+  }
+
+  function updateBalance() {
+    var b = document.getElementById('bj-balance');
+    if(b) b.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+bet+'₿';
+  }
+
+  function render(dealerHidden, result) {
+    var dv = dealerHidden ? handValue([dealerHand[0]]) : handValue(dealerHand);
+    var pv = handValue(playerHand);
+    var resultHtml = result ? '<div class="bj-result '+result.cls+'">'+result.msg+'</div>' : '';
+    var actHtml = '';
+    if (!gameOver) {
+      var canDouble = (playerHand.length === 2 && S.money >= bet*2);
+      actHtml = '<div class="bj-actions">'
+        +'<button class="bj-btn" onclick="BJ.hit()">HIT</button>'
+        +'<button class="bj-btn" onclick="BJ.stand()">STAND</button>'
+        +(canDouble?'<button class="bj-btn" onclick="BJ.double()">DOUBLE</button>':'')
+        +'</div>';
+    } else {
+      actHtml = '<div class="bj-actions">'
+        +'<button class="bj-btn" onclick="BJ.deal()">NOVÁ HRA</button>'
+        +'<button class="bj-btn danger" onclick="Casino.close()">ODÍSŤ</button>'
+        +'</div>';
+    }
+
+    document.getElementById('bj-dealer-cards').innerHTML = renderHand(dealerHand, dealerHidden);
+    document.getElementById('bj-player-cards').innerHTML = renderHand(playerHand, false);
+    document.getElementById('bj-dealer-score').innerHTML = 'Hodnota: <span>'+(dealerHidden ? dv+'+?' : dv)+'</span>';
+    document.getElementById('bj-player-score').innerHTML = 'Hodnota: <span>'+pv+'</span>'+(pv>21?' <span style="color:var(--danger)">BUST!</span>':'');
+    document.getElementById('bj-actions-wrap').innerHTML = actHtml;
+    if (result) {
+      var res = document.getElementById('bj-result');
+      if(res) res.innerHTML = resultHtml;
+    } else {
+      var res2 = document.getElementById('bj-result');
+      if(res2) res2.innerHTML = '';
+    }
+    updateBalance();
+  }
+
+  function endGame(cls, msg, delta) {
+    gameOver = true;
+    S.money = Math.max(0, S.money + delta);
+    Renderer.updateMoney();
+    if (delta > 0) addLog('Blackjack: Vyhrals +'+delta+'₿','ok');
+    else if (delta < 0) addLog('Blackjack: Prehral si '+Math.abs(delta)+'₿','warn');
+    else addLog('Blackjack: Remíza','info');
+    render(false, {cls:cls, msg:msg});
+    // CEO laundry quest tracking
+    try { if (typeof CasinoQuestTracker !== 'undefined') CasinoQuestTracker.onRound(bet, delta); } catch(e){}
+  }
+
+  function dealerPlay() {
+    while (handValue(dealerHand) < 17) dealerHand.push(draw());
+    var dv = handValue(dealerHand);
+    var pv = handValue(playerHand);
+    if (dv > 21)             endGame('win', '🎉 DEALER BUST — VYHRALS! +'+bet*2+'₿', bet);
+    else if (pv > dv)        endGame('win', '🎉 VYHRAL SI! +'+bet*2+'₿', bet);
+    else if (dv > pv)        endGame('lose','💀 PREHRAL SI. -'+bet+'₿', -bet);
+    else                     endGame('push','🤝 REMÍZA', 0);
+  }
+
+  var _pub = {
+    setBet: function(v) {
+      bet = v;
+      updateBalance();
+      // re-render chips
+      var chipWrap = document.getElementById('bj-chips');
+      if(chipWrap) chipWrap.innerHTML = getBetChips();
+    },
+
+    deal: function() {
+      if (S.money < bet) { addLog('Nedostatok kreditov pre stávku.','warn'); return; }
+      deck = shuffle();
+      playerHand = [draw(), draw()];
+      dealerHand = [draw(), draw()];
+      gameOver = false;
+      S.money -= bet;
+      Renderer.updateMoney();
+      render(true, null);
+      // Check natural blackjack
+      if (handValue(playerHand) === 21) {
+        setTimeout(function(){
+          var payout = Math.floor(bet * 1.5);
+          endGame('win', '🃏 BLACKJACK! +'+( bet + payout )+'₿', payout);
+        }, 500);
+      }
+    },
+
+    hit: function() {
+      if(gameOver) return;
+      playerHand.push(draw());
+      var pv = handValue(playerHand);
+      if (pv > 21) { endGame('lose', '💀 BUST! -'+bet+'₿', -bet); return; }
+      if (pv === 21) { _pub.stand(); return; }
+      render(true, null);
+    },
+
+    stand: function() {
+      if(gameOver) return;
+      dealerPlay();
+    },
+
+    double: function() {
+      if(gameOver || playerHand.length !== 2) return;
+      if(S.money < bet) { addLog('Nedostatok kreditov.','warn'); return; }
+      S.money -= bet;
+      bet *= 2;
+      Renderer.updateMoney();
+      playerHand.push(draw());
+      var pv = handValue(playerHand);
+      if (pv > 21) { endGame('lose','💀 BUST! -'+bet+'₿', -bet); return; }
+      dealerPlay();
+    }
+  };
+
+  return _pub;
+})();
+
+function openBlackjack() {
+  var bjBet = 10;
+  // init default bet
+  if (typeof BJ.setBet === 'function') { /* use existing */ }
+
+  Casino.open(
+    '<div class="casino-header">'
+      +'<div class="casino-title">🃏 BLACKJACK</div>'
+      +'<button class="casino-close" onclick="Casino.close()">✕ Zavrieť</button>'
+    +'</div>'
+    +'<div class="casino-body">'
+      +'<div class="casino-balance" id="bj-balance">💰 Zostatok: '+S.money+'₿  |  Stávka: 10₿</div>'
+      +'<div class="bj-table">'
+        +'<div class="bj-hand-label">// DEALER //</div>'
+        +'<div class="bj-cards" id="bj-dealer-cards"></div>'
+        +'<div class="bj-score" id="bj-dealer-score">Hodnota: <span>—</span></div>'
+        +'<div class="bj-divider"></div>'
+        +'<div class="bj-hand-label">// TVOJA RUKA //</div>'
+        +'<div class="bj-cards" id="bj-player-cards"></div>'
+        +'<div class="bj-score" id="bj-player-score">Hodnota: <span>—</span></div>'
+        +'<div id="bj-result"></div>'
+        +'<div class="bj-divider"></div>'
+        +'<div class="bj-hand-label">// STÁVKA //</div>'
+        +'<div class="bj-bet-row" id="bj-chips">'
+          +'<button class="bj-bet-chip active" onclick="BJ.setBet(10)">10₿</button>'
+          +'<button class="bj-bet-chip" onclick="BJ.setBet(25)">25₿</button>'
+          +'<button class="bj-bet-chip" onclick="BJ.setBet(50)">50₿</button>'
+          +'<button class="bj-bet-chip" onclick="BJ.setBet(100)">100₿</button>'
+          +'<button class="bj-bet-chip" onclick="BJ.setBet(200)">200₿</button>'
+        +'</div>'
+        +'<div id="bj-actions-wrap">'
+          +'<div class="bj-actions">'
+            +'<button class="bj-btn" onclick="BJ.deal()">ROZDAJ KARTY</button>'
+          +'<div style="font-size:10px;color:var(--text-muted);margin-top:8px;text-align:center">[ ← ] HIT &nbsp;|&nbsp; [ ↓ ] STAND &nbsp;|&nbsp; [ → ] DOUBLE</div>'
+            +'<button class="bj-btn danger" onclick="Casino.close()">ODÍSŤ</button>'
+          +'</div>'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+  );
+  // init BJ state
+  BJ.setBet(10);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   §28.  CASINO: SLOTS  (3-reel slot machine)
+   ─────────────────────────────────────────────────────────────────
+   Symboly s váhami (WEIGHTS) a payout multiplikátormi (PAYOUTS).
+   Auto-spin režim. Hookuje CasinoQuestTracker (laundry).
+   Otvoriť: openSlots()
+═══════════════════════════════════════════════════════════════════ */
+var Slots = (function() {
+  var SYMBOLS = ['🍒','🍋','🔔','⭐','💎','7️⃣','🍀','🎱'];
+  var WEIGHTS  = [30,  25,  20,  12,   8,   3,   15,  10];
+  var PAYOUTS  = {'💎':50,'7️⃣':30,'⭐':20,'🍀':15,'🔔':10,'🍋':6,'🍒':4,'🎱':8};
+
+  function weightedRandom() {
+    var total = WEIGHTS.reduce(function(a,b){return a+b;},0);
+    var r = Math.random()*total, cum=0;
+    for(var i=0;i<SYMBOLS.length;i++){ cum+=WEIGHTS[i]; if(r<cum) return SYMBOLS[i]; }
+    return SYMBOLS[0];
+  }
+
+  var spinning = false;
+  var autoInterval = null;
+  var currentBet = 10;
+
+  // Reel ticker animation — cycles through random symbols rapidly
+  function animateReel(el, durationMs, finalSym, cb) {
+    var start = Date.now();
+    var speed = 60; // ms per frame
+    var t = setInterval(function(){
+      el.textContent = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
+      if (Date.now() - start >= durationMs - speed) {
+        clearInterval(t);
+        el.textContent = finalSym;
+        el.classList.remove('spinning');
+        if (cb) cb();
+      }
+    }, speed);
+  }
+
+  function doSpin() {
+    if (spinning) return;
+    if (S.money < currentBet) {
+      addLog('Nedostatok kreditov pre stávku.','warn');
+      _pub.stopAuto();
+      return;
+    }
+    S.money -= currentBet;
+    Renderer.updateMoney();
+    spinning = true;
+
+    var reels = [
+      document.getElementById('reel0'),
+      document.getElementById('reel1'),
+      document.getElementById('reel2'),
+    ];
+    var result = document.getElementById('slots-result');
+    result.textContent = '⟳';
+    result.className = 'slots-result';
+    reels.forEach(function(r){ r.classList.add('spinning'); });
+
+    var final = [weightedRandom(), weightedRandom(), weightedRandom()];
+    // Staggered stop: reel 0 stops first, then 1, then 2
+    var stopped = 0;
+    var durations = [700, 1100, 1500];
+    reels.forEach(function(r, i){
+      animateReel(r, durations[i], final[i], function(){
+        stopped++;
+        if (stopped === 3) evaluate(final, reels, result);
+      });
+    });
+  }
+
+  function evaluate(final, reels, result) {
+    spinning = false;
+    var a = final[0], b2 = final[1], c2 = final[2];
+    var payout = 0, msg = '', cls = 'lose';
+
+    if (a===b2 && b2===c2) {
+      var mult = PAYOUTS[a] || 5;
+      payout = currentBet * mult;
+      msg = a==='💎' ? '💎💎💎 JACKPOT! +'+payout+'₿' : a+a+a+' TROJKA! +'+payout+'₿';
+      cls = a==='💎' ? 'jackpot' : 'win';
+      reels.forEach(function(r){ r.classList.add('win-reel'); });
+      gainXP(5);
+    } else if (a===b2 || b2===c2 || a===c2) {
+      var pairSym = (a===b2)?a:(b2===c2?b2:a);
+      var pairMult = Math.max(1, Math.floor((PAYOUTS[pairSym]||4)/3));
+      payout = currentBet * pairMult;
+      msg = pairSym+pairSym+' PÁR — Výhra: '+payout+'₿';
+      cls = payout >= currentBet ? 'win' : 'lose';
+    } else {
+      msg = 'Žiadna výhra. -'+currentBet+'₿';
+      cls = 'lose';
+    }
+    reels.forEach(function(r){ r.classList.remove('win-reel'); });
+    if (cls==='win'||cls==='jackpot') reels.forEach(function(r){ r.classList.add('win-reel'); });
+
+    S.money = Math.max(0, S.money + payout);
+    Renderer.updateMoney();
+    if (payout > 0) addLog('Sloty: Výhra '+payout+'₿ | '+msg,'ok');
+    else            addLog('Sloty: Prehral si '+currentBet+'₿','warn');
+
+    result.textContent = msg;
+    result.className = 'slots-result '+cls;
+    var bal = document.getElementById('slots-balance');
+    if(bal) bal.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+currentBet+'₿';
+
+    // CEO laundry quest tracking
+    try { if (typeof CasinoQuestTracker !== 'undefined') CasinoQuestTracker.onRound(currentBet, payout - currentBet); } catch(e){}
+
+    // if auto is running, schedule next spin
+    if (autoInterval === 'running') {
+      autoInterval = setTimeout(function(){ doSpin(); }, 400);
+    }
+  }
+
+  var _pub = {
+    setBet: function(v) {
+      currentBet = v;
+      var b = document.getElementById('slots-balance');
+      if(b) b.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+v+'₿';
+      document.querySelectorAll('.slots-chip').forEach(function(c){
+        c.classList.toggle('active', parseInt(c.dataset.v)===v);
+      });
+    },
+
+    spin: function() { doSpin(); },
+
+    startAuto: function() {
+      if (autoInterval) return;
+      autoInterval = 'running';
+      var btn = document.getElementById('slots-auto-btn');
+      if(btn){ btn.textContent='⏹ STOP AUTO'; btn.classList.add('auto-active'); }
+      doSpin();
+    },
+
+    stopAuto: function() {
+      if (autoInterval && autoInterval !== 'running') clearTimeout(autoInterval);
+      autoInterval = null;
+      var btn = document.getElementById('slots-auto-btn');
+      if(btn){ btn.textContent='🔁 AUTO'; btn.classList.remove('auto-active'); }
+    },
+
+    toggleAuto: function() {
+      if (autoInterval) _pub.stopAuto(); else _pub.startAuto();
+    }
+  };
+  return _pub;
+})();
+
+function openSlots() {
+  Casino.open(
+    '<div class="casino-header">'
+      +'<div class="casino-title">🎰 SLOT MACHINE</div>'
+      +'<button class="casino-close" onclick="Casino.close()">✕ Zavrieť</button>'
+    +'</div>'
+    +'<div class="casino-body">'
+      +'<div class="casino-balance" id="slots-balance">💰 Zostatok: '+S.money+'₿  |  Stávka: 10₿</div>'
+      +'<div class="slots-reels">'
+        +'<div class="slots-reel" id="reel0">🎰</div>'
+        +'<div class="slots-reel" id="reel1">🎰</div>'
+        +'<div class="slots-reel" id="reel2">🎰</div>'
+      +'</div>'
+      +'<div class="slots-payline">[ 🍒×4 | 🍋×6 | 🔔×10 | ⭐×20 | 🍀×15 | 7️⃣×30 | 💎×50 ]</div>'
+      +'<div id="slots-result" class="slots-result"></div>'
+      +'<div class="bj-divider"></div>'
+      +'<div class="bj-hand-label">// STÁVKA //</div>'
+      +'<div class="bj-bet-row">'
+        +'<button class="slots-chip bj-bet-chip active" data-v="10" onclick="Slots.setBet(10)">10₿</button>'
+        +'<button class="slots-chip bj-bet-chip" data-v="25" onclick="Slots.setBet(25)">25₿</button>'
+        +'<button class="slots-chip bj-bet-chip" data-v="50" onclick="Slots.setBet(50)">50₿</button>'
+        +'<button class="slots-chip bj-bet-chip" data-v="100" onclick="Slots.setBet(100)">100₿</button>'
+      +'</div>'
+      +'<div class="slots-btn-row">'        +'<button class="slots-spin-btn" id="slots-spin-btn" onclick="Slots.spin()">⚡ TOČIŤ ⚡</button>'        +'<button class="slots-auto-btn bj-btn" id="slots-auto-btn" onclick="Slots.toggleAuto()">🔁 AUTO</button>'      +'</div>'      +'<div class="slots-hint" style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:6px">[SPACE] = Točiť</div>'    +'</div>'  );  Slots.setBet(10);}
+
+
+function escH(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function safeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'\x01').replace(/>/g,'\x02')
+    .replace(/\x01b\x02([\s\S]*?)\x01\/b\x02/g,'<b>$1</b>')
+    .replace(/\x01i\x02([\s\S]*?)\x01\/i\x02/g,'<i>$1</i>')
+    .replace(/\x01/g,'&lt;').replace(/\x02/g,'&gt;');
+}
+
+
+
+function openHackView(){
+  document.getElementById('hack-view').classList.add('show');
+  document.querySelectorAll('#topbar-tabs .tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){b.classList.remove('active');});
+  var hb=document.querySelector('#left-nav .sidenav-btn[data-view="hack"]');
+  if(hb)hb.classList.add('active');
+  switchHackTab('hacking');
+  initTerminalUI();
+}
+function closeHackView(){
+  document.getElementById('hack-view').classList.remove('show');
+  document.querySelectorAll('#left-nav .sidenav-btn').forEach(function(b){b.classList.remove('active');});
+  var gb=document.querySelector('#left-nav .sidenav-btn[data-view="game"]');
+  if(gb)gb.classList.add('active');
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   §29.  HACKING SYSTEM (Bitburner-style)
+   ─────────────────────────────────────────────────────────────────
+   - Servers grid s rooting / hacking / weaken / grow
+   - Scripts (deploy logic na servery)
+   - Corporations (passive income)
+   - Tiers + random events
+   Otvoriť: openHackView()
+   ─────────────────────────────────────────────────────────────────
+   CEO ZLA // LAZARUS — INCREMENTAL RPG UPGRADE v3.0
+   NEW SYSTEMS: Hacking, Terminal, Corp, Scripts, Random Events, Tiers
+═══════════════════════════════════════════════════════════════════ */
+
+var HackingSystem = (function() {
+  var SERVERS = [
+    { id:'n00dles',    name:'n00dles.prv',        tier:1, baseSec:1,  maxMoney:70000,  growth:3000, hackReq:1  },
+    { id:'joesguns',   name:'joesguns.prv',       tier:1, baseSec:10, maxMoney:2e6,    growth:20,   hackReq:10 },
+    { id:'sigma-cos',  name:'sigma-cosmetics.sk', tier:2, baseSec:15, maxMoney:6e6,    growth:15,   hackReq:25 },
+    { id:'magura-cdn', name:'magura-cdn.internal',tier:2, baseSec:25, maxMoney:20e6,   growth:12,   hackReq:40 },
+    { id:'mec-bank',   name:'mec.bancorp.sk',     tier:3, baseSec:40, maxMoney:80e6,   growth:8,    hackReq:65 },
+    { id:'lazarus-net',name:'lazarus.darknet.0',  tier:4, baseSec:80, maxMoney:500e6,  growth:4,    hackReq:90 },
+  ];
+  var _st = {};
+  function _initSrv(s) { _st[s.id] = { security:s.baseSec, money:s.maxMoney*0.5, rooted:false }; }
+  function init() {
+    SERVERS.forEach(_initSrv);
+    if (S.hackState) Object.keys(S.hackState).forEach(function(id){ if(_st[id]) Object.assign(_st[id], S.hackState[id]); });
+  }
+  function getState()   { return _st; }
+  function getServers() { return SERVERS; }
+  function canSeeServer(s) { return S.hackStat >= Math.max(1, s.hackReq*0.5); }
+  function canRoot(s)   { return S.hackStat >= s.hackReq && _st[s.id] && !_st[s.id].rooted; }
+  function canHack(s)   { return S.hackStat >= s.hackReq && _st[s.id] && _st[s.id].rooted; }
+  function _hackChance(s){ return Math.max(0.05,Math.min(0.95,(S.hackStat-s.hackReq*0.4)/(_st[s.id].security+1)*0.9)); }
+  function rootServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||st.rooted)return;
+    if(S.hackStat<s.hackReq){cb&&cb({ok:false,msg:'HCK '+s.hackReq+' potrebný.'});return;}
+    st.rooted=true; st.security=Math.min(100,st.security+5);
+    cb&&cb({ok:true,msg:'[NUKE] '+s.name+' — ROOT ZÍSKANÝ!'});
+    addLog('[NUKE] '+s.name,'ok'); showNotif('💻 '+s.name+' rooted!'); saveState(); renderHackingUI();
+  }
+  function hackServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||!st.rooted){cb&&cb({ok:false,msg:'Server nie je rooted.'});return;}
+    var chance=_hackChance(s),success=Math.random()<chance;
+    if(success){
+      var stolen=Math.min(st.money,Math.floor(st.money*(0.05+Math.random()*0.1)));
+      st.money-=stolen; st.security=Math.min(100,st.security+0.002);
+      S.money+=stolen; S.hackStat=Math.min(100,S.hackStat+0.02);
+      Renderer.updateMoney(); Renderer.updateStats();
+      cb&&cb({ok:true,msg:'[HACK] '+s.name+' — +'+stolen.toLocaleString('sk')+'₿ ('+( chance*100).toFixed(0)+'%)'});
+    } else {
+      st.security=Math.min(100,st.security+0.5);
+      cb&&cb({ok:false,msg:'[FAIL] '+s.name+' — detekovaný!'});
+    }
+    saveState();
+  }
+  function growServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||!st.rooted){cb&&cb({ok:false,msg:'Nuke najprv.'});return;}
+    var mult=1+(s.growth/100)*(S.hackStat/100);
+    st.money=Math.min(s.maxMoney,st.money*mult); st.security=Math.min(100,st.security+0.004);
+    S.hackStat=Math.min(100,S.hackStat+0.01); Renderer.updateStats();
+    cb&&cb({ok:true,msg:'[GROW] '+s.name+' x'+mult.toFixed(3)});
+    saveState();
+  }
+  function weakenServer(id,cb){
+    var s=SERVERS.find(function(x){return x.id===id;}),st=_st[id];
+    if(!s||!st||!st.rooted){cb&&cb({ok:false,msg:'Nuke najprv.'});return;}
+    var red=0.05*(S.hackStat/s.hackReq);
+    st.security=Math.max(s.baseSec,st.security-red); S.hackStat=Math.min(100,S.hackStat+0.01); Renderer.updateStats();
+    cb&&cb({ok:true,msg:'[WEAKEN] '+s.name+' sec:'+st.security.toFixed(2)});
+    saveState();
+  }
+  function saveState(){ S.hackState={}; Object.keys(_st).forEach(function(id){ S.hackState[id]=Object.assign({},_st[id]); }); }
+  function autoTick(){ ScriptEngine.tick(); }
+  return { init:init,getState:getState,getServers:getServers,canSeeServer:canSeeServer,canRoot:canRoot,canHack:canHack,rootServer:rootServer,hackServer:hackServer,growServer:growServer,weakenServer:weakenServer,saveState:saveState,autoTick:autoTick };
+})();
+
+var ScriptEngine = (function() {
+  var SCRIPTS = [
+    { id:'basic-hack', name:'basic-hack.js', desc:'Auto-hackuje najslabší rooted server každých 5s.', cost:500,  tier:1, interval:5,
+      action:function(){ var rt=HackingSystem.getServers().filter(function(s){return HackingSystem.getState()[s.id]&&HackingSystem.getState()[s.id].rooted;}); if(!rt.length)return; HackingSystem.hackServer(rt[0].id,function(r){if(r.ok)addLog(r.msg,'ok');}); }},
+    { id:'grow-weaken', name:'grow-weaken.js', desc:'Udržiava optimálny stav serverov (grow/weaken cycle) každých 8s.', cost:2500, tier:2, interval:8,
+      action:function(){ var srvs=HackingSystem.getServers(),st=HackingSystem.getState(); srvs.filter(function(s){return st[s.id]&&st[s.id].rooted;}).forEach(function(s){ var ss=st[s.id]; if(ss.security>s.baseSec+5) HackingSystem.weakenServer(s.id,function(){}); else if(ss.money<s.maxMoney*0.7) HackingSystem.growServer(s.id,function(){}); }); }},
+    { id:'batch-hack', name:'batch-hack.js', desc:'Hackuje všetky rooted servery simultánne každých 10s.', cost:12000, tier:3, interval:10,
+      action:function(){ var srvs=HackingSystem.getServers(),st=HackingSystem.getState(); srvs.filter(function(s){return st[s.id]&&st[s.id].rooted;}).forEach(function(s){ HackingSystem.hackServer(s.id,function(r){if(r.ok)addLog(r.msg,'ok');}); }); }},
+    { id:'lazarus-intercept', name:'lazarus-intercept.js', desc:'Interceptuje LAZARUS sieť. +25₿/s pasívne + XP.', cost:80000, tier:4, interval:3,
+      action:function(){ var b=25+Math.floor(S.hackStat*0.5); S.money+=b; gainXP(2); Renderer.updateMoney(); }},
+  ];
+  var _running={}, _counters={};
+  function getScripts(){return SCRIPTS;}
+  function isRunning(id){return !!_running[id];}
+  function buyScript(id){
+    var sc=SCRIPTS.find(function(s){return s.id===id;});
+    if(!sc||S.money<sc.cost){addLog('Nedostatok kreditov.','warn');return;}
+    S.money-=sc.cost; if(!S.ownedScripts)S.ownedScripts={}; S.ownedScripts[id]=true;
+    Renderer.updateMoney(); addLog('[SCRIPT] '+sc.name+' zakúpený!','ok'); showNotif('⚙ '+sc.name+' aktívny!');
+    startScript(id); renderScriptUI();
+  }
+  function startScript(id){ var sc=SCRIPTS.find(function(s){return s.id===id;}); if(!sc||_running[id])return; _counters[id]=0; _running[id]={script:sc}; addLog('[SCRIPT] '+sc.name+' spustený.','ok'); }
+  function stopScript(id){ if(_running[id]){delete _running[id]; addLog('[SCRIPT] '+id+' zastavený.','warn');} }
+  function tick(){ Object.keys(_running).forEach(function(id){ _counters[id]=(_counters[id]||0)+1; var sc=_running[id].script; if(_counters[id]>=sc.interval){_counters[id]=0;try{sc.action();}catch(e){}} }); }
+  function restoreFromSave(){ if(!S.ownedScripts)return; Object.keys(S.ownedScripts).forEach(function(id){if(S.ownedScripts[id])startScript(id);}); }
+  return { getScripts:getScripts,isRunning:isRunning,buyScript:buyScript,startScript:startScript,stopScript:stopScript,tick:tick,restoreFromSave:restoreFromSave };
+})();
+
+var CorporationSystem = (function() {
+  var CORPS = [
+    { id:'shadow-net',  name:'ShadowNet LLC',         desc:'Malá sieťová firma. Dáta a VPN.',               cost:5000,   tier:1, baseIncome:8,
+      upgrades:[{id:'bandwidth',name:'Bandwidth+',cost:3000,incBonus:5},{id:'darkweb',name:'DarkWeb Node',cost:10000,incBonus:15},{id:'botnet',name:'Botnet v2',cost:30000,incBonus:40}]},
+    { id:'data-brokers',name:'DataBrokers s.r.o.',     desc:'Predaj osobných dát. Rýchly zisk.',              cost:25000,  tier:2, baseIncome:30,
+      upgrades:[{id:'scraper',name:'Web Scraper',cost:15000,incBonus:20},{id:'ai-prof',name:'AI Profiler',cost:50000,incBonus:80},{id:'mec-con',name:'MEC Contract',cost:150000,incBonus:250}]},
+    { id:'corp-saboteur',name:'LAZARUS Counter-Ops',   desc:'Infiltrácia korporácií. Sabotáž a výkupné.',     cost:100000, tier:3, baseIncome:120,
+      upgrades:[{id:'insider',name:'Insider sieť',cost:60000,incBonus:100},{id:'zero-day',name:'Zero-Day Cache',cost:250000,incBonus:350},{id:'blackmail',name:'CEO Blackmail',cost:800000,incBonus:1200}]},
+    { id:'neo-magura',  name:'Neo-Magura Corp',        desc:'Ty si CEO. Úplná kontrola nad mestom. ENDGAME.', cost:2000000,tier:4, baseIncome:800,
+      upgrades:[{id:'ai-core',name:'DAEDALUS AI Core',cost:1000000,incBonus:2000},{id:'city-ctrl',name:'City Control',cost:5000000,incBonus:8000},{id:'global',name:'Global Takeover',cost:20000000,incBonus:30000}]},
+  ];
+  function getCorps(){return CORPS;}
+  function isOwned(id){return S.ownedCorps&&S.ownedCorps[id];}
+  function hasUpgrade(cid,uid){return S.corpUpgrades&&S.corpUpgrades[cid]&&S.corpUpgrades[cid][uid];}
+  function _corpIncome(c){ var t=c.baseIncome; c.upgrades.forEach(function(u){if(hasUpgrade(c.id,u.id))t+=u.incBonus;}); return t; }
+  function buyCorp(id){
+    var c=CORPS.find(function(x){return x.id===id;}); if(!c||isOwned(id))return;
+    if(S.money<c.cost){addLog('Nedostatok kreditov.','warn');return;}
+    S.money-=c.cost; if(!S.ownedCorps)S.ownedCorps={}; S.ownedCorps[id]=true;
+    Renderer.updateMoney(); recalcCorpIncome(); addLog('[CORP] '+c.name+' kúpená!','ok'); showNotif('🏢 '+c.name+' online!'); renderCorpUI();
+  }
+  function buyUpgrade(cid,uid){
+    var c=CORPS.find(function(x){return x.id===cid;}); if(!c||!isOwned(cid))return;
+    var u=c.upgrades.find(function(x){return x.id===uid;}); if(!u||hasUpgrade(cid,uid))return;
+    if(S.money<u.cost){addLog('Nedostatok kreditov.','warn');return;}
+    S.money-=u.cost; if(!S.corpUpgrades)S.corpUpgrades={}; if(!S.corpUpgrades[cid])S.corpUpgrades[cid]={};
+    S.corpUpgrades[cid][uid]=true; Renderer.updateMoney(); recalcCorpIncome(); addLog('[CORP] '+c.name+': '+u.name,'ok'); showNotif('⬆ '+u.name); renderCorpUI();
+  }
+  function recalcCorpIncome(){
+    var total=0; CORPS.forEach(function(c){if(isOwned(c.id))total+=_corpIncome(c);}); if(!S.income)S.income={}; S.income.corp=total; Renderer.updateIncome();
+  }
+  return { getCorps:getCorps,isOwned:isOwned,hasUpgrade:hasUpgrade,buyCorp:buyCorp,buyUpgrade:buyUpgrade,recalcCorpIncome:recalcCorpIncome,_corpIncome:_corpIncome };
+})();
+
+var RandomEvents = (function() {
+  var EVENTS = [
+    { id:'traced',      label:'🔴 Stopa detekovaná', weight:15,
+      cond:function(){return S.hackStat>=10;},
+      effect:function(){var st=HackingSystem.getState();Object.keys(st).forEach(function(id){st[id].security=Math.min(100,st[id].security+10);});addLog('!! MEC stopa: bezpečnosť serverov +10!','warn');}},
+    { id:'data-leak',   label:'🟢 Dátový únik',      weight:15,
+      cond:function(){return S.hackStat>=5;},
+      effect:function(){var g=50+Math.floor(Math.random()*S.hackStat*15);S.money+=g;Renderer.updateMoney();addLog('Dátový únik: +'+g+'₿','ok');showNotif('💸 +'+g+'₿ nájdených!');}},
+    { id:'corp-raid',   label:'🔴 MEC Raid',          weight:8,
+      cond:function(){return S.money>=500&&S.hackStat>=20;},
+      effect:function(){var l=Math.floor(S.money*0.05);S.money=Math.max(0,S.money-l);Renderer.updateMoney();addLog('MEC Raid: strata '+l+'₿','warn');}},
+    { id:'blackmarket',  label:'🟡 Čierny Trh',       weight:10,
+      cond:function(){return S.money>=250&&!(S.ownedScripts&&S.ownedScripts['basic-hack']);},
+      effect:function(){S.money-=250;if(!S.ownedScripts)S.ownedScripts={};S.ownedScripts['basic-hack']=true;ScriptEngine.startScript('basic-hack');Renderer.updateMoney();addLog('Čierny trh: basic-hack.js za 250₿!','ok');renderScriptUI();}},
+    { id:'whistleblower',label:'🟢 Informátor',       weight:8,
+      cond:function(){return !!(S.flags&&S.flags['agent_delta_tomas']);},
+      effect:function(){gainXP(50);addLog('Informátor: XP +50!','ok');showNotif('📁 XP +50!');}},
+    { id:'power-surge',  label:'⚡ Sieťový Glitch',   weight:6,
+      cond:function(){return true;},
+      effect:function(){S.hackStat=Math.min(100,S.hackStat+2);Renderer.updateStats();addLog('Glitch: HCK +2','ok');document.body.classList.add('glitch-active');setTimeout(function(){document.body.classList.remove('glitch-active');},600);}},
+    { id:'san-decay',    label:'🧠 Psychická záťaž',  weight:7,
+      cond:function(){return S.san>15;},
+      effect:function(){S.san=Math.max(0,S.san-10);Renderer.updateStats();addLog('Psychická záťaž: SAN -10','warn');}},
+  ];
+  var _last=0, _ticker=0;
+  function tick(){
+    _ticker++;
+    if(_ticker-_last<45)return;
+    if(Math.random()>0.03)return;
+    var avail=EVENTS.filter(function(e){return e.cond?e.cond():true;});
+    if(!avail.length)return;
+    var total=avail.reduce(function(a,e){return a+e.weight;},0),r=Math.random()*total,cum=0,chosen;
+    for(var i=0;i<avail.length;i++){cum+=avail[i].weight;if(r<=cum){chosen=avail[i];break;}}
+    if(!chosen)chosen=avail[0];
+    _last=_ticker;
+    chosen.effect();
+    addLog(chosen.label,'info');
+  }
+  return { tick:tick };
+})();
+
+var TierSystem = (function() {
+  var TIERS = [
+    { tier:1, name:'Pouličný Hacker',    icon:'💻', req:{hackStat:1,  money:0      }, unlocks:'n00dles server, basic-hack.js' },
+    { tier:2, name:'Sieťový Duch',       icon:'👻', req:{hackStat:25, money:5000   }, unlocks:'sigma-cos server, grow-weaken.js, ShadowNet Corp' },
+    { tier:3, name:'Korporátny Sabotér', icon:'🥷', req:{hackStat:50, money:50000  }, unlocks:'mec-bank server, batch-hack.js, DataBrokers Corp' },
+    { tier:4, name:'CEO Zla',            icon:'👑', req:{hackStat:80, money:500000 }, unlocks:'lazarus.darknet.0, lazarus-intercept.js, Neo-Magura Corp' },
+  ];
+  function getCurrentTier(){ var t=1; TIERS.forEach(function(x){if(S.hackStat>=x.req.hackStat&&S.money>=x.req.money)t=x.tier;}); return t; }
+  function getTierData(t){ return TIERS.find(function(x){return x.tier===t;}); }
+  function checkTierUp(){
+    var prev=S.tier||1, curr=getCurrentTier();
+    if(curr>prev){ S.tier=curr; var td=getTierData(curr); addLog('TIER UP! '+td.icon+' '+td.name,'ok'); showNotif('⭐ TIER '+curr+': '+td.name); document.body.classList.add('tier-up-flash'); setTimeout(function(){document.body.classList.remove('tier-up-flash');},1200); }
+    return curr;
+  }
+  return { getCurrentTier:getCurrentTier, getTierData:getTierData, TIERS:TIERS, checkTierUp:checkTierUp };
+})();
+
+var _toastQueue=[], _toastBusy=false;
+function showRichNotif(title,body,cls){ _toastQueue.push({title:title,body:body,cls:cls||'ok'}); if(!_toastBusy)_nextToast(); }
+function _nextToast(){
+  if(!_toastQueue.length){_toastBusy=false;return;}
+  _toastBusy=true;
+  var t=_toastQueue.shift(), cont=document.getElementById('toast-container');
+  if(!cont){_toastBusy=false;return;}
+  var el=document.createElement('div'); el.className='toast-item toast-'+t.cls;
+  el.innerHTML='<div class="toast-title">'+t.title+'</div>'+(t.body?'<div class="toast-body">'+t.body+'</div>':'');
+  cont.appendChild(el);
+  setTimeout(function(){el.classList.add('toast-show');},10);
+  setTimeout(function(){el.classList.remove('toast-show');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);setTimeout(_nextToast,150);},400);},3500);
+}
+
+var Terminal=(function(){
+  var _hist=[],_hi=-1;
+  function _pad(s,n){s=String(s);while(s.length<n)s+=' ';return s;}
+  var CMDS={
+    help:function(){return['<span class="t-hi">// LAZARUS TERMINAL — PRÍKAZY //</span>','<span class="t-cmd">ls</span>           — zoznam serverov','<span class="t-cmd">scan [id]</span>    — detail servera','<span class="t-cmd">nuke [id]</span>    — získať root','<span class="t-cmd">hack [id]</span>    — hack','<span class="t-cmd">grow [id]</span>    — grow','<span class="t-cmd">weaken [id]</span>  — weaken','<span class="t-cmd">scripts</span>      — skripty','<span class="t-cmd">corp</span>         — korporácie','<span class="t-cmd">tier</span>         — progression tier','<span class="t-cmd">stats</span>        — štatistiky','<span class="t-cmd">clear</span>        — vyčistiť'].join('\n');},
+    ls:function(){
+      var lines=['<span class="t-hi">// SERVER LIST //</span>'];
+      HackingSystem.getServers().forEach(function(s){
+        if(!HackingSystem.canSeeServer(s))return;
+        var st=HackingSystem.getState()[s.id];
+        var root=st.rooted?'<span class="t-ok">ROOT</span>':'<span class="t-warn">LOCK</span>';
+        lines.push('  '+root+' '+_pad(s.id,16)+'SEC:'+_pad(st.security.toFixed(1),6)+'💰'+Math.floor(st.money/1000)+'k  HCK'+s.hackReq);
+      });
+      return lines.join('\n');
+    },
+    scan:function(a){
+      var id=a[0]; if(!id)return'<span class="t-warn">scan [id]</span>';
+      var s=HackingSystem.getServers().find(function(x){return x.id===id;});
+      if(!s)return'<span class="t-warn">Nenájdený.</span>';
+      var st=HackingSystem.getState()[id];
+      return['<span class="t-hi">// SCAN: '+s.name+' //</span>','  HCK Req:  '+s.hackReq+' (tvoj: '+S.hackStat.toFixed(1)+')','  Security: '+st.security.toFixed(2),'  Money:    '+Math.floor(st.money).toLocaleString('sk')+'₿ / '+s.maxMoney.toLocaleString('sk')+'₿','  Root:     '+(st.rooted?'ÁNO':'NIE')].join('\n');
+    },
+    nuke:function(a){
+      var id=a[0]; if(!id)return'<span class="t-warn">nuke [id]</span>';
+      var s=HackingSystem.getServers().find(function(x){return x.id===id;});
+      if(!s||!HackingSystem.canSeeServer(s))return'<span class="t-warn">Neviditeľný server.</span>';
+      if(HackingSystem.getState()[id].rooted)return'<span class="t-ok">Už rooted.</span>';
+      if(S.hackStat<s.hackReq)return'<span class="t-warn">HCK '+s.hackReq+' potrebný.</span>';
+      var r=''; HackingSystem.rootServer(id,function(x){r='<span class="t-ok">'+x.msg+'</span>';}); return r;
+    },
+    hack:function(a){
+      var id=a[0]; if(!id)return'<span class="t-warn">hack [id]</span>';
+      if(!HackingSystem.getState()[id])return'<span class="t-warn">Nenájdený.</span>';
+      if(!HackingSystem.getState()[id].rooted)return'<span class="t-warn">Nuke najprv.</span>';
+      var r=''; HackingSystem.hackServer(id,function(x){r=x.ok?'<span class="t-ok">'+x.msg+'</span>':'<span class="t-warn">'+x.msg+'</span>';}); renderHackingUI(); return r;
+    },
+    grow:function(a){
+      var id=a[0]; if(!id||!HackingSystem.getState()[id])return'<span class="t-warn">grow [id]</span>';
+      if(!HackingSystem.getState()[id].rooted)return'<span class="t-warn">Nuke najprv.</span>';
+      var r=''; HackingSystem.growServer(id,function(x){r='<span class="t-ok">'+x.msg+'</span>';}); renderHackingUI(); return r;
+    },
+    weaken:function(a){
+      var id=a[0]; if(!id||!HackingSystem.getState()[id])return'<span class="t-warn">weaken [id]</span>';
+      if(!HackingSystem.getState()[id].rooted)return'<span class="t-warn">Nuke najprv.</span>';
+      var r=''; HackingSystem.weakenServer(id,function(x){r='<span class="t-ok">'+x.msg+'</span>';}); renderHackingUI(); return r;
+    },
+    scripts:function(){
+      var lines=['<span class="t-hi">// SKRIPTY //</span>'];
+      ScriptEngine.getScripts().forEach(function(sc){
+        var owned=S.ownedScripts&&S.ownedScripts[sc.id], running=ScriptEngine.isRunning(sc.id);
+        var stat=running?'<span class="t-ok">ACTIVE</span>':owned?'<span class="t-dim">OWNED </span>':'<span class="t-warn">'+sc.cost+'₿  </span>';
+        lines.push('  '+stat+' '+sc.name);
+      });
+      return lines.join('\n');
+    },
+    corp:function(){
+      var lines=['<span class="t-hi">// KORPORÁCIE //</span>'];
+      CorporationSystem.getCorps().forEach(function(c){
+        var owned=CorporationSystem.isOwned(c.id);
+        var stat=owned?'<span class="t-ok">OWNED</span>':'<span class="t-warn">'+c.cost.toLocaleString('sk')+'₿</span>';
+        lines.push('  '+stat+' '+c.name+' +'+c.baseIncome+'₿/s base');
+      });
+      return lines.join('\n');
+    },
+    tier:function(){
+      var t=TierSystem.getCurrentTier(), lines=['<span class="t-hi">// PROGRESSION TIER //</span>'];
+      TierSystem.TIERS.forEach(function(x){
+        var a=x.tier===t, cls=a?'t-ok':'t-dim';
+        lines.push((a?'▶ ':'  ')+'<span class="'+cls+'">TIER '+x.tier+' '+x.icon+' '+x.name+'</span>  HCK:'+x.req.hackStat+' 💰'+x.req.money.toLocaleString('sk')+'₿');
+      });
+      return lines.join('\n');
+    },
+    stats:function(){
+      var total=['job','hack','fish','bonus','boats','corp'].reduce(function(a,k){return a+(S.income&&S.income[k]?S.income[k]:0);},0);
+      return['<span class="t-hi">// ŠTATISTIKY //</span>','  HP:'+S.hp.toFixed(1)+'  SAN:'+S.san.toFixed(1)+'  Hlad:'+S.hunger.toFixed(1),'  HCK:'+S.hackStat.toFixed(2)+'  SIL:'+S.str.toFixed(2)+'  OHY:'+S.flex.toFixed(2),'  Level:'+S.level+'  XP:'+Math.floor(S.xp)+'/'+S.level*80,'  💰 '+S.money.toLocaleString('sk')+'₿  Príjem:'+total.toFixed(2)+'₿/s','  Tier:'+TierSystem.getCurrentTier()+' — '+(TierSystem.getTierData(TierSystem.getCurrentTier())||{name:'?'}).name].join('\n');
+    },
+    clear:function(){var o=document.getElementById('terminal-output');if(o)o.innerHTML='';return null;},
+  };
+  function exec(raw){
+    var p=raw.trim().split(/\s+/),cmd=p[0].toLowerCase(),args=p.slice(1);
+    _hist.unshift(raw); if(_hist.length>30)_hist.pop(); _hi=-1;
+    var fn=CMDS[cmd]; if(!fn)return'<span class="t-warn">Príkaz nenájdený: '+cmd+'. Napíš <span class="t-cmd">help</span></span>';
+    return fn(args);
+  }
+  function histUp(){if(_hi<_hist.length-1)_hi++;return _hist[_hi]||'';}
+  function histDn(){if(_hi>-1)_hi--;return _hi>=0?_hist[_hi]:'';}
+  return { exec:exec, historyUp:histUp, historyDown:histDn };
+})();
+
+function renderHackingUI(){
+  var cont=document.getElementById('hacking-panel-body'); if(!cont)return;
+  var srvs=HackingSystem.getServers(), state=HackingSystem.getState(), tier=TierSystem.getCurrentTier(), html='';
+  srvs.forEach(function(s){
+    if(!HackingSystem.canSeeServer(s))return;
+    var st=state[s.id], root=st.rooted, pct=Math.floor((st.money/s.maxMoney)*100), secPct=Math.floor(st.security);
+    html+='<div class="hack-server-card '+(root?'rooted':'locked')+'">';
+    html+='<div class="hack-srv-header"><span class="hack-srv-name">'+s.name+'</span><span class="hack-srv-status '+(root?'ok':'warn')+'">'+(root?'● ROOT':'○ LOCK')+'</span></div>';
+    html+='<div class="hack-srv-bars">';
+    html+='<div class="hack-bar-row"><span>💰</span><div class="hack-bar-wrap"><div class="hack-bar money" style="width:'+pct+'%"></div></div><span class="hack-bar-label">'+pct+'%</span></div>';
+    html+='<div class="hack-bar-row"><span>🔒</span><div class="hack-bar-wrap"><div class="hack-bar sec" style="width:'+secPct+'%"></div></div><span class="hack-bar-label">'+st.security.toFixed(1)+'</span></div>';
+    html+='</div><div class="hack-srv-actions">';
+    if(!root){
+      var canR=S.hackStat>=s.hackReq;
+      html+='<button class="hack-btn nuke" '+(canR?'':'disabled')+' onclick="HackingSystem.rootServer(\''+s.id+'\',function(r){addLog(r.msg,r.ok?\'ok\':\'warn\');})">NUKE</button>';
+    } else {
+      html+='<button class="hack-btn hack" onclick="HackingSystem.hackServer(\''+s.id+'\',function(r){addLog(r.msg,r.ok?\'ok\':\'warn\');renderHackingUI();})">HACK</button>';
+      html+='<button class="hack-btn grow" onclick="HackingSystem.growServer(\''+s.id+'\',function(r){addLog(r.msg,\'ok\');renderHackingUI();})">GROW</button>';
+      html+='<button class="hack-btn weak" onclick="HackingSystem.weakenServer(\''+s.id+'\',function(r){addLog(r.msg,\'ok\');renderHackingUI();})">WEAK</button>';
+    }
+    html+='</div></div>';
+  });
+  if(!html)html='<div class="hack-empty">// Zvýšte HCK pre prístup k serverom — trénujte Hacking na Uni //</div>';
+  cont.innerHTML=html;
+}
+
+function renderScriptUI(){
+  var cont=document.getElementById('scripts-panel-body'); if(!cont)return;
+  var tier=TierSystem.getCurrentTier(), html='';
+  ScriptEngine.getScripts().forEach(function(sc){
+    var owned=S.ownedScripts&&S.ownedScripts[sc.id], running=ScriptEngine.isRunning(sc.id), locked=sc.tier>tier+1;
+    html+='<div class="script-card'+(running?' running':'')+(locked?' locked':'')+(owned&&!running?' owned':'')+ '">';
+    html+='<div class="script-name">'+sc.name+'</div><div class="script-desc">'+sc.desc+'</div>';
+    html+='<div class="script-meta">⏱ '+sc.interval+'s | Tier '+sc.tier+'</div>';
+    if(locked)      html+='<div class="script-locked-msg">// Tier '+sc.tier+' locked //</div>';
+    else if(running)html+='<button class="script-btn stop-btn" onclick="ScriptEngine.stopScript(\''+sc.id+'\');renderScriptUI()">⏹ STOP</button>';
+    else if(owned)  html+='<button class="script-btn start-btn" onclick="ScriptEngine.startScript(\''+sc.id+'\');renderScriptUI()">▶ ŠTART</button>';
+    else            html+='<button class="script-btn buy-btn" onclick="ScriptEngine.buyScript(\''+sc.id+'\');renderScriptUI()">BUY '+sc.cost.toLocaleString('sk')+'₿</button>';
+    html+='</div>';
+  });
+  cont.innerHTML=html;
+}
+
+function renderCorpUI(){
+  var cont=document.getElementById('corp-panel-body'); if(!cont)return;
+  var tier=TierSystem.getCurrentTier(), html='';
+  CorporationSystem.getCorps().forEach(function(corp){
+    var owned=CorporationSystem.isOwned(corp.id), locked=corp.tier>tier+1;
+    html+='<div class="corp-card'+(owned?' owned':'')+(locked?' locked':'')+ '">';
+    html+='<div class="corp-header"><span class="corp-name">'+corp.name+'</span>';
+    var inc=owned?CorporationSystem._corpIncome(corp):corp.baseIncome;
+    html+='<span class="corp-income">+'+inc+'₿/s</span></div>';
+    html+='<div class="corp-desc">'+corp.desc+'</div>';
+    if(locked)       html+='<div class="corp-locked-msg">// Tier '+corp.tier+' req //</div>';
+    else if(!owned)  html+='<button class="corp-buy-btn" onclick="CorporationSystem.buyCorp(\''+corp.id+'\')">KÚPIŤ '+corp.cost.toLocaleString('sk')+'₿</button>';
+    else {
+      html+='<div class="corp-upgrades">';
+      corp.upgrades.forEach(function(up){
+        var has=CorporationSystem.hasUpgrade(corp.id,up.id);
+        html+='<div class="corp-upgrade'+(has?' owned-up':'')+ '"><span class="up-name">'+up.name+'</span><span class="up-bonus">+'+up.incBonus+'₿/s</span>';
+        if(!has)html+='<button class="up-btn" onclick="CorporationSystem.buyUpgrade(\''+corp.id+'\',\''+up.id+'\')">'+up.cost.toLocaleString('sk')+'₿</button>';
+        else     html+='<span class="up-done">✓</span>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  cont.innerHTML=html;
+}
+
+function switchHackTab(tab){
+  ['hacking','scripts','corp','terminal'].forEach(function(t){
+    var b=document.getElementById('hack-tab-'+t), p=document.getElementById('hack-pane-'+t);
+    if(b)b.classList.toggle('active',t===tab);
+    if(p)p.classList.toggle('active',t===tab);
+  });
+  if(tab==='hacking')renderHackingUI();
+  if(tab==='scripts')renderScriptUI();
+  if(tab==='corp')renderCorpUI();
+}
+
+function initTerminalUI(){
+  var input=document.getElementById('terminal-input'), output=document.getElementById('terminal-output');
+  if(!input||!output)return;
+  function run(){
+    var raw=input.value.trim(); if(!raw)return;
+    output.innerHTML+='<div class="t-line t-prompt">$ '+raw+'</div>';
+    var res=Terminal.exec(raw);
+    if(res!==null)output.innerHTML+='<div class="t-line">'+res+'</div>';
+    output.scrollTop=output.scrollHeight; input.value='';
+  }
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){run();}
+    if(e.key==='ArrowUp'){input.value=Terminal.historyUp();e.preventDefault();}
+    if(e.key==='ArrowDown'){input.value=Terminal.historyDown();e.preventDefault();}
+  });
+  var btn=document.getElementById('terminal-run'); if(btn)btn.onclick=run;
+  output.innerHTML='<div class="t-line t-hi">// LAZARUS TERMINAL v3.0 — CEO ZLA //</div><div class="t-line t-dim">Napíš <span class="t-cmd">help</span> pre príkazy.</div>';
+}
+
+function _updateTierBadge(){
+  var el=document.getElementById('tier-badge'); if(!el)return;
+  var t=TierSystem.getCurrentTier(), td=TierSystem.getTierData(t);
+  if(td)el.textContent='T'+t+' '+td.icon+' '+td.name;
+}
+
+var _newSysTicker=0, _newSysInterval=null;
+function _startNewSystems(){
+  if(_newSysInterval)clearInterval(_newSysInterval);
+  _newSysInterval=setInterval(function(){
+    if(!StateMachine.is(StateMachine.STATES.PLAYING))return;
+    _newSysTicker++;
+    // corp income micro-tick (every 50ms = 20 per second)
+    if(S.income&&S.income.corp)S.money+=S.income.corp/20;
+    // 1-second operations
+    if(_newSysTicker%20===0){
+      HackingSystem.autoTick();
+      RandomEvents.tick();
+      TierSystem.checkTierUp();
+      _updateTierBadge();
+      Renderer.updateMoney();
+    }
+    // auto-save every 10s
+    if(_newSysTicker%200===0){
+      HackingSystem.saveState();
+      try{
+        var sd={S:S,FLEET_STATE:(typeof FLEET_STATE!=='undefined'?FLEET_STATE:null),COURSE_STATE:(typeof COURSE_STATE!=='undefined'?COURSE_STATE:null),HQ_COOLDOWNS:(typeof HQ_COOLDOWNS!=='undefined'?HQ_COOLDOWNS:null),version:'3.0'};
+        localStorage.setItem(GameConfig.SAVE_KEY,JSON.stringify(sd));
+      }catch(e){}
+    }
+  },50);
+}
+
+StateMachine.on(StateMachine.STATES.PLAYING,function(){
+  HackingSystem.init();
+  ScriptEngine.restoreFromSave();
+  CorporationSystem.recalcCorpIncome();
+  _startNewSystems();
+  setTimeout(function(){
+    initTerminalUI(); renderHackingUI(); renderScriptUI(); renderCorpUI(); _updateTierBadge();
+  },400);
+});
+
+var _origSave=saveGame;
+saveGame=function(){HackingSystem.saveState();_origSave();};
+
+var _origLoad=loadGame;
+loadGame=function(){
+  _origLoad();
+  if(!S.ownedScripts)S.ownedScripts={};
+  if(!S.ownedCorps)S.ownedCorps={};
+  if(!S.corpUpgrades)S.corpUpgrades={};
+  if(!S.hackState)S.hackState={};
+  if(!S.income)S.income={};
+  if(!S.income.corp)S.income.corp=0;
+  if(!S.tier)S.tier=1;
+};
+
+var _origNew=newGame;
+newGame=function(){
+  _origNew();
+  S.ownedScripts={}; S.ownedCorps={}; S.corpUpgrades={}; S.hackState={}; S.income.corp=0; S.tier=1;
+};
+
+/* Patch updateIncome to show corp row */
+var _origUpdateIncome2=Renderer.updateIncome.bind(Renderer);
+Renderer.updateIncome=function(){
+  _origUpdateIncome2();
+  var el=document.getElementById('inc-corp');
+  if(el)el.textContent='+'+(S.income&&S.income.corp?S.income.corp.toFixed(1):0)+'/s';
+  var tot=document.getElementById('inc-total');
+  if(tot){
+    var sum=['job','hack','fish','bonus','boats','corp'].reduce(function(a,k){return a+(S.income&&S.income[k]?S.income[k]:0);},0);
+    tot.textContent='+'+sum.toFixed(2)+'/s';
+  }
+};
 
 </script>
-
-<script src="scenes.js"></script>
-
-
-<script src="fishing.js"></script>
-
 
 
 <!-- HACK VIEW OVERLAY -->
@@ -8722,7 +10784,525 @@ var StocksMinigame = (function() {
      Persist: S.factions.{discovered, joined, rep, quests, minigameStats}
      Auto-saved cez bežný saveGame().
 ═══════════════════════════════════════════════════════════════════ -->
-<script src="factions.js"></script>
+<script>
+var FactionsSystem = (function() {
+
+  // ── Konfigurácia ─────────────────────────────────────
+  var INCOME_PER_FACTION = 10;   // 10₿/s per joined faction
+  var REP_INITIAL_JOIN   = 5;    // počiatočná rep po join
+  var REP_MAX            = 100;
+  var REP_PER_QUEST      = 15;
+  var REP_PER_MINIGAME   = 1;
+  var REP_PER_TALK       = 2;
+
+  var FACTIONS = {
+    stokari: {
+      id:        'stokari',
+      name:      'STOKÁRI',
+      icon:      '💀',
+      color:     '#ef4444',
+      colorClass:'fac-stokari',
+      tag:       'Pouliční · Drogy · Low-tech',
+      banner:    'https://images.unsplash.com/photo-1565536421961-15ddc36c6e02?w=800&auto=format&fit=crop',
+      desc:      'Mladí, hladní, lacné augmenty Gentech B2. Predávajú drogy, vlámu sa kamkoľvek. Garáže na okraji Píly sú ich diera. Loyalita rodiny.',
+      location:  'fac_stokari_garaze',
+      minigame:  'street_deal',
+      questTitle:'Vyber dlžobu od dílera',
+      bonusText: '+10₿/s · Prístup k Street Deal'
+    },
+    hackers: {
+      id:        'hackers',
+      name:      'HACKERI',
+      icon:      '💻',
+      color:     '#22d3ee',
+      colorClass:'fac-hackers',
+      tag:       'FIT · Exploity · Whitepapery',
+      banner:    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop',
+      desc:      'Oravec a jeho sieť v Lab B7. Nelegálny audit, leakovanie, exploit-ako-služba. Niekto to volá aktivizmus, niekto terorizmus. Oni — práca.',
+      location:  'fac_hackers_lab',
+      minigame:  'terminal_ops',
+      questTitle:'Hackni FIT a uprav známky',
+      bonusText: '+10₿/s · +1 hackStat za minihru'
+    },
+    ceo: {
+      id:        'ceo',
+      name:      'CEO',
+      icon:      '🎩',
+      color:     '#facc15',
+      colorClass:'fac-ceo',
+      tag:       'Penthouse · Burza · Politika',
+      banner:    'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=900&auto=format&fit=crop',
+      desc:      'Sieť Tomáša a Bartóka. Politici ktorých vlastnia, banky ktoré rozumejú, kasína ktoré preprajú. Penthouse na Top Cafe — výhľad na všetko.',
+      location:  'fac_ceo_penthouse',
+      minigame:  'stocks',
+      questTitle:'Vydieranie politika · Pranie peňazí',
+      bonusText: '+10₿/s · Prístup k Penthouse + Stocks'
+    },
+    rybari: {
+      id:        'rybari',
+      name:      'RYBÁRI',
+      icon:      '🐟',
+      color:     '#4ade80',
+      colorClass:'fac-rybari',
+      tag:       'Mŕtve Rameno · Tichá sieť',
+      banner:    'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop',
+      desc:      'Starí robotníci, dôchodcovia, fero-50-y. Mŕtve Rameno je viac ako rybačka. Tichá sieť informácií. Vidia veci ktoré štát nevidí.',
+      location:  'fac_rybari_rameno',
+      minigame:  'fishing',
+      questTitle:'Pavlíkov vrak v rieke',
+      bonusText: '+10₿/s · +25% predaj rýb'
+    }
+  };
+
+  // ── DOM refs (lazy) ─────────────────────────────────
+  function _grid()    { return document.getElementById('factions-grid'); }
+  function _overlay() { return document.getElementById('factions-overlay'); }
+  function _miniList(){ return document.getElementById('factions-mini-list'); }
+
+  // ── Helpers ─────────────────────────────────────────
+  function _ensureState() {
+    if (!S.factions) {
+      S.factions = {
+        discovered:{}, joined:{},
+        rep:{ stokari:0, hackers:0, ceo:0, rybari:0 },
+        quests:{}, minigameStats:{ stokari:0, hackers:0, ceo:0, rybari:0 }
+      };
+    }
+    if (!S.factions.rep) S.factions.rep = { stokari:0, hackers:0, ceo:0, rybari:0 };
+    if (!S.factions.discovered) S.factions.discovered = {};
+    if (!S.factions.joined) S.factions.joined = {};
+    if (!S.factions.quests) S.factions.quests = {};
+    if (!S.factions.minigameStats) S.factions.minigameStats = { stokari:0, hackers:0, ceo:0, rybari:0 };
+  }
+
+  function _joinedCount() {
+    _ensureState();
+    return Object.keys(S.factions.joined).filter(function(k){ return S.factions.joined[k]; }).length;
+  }
+
+  function getFactionsIncome() {
+    return _joinedCount() * INCOME_PER_FACTION;
+  }
+
+  // ── DISCOVER & UNLOCK ────────────────────────────────
+  function discover(facId, customMsg) {
+    _ensureState();
+    if (!FACTIONS[facId]) return;
+    if (S.factions.discovered[facId]) return; // already
+    S.factions.discovered[facId] = true;
+    _showUnlockPopup(facId, customMsg);
+    addLog('FRAKCIA odomknutá: ' + FACTIONS[facId].name + '.', 'ok');
+    _setTabPending(true);
+    renderMiniList();
+  }
+
+  function _showUnlockPopup(facId, customMsg) {
+    var fac = FACTIONS[facId]; if (!fac) return;
+    var pop = document.getElementById('faction-unlock-popup');
+    var t = document.getElementById('faction-unlock-title');
+    var m = document.getElementById('faction-unlock-msg');
+    if (!pop) return;
+    var defaultMsg = {
+      stokari: 'Garáže na okraji Píly. Stokárska diera. Choď tam až budeš pripravený zájsť hlbšie.',
+      hackers: 'Lab B7 na FIT. Oravec čaká. Tichý vstup, žiadny záznam.',
+      ceo:     'Penthouse na vrchu Top Cafe. Tomáš pozýva — kúpiť si miesto pri stole.',
+      rybari:  'Mŕtve Rameno. Lucia ťa odporučila. Fero ťa očakáva pri ohni.'
+    };
+    t.textContent = fac.icon + '  ' + fac.name;
+    m.textContent = customMsg || defaultMsg[facId] || fac.desc;
+    pop.style.borderLeftColor = fac.color;
+    pop.style.boxShadow = '0 4px 24px rgba(0,0,0,0.7), 0 0 24px ' + fac.color + '40';
+    pop.classList.add('show');
+    clearTimeout(pop._t);
+    pop._t = setTimeout(function(){ pop.classList.remove('show'); }, 8000);
+  }
+
+  function _setTabPending(on) {
+    var tab = document.querySelector('.tab-btn[data-tab="factions"]');
+    if (!tab) return;
+    tab.classList.toggle('has-pending', !!on);
+  }
+
+  // ── JOIN ─────────────────────────────────────────────
+  function join(facId) {
+    _ensureState();
+    if (!FACTIONS[facId]) return;
+    if (S.factions.joined[facId]) return; // už člen
+    S.factions.joined[facId] = true;
+    if (S.factions.rep[facId] < REP_INITIAL_JOIN) S.factions.rep[facId] = REP_INITIAL_JOIN;
+    if (!S.factions.discovered[facId]) S.factions.discovered[facId] = true;
+    addLog('Pridal si sa k frakcii: ' + FACTIONS[facId].name + '. Príjem +' + INCOME_PER_FACTION + '₿/s.', 'ok');
+    showNotif('⚔ JOIN: ' + FACTIONS[facId].name + ' (+' + INCOME_PER_FACTION + '₿/s)');
+    if (typeof SoundFX !== 'undefined') SoundFX.play('factionJoin');
+    _refreshIncomeRow();
+    renderMiniList();
+    if (typeof Renderer !== 'undefined') Renderer.updateIncome();
+    if (typeof saveGame === 'function') try { saveGame(); } catch(e){}
+  }
+
+  function leave(facId) {
+    _ensureState();
+    if (!S.factions.joined[facId]) return;
+    if (!confirm('Naozaj chceš opustiť frakciu ' + FACTIONS[facId].name + '? Stratíš pasívny príjem aj reputáciu.')) return;
+    S.factions.joined[facId] = false;
+    S.factions.rep[facId] = Math.floor(S.factions.rep[facId] / 2);
+    addLog('Opustil si frakciu: ' + FACTIONS[facId].name + '.', 'warn');
+    _refreshIncomeRow();
+    renderMiniList();
+    renderWindow();
+    if (typeof Renderer !== 'undefined') Renderer.updateIncome();
+  }
+
+  // ── REPUTATION ──────────────────────────────────────
+  function addRep(facId, amount, reason) {
+    _ensureState();
+    if (!FACTIONS[facId]) return;
+    var prev = S.factions.rep[facId] || 0;
+    var next = Math.max(0, Math.min(REP_MAX, prev + amount));
+    S.factions.rep[facId] = next;
+    var diff = next - prev;
+    if (diff !== 0) {
+      var sign = diff > 0 ? '+' : '';
+      addLog('Reputácia ' + FACTIONS[facId].name + ': ' + sign + diff + (reason ? ' (' + reason + ')' : '') + ' → ' + next + '/100.', diff > 0 ? 'ok' : 'warn');
+    }
+    renderMiniList();
+    if (_overlay() && _overlay().classList.contains('show')) renderWindow();
+  }
+
+  // ── QUESTS ──────────────────────────────────────────
+  function activateQuest(facId, questId) {
+    _ensureState();
+    var key = facId + ':' + questId;
+    if (S.factions.quests[key] && S.factions.quests[key].done) return false;
+    S.factions.quests[key] = S.factions.quests[key] || { active:true, progress:0, done:false };
+    S.factions.quests[key].active = true;
+    return true;
+  }
+  function completeQuest(facId, questId) {
+    _ensureState();
+    var key = facId + ':' + questId;
+    var q = S.factions.quests[key];
+    if (!q) return;
+    if (q.done) return;
+    q.done = true; q.active = false;
+    addRep(facId, REP_PER_QUEST, 'quest');
+    showNotif('✓ Quest splnený · ' + FACTIONS[facId].name + ' +' + REP_PER_QUEST + ' rep');
+  }
+  function getActiveQuest(facId) {
+    _ensureState();
+    var keys = Object.keys(S.factions.quests);
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      if (k.indexOf(facId + ':') !== 0) continue;
+      var q = S.factions.quests[k];
+      if (q.active && !q.done) return { id: k.split(':')[1], data: q };
+      if (q.done) return { id: k.split(':')[1], data: q };
+    }
+    return null;
+  }
+
+  // ── MINIGAME RESULT HOOK ─────────────────────────────
+  function onMinigameSuccess(facId, payload) {
+    _ensureState();
+    payload = payload || {};
+    S.factions.minigameStats[facId] = (S.factions.minigameStats[facId] || 0) + 1;
+    addRep(facId, REP_PER_MINIGAME, 'minihra');
+    if (payload.money) { S.money += payload.money; if (typeof Renderer !== 'undefined') Renderer.updateMoney(); }
+    if (payload.xp)    { gainXP(payload.xp); }
+    if (payload.hackStat && facId === 'hackers') { S.hackStat = Math.min(100, S.hackStat + payload.hackStat); if (typeof Renderer !== 'undefined') Renderer.updateStats(); }
+  }
+
+  // ── INCOME ROW ──────────────────────────────────────
+  function _refreshIncomeRow() {
+    var row = document.getElementById('inc-factions-row');
+    var val = document.getElementById('inc-factions');
+    var income = getFactionsIncome();
+    if (!row || !val) return;
+    if (income > 0) {
+      row.style.display = '';
+      val.textContent = '+' + income + '/s';
+    } else {
+      row.style.display = 'none';
+    }
+  }
+
+  // ── MINI LIST (left sidebar panel) ───────────────────
+  function renderMiniList() {
+    _ensureState();
+    var el = _miniList();
+    if (!el) return;
+    var html = '';
+    Object.keys(FACTIONS).forEach(function(id){
+      var fac = FACTIONS[id];
+      var disc = !!S.factions.discovered[id];
+      var join_ = !!S.factions.joined[id];
+      var rep = S.factions.rep[id] || 0;
+      var classes = 'faction-mini-row ' + fac.colorClass;
+      if (!disc) classes += ' locked';
+      if (join_) classes += ' joined';
+      var name = disc ? fac.name : '???';
+      var repTxt = disc ? rep : '—';
+      html += '<div class="' + classes + '" onclick="FactionsSystem.openWindow()">' +
+                '<span class="faction-mini-icon">' + (disc ? fac.icon : '🔒') + '</span>' +
+                '<span class="faction-mini-name ' + (join_ ? 'joined':'') + '">' + name + '</span>' +
+                '<div class="faction-mini-bar">' +
+                  '<div class="faction-mini-bar-fill" style="width:' + (disc ? rep : 0) + '%;background:' + fac.color + '"></div>' +
+                '</div>' +
+                '<span class="faction-mini-rep">' + repTxt + '</span>' +
+              '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  // ── MAIN WINDOW ─────────────────────────────────────
+  function openWindow() {
+    _ensureState();
+    renderWindow();
+    var ov = _overlay();
+    if (ov) ov.classList.add('show');
+    _setTabPending(false);
+  }
+  function closeWindow() {
+    var ov = _overlay();
+    if (ov) ov.classList.remove('show');
+  }
+
+  function renderWindow() {
+    _ensureState();
+    var grid = _grid();
+    if (!grid) return;
+    var html = '';
+    Object.keys(FACTIONS).forEach(function(id){
+      html += _renderCard(id);
+    });
+    grid.innerHTML = html;
+  }
+
+  function _renderCard(id) {
+    var fac = FACTIONS[id];
+    var disc = !!S.factions.discovered[id];
+    var join_ = !!S.factions.joined[id];
+    var rep  = S.factions.rep[id] || 0;
+    var miniWins = S.factions.minigameStats[id] || 0;
+    var quest = getActiveQuest(id);
+    var incomeContrib = join_ ? INCOME_PER_FACTION : 0;
+
+    var cls = 'faction-card';
+    if (!disc) cls += ' locked';
+    if (join_) cls += ' joined';
+
+    var questHtml = '';
+    if (join_) {
+      if (quest) {
+        var doneClass = quest.data.done ? 'done' : '';
+        var icon = quest.data.done ? '✓' : '◆';
+        var status = quest.data.done ? ' [SPLNENÝ]' : ' [AKTÍVNY]';
+        questHtml = '<div class="faction-card-quest ' + doneClass + '">' +
+                      '<span class="faction-card-quest-icon">' + icon + '</span> ' +
+                      '<span>' + fac.questTitle + status + '</span>' +
+                    '</div>';
+      } else {
+        questHtml = '<div class="faction-card-quest">' +
+                      '<span class="faction-card-quest-icon">◇</span> ' +
+                      '<span>Quest: ' + fac.questTitle + ' [DOSTUPNÝ]</span>' +
+                    '</div>';
+      }
+    }
+
+    var actions = '';
+    if (!disc) {
+      actions = ''; // locked overlay handles
+    } else if (!join_) {
+      actions =
+        '<button class="faction-card-btn primary ' + fac.colorClass + '" ' +
+          'onclick="FactionsSystem.travelTo(\'' + id + '\')">▶ NAVŠTÍVIŤ HUB</button>' +
+        '<button class="faction-card-btn ' + fac.colorClass + '" ' +
+          'onclick="FactionsSystem.quickJoin(\'' + id + '\')">⚔ JOIN (10₿/s)</button>';
+    } else {
+      actions =
+        '<button class="faction-card-btn primary ' + fac.colorClass + '" ' +
+          'onclick="FactionsSystem.travelTo(\'' + id + '\')">▶ NAVŠTÍVIŤ HUB</button>' +
+        '<button class="faction-card-btn ' + fac.colorClass + '" ' +
+          'onclick="FactionsSystem.openMinigame(\'' + id + '\')">🎯 MINIHRA</button>' +
+        '<button class="faction-card-btn" style="color:#888;border-color:#444" ' +
+          'onclick="FactionsSystem.leave(\'' + id + '\')">✕ Opustiť frakciu</button>';
+    }
+
+    return '' +
+      '<div class="' + cls + '">' +
+        '<div class="faction-card-banner" style="background-image:url(\'' + fac.banner + '\')">' +
+          '<div class="faction-card-banner-icon ' + fac.colorClass + '">' + (disc ? fac.icon : '🔒') + '</div>' +
+          '<div class="faction-card-banner-name ' + fac.colorClass + '">' + fac.name + '</div>' +
+        '</div>' +
+        '<div class="faction-card-body">' +
+          '<div class="faction-card-tag">' + fac.tag + '</div>' +
+          '<div class="faction-card-desc">' + fac.desc + '</div>' +
+          questHtml +
+          '<div class="faction-card-rep-row">' +
+            '<span class="faction-card-rep-label">REP</span>' +
+            '<div class="faction-card-rep-bar">' +
+              '<div class="faction-card-rep-fill" style="width:' + rep + '%;background:' + fac.color + '"></div>' +
+            '</div>' +
+            '<span class="faction-card-rep-num ' + fac.colorClass + '">' + rep + '</span>' +
+          '</div>' +
+          '<div class="faction-card-stats">' +
+            '<div class="faction-card-stat"><span class="faction-card-stat-label">Príjem</span><span class="faction-card-stat-val">+' + incomeContrib + '₿/s</span></div>' +
+            '<div class="faction-card-stat"><span class="faction-card-stat-label">Minihry</span><span class="faction-card-stat-val">' + miniWins + '</span></div>' +
+          '</div>' +
+          '<div class="faction-card-actions">' + actions + '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // ── ACTIONS ─────────────────────────────────────────
+  function travelTo(facId) {
+    var fac = FACTIONS[facId]; if (!fac) return;
+    closeWindow();
+    if (typeof goTo === 'function') goTo(fac.location);
+  }
+
+  function quickJoin(facId) {
+    join(facId);
+    renderWindow();
+    travelTo(facId);
+  }
+
+  function openMinigame(facId) {
+    closeWindow();
+    var minigame = FACTIONS[facId].minigame;
+    if (minigame === 'fishing' && typeof openFishing === 'function') {
+      openFishing();
+    } else if (minigame === 'street_deal' && typeof StreetDealMinigame !== 'undefined') {
+      StreetDealMinigame.open();
+    } else if (minigame === 'terminal_ops' && typeof TerminalOpsMinigame !== 'undefined') {
+      TerminalOpsMinigame.open();
+    } else if (minigame === 'stocks' && typeof StocksMinigame !== 'undefined') {
+      StocksMinigame.open();
+    } else {
+      showNotif('🎯 Minihra bude dostupná v ďalšej etape');
+    }
+  }
+
+  // ── AUTO-DISCOVERY HOOK (volá sa pri scéna onEnter) ─
+  // Mapuje existujúce flagy na frakcie. Volá sa z renderScene wrappera.
+  var DISCOVERY_TRIGGERS = {
+    stokari_prvykontakt: 'stokari',  // Ferko @ priemyselná štvrť
+    stokari_jantar:      'stokari',
+    stokari_vnem:        'stokari',
+    oravec_stopa:        'hackers',   // Lucia spomne Oravca
+    melisko_kontakt:     'ceo',       // Mike Melišek = network into CEO
+    miki_navstiveny:     'rybari',    // Lucia v Miki bare = rybári hint
+    lucia_rep_plus:      'rybari',
+    tomas_stopa:         'ceo'
+  };
+  function checkDiscoveryFromFlags() {
+    _ensureState();
+    Object.keys(DISCOVERY_TRIGGERS).forEach(function(flagName){
+      if (S.flags && S.flags[flagName]) {
+        var facId = DISCOVERY_TRIGGERS[flagName];
+        if (!S.factions.discovered[facId]) {
+          discover(facId);
+        }
+      }
+    });
+  }
+
+  // ── INIT ────────────────────────────────────────────
+  function init() {
+    _ensureState();
+    renderMiniList();
+    _refreshIncomeRow();
+    // Skontroluj ci uz nieco neunlocknute z minulosti
+    checkDiscoveryFromFlags();
+  }
+
+  // ── PUBLIC ──────────────────────────────────────────
+  return {
+    FACTIONS: FACTIONS,
+    init: init,
+    join: join,
+    leave: leave,
+    discover: discover,
+    addRep: addRep,
+    activateQuest: activateQuest,
+    completeQuest: completeQuest,
+    getActiveQuest: getActiveQuest,
+    onMinigameSuccess: onMinigameSuccess,
+    getFactionsIncome: getFactionsIncome,
+    openWindow: openWindow,
+    closeWindow: closeWindow,
+    renderWindow: renderWindow,
+    renderMiniList: renderMiniList,
+    travelTo: travelTo,
+    quickJoin: quickJoin,
+    openMinigame: openMinigame,
+    checkDiscoveryFromFlags: checkDiscoveryFromFlags
+  };
+})();
+
+// ── Hooks: volaj checkDiscoveryFromFlags po každej scéne ──
+(function(){
+  // Wrap goTo aby po vstupe do scény skontroloval discovery
+  if (typeof goTo === 'function') {
+    var _origGoTo = goTo;
+    window.goTo = function(sceneId) {
+      var r = _origGoTo.apply(this, arguments);
+      try { FactionsSystem.checkDiscoveryFromFlags(); } catch(e){}
+      return r;
+    };
+  }
+  // Wrap loadGame aby po načítaní obnovil mini list a income
+  if (typeof loadGame === 'function') {
+    var _origLoad = loadGame;
+    window.loadGame = function() {
+      _origLoad.apply(this, arguments);
+      try { FactionsSystem.init(); } catch(e){}
+    };
+  }
+  // Wrap newGame aby pri novej hre resetol UI
+  if (typeof newGame === 'function') {
+    var _origNew = newGame;
+    window.newGame = function() {
+      _origNew.apply(this, arguments);
+      try { FactionsSystem.init(); } catch(e){}
+    };
+  }
+})();
+
+// ── Hook: do GameLoop._tick — pridaj faction income ──
+(function(){
+  // Patch existujúci tick: mokrý monkey-patch GameLoop start/stop nestačí, lebo total
+  // sa počíta inline. Riešime to tak, že pri každom poskočení S.money pripočítame
+  // faction income cez interval (1s) — bezpečné, nevyžaduje úpravu pôvodnej logiky.
+  var lastFactionTick = Date.now();
+  setInterval(function(){
+    if (typeof S === 'undefined' || !S.factions) return;
+    if (typeof StateMachine === 'undefined') return;
+    if (!StateMachine.is(StateMachine.STATES.PLAYING)) return;
+    var now = Date.now();
+    if (now - lastFactionTick < 950) return; // ~1s
+    lastFactionTick = now;
+    var inc = FactionsSystem.getFactionsIncome();
+    if (inc > 0) {
+      S.money += inc;
+      if (typeof Renderer !== 'undefined') {
+        Renderer.updateMoney();
+        // refresh income display every ~5 ticks
+        if (Math.random() < 0.2) Renderer.updateIncome();
+      }
+    }
+  }, 1000);
+})();
+
+// ── Init po DOM ready ──
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){ try { FactionsSystem.init(); } catch(e){ console.warn('[Factions] init err:', e); } }, 200);
+  });
+} else {
+  setTimeout(function(){ try { FactionsSystem.init(); } catch(e){ console.warn('[Factions] init err:', e); } }, 200);
+}
+</script>
 
 <!-- ═══════════════════════════════════════════════════════════════════
      §35.  AudioController  — background music + volume control
