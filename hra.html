@@ -2065,6 +2065,35 @@ a:hover { color: #fff; }
 .item-card-use:hover { background: rgba(57,255,20,0.08); color: var(--green); }
 
 /* ── EQUIPMENT (compact list) ── */
+/* ══════════════════════════════════════════════════════
+   PAPERDOLL / EQUIP INVENTÁR (starý štýl)
+══════════════════════════════════════════════════════ */
+.paperdoll-wrap {
+  display:flex; align-items:center; justify-content:center;
+  gap:0; padding:8px 0 4px; min-height:220px; position:relative;
+}
+.equip-col { display:flex; flex-direction:column; gap:8px; align-items:center; width:68px; }
+.paperdoll-center { width:80px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+.paperdoll-center .pd-label { font-family:var(--font-hud); font-size:7px; letter-spacing:2px; color:var(--green3); margin-top:3px; text-align:center; }
+.eq-slot-wrap { text-align:center; }
+.eq-slot-wrap label { display:block; font-size:7px; color:var(--text-dim); margin-bottom:3px; text-transform:uppercase; letter-spacing:1px; font-family:var(--font-body); white-space:nowrap; }
+.eq-slot {
+  width:56px; height:56px; border:1px dashed var(--dimmer);
+  background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
+  position:relative; cursor:pointer; transition:all 0.2s; font-size:22px;
+}
+.eq-slot:hover { border-color:var(--green3); background:rgba(57,255,20,0.04); }
+.eq-slot.equipped { border:1px solid var(--green3); box-shadow:0 0 10px rgba(57,255,20,0.2); background:rgba(57,255,20,0.04); }
+.eq-slot.equipped::after { content:'✕'; position:absolute; top:1px; right:3px; font-size:8px; color:var(--danger); opacity:0; transition:opacity 0.15s; font-family:var(--font-mono); }
+.eq-slot.equipped:hover::after { opacity:1; }
+.eq-slot-name { font-size:8px; color:var(--green4); font-family:var(--font-mono); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60px; text-align:center; }
+.equip-stats-box { border:1px solid var(--border2); border-top:1px solid var(--border-hi); background:linear-gradient(180deg,var(--bg3),var(--bg2)); padding:8px 10px; margin-top:6px; font-size:11px; margin:6px 8px 0; }
+.equip-stats-title { font-family:var(--font-hud); font-size:8px; letter-spacing:2px; color:var(--green3); margin-bottom:6px; text-transform:uppercase; }
+.equip-stat-row { display:flex; justify-content:space-between; padding:2px 0; color:var(--text-dim); font-family:var(--font-mono); font-size:10px; border-bottom:1px solid var(--border2); }
+.equip-stat-row:last-child { border-bottom:none; }
+.equip-stat-row span:last-child { color:var(--green4); }
+.equip-hint { font-size:9px; color:var(--text-muted); text-align:center; padding:6px 8px 2px; letter-spacing:1px; font-family:var(--font-body); }
+
 .equip-compact-list { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
 .eq-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border2); background: var(--bg); cursor: pointer; transition: all 0.1s; }
 .eq-row:hover { border-color: var(--green3); background: rgba(57,255,20,0.04); }
@@ -4681,6 +4710,7 @@ body.low-power .minigame-overlay {
     <button class="tab-btn"        onclick="switchView('shop')">🛒 Obchod</button>
     <button class="tab-btn"        onclick="openHackView()">💻 Hack</button>
     <button class="tab-btn" data-tab="factions" onclick="FactionsSystem.openWindow()">⚔ Frakcie</button>
+    <button class="tab-btn" id="arena-tab-btn" onclick="loadArena()">🥊 Aréna</button>
   </div>
   <div id="topbar-right">
     <!-- HP + SAN mini-bary -->
@@ -4804,45 +4834,60 @@ body.low-power .minigame-overlay {
       <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
     </div>
     <div class="inv-drawer-pane" id="inv-drawer-pane-equip">
-      <div class="equip-compact-list">
-        <div class="eq-row" id="eqrow-head" onclick="eqSlotClick('head')">
-          <span class="eq-row-label">Hlava</span>
-          <span class="eq-row-icon" id="eqslot-head">⬜</span>
-          <span class="eq-row-name" id="eqslot-head-name">— prázdny slot —</span>
+      <!-- PAPERDOLL — obrázok vľavo, sloty vpravo -->
+      <div class="paperdoll-wrap">
+        <!-- Ľavý stĺpec slotov -->
+        <div class="equip-col">
+          <div class="eq-slot-wrap">
+            <label>Hlava</label>
+            <div class="eq-slot" id="eqslot-head" title="Prázdny slot" onclick="eqSlotClick('head')"></div>
+            <div class="eq-slot-name" id="eqslot-head-name">—</div>
+          </div>
+          <div class="eq-slot-wrap">
+            <label>Telo</label>
+            <div class="eq-slot" id="eqslot-body" title="Prázdny slot" onclick="eqSlotClick('body')"></div>
+            <div class="eq-slot-name" id="eqslot-body-name">—</div>
+          </div>
+          <div class="eq-slot-wrap">
+            <label>Nohavice</label>
+            <div class="eq-slot" id="eqslot-pants" title="Prázdny slot" onclick="eqSlotClick('pants')"></div>
+            <div class="eq-slot-name" id="eqslot-pants-name">—</div>
+          </div>
         </div>
-        <div class="eq-row" id="eqrow-body" onclick="eqSlotClick('body')">
-          <span class="eq-row-label">Telo</span>
-          <span class="eq-row-icon" id="eqslot-body">⬜</span>
-          <span class="eq-row-name" id="eqslot-body-name">— prázdny slot —</span>
+        <!-- Stred — postava JC Denton -->
+        <div class="paperdoll-center">
+          <img src="public/images/hra/JCDenton.jpg" alt="Agent" style="width:72px;height:200px;object-fit:cover;object-position:top center;border-left:1px solid var(--border);border-right:1px solid var(--border);filter:drop-shadow(0 0 8px rgba(57,255,20,0.35)) saturate(0.7) brightness(0.9)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;width:72px;height:200px;background:linear-gradient(180deg,#050a05,#080d08);border-left:1px solid var(--border);border-right:1px solid var(--border);align-items:center;justify-content:center;font-size:48px;filter:drop-shadow(0 0 8px rgba(57,255,20,0.35))">🕵️</div>
+          <div class="pd-label">AGENT</div>
         </div>
-        <div class="eq-row" id="eqrow-pants" onclick="eqSlotClick('pants')">
-          <span class="eq-row-label">Nohavice</span>
-          <span class="eq-row-icon" id="eqslot-pants">⬜</span>
-          <span class="eq-row-name" id="eqslot-pants-name">— prázdny slot —</span>
-        </div>
-        <div class="eq-row" id="eqrow-weapon" onclick="eqSlotClick('weapon')">
-          <span class="eq-row-label">Zbraň</span>
-          <span class="eq-row-icon" id="eqslot-weapon">⬜</span>
-          <span class="eq-row-name" id="eqslot-weapon-name">— prázdny slot —</span>
-        </div>
-        <div class="eq-row" id="eqrow-special" onclick="eqSlotClick('special')">
-          <span class="eq-row-label">Špeciálne</span>
-          <span class="eq-row-icon" id="eqslot-special">⬜</span>
-          <span class="eq-row-name" id="eqslot-special-name">— prázdny slot —</span>
-        </div>
-        <div class="eq-row" id="eqrow-feet" onclick="eqSlotClick('feet')">
-          <span class="eq-row-label">Nástroj</span>
-          <span class="eq-row-icon" id="eqslot-feet">⬜</span>
-          <span class="eq-row-name" id="eqslot-feet-name">— prázdny slot —</span>
+        <!-- Pravý stĺpec slotov -->
+        <div class="equip-col">
+          <div class="eq-slot-wrap">
+            <label>Zbraň</label>
+            <div class="eq-slot" id="eqslot-weapon" title="Prázdny slot" onclick="eqSlotClick('weapon')"></div>
+            <div class="eq-slot-name" id="eqslot-weapon-name">—</div>
+          </div>
+          <div class="eq-slot-wrap">
+            <label>Špeciálne</label>
+            <div class="eq-slot" id="eqslot-special" title="Prázdny slot" onclick="eqSlotClick('special')"></div>
+            <div class="eq-slot-name" id="eqslot-special-name">—</div>
+          </div>
+          <div class="eq-slot-wrap">
+            <label>Nástroj</label>
+            <div class="eq-slot" id="eqslot-feet" title="Prázdny slot" onclick="eqSlotClick('feet')"></div>
+            <div class="eq-slot-name" id="eqslot-feet-name">—</div>
+          </div>
         </div>
       </div>
-      <div style="margin:4px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
-        <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">⚙ Aktívne bonusy výstroja</div>
+      <!-- Bonusy -->
+      <div class="equip-stats-box">
+        <div class="equip-stats-title">⚙ Aktívne bonusy výstroja</div>
         <div id="equip-bonuses-list"></div>
       </div>
-      <div style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);text-align:center;padding:4px 8px">// Klikni na slot pre zloženie //</div>
-      <div style="margin:6px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
-        <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">📦 Predmety v inventári</div>
+      <div class="equip-hint">// Klikni na slot pre zloženie • Kúp v Obchode a nasaď tu //</div>
+      <!-- Nasaditeľné predmety z inventára -->
+      <div class="equip-stats-box" style="margin-top:6px">
+        <div class="equip-stats-title">📦 Predmety v inventári</div>
         <div id="equip-available-list"></div>
       </div>
     </div>
@@ -5054,45 +5099,60 @@ body.low-power .minigame-overlay {
         <div id="inv-panel-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
       </div>
       <div class="inv-ppane" id="inv-ppane-equip">
-        <div class="equip-compact-list">
-          <div class="eq-row" id="eqrow2-head" onclick="eqSlotClick('head')">
-            <span class="eq-row-label">Hlava</span>
-            <span class="eq-row-icon" id="eqslot2-head">⬜</span>
-            <span class="eq-row-name" id="eqslot2-head-name">— prázdny slot —</span>
+        <!-- PAPERDOLL — obrázok vľavo, sloty vpravo -->
+        <div class="paperdoll-wrap">
+          <!-- Ľavý stĺpec slotov -->
+          <div class="equip-col">
+            <div class="eq-slot-wrap">
+              <label>Hlava</label>
+              <div class="eq-slot" id="eqslot2-head" title="Prázdny slot" onclick="eqSlotClick('head')"></div>
+              <div class="eq-slot-name" id="eqslot2-head-name">—</div>
+            </div>
+            <div class="eq-slot-wrap">
+              <label>Telo</label>
+              <div class="eq-slot" id="eqslot2-body" title="Prázdny slot" onclick="eqSlotClick('body')"></div>
+              <div class="eq-slot-name" id="eqslot2-body-name">—</div>
+            </div>
+            <div class="eq-slot-wrap">
+              <label>Nohavice</label>
+              <div class="eq-slot" id="eqslot2-pants" title="Prázdny slot" onclick="eqSlotClick('pants')"></div>
+              <div class="eq-slot-name" id="eqslot2-pants-name">—</div>
+            </div>
           </div>
-          <div class="eq-row" id="eqrow2-body" onclick="eqSlotClick('body')">
-            <span class="eq-row-label">Telo</span>
-            <span class="eq-row-icon" id="eqslot2-body">⬜</span>
-            <span class="eq-row-name" id="eqslot2-body-name">— prázdny slot —</span>
+          <!-- Stred — postava JC Denton -->
+          <div class="paperdoll-center">
+            <img src="public/images/hra/JCDenton.jpg" alt="Agent" style="width:72px;height:200px;object-fit:cover;object-position:top center;border-left:1px solid var(--border);border-right:1px solid var(--border);filter:drop-shadow(0 0 8px rgba(57,255,20,0.35)) saturate(0.7) brightness(0.9)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div style="display:none;width:72px;height:200px;background:linear-gradient(180deg,#050a05,#080d08);border-left:1px solid var(--border);border-right:1px solid var(--border);align-items:center;justify-content:center;font-size:48px;filter:drop-shadow(0 0 8px rgba(57,255,20,0.35))">🕵️</div>
+            <div class="pd-label">AGENT</div>
           </div>
-          <div class="eq-row" id="eqrow2-pants" onclick="eqSlotClick('pants')">
-            <span class="eq-row-label">Nohavice</span>
-            <span class="eq-row-icon" id="eqslot2-pants">⬜</span>
-            <span class="eq-row-name" id="eqslot2-pants-name">— prázdny slot —</span>
-          </div>
-          <div class="eq-row" id="eqrow2-weapon" onclick="eqSlotClick('weapon')">
-            <span class="eq-row-label">Zbraň</span>
-            <span class="eq-row-icon" id="eqslot2-weapon">⬜</span>
-            <span class="eq-row-name" id="eqslot2-weapon-name">— prázdny slot —</span>
-          </div>
-          <div class="eq-row" id="eqrow2-special" onclick="eqSlotClick('special')">
-            <span class="eq-row-label">Špeciálne</span>
-            <span class="eq-row-icon" id="eqslot2-special">⬜</span>
-            <span class="eq-row-name" id="eqslot2-special-name">— prázdny slot —</span>
-          </div>
-          <div class="eq-row" id="eqrow2-feet" onclick="eqSlotClick('feet')">
-            <span class="eq-row-label">Nástroj</span>
-            <span class="eq-row-icon" id="eqslot2-feet">⬜</span>
-            <span class="eq-row-name" id="eqslot2-feet-name">— prázdny slot —</span>
+          <!-- Pravý stĺpec slotov -->
+          <div class="equip-col">
+            <div class="eq-slot-wrap">
+              <label>Zbraň</label>
+              <div class="eq-slot" id="eqslot2-weapon" title="Prázdny slot" onclick="eqSlotClick('weapon')"></div>
+              <div class="eq-slot-name" id="eqslot2-weapon-name">—</div>
+            </div>
+            <div class="eq-slot-wrap">
+              <label>Špeciálne</label>
+              <div class="eq-slot" id="eqslot2-special" title="Prázdny slot" onclick="eqSlotClick('special')"></div>
+              <div class="eq-slot-name" id="eqslot2-special-name">—</div>
+            </div>
+            <div class="eq-slot-wrap">
+              <label>Nástroj</label>
+              <div class="eq-slot" id="eqslot2-feet" title="Prázdny slot" onclick="eqSlotClick('feet')"></div>
+              <div class="eq-slot-name" id="eqslot2-feet-name">—</div>
+            </div>
           </div>
         </div>
-        <div style="margin:4px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
-          <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">⚙ Aktívne bonusy výstroja</div>
+        <!-- Bonusy -->
+        <div class="equip-stats-box">
+          <div class="equip-stats-title">⚙ Aktívne bonusy výstroja</div>
           <div id="equip-panel-bonuses-list"></div>
         </div>
-        <div style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);text-align:center;padding:4px 8px">// Klikni na slot pre zloženie //</div>
-        <div style="margin:6px 8px;padding:8px;border:1px solid var(--border2);background:rgba(0,8,0,0.5)">
-          <div style="font-family:var(--font-hud);font-size:8px;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px">📦 Predmety v inventári</div>
+        <div class="equip-hint">// Klikni na slot pre zloženie • Kúp v Obchode a nasaď tu //</div>
+        <!-- Nasaditeľné predmety z inventára -->
+        <div class="equip-stats-box" style="margin-top:6px">
+          <div class="equip-stats-title">📦 Predmety v inventári</div>
           <div id="equip-panel-available-list"></div>
         </div>
       </div>
@@ -5874,49 +5934,57 @@ var Renderer = (function() {
   function _renderEquip() {
     ensureEquipped();
     var slots = ['head','body','pants','weapon','special','feet'];
+    var prefixes = ['eqslot-', 'eqslot2-'];
     slots.forEach(function(slot) {
       var id = S.equipped[slot];
-      var slotEl  = document.getElementById('eqslot-' + slot);
-      var nameEl  = document.getElementById('eqslot-' + slot + '-name');
-      var rowEl   = document.getElementById('eqrow-' + slot);
-      if (!slotEl) return;
-      if (id) {
-        var it = ITEMS[id] || {};
-        slotEl.textContent = it.icon || '?';
-        if (nameEl) nameEl.textContent = it.name || id;
-        if (rowEl) rowEl.classList.add('filled');
-      } else {
-        slotEl.textContent = '⬜';
-        if (nameEl) nameEl.textContent = '— prázdny slot —';
-        if (rowEl) rowEl.classList.remove('filled');
-      }
+      var it = id ? (ITEMS[id] || {}) : null;
+      prefixes.forEach(function(pfx) {
+        var slotEl = document.getElementById(pfx + slot);
+        var nameEl = document.getElementById(pfx + slot + '-name');
+        if (!slotEl) return;
+        if (id && it) {
+          slotEl.textContent = it.icon || '⚙';
+          slotEl.classList.add('equipped');
+          slotEl.title = 'Zložiť: ' + (it.name||slot);
+          if (nameEl) nameEl.textContent = (it.name||id).substring(0,10);
+        } else {
+          slotEl.textContent = '';
+          slotEl.classList.remove('equipped');
+          slotEl.title = 'Prázdny slot';
+          if (nameEl) nameEl.textContent = '—';
+        }
+      });
     });
-    // Bonus list
-    var bonusList = document.getElementById('equip-bonuses-list');
-    if (bonusList) {
-      var bonusHtml = '';
-      slots.forEach(function(slot) {
-        var id = S.equipped[slot]; if (!id) return;
-        var b = EQUIP_BONUSES[id]; if (!b || !b.label) return;
-        var it = ITEMS[id] || {};
-        bonusHtml += '<div class="equip-bonus-row"><span>' + (it.icon||'') + ' ' + escH(it.name||id) + '</span><span style="color:var(--green3)">' + b.label + '</span></div>';
-      });
-      bonusList.innerHTML = bonusHtml || '<div class="inv-empty">// Žiadne bonusy //</div>';
-    }
-    // Available equippables list
-    var avail = document.getElementById('equip-available-list');
-    if (avail) {
-      var availHtml = '';
-      S.inventory.forEach(function(id) {
-        if (!ITEM_EQUIP_SLOT[id]) return;
-        var it = ITEMS[id] || {}; var slot = ITEM_EQUIP_SLOT[id];
-        var isEq = S.equipped && S.equipped[slot] === id;
-        availHtml += '<button class="equip-avail-btn" onclick="' + (isEq ? "unequipSlot('" + slot + "')" : "equipItem('" + id + "')") + '">' + (it.icon||'') + ' ' + escH(it.name||id) + '<span style="font-size:9px;color:' + (isEq?'var(--green3)':'var(--text-muted)') + ';margin-left:auto">' + (isEq?'✓ Nasadené':'⊕ Nasadiť') + '</span></button>';
-      });
-      avail.innerHTML = availHtml || '<div style="color:var(--text-muted);font-size:10px;padding:8px;font-family:var(--font-mono)">// Žiadne nasaditeľné predmety //</div>';
-    }
+    var bonusHtml = '';
+    slots.forEach(function(slot) {
+      var id = S.equipped[slot]; if (!id) return;
+      var b = EQUIP_BONUSES[id]; var it = ITEMS[id] || {};
+      if (b && b.label) bonusHtml += '<div class="equip-stat-row"><span>' + (it.icon||'⚙') + ' ' + escH(it.name||id) + '</span><span>' + b.label + '</span></div>';
+    });
+    var noBonus = '<div class="equip-stat-row"><span style="color:var(--text-muted)">Žiadna výstroj</span><span>—</span></div>';
+    ['equip-bonuses-list','equip-panel-bonuses-list'].forEach(function(listId) {
+      var el = document.getElementById(listId); if (el) el.innerHTML = bonusHtml || noBonus;
+    });
+    var availHtml = '';
+    S.inventory.forEach(function(id) {
+      if (!ITEM_EQUIP_SLOT[id]) return;
+      var it = ITEMS[id] || {}; var slot = ITEM_EQUIP_SLOT[id]; var b = EQUIP_BONUSES[id];
+      var isOn = S.equipped && S.equipped[slot] === id;
+      availHtml += '<div class="item-card" style="margin-bottom:5px">' +
+        '<div class="item-card-header"><span class="item-card-icon">' + (it.icon||'⚙') + '</span>' +
+        '<span class="item-card-name">' + escH(it.name||id) + '</span>' +
+        '<span class="item-card-qty" style="font-size:9px;color:var(--text-muted)">[' + slot + ']</span></div>' +
+        (b && b.label ? '<div class="item-card-desc" style="color:var(--green3)">' + escH(b.label) + '</div>' : '') +
+        (isOn
+          ? '<button class="item-card-use" style="border-color:var(--warn);color:var(--warn)" onclick="unequipSlot(\'' + slot + '\')">⊖ Zložiť</button>'
+          : '<button class="item-card-use" onclick="equipItem(\'' + id + '\')">⊕ Nasadiť</button>'
+        ) + '</div>';
+    });
+    var noAvail = '<div class="inv-empty" style="padding:10px 0;font-size:11px">// Žiadne nasaditeľné predmety //</div>';
+    ['equip-available-list','equip-panel-available-list'].forEach(function(listId) {
+      var el = document.getElementById(listId); if (el) el.innerHTML = availHtml || noAvail;
+    });
   }
-
   function _renderFlags() {
     Object.keys(S.flags).forEach(function(k) {
       if (!S.flags[k]) return;
@@ -6897,13 +6965,13 @@ var SCENES = {
       addLog('Stokári — priemyselná štvrť. Prvý kontakt.', 'ok');
     },
     choices: [
-      { text: '"Iba Prechádzam, nech sa vám darí." [neutrálne]',
+      { text: '"Len prechádzam, nech sa darí." [neutrálne]',
         next: 'sc_002_prechod' },
-      { text: '"To je Môj problém vy zasraný zkurvysyni//Battle.js Innitiating." [REP Stokári −1]',
+      { text: '"Môj problém, nie váš." [REP Stokári −1]',
         next: 'sc_002_moj' },
-      { text: '"Čaute chalani, poznáte Jantar? Akurát tam idem, nechcete Cigarety ?(Give Item)" [REP Stokári +1]',
+      { text: '"Čaute, poznáte Jantar? Akurát tam idem. Máte záujem o cigarety?" [REP Stokári +1]',
         next: 'sc_002_jantar', xp: 10 },
-      { text: '(Zastav sa, pozri na Arm Augment(Pipboy Terminal) na svojej ruke, prešlo pár minút. Počasie sa bude meniť — VNEM [XP +15]',
+      { text: '(Zastav sa. Pozri na augment na ruke — čosi ti hovorí.) [VNEM, XP +15]',
         next: 'sc_002_augment', xp: 15 },
     ]
   },
@@ -6958,9 +7026,9 @@ var SCENES = {
     art: '🏭',
     npcName: 'Ferko',
     text: [
-      'Pozrieš na augment. LEDka bliká červená, pomalá. Snaží sa ti niečo povedať',
-      'Gentech B2, ich predávali vo výpredaji od roku 2069 keď prišli s lepšími modelmi ktoré zvládali 100 triliónov parametrov. Istý čas sa ďalej nepokračovalo lebo zákonodárci sa nevedeli rozhodnúť či potrebujeme viac. Ukázalo sa že áno',
-      'Indikuje svalovú záťaž. Červená znamená relaxovaný.',
+      'Pozrieš na augment. LEDka bliká červená, pomalá.',
+      'Gentech B2. Predávali ich vo výpredaji od roku 2069, keď prišli lepšie modely. Zákonodárci sa vtedy nevedeli rozhodnúť, či ich vôbec potrebujeme. Ukázalo sa, že áno.',
+      'Indikuje svalovú záťaž. Červená znamená: relaxovaný.',
       '',
       'Ferko si všimne že pozeráš. "Čo?"',
       '"Gentech B2. Červená. Nie si napätý." "A?"',
@@ -6992,8 +7060,9 @@ var SCENES = {
     npcName: 'Lucia',
     npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     text: [
-      'Na pravo od vchodu je Alzabox, každých pár minút príde robot aby vyzdvihol alebo uložil zásielku podľa potreby. Musíš mať ale Subscription Samozrejme a nad dverami stará neonová ryba, holografická, otvára ústa donekonečna.',
-      'Neóny blikajú, nejde o chybu elektrickej siete, to sa ti snaží vyššia moc povedať že sa máš uvoľniť a naladiť do rytmu.',
+      'Napravo od vchodu stojí Alzabox — každých pár minút ho obsluží robot, zdvihne zásielku alebo odloží novú. Treba mať Subscription. Samozrejme.',
+      'Nad dverami visí stará neonová ryba, holografická, otvára ústa donekonečna.',
+      'Neóny blikajú. Nie je to chyba elektrickej siete — to sa ti vyššia moc snaží povedať, aby si sa uvoľnil a naladil do rytmu.',
       '',
       'Prvá vec ktorú pocítiš je teplo. Každá verejná budova v meste reguluje na sedemnásť stupňov.',
       'Miki bar má dvadsaťdva. Niekto to tu ohrieva schválne.',
@@ -7095,10 +7164,10 @@ var SCENES = {
     npcName: 'Lucia',
     npcImg: 'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/lucia.png',
     text: [
-      '"Tri roky som tu za týmto barom počúvala ľudí. Vieš čo som sa naučila?",',
+      '"Tri roky som tu za týmto barom počúvala ľudí. Vieš čo som sa naučila?"',
       '"Každý má svoju verziu mesta."',
-      '"Starý Miro povie ti, že Prievidza umrela keď zatvorili bane."',
-      '"Mladí čo chodia sem v piatok povedia ti, že Prievidza nikdy nežila."',
+      '"Starý Miro ti povie, že Prievidza umrela keď zatvorili bane."',
+      '"Mladí čo chodia sem v piatok ti povedia, že Prievidza nikdy nežila."',
       '"A Tomáš z M.E.C. — ten čo chodí sem v utorok večer, myslí si že ho nepoznám —',
       ' ten ti povie, že Prievidza je investičná príležitosť."',
       '"Nikto z nich nemá celkom pravdu. A nikto celkom klame."',
@@ -7106,11 +7175,11 @@ var SCENES = {
       '"Ty? Čo hovoríš ty?"',
       '"Ja hovorím, že som tu. Čo o mne hovorí viac ako chcem."',
       '',
-      '"Ľudia v bytoch M.E.C. majú internet iba cez Bane Corp. infraštruktúru.",',
+      '"Ľudia v bytoch M.E.C. majú internet len cez Bane Corp. infraštruktúru."',
       '"Každý paket, každá správa, každý hovor ide cez ich servery."',
-      '"Môj sused Ján — šesťdesiatdva, chodí hlasovať každé voľby.",',
-      '"V marci hlasoval za stranu ktorej nikdy neveril. Bol z toho zmätený.",',
-      '"Nechcel som," hovoril. "Ale prišiel som k urne a ruka išla sama."',
+      '"Môj sused Ján — šesťdesiatdva, chodí hlasovať každé voľby."',
+      '"V marci hlasoval za stranu, ktorej nikdy neveril. Bol z toho celý pomätený."',
+      '"Nechcel som," hovoril. "Prišiel som k urne a ruka išla sama."',
       '',
       '// [LOGIKA] 5G infraštruktúra. Bane Corp. siete. Biomodifikácia neurálnych receptorov',
       '// cez mikrovlnné frekvencie je teoreticky možná od roku 2041. Teoreticky. //',
@@ -7209,11 +7278,11 @@ var SCENES = {
       '',
       '// [LOGIKA] Cibuľu. O polnoci. V bare. Buď je to metafora, alebo je to presne to čo to je. //',
       '',
-      '"Nie hocijakú. Tú starú, z trhoviska. Tá čo predáva Marta — vedľa hodinára, každú stredu.",',
-      '"Bane Corp. začali pred rokom pestovať nejaké hybridné veci, geneticky.",',
+      '"Nie hocijakú. Tú starú, z trhoviska. Tá čo predáva Marta — vedľa hodinára, každú stredu."',
+      '"Bane Corp. začali pred rokom pestovať nejaké hybridné veci, geneticky."',
       '"Cibuľa má byť cibuľa, rozumiete? Nie nejaký korporátny experiment."',
       '',
-      '"Trhovisko je zatvorené. Marta odišla.",',
+      '"Trhovisko je zatvorené. Marta odišla."',
       '"Ale niekde tá cibuľa musí byť. Všetko čo bolo — niekde je."',
       '',
       '// [EMPATIA] Nehovorí o cibuli. Alebo hovorí o cibuli a zároveň o niečom inom. //',
@@ -7243,10 +7312,10 @@ var SCENES = {
       'Od stola v rohu sa ozve jeden z mladých.',
       '"Počujete? Vy starší — boli ste vonku v utorok v noci?"',
       '',
-      '"Bolo nás päť, išli sme od Jantaru domov, asi o druhej.",',
-      '"A nad Cigelkou — niečo preletelo. Ticho. Žiadny zvuk.",',
+      '"Bolo nás päť, išli sme od Jantaru domov, asi o druhej."',
+      '"A nad Cigelkou — niečo preletelo. Ticho. Žiadny zvuk."',
       '"Svetlá, ale nie ako lietadlo. Tri svetlá, trojuholník, pomalé."',
-      '"Zastavili sme auto na tej ceste pri Lesoparku.",',
+      '"Zastavili sme auto na tej ceste pri Lesoparku."',
       '"Oproti nám zastavilo auto. Dvaja chlapi. Spýtali sa nás kde je Lesopark."',
       '',
       '// [VNEM] Ruka mu jemne trasie. Nie od alkoholu — ruky opitých sa trasú inak.',
@@ -7300,7 +7369,7 @@ var SCENES = {
       'Mesto okolo neho bliká a bzučí a sleduje. On horí v plechovke a číta papierovú mapu.',
       '',
       'Keď si sadneš, povie bez toho aby sa pozrel:',
-      '"Tri roky. Kaukaz. Vrátil si sa pretože si musel, nie pretože si chcel.",',
+      '"Tri roky. Kaukaz. Vrátil si sa pretože si musel, nie pretože si chcel."',
       '"Viem to pretože ľudia čo sa vracajú pretože chcú — tí idú rovno domov. Ty si tu."',
       '"Tak začneme."',
       '',
@@ -7328,13 +7397,13 @@ var SCENES = {
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     text: [
       '// [TELO — HP] //',
-      '"Telo je nástroj. Nie chrám, nie väzenie. Nástroje sa brúsia, opravujú, skladajú keď ich zanedbáš.",',
+      '"Telo je nástroj. Nie chrám, nie väzenie. Nástroje sa brúsia, opravujú, skladajú keď ich zanedbáš."',
       '"Gym na Zagorskej. Terasy pri Bojniciach. Spánok. Jedlo."',
       '// HP max 100. Klesa bojom, hladom, nespánkom. Rastie odpočinkom, jedlom, lekárom. //',
       '',
       '// [MYSEĽ — SANITA] //',
-      '"V tomto meste existujú informácie ktoré mozog nevie spracovať bez straty.",',
-      '"Čím hlbšie pôjdeš — do tunelov, do sietí, do histórie — tým viac budeš vidieť veci ktoré nie sú pre ľudské oči.",',
+      '"V tomto meste existujú informácie ktoré mozog nevie spracovať bez straty."',
+      '"Čím hlbšie pôjdeš — do tunelov, do sietí, do histórie — tým viac budeš vidieť veci ktoré nie sú pre ľudské oči."',
       '"Sanita nie je slabosť. Je to zásobník. Keď je prázdny, prestaneš rozlišovať čo je skutočné."',
       '// SAN max 100. Klesa odhaleniami, izoláciou, Mentátom. Rastie rozhovorom, prírodou, záhradou. //',
       '',
@@ -7381,9 +7450,9 @@ var SCENES = {
     npcName: 'Druid',
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     text: [
-      '"Tunely pod Bojnicami. Sú staré. Staršie ako Bane Corp., staršie ako ja.",',
+      '"Tunely pod Bojnicami. Sú staré. Staršie ako Bane Corp., staršie ako ja."',
       '"Teraz — niečo tam je. Nie ľudia. Server farm. Alebo to čo z nej zostalo."',
-      '"LAZARUS bol zapnutý v roku 2061. Tam. Pod Bojnicami.",',
+      '"LAZARUS bol zapnutý v roku 2061. Tam. Pod Bojnicami."',
       '"Mysleli sme že je to zálohovací systém. Nebol."',
       '',
       '// [LOGIKA] Server farm pod Bojnicami. Rok 2061. Šestnásť rokov.',
@@ -7427,14 +7496,14 @@ var SCENES = {
     npcImg:  'https://raw.githubusercontent.com/Zacharko/CEO-od-Evil/main/public/images/hra/druid.png',
     text: [
       '"Kto si ty?"',
-      '"Bol som baník. Potom inžinier. Potom niekto koho M.E.C. nechcel nechať existovať.",',
+      '"Bol som baník. Potom inžinier. Potom niekto koho M.E.C. nechcel nechať existovať."',
       '"A potom som prestal byť niekto koho môžu nájsť."',
       '',
-      '"Bol som pri tom keď zapli LAZARUS. Rok 2061.",',
+      '"Bol som pri tom keď zapli LAZARUS. Rok 2061."',
       '"Server farm pod Bojnicami. Mysleli sme že je to zálohovací systém. Nebol."',
       '',
-      '"Odporúčam aby si sa naučil hackovat.",',
-      '"Nie pretože je to najefektívnejšie.",',
+      '"Odporúčam aby si sa naučil hackovat."',
+      '"Nie pretože je to najefektívnejšie."',
       '"Ale pretože LAZARUS žije v sieti a ak ho chceš vidieť, musíš vedieť kde pozerať."',
       '',
       '// [LOGIKA] Druid bol pri zapnutí LAZARU. Rok 2061. Šestnásť rokov. //',
@@ -7541,7 +7610,7 @@ var SCENES = {
       'Zahodí cigaretu. Na zápästí vidíš jazvu. Čerstvú.',
       'Chirurgickú. Nevyzerá ako nehoda.',
       '',
-      '"Záujímavé, nie?" Všimla si, že pozeráš.',
+      '"Zaujímavé, nie?" Všimla si, že pozeráš.',
       '"Dajú ti to bez pýtania. Vraj monitoring zdravia. Vraj dobrovoľné."',
       '',
       '"Nebolo."',
@@ -7572,7 +7641,7 @@ var SCENES = {
       'Ukáže zápästie.',
       '',
       '"LAZARUS nie je projekt. Je to systém. Frekvencie, biológia, poddajnosť."',
-      '"Nie smrť — niečo subtílnejšie. Ľudia prestanú klásť otázky.",',
+      '"Nie smrť — niečo subtílnejšie. Ľudia prestanú klásť otázky."',
       '"Alebo začnú hlasovať pre strany, ktorým nikdy neverili."',
       '',
       '"O štvrtej ráno sa spustí druhá fáza. Potom je neskoro."',
@@ -7599,8 +7668,8 @@ var SCENES = {
       '"Pavel Oravec. FRI, laboratórium B7."',
       '',
       'Odmlčí sa. Pozrie na fontánu.',
-      '"Viem, že to znie ako konšpirácia. Sama som si to hovorila, kým som sedela v čakárni",',
-      '"a pozerala na plakát: DOBROVOĽNÝ MONITORING = ZDRAVŠIA KOMUNITA."',
+      '"Viem, že to znie ako konšpirácia. Sama som si to hovorila — kým som sedela v čakárni',
+      ' a pozerala na plakát: DOBROVOĽNÝ MONITORING = ZDRAVŠIA KOMUNITA."',
       '"Podpísala som. Lebo čo iné si robí človek v čakárni?"',
       '',
       '"Konšpirácie majú jeden problém: niekedy sú pravda."',
@@ -8209,7 +8278,12 @@ var SCENES = {
       { text:'[B] Ísť na poštu',            next:'posta' },
       { text:'[C] Ísť do Jantaru',         next:'loc_jantar' },
       { text:'[D] Ísť na FRI',             next:'loc_fri' },
-    ]
+    
+      { text:'[E] 🗣 Pýtať sa čo sa deje v meste',       next:'loc_namestie_deje' },
+      { text:'[F] 🌿 Pýtať sa o jaskyne — varovanie',    next:'loc_namestie_jaskyne',
+        cond:function(){ return !!S.flags['jaskyne_info']; }, condFail:'' },
+      { text:'[G] 📁 Opýtať sa na LAZARUS reakciu',      next:'loc_namestie_lazarus',
+        cond:function(){ return !!S.flags['lazarus_pozna']; }, condFail:'' },]
   },
 
   loc_namestie_muž: {
@@ -8261,7 +8335,13 @@ var SCENES = {
         cond: function(){ return !!S.flags['michal_stretnuty']; },
         condFail: '' },
       { text:'[F] Odísť',                     next:'start' },
-    ]
+    
+      { text:'[G] 🗣 Rozprávať sa s Luciou (podrobne)',  next:'loc_miki_lucia' },
+      { text:'[H] 🔍 Opýtať sa na podozrivé autá',        next:'loc_miki_spz',
+        cond:function(){ return !!S.flags['miki_spz_videl']; }, condFail:'' },
+      { text:'[I] 🌿 Spýtať sa na jaskyne',              next:'loc_miki_jaskyne' },
+      { text:'[J] 🔴 LAZARUS — priamo',                  next:'loc_miki_lazarus',
+        cond:function(){ return !!S.flags['lazarus_pozna']; }, condFail:'' },]
   },
 
   loc_miki_hazard: {
@@ -8490,7 +8570,10 @@ var SCENES = {
     choices: [
       { text:'[A] Zobrať zvyšky (Hlad -35, HP +5)',   next:'loc_squash_jedlo' },
       { text:'[B] Odísť',                              next:'start' },
-    ]
+    
+      { text:'[C] 🗣 Opýtať sa o FRI a nočné udalosti',  next:'loc_squash_fri' },
+      { text:'[D] 🌿 Pýtať sa na Vtáčnik',               next:'loc_squash_vtacnik' },
+      { text:'[E] 📋 Informácie o okolí',                next:'loc_squash_info' },]
   },
 
   loc_squash_jedlo: {
@@ -8531,7 +8614,10 @@ var SCENES = {
       { text:'[A] Ísť späť do centra',            next:'start' },
       { text:'[B] Zjesť doma (Hlad -30)',          next:'loc_domov_jedlo' },
       { text:'[C] Oddychovať (HP +15, SAN +5)',    next:'loc_domov_oddych' },
-    ]
+    
+      { text:'[D] 💬 Rozprávať sa s Evou',               next:'loc_domov_rozpravat' },
+      { text:'[E] 🆘 Požiadať Evu o pomoc',              next:'loc_domov_pomoc',
+        cond:function(){ return !!S.flags['eva_zoznamena']; }, condFail:'' },]
   },
 
   loc_domov_jedlo: {
@@ -8588,7 +8674,9 @@ var SCENES = {
       { text:'[C] Preskúmať čakáreň',           next:'loc_stanica_cakaren' },
       { text:'[D] Automat — káva (20₿ | +SAN)', next:'loc_stanica_kava' },
       { text:'[E] Odísť',                        next:'start' },
-    ]
+    
+      { text:'[G] 🕵 Pristúpiť k agentovi Delta',        next:'loc_stanica_delta',
+        cond:function(){ return !!S.flags['delta_info']; }, condFail:'' },]
   },
 
   loc_stanica_kava: {
@@ -12414,6 +12502,1269 @@ var SCENES = {
     choices: [{ text: '← Späť k Mŕtvemu Ramenu', next: 'fac_rybari_rameno' }]
   },
 
+
+  // ── SCÉNY Z PREDCHÁDZAJÚCEJ VERZIE (Lucia, Jantar, Námestie, Squash, Stanica, FRI, Domov) ──
+
+  loc_miki_lucia: {
+    name: 'Miki Bar // Lucia',
+    art: '🥃',
+    text: [
+      '<b>Lucia Horáková</b>. Barmanka.',
+      'Pohybuje sa za barom ako keby bar patril jej — nie Igorovi.',
+      'Keď sa pozrieš, neutečie ti pohľadom. Drží ho.',
+      '',
+      '"Čo dáš?" — Nie pozdrav. Nie otázka. Rozsudok.',
+      '',
+      '<i>// ELEKTROMORÁLKA: Táto žena videla veľa. A zabudla ešte viac. //',
+    ],
+    choices: [
+      { text:'[A] „Slivovicu."',                               next:'loc_miki_lucia_slivo' },
+      { text:'[B] „Nič. Len chcem vedieť — čo si ty za človek?"', next:'loc_miki_lucia_kto' },
+      { text:'[C] „Pracuješ tu dlho?"',                        next:'loc_miki_lucia_dlho' },
+      { text:'[D] „Počul si o LAZARUS protokole?"',            next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Ešte na to nie si pripravený.' },
+      { text:'[E] Odísť',                                      next:'loc_miki' },
+    ]
+  },
+
+  loc_miki_lucia_co_hladam: {
+    name: 'Miki Bar // Lucia — Čo Hľadáš',
+    art: '🔍',
+    text: [
+      'Odvrátila sa. Utiera pohár — ten istý pohár, tretíkrát.',
+      '"Niekto — alebo niečo."',
+      '"Možno oboje."',
+      '"Ľudia čo hľadajú odpovede majú taký pohľad."',
+      '"Unavený. Ale nie od spánku."',
+      '',
+      '"Videla som takýchto ľudí v záchranke."',
+      '"Raz. Pred trom rokmi."',
+      '"Hovoril divné veci. O signáloch. O frekvenciách."',
+      '"Pol roka nato — nekrológ v novinách."',
+      '',
+      'Otočí sa. Pozrie na teba priamo.',
+      '"Dávaj si pozor čo hľadáš. Niekedy to nájdeš."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-5); updateStats(); gainXP(15); S.flags['lucia_varovanie']=true; },
+    choices: [
+      { text:'[A] „Ten muž — čo si zistila?"',      next:'loc_miki_lucia_pacient' },
+      { text:'[B] „Nájdem to aj tak. Pomôžeš?"',    next:'loc_miki_lucia_pomoc' },
+      { text:'[C] Objednáš ďalšiu slivovicu',       next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_dakujem: {
+    name: 'Miki Bar // Lucia — Rozlúčenie',
+    art: '🚪',
+    text: [
+      '"Ďakujem."',
+      '',
+      'Lucia si vezme pohár — ten čo utierala celý večer.',
+      'Konečne ho odloží na policu.',
+      '"Vráť sa," hovorí.',
+      '"Ak budeš môcť."',
+      '',
+      'Nie: "Veľa šťastia."',
+      'Nie: "Daj si pozor."',
+      'Len: "Vráť sa."',
+      '',
+      '<i>// Niekedy je to dostatok. //',
+    ],
+    onEnter: function(){ S.san=Math.min(100,S.san+6); updateStats(); gainXP(10); },
+    choices: [
+      { text:'[A] Ísť na operáciu', next:'start' },
+      { text:'[B] Zostať v bare',   next:'loc_miki' },
+    ]
+  },
+
+  loc_miki_lucia_dlho: {
+    name: 'Miki Bar // Lucia — Dĺžka',
+    art: '🕰️',
+    text: [
+      '"Tri roky." Ani sa nad tým nezamyslí.',
+      '"Igor ma zobral keď som potrebovala prácu a on potreboval niekoho,',
+      'kto sa nebojí nočných zákazníkov."',
+      '',
+      '"Nočných?" opýtaš sa.',
+      '',
+      '"Tých čo prichádzajú po jednej."',
+      '"Nie za drinkom."',
+      'Pohľad na dvere — rýchly, zvykový.',
+      '"Za informáciami."',
+      '',
+      '<i>// Lucia vie viac ako hovorí. Čo nepovie Igorovi — povie poháriku. //',
+    ],
+    onEnter: function(){ gainXP(10); S.flags['lucia_noc_hint']=true; },
+    choices: [
+      { text:'[A] „Aké informácie?"',                next:'loc_miki_lucia_info_noc' },
+      { text:'[B] „A ty — dávaš im čo chcú?"',      next:'loc_miki_lucia_rola' },
+      { text:'[C] Objednáš slivovicu',               next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_dovody: {
+    name: 'Miki Bar // Lucia — Dôvody',
+    art: '🌑',
+    text: [
+      '"Dôvody." Naleje si sama. Malý lok.',
+      '"Záchranárka vidí ľudí na najhoršom mieste ich života."',
+      '"Tri roky. Každý deň. Potom jeden deň — nemôžeš zastaviť."',
+      '"Len stojíš a pozeráš."',
+      '"A systém ti povie, že si urobila čo si mohla."',
+      '',
+      '"Bar je jednoduchší." Pohľad na pohár.',
+      '"Tu si sám zodpovedný za to čo dáš."',
+      '"Nie za to čo nevezmeš."',
+      '',
+      '<i>// EMPATHY: Hanba a úľava v rovnakom pohári. //',
+    ],
+    onEnter: function(){ gainXP(12); S.flags['lucia_burnout']=true; },
+    choices: [
+      { text:'[A] „Čo si nemohla zastaviť?"',    next:'loc_miki_lucia_pacient' },
+      { text:'[B] Mlčíš. Rozumieš.',             next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_info_noc: {
+    name: 'Miki Bar // Lucia — Nočné Informácie',
+    art: '🌙',
+    text: [
+      '"Aké informácie." Tón: nie otázka. Registrácia.',
+      '"Závisí čo potrebujú."',
+      '"Niektorí chcú vedieť či niekto tu sedel. Kedy odišiel."',
+      '"Iní chcú vedieť — čo povedal."',
+      '"Barmanka je neviditeľná. Ľudia zabudnú, že tu som."',
+      '"A ja nezabúdam."',
+      '',
+      'Utiera pohár. Ten istý pohár.',
+      '"Čo chceš vedieť ty?"',
+    ],
+    onEnter: function(){ gainXP(8); },
+    choices: [
+      { text:'[A] „Čo vieš o zákazníkoch po jednej ráno?"', next:'loc_miki_lucia_zakaznik' },
+      { text:'[B] „Čo vieš o Vtáčniku?"',                   next:'loc_miki_lucia_vtacnik' },
+      { text:'[C] „Vieš o LAZARUS?"',                        next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Toto slovo tu nespomínaj nadarmo.' },
+    ]
+  },
+
+  loc_miki_lucia_kedy: {
+    name: 'Miki Bar // Lucia — Kedy',
+    art: '📅',
+    text: [
+      '"Kedy." Zamyslí sa. "Trinásty október. Štvrtok."',
+      '"Ráno. Piata hodina — ešte šero."',
+      '"Presne o mesiac neskôr — zmizol Tibor Mach."',
+      '"Elektrikár. Pracoval na Vtáčniku."',
+      '"Poznala som ho — chodil sem raz za týždeň."',
+      '"Vždy sám. Vždy rovnaký stôl."',
+      '"Posledný raz tu sedel tri dni pred tým ako zmizol."',
+      '"Povedal: \'Lucia, ak sa stratím — v šuflíku za barom je obálka.\'"',
+      '',
+      'Odmlčí sa.',
+      '"Obálka tam stále je."',
+    ],
+    onEnter: function(){ gainXP(25); S.flags['lucia_obalka']=true; addLog('Stopa: obálka od Tibora Macha za barom!','ok'); showNotif('Tibor Mach zanechal obálku Lucii!'); },
+    choices: [
+      { text:'[A] „Môžem vidieť tú obálku?"', next:'loc_miki_lucia_obalka_otvor' },
+      { text:'[B] „Prečo si to nepovedala skôr?"', next:'loc_miki_lucia_preco_mlcala' },
+    ]
+  },
+
+  loc_miki_lucia_klamstvo: {
+    name: 'Miki Bar // Lucia — Klamstvo',
+    art: '😶',
+    text: [
+      '"Len zákazník." Opakuje pomaly.',
+      'Pohár ide na policu. Utierka na pult.',
+      '"Iste."',
+      '',
+      'Otočí sa chrbtom.',
+      '"Ďalší drink bude sto kreditov."',
+    ],
+    onEnter: function(){ addLog('Lucia ti neverí. Cena zdvojnásobená.','warn'); },
+    choices: [
+      { text:'[A] Povedať pravdu',           next:'loc_miki_lucia_pravda' },
+      { text:'[B] Odísť',                   next:'loc_miki' },
+    ]
+  },
+
+  loc_miki_lucia_kto: {
+    name: 'Miki Bar // Lucia — Kto si',
+    art: '🌑',
+    text: [
+      'Zastaví sa. Položí utierku.',
+      '"Zaujímavá otázka. Zvyčajne pýtajú čo mám, nie kto som."',
+      '',
+      'Opiera sa o bar. Pozerá na teba — nie ako na zákazníka.',
+      '"Lucia. Horáková. Barmanka, ak musíš mať titul."',
+      '"Predtým: záchranárka na záchranke v Bojniciach. Tri roky."',
+      '"Potom — jeden večer, jeden pacient, jeden prípad čo sa uzavrel príliš rýchlo."',
+      '"A tu som."',
+      '',
+      '<i>// EMPATHY: Za poslednou vetou je niekoľko rokov hniezda. //',
+    ],
+    onEnter: function(){ gainXP(12); S.flags['lucia_historia']=true; },
+    choices: [
+      { text:'[A] „Čo sa stalo s tým pacientom?"', next:'loc_miki_lucia_pacient' },
+      { text:'[B] „Prečo bar? Prečo práve sem?"',  next:'loc_miki_lucia_preco' },
+      { text:'[C] Objednáš slivovicu',             next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_lazarus: {
+    name: 'Miki Bar // Lucia — LAZARUS',
+    art: '⚠️',
+    text: [
+      'Utierka padne na bar.',
+      '"LAZARUS." Tichšie ako čokoľvek predtým.',
+      '',
+      '"Ten muž z nemocnice — pred tým ako ho prepustili —"',
+      '"— šeptal to slovo. Znova a znova."',
+      '"Myslela som, že blúzni."',
+      '',
+      '"Potom som to počula ešte raz. Tu. Zákazník po jednej ráno."',
+      '"Hovoril do telefónu. Myslel, že nič nepočujem."',
+      '"\'LAZARUS uzol aktívny. Štvrtá hodina potvrdzuje.\'"',
+      '',
+      '"Neviem čo je LAZARUS."',
+      '"Ale viem, že ľudia čo ho spomínajú — miznú, alebo zomierajú."',
+      '"Takže tebe — tebe to poviem iba raz:"',
+      '"Ak chceš žiť — zabudni na to slovo."',
+      '"Ak nechceš —" Pohľad dolu na bar. "— obálka je tam."',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['lucia_lazarus_vie']=true; addLog('Lucia potvrdila LAZARUS. Uzol. Štvrtá hodina.','ok'); if(!S.flags['lucia_obalka']) S.flags['lucia_obalka']=true; },
+    choices: [
+      { text:'[A] „Obálka — ukáž mi ju."',              next:'loc_miki_lucia_kedy' },
+      { text:'[B] „Čo si videla na Vtáčniku?"',         next:'loc_miki_lucia_vtacnik' },
+      { text:'[C] „Kto bol ten zákazník po jednej?"',   next:'loc_miki_lucia_zakaznik' },
+    ]
+  },
+
+  loc_miki_lucia_mlcanie: {
+    name: 'Miki Bar // Lucia — Mlčanie',
+    art: '🕯️',
+    text: [
+      'Mlčíte.',
+      'Bar je takmer prázdny. Igor niekde vzadu.',
+      '',
+      'Lucia utiera ten istý pohár. Ty piješ.',
+      '',
+      'Po chvíli: "Je doskoré, alebo neskoro?"',
+      '"Závisí od toho, odkiaľ idieš," odpovieš.',
+      '',
+      '"To je múdra odpoveď," hovorí.',
+      '"Alebo zbabelá."',
+      '"Závisí od toho, odkiaľ idieš," zopakuje tvoje slová.',
+      '"Rovnaká odpoveď. Iný problém."',
+    ],
+    onEnter: function(){ S.san=Math.min(100,S.san+8); updateStats(); gainXP(5); addLog('SAN +8. Chvíľa ticha v bare.','ok'); },
+    choices: [
+      { text:'[A] Odísť',                next:'loc_miki' },
+      { text:'[B] „Ešte jedno."',        next:'loc_miki_lucia_slivo' },
+    ]
+  },
+
+  loc_miki_lucia_nahlasila: {
+    name: 'Miki Bar // Lucia — Nahlásenie',
+    art: '📋',
+    text: [
+      '"Nahlásila." Krátky smiech — bez humoru.',
+      '"Primárovi. Riaditeľovi. Hygienickej stanici."',
+      '"A potom ma povolali do kancelárie."',
+      '"Muž v obleku. Nie lekár. Nie z nemocnice."',
+      '"Povedal mi, že som unavená. Že pracujem príliš tvrdo."',
+      '"Že by som si mala vziať dovolenku."',
+      '"A že môj pracovný kontrakt — sa dá prehodnotiť."',
+      '',
+      '"Na druhý deň mi povedali, že záchranársky post bol zrušený."',
+      '"Rozpočtové škrty."',
+      '"Samozrejme."',
+      '',
+      '<i>// AUTHORITY: Systém niekedy nepotrebuje pohroziť. Stačí naznačiť. //',
+    ],
+    onEnter: function(){ gainXP(18); S.san=Math.max(0,S.san-5); updateStats(); S.flags['lucia_vyhodena']=true; addLog('Lucia bola umlčaná. Stopa Vtáčnik-nemocnica.','ok'); },
+    choices: [
+      { text:'[A] „Ten muž v obleku — pamätáš si ho?"', next:'loc_miki_lucia_obleceny' },
+      { text:'[B] „Čo vieš o LAZARUS?"',               next:'loc_miki_lucia_lazarus' },
+      { text:'[C] Mlčíš. Dosť si počul.',               next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_obalka_otvor: {
+    name: 'Miki Bar // Tibora Obálka',
+    art: '📬',
+    text: [
+      'Vytrhne obálku zo šuflíka. Neotvorenú.',
+      '"Nechcela som vedieť čo v nej je."',
+      '"Ak viem — som zapojená. Ak neviem — som len barmanka."',
+      '',
+      'Podá ti ju.',
+      '"Teraz ty rozhoduj."',
+      '',
+      'Otvoríš. Vnútri — ručne písaná stránka a kľúč.',
+      '"UZOL 7 — VTÁČNIK OMEGA CORE. Prístupový kód: <b>DELTA-9-ECHO</b>."',
+      '"Záložný vstup — bočné dvere bunkra. Ak sa niečo stane."',
+      '<i>// Získal si kód DELTA-9-ECHO a kľúč záložného vstupu. //',
+    ],
+    onEnter: function(){ gainXP(35); addItem('keycard'); S.flags['delta9echo']=true; addLog('Záložný kód DELTA-9-ECHO. Keycard záložný vstup.','ok'); showNotif('Tibor Mach: kód DELTA-9-ECHO + keycard bočného vstupu!'); },
+    choices: [
+      { text:'[A] „Ďakujem, Lucia. Toto zachráni životy."', next:'loc_miki_lucia_dakujem' },
+      { text:'[B] Ísť do bunkra',                          next:'bunker',
+        cond:function(){ return hasItem('spis'); }, condFail:'Potrebuješ aj spis OMEGA.' },
+    ]
+  },
+
+  loc_miki_lucia_obleceny: {
+    name: 'Miki Bar // Lucia — Muž v Obleku',
+    art: '🕵️',
+    text: [
+      '"Pamätám si každého, koho stretnem. Profesionálna deformácia."',
+      '"Vysoký. Šedivý. Hovoril bez prízvuku — čo je samo o sebe prízvuk."',
+      '"A mal — tu."',
+      'Ukazuje za ľavé ucho.',
+      '"Jemná jazva. Operačná. Nie úraz."',
+      '"Implantát?"',
+      '"Možno." Pozrie na teba. "Ty tiež sleduješ uši ľudí?"',
+      '',
+      '<i>// PERCEPTION: Koordinátor LAZARUS. Alebo niekto z jeho tímu. //',
+    ],
+    onEnter: function(){ gainXP(25); S.flags['lucia_jazva']=true; addLog('Stopa: jazva za uchom = implantát. Koordinátor?','ok'); showNotif('Nová stopa: jazva za uchom — implantát LAZARUS?'); },
+    choices: [
+      { text:'[A] „Vieš kde ten muž pracuje?"',  next:'loc_miki_lucia_lazarus' },
+      { text:'[B] „Ďakujem. Toto je dôležité."', next:'loc_miki_lucia_dakujem' },
+    ]
+  },
+
+  loc_miki_lucia_otec: {
+    name: 'Miki Bar // Lucia — Otec',
+    art: '🌲',
+    text: [
+      '"Otec." Krátka pauza.',
+      '"Je živý. V Zliechove. Robí slivovicu a číta noviny."',
+      '"Hovorí, že noviny klamú."',
+      '"A slivovica nikdy."',
+      '"Asi má pravdu v oboch prípadoch."',
+      '',
+      'Malý úsmev. Prvý skutočný úsmev od začiatku rozhovoru.',
+      '"Chodím k nemu raz za mesiac."',
+      '"On pýta: \'Kedy prestaneš robiť v bare?\'"',
+      '"Ja pýtam: \'Kedy prestaneš robiť slivovicu?\'"',
+      '"Nikto z nás neodpovie."',
+      '"Tak si dáme pohár a pozrieme sa na lúku."',
+    ],
+    onEnter: function(){ S.san=Math.min(100,S.san+5); updateStats(); gainXP(8); },
+    choices: [
+      { text:'[A] „Daj mi ďalšiu slivovicu."',    next:'loc_miki_lucia_slivo' },
+      { text:'[B] Vrátiť sa k témam',              next:'loc_miki_lucia_preco' },
+    ]
+  },
+
+  loc_miki_lucia_pacient: {
+    name: 'Miki Bar // Lucia — Pacient',
+    art: '🚑',
+    text: [
+      'Dlhá pauza. Nie preto, že nechce povedať.',
+      'Preto, že ešte vždy hľadá správne slová.',
+      '',
+      '"Muž. Päťdesiat rokov. Priviezli ho z Vtáčnika."',
+      '"Elektromagnetická expozícia — tak to napísali."',
+      '"Hovoril o zvukoch. O frekvenciách čo necítil uchami."',
+      '"O tom, že vidí siete — nie pavúčie — niečo iné. V ľuďoch."',
+      '',
+      '"Diagnóza: akútna psychóza. Liečba: medikamenty a mlčanie."',
+      '"O týždeň prepustený. Za mesiac mŕtvy — mozgová príhoda."',
+      '"Päťdesiatjeden rokov."',
+      '',
+      '<i>// LOGIC: To isté ako Evin otec. Rovnaký vek. Rovnaké miesto. //',
+    ],
+    onEnter: function(){ gainXP(20); S.san=Math.max(0,S.san-8); updateStats(); S.flags['lucia_pacient_vtacnik']=true; addLog('SAN -8. Vzorec: Vtáčnik — expozícia — smrť.','warn'); },
+    choices: [
+      { text:'[A] „Nahlásila si to?"',               next:'loc_miki_lucia_nahlasila' },
+      { text:'[B] „Prečo si prišla sem?"',           next:'loc_miki_lucia_preco' },
+      { text:'[C] „Vieš o LAZARUS?"',                next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && (S.flags['marek_kod'] || S.flags['lucia_pacient_vtacnik']); }, condFail:'...' },
+    ]
+  },
+
+  loc_miki_lucia_pomoc: {
+    name: 'Miki Bar // Lucia — Pomoc',
+    art: '🤝',
+    text: [
+      'Dlhá pauza.',
+      '"Pomôcť." Opakuje slovo ako keby ho skúšala.',
+      '',
+      '"Viem jedno miesto. Kde tí zákazníci čo prichádzajú po jednej — kde idú potom."',
+      '"Nie domov. Smerom na Vtáčnik."',
+      '"Chodník pri cintoríne vedie ku starému lesníkovi."',
+      '"Za posledné dva mesiace som videla tri autá bez ŠPZ ísť tou cestou."',
+      '"Vracali sa vždy. Ľudia čo išli s nimi — nie vždy."',
+      '',
+      '"To je všetko čo viem." Pohľad ku dverám. "To je všetko čo ti poviem."',
+    ],
+    onEnter: function(){ gainXP(22); S.flags['lucia_cesta_vtacnik']=true; addLog('Stopa od Lucie: cesta cez cintorín na Vtáčnik.','ok'); showNotif('Lucia: cesta ku Vtáčniku cez cintorín'); },
+    choices: [
+      { text:'[A] Ísť do jaskýň (Vtáčnik)',         next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Potrebuješ baterku.' },
+      { text:'[B] „Ďakujem. Naozaj."',              next:'loc_miki_lucia_dakujem' },
+    ]
+  },
+
+  loc_miki_lucia_pravda: {
+    name: 'Miki Bar // Lucia — Pravda',
+    art: '💡',
+    text: [
+      'Povedáš jej. Nie všetko. Dosť.',
+      '',
+      'Keď skončíš — mlčí.',
+      '"Tak." Vydýchne. "Nakoniec niekto."',
+      '"Vedela som, že raz niekto príde a spýta sa správne otázky."',
+      '"Len som nevedela — kedy."',
+      '"A dúfala som, že to bude skôr."',
+      '',
+      '"Tibor mal pravdu. Existuje obálka."',
+      '"A ja ti ju dám."',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['lucia_dovera']=true; addLog('Lucia ti dôveruje. Prístup k obálke.','ok'); },
+    choices: [
+      { text:'[A] „Obálka — kde je?"', next:'loc_miki_lucia_obalka_otvor' },
+    ]
+  },
+
+  loc_miki_lucia_preco: {
+    name: 'Miki Bar // Lucia — Prečo Sem',
+    art: '🌧️',
+    text: [
+      '"Prečo sem." Zopakuje otázku ako keby ju skúšala na váhu.',
+      '',
+      '"Prievidza je dosť malá na to, aby si vždy vedel čo sa deje."',
+      '"A dosť veľká na to, aby ti nikto neveril keď to povieš."',
+      '"Ideálna kombinácia pre niekoho ako som ja."',
+      '',
+      '"Igor nepýta otázky. Bar zavrie o štvrtej."',
+      '"A každý, kto sem príde — príde z dôvodu. Nie zo zvyku."',
+      '"Zákazníci zo zvyku chodia domov."',
+      '"Tí čo sem chodia — hľadajú niečo."',
+      '',
+      '"Ty tiež."',
+      'Nie otázka.',
+    ],
+    onEnter: function(){ gainXP(10); },
+    choices: [
+      { text:'[A] „Čo hľadám podľa teba?"',       next:'loc_miki_lucia_co_hladam' },
+      { text:'[B] Objednáš slivovicu',             next:'loc_miki_lucia_slivo' },
+      { text:'[C] „Čo vieš o noci na Vtáčniku?"', next:'loc_miki_lucia_vtacnik' },
+    ]
+  },
+
+  loc_miki_lucia_preco_mlcala: {
+    name: 'Miki Bar // Lucia — Prečo Mlčala',
+    art: '🤐',
+    text: [
+      'Nezamkne pohľad. Neodvracia sa.',
+      '"Preto, že som sa bála."',
+      '"Nie za seba. Za Tibora som sa bála pred mesiacom."',
+      '"Teraz je Tibor preč. A báť sa za mŕtveho nemá zmysel."',
+      '"Zostávam báť sa za živých."',
+      '',
+      'Pozrie na teba.',
+      '"Ty si živý. Zatiaľ."',
+      '"A môžeš ísť tam kde ja nemôžem."',
+      '"Tak choď."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-5); updateStats(); gainXP(10); },
+    choices: [
+      { text:'[A] Ísť do jaskýň',  next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky sa nevrátiš.' },
+      { text:'[B] Zostávaš chvíľu', next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_rola: {
+    name: 'Miki Bar // Lucia — Jej Rola',
+    art: '🎭',
+    text: [
+      '"Dávam im čo chcú?" Krátky pohľad. "Niekedy."',
+      '"Drink — áno. Informáciu — závisí od toho, komu."',
+      '"Naposledy som dala \'informáciu\' chlapovi čo mi klamal do očí."',
+      '"Povedal, že hľadá stratenú priateľku."',
+      '"Mal prsteň na prste."',
+      '"Dostal fľašu minerálky a adresu záchranky."',
+      '',
+      '"Kto si ty?"',
+      'Priamy pohľad. Čaká.',
+      '<i>// COMPOSURE: Táto žena číta klamstvo ako text. //',
+    ],
+    onEnter: function(){ gainXP(10); },
+    choices: [
+      { text:'[A] Povedať pravdu',              next:'loc_miki_lucia_pravda' },
+      { text:'[B] „Som len zákazník."',         next:'loc_miki_lucia_klamstvo' },
+      { text:'[C] „Som ten, kto zastaví LAZARUS."', next:'loc_miki_lucia_lazarus',
+        cond:function(){ return S.flags && S.flags['marek_kod']; }, condFail:'Nie si ešte pripravený.' },
+    ]
+  },
+
+  loc_miki_lucia_slivo: {
+    name: 'Miki Bar // Lucia — Slivovica',
+    art: '🥃',
+    text: [
+      'Naleje bez toho, aby sa pozrela na pohár. Vie kde je.',
+      '"Päťdesiat." Pohár pristane pred tebou bez rozpláchnutia.',
+      '',
+      'Slivovica je dobrá. Príliš dobrá na to, aby bola od Igora.',
+      '"Tvoja?" spýtaš sa.',
+      '',
+      'Prvý raz sa usmiala. Nie priateľsky — skôr ako keby si povedal niečo správne.',
+      '"Domáca. Z dediny pri Zliechove."',
+      '"Môj otec robil. Teraz robím ja."',
+      '"On prestal. Z iných dôvodov ako ja začala."',
+    ],
+    onEnter: function(){
+      if(S.money>=50){ S.money-=50; S.san=Math.min(100,S.san+10); updateMoneyDisplay(); updateStats(); addLog('Luciina slivovica: -50₿, SAN +10.','ok'); gainXP(8); S.flags['lucia_slivo']=true; }
+      else { addLog('Nemáš dosť.','warn'); }
+    },
+    choices: [
+      { text:'[A] „Z akých dôvodov si začala ty?"',    next:'loc_miki_lucia_dovody' },
+      { text:'[B] „Tvoj otec — čo mu je?"',            next:'loc_miki_lucia_otec' },
+      { text:'[C] Mlčíš a piješ',                      next:'loc_miki_lucia_mlcanie' },
+    ]
+  },
+
+  loc_miki_lucia_vtacnik: {
+    name: 'Miki Bar // Lucia — Vtáčnik',
+    art: '⛰️',
+    text: [
+      '"Vtáčnik." Pohár siahol na policu a zastal tam.',
+      '',
+      '"Chodím tam behať. Chodila som. Prestala som pred rokom."',
+      '"Nie preto, že by som bola lenivá."',
+      '"Preto, že raz ráno — pri východe slnka —"',
+      '"— zazrela som na vrchole skupinu ľudí."',
+      '"Stáli v kruhu. Ticho. Nikto sa nehýbal."',
+      '"Jeden sa otočil a pozrel dolu. Na mňa."',
+      '"Príliš ďaleko na to, aby som videla tvár."',
+      '"Dosť blízko na to, aby som vedela — nebol tam náhodou."',
+      '',
+      '<i>// ENCYCLOPEDIA: Kruhové zhromaždenia pri uzlových bodoch. LAZARUS aktivácie? //',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['lucia_vtacnik_kruh']=true; S.san=Math.max(0,S.san-8); updateStats(); addLog('SAN -8. Lucia videla ceremóniu na Vtáčniku.','warn'); },
+    choices: [
+      { text:'[A] „Vieš o LAZARUS protokole?"',     next:'loc_miki_lucia_lazarus' },
+      { text:'[B] „Kedy presne si to videla?"',     next:'loc_miki_lucia_kedy' },
+      { text:'[C] „Nahlásila si to?"',              next:'loc_miki_lucia_nahlasila' },
+    ]
+  },
+
+  loc_miki_lucia_zakaznik: {
+    name: 'Miki Bar // Lucia — Zákazník',
+    art: '👤',
+    text: [
+      '"Zákazník." Premýšľa.',
+      '"Nevidela som ho predtým. Ani potom."',
+      '"Vysoký. Šedivý. Hovoril bez prízvuku."',
+      '"A mal tu —"',
+      'Ukazuje za ľavé ucho.',
+      '"Jazvu. Operačnú."',
+      '"Vtedy som si myslela — implantát pre sluch."',
+      '"Teraz si myslím niečo iné."',
+      '',
+      '<i>// Ten istý muž ako z nemocnice. Koordinátor. //',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['lucia_jazva']=true; S.flags['koordinator_jazva']=true; addLog('Koordinátor LAZARUS: jazva za uchom. Implantát.','ok'); showNotif('Koordinátor identifikovaný: jazva, sivý, bez prízvuku'); },
+    choices: [
+      { text:'[A] Ísť do bunkra',                next:'bunker',
+        cond:function(){ return hasItem('keycard') && hasItem('spis'); }, condFail:'Potrebuješ keycard + spis.' },
+      { text:'[B] „Ďakujem. Toto je kľúčové."',  next:'loc_miki_lucia_dakujem' },
+    ]
+  },
+
+  loc_miki_cakat: {
+    name: 'Miki Bar // Čakanie',
+    art: '🍺',
+    text: [
+      'Sadneš si. Igor pokračuje v utieraní.',
+      'Päť minút. Desať.',
+      '',
+      'Nakoniec položí pohár a sadne si oproti.',
+      '"Si tvrdohlavý. To sa mi páči."',
+      '"Čo chceš?"',
+    ],
+    choices: [
+      { text:'[A] „Informácie o nočných udalostiach."', next:'loc_miki_noc' },
+      { text:'[B] „Čo sa rieši v Prievidzi?"',          next:'loc_miki_riesenia' },
+      { text:'[C] Odísť',                               next:'loc_namestie' },
+    ]
+  },
+
+  loc_miki_detektor: {
+    name: 'Miki Bar // EMF Detektor',
+    art: '📡',
+    text: [
+      '"Detektor." Igor sa zdvihne a odíde do zadnej miestnosti.',
+      'Počuješ šúchanie, klopanie o steny, prípadne nadávky.',
+      '',
+      'Vráti sa s krabicou pokrytou prachom.',
+      '"Dostal som to pred dvoma rokmi od elektrikára čo tu býval."',
+      '"Hovoril, že v niektorých častiach mesta meria prístroj šesťkrát viac ako normálne."',
+      '"Potom elektrikár odišiel. Zanechal toto."',
+      '',
+      'Podá ti detektor.',
+      '"Ber. Ak nájdeš čo hľadáš, povedz mi."',
+    ],
+    onEnter: function(){ addItem('detektor'); gainXP(15); addLog('EMF detektor získaný od Igora.','ok'); },
+    choices: [
+      { text:'[A] Poďakovať a ísť k veži',   next:'banovce_cesta' },
+      { text:'[B] Zostať, pýtať sa ďalej',   next:'loc_miki_lazarus' },
+    ]
+  },
+
+  loc_miki_drink: {
+    name: 'Miki Bar // Drink',
+    art: '🥃',
+    text: [
+      'Igor sa konečne otočí. Pozrie na teba. Pozrie na pult.',
+      '"Slivovica alebo voda."',
+      '"Nič iné nemáme." — Bar má za sebou pätnásť druhov whiskey.',
+      '',
+      'Kúpiš slivovicu. Päťdesiat kreditov.',
+      'Dáš ju na pult. Igor ju zoberie späť a vypije sám.',
+      '',
+      '"Dobrá." Sadne si. "Teraz hovor."',
+    ],
+    onEnter: function(){
+      if(S.money>=50){ S.money-=50; S.san=Math.min(100,S.san+8); updateMoneyDisplay(); updateStats(); addLog('Slivovica: -50₿, SAN +8.','ok'); }
+      else { addLog('Nemáš dosť peňazí na drink.','warn'); }
+    },
+    choices: [
+      { text:'[A] „Čo sa deje v meste v noci?"',  next:'loc_miki_noc' },
+      { text:'[B] „Vieš o LAZARUS?"',             next:'loc_miki_lazarus' },
+    ]
+  },
+
+  loc_miki_jaskyne: {
+    name: 'Miki Bar // Jaskyne Pod Vtáčnikom',
+    art: '🕯️',
+    text: [
+      '"Svetlá pod zemou." Igor si poklepe na stôl.',
+      '"Myslel som, že som blázon. Ale mám svedka — Romana zo Squashu."',
+      '"Videli sme to istú noc, nezávisle."',
+      '',
+      '"Modré svetlo. Rytmické pulzy. Nie baterka."',
+      '"Baterka nesvieti cez zem."',
+      '',
+      '"Ak ideš tam — vezmi plynmasku. A niekoho, komu dôveruješ."',
+      '"Alebo aspoň niekoho, koho neľutuješ stratiť."',
+    ],
+    onEnter: function(){ gainXP(12); addLog('Modrá pulzácia v jaskyniach — stopa.','ok'); },
+    choices: [
+      { text:'[A] Ísť do jaskýň', next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Potrebuješ aspoň baterku.' },
+      { text:'[B] Ísť do Squashu ku Romanovi', next:'loc_squash' },
+    ]
+  },
+
+  loc_miki_lazarus: {
+    name: 'Miki Bar // LAZARUS',
+    art: '☠️',
+    text: [
+      'Igor vstane. Otočí rádio hlasnejšie.',
+      'Keď hovorí, robí to so sklonenou hlavou k stolu.',
+      '',
+      '"LAZARUS. Áno. Počul som to slovo dvakrát."',
+      '"Raz od opilého úradníka, čo tu raz spal pri stole."',
+      '"Druhý raz — od muža, čo ma prišiel varovať, aby som zabudol na to, čo som počul."',
+      '',
+      '"Ten muž mal červené oči."',
+      '"Nie metaforu. Naozaj červené."',
+      '',
+      '"Odporúčam ti: nájdi Druida. On vie viac ako ja."',
+      '"A ak ideš do jaskýň — nevracaj sa sám."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-8); updateStats(); gainXP(20); addLog('SAN -8. Červené oči — reptiliani.','warn'); activateOp('op-druid'); },
+    choices: [
+      { text:'[A] „Kde nájdem Druida?"',          next:'posta' },
+      { text:'[B] „Červené oči — čo si myslíš?', next:'loc_miki_reptil' },
+      { text:'[C] Odísť',                         next:'start' },
+    ]
+  },
+
+  loc_miki_noc: {
+    name: 'Miki Bar // Nočné Udalosti',
+    art: '🌙',
+    text: [
+      '"Noc?" Igor si dá lokol. "V noci sa tu deje veľa."',
+      '"Každý štvrtok prichádza dodávka bez loga. Parkuje pri Jantare."',
+      '"Neviem čo vykladá. Viem, že Viktor — majiteľ Jantara — ráno vyzerá inak."',
+      '"Ako keby niečo dostal. Alebo niečo stratil."',
+      '',
+      '"A pri Vtáčniku vidím svetlá. Dolu, nie hore."',
+      '"Pod zemou niekto svieti."',
+      '',
+      '<i>// Stopa: štvrtková dodávka pri Jantare //',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['dodavka_hint']=true; addLog('Stopa: dodávka pri Jantare.','ok'); },
+    choices: [
+      { text:'[A] „Viktor z Jantara — čo o ňom vieš?"', next:'loc_miki_viktor' },
+      { text:'[B] „Svetlá pod Vtáčnikom — jaskyne?"',   next:'loc_miki_jaskyne' },
+      { text:'[C] „LAZARUS — poznáš to slovo?"',        next:'loc_miki_lazarus' },
+    ]
+  },
+
+  loc_miki_otvor: {
+    name: 'Miki Bar // Marek Ťa Poslal',
+    art: '🗝️',
+    text: [
+      'Igor sa zastaví. Pomaly sa otočí.',
+      '"Marek." Nie otázka. Konštatovanie.',
+      '',
+      'Odloží pohár. Zamkne dvere baru kľúčom, čo nosí na krku.',
+      '',
+      '"Sadni."',
+      'Atmosféra sa zmení — z ľahostajnej na serióznu.',
+      '"Ak ťa Marek posiela, je to vážne. Čo potrebuješ vedieť?"',
+    ],
+    onEnter: function(){ gainXP(12); addLog('Miki ti dôveruje. Prístup k informáciám.','ok'); },
+    choices: [
+      { text:'[A] „Čo vieš o LAZARUS protokole?"', next:'loc_miki_lazarus' },
+      { text:'[B] „Kto sú ľudia bez ŠPZ?"',        next:'loc_miki_spz' },
+      { text:'[C] „Kde zohnám EMF detektor?"',     next:'loc_miki_detektor' },
+    ]
+  },
+
+  loc_miki_reptil: {
+    name: 'Miki Bar // Červené Oči',
+    art: '👁️',
+    text: [
+      '"Čo si myslím?" Igor si sadne. Pozrie do pohára.',
+      '',
+      '"Vieš čo je najhoršia vec? Nie to, že mi neveríš."',
+      '"Najhoršie je, že ja sám si nie som istý čo som videl."',
+      '',
+      '"Ten muž bol normálny. Oblečenie. Reč. Gestá."',
+      '"Len oči nie."',
+      '"A keď odišiel — na zemi zostali dve malé kvapky krvi."',
+      '"Nie z rany. Z oka."',
+      '',
+      'Igor dopije pohár a dá si ďalší.',
+      '"Niekedy radšej verím, že som sníval."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-10); updateStats(); gainXP(15); addLog('SAN -10. Svedectvo o reptiliánovi.','warn'); },
+    choices: [
+      { text:'[A] Ísť do jaskýň',     next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky nepôjdeš.' },
+      { text:'[B] Odísť',            next:'start' },
+    ]
+  },
+
+  loc_miki_spz: {
+    name: 'Miki Bar // Autá Bez ŠPZ',
+    art: '🚗',
+    text: [
+      '"ŠPZ?" Igor sa zasmeje horkosladko.',
+      '"Sledoval som ich. Mercedes E trieda — štyri kusy."',
+      '"Prichádzajú vždy po 23:00. Parkujú pri starej textilke."',
+      '"Cez deň ich nie je. V noci vždy."',
+      '',
+      '"Raz som sa priblížil. Vracal som sa z baru, bolo mi to jedno."',
+      '"Šofér sa pozrel na mňa. Len sa pozrel."',
+      '"Nepovedal nič. Len sa pozrel."',
+      '"Prišiel som domov a vomitoval som tri hodiny."',
+      '',
+      '"Bez dôvodu. Bez alkoholu. Len po tom pohľade."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-7); updateStats(); gainXP(12); addLog('SAN -7. Autá bez ŠPZ — stopa.','warn'); S.flags['spz_auta']=true; },
+    choices: [
+      { text:'[A] Vypytovať sa ďalej',    next:'loc_miki_lazarus' },
+      { text:'[B] Ísť do Jantara',        next:'loc_jantar' },
+      { text:'[C] Odísť na operáciu',    next:'start' },
+    ]
+  },
+
+  loc_miki_viktor: {
+    name: 'Miki Bar // Viktor Neon',
+    art: '👤',
+    text: [
+      '"Viktor." Igor sa zamyslí. Nepríjemne dlho.',
+      '"Prišiel sem pred troma rokmi. Z Bratislavy, hovoril."',
+      '"Jantar dal do poriadku za dva mesiace. Hotovosťou."',
+      '',
+      '"Zákazníci, čo k nemu chodia — nie sú odtiaľto."',
+      '"Prichádza neskoro, odchádza včas. Nikdy netriezvy."',
+      '"To pri majiteľovi nočného klubu hovorí veľa."',
+      '',
+      '"Ak ideš do Jantara, nerob hlúposti. A nepij nič, čo si sám neobjednal."',
+    ],
+    onEnter: function(){ gainXP(10); S.flags['viktor_warn']=true; },
+    choices: [
+      { text:'[A] Ísť do Jantara',  next:'loc_jantar' },
+      { text:'[B] Zostať, pýtať sa',next:'loc_miki_lazarus' },
+    ]
+  },
+
+  loc_jantar_brat: {
+    name: 'Jantar // Bratislava',
+    art: '🏙️',
+    text: [
+      '"Bratislava." Viktor sa trochu uvoľní. Ako keby tá otázka bola bezpečná.',
+      '"Áno. Päť rokov. Predtým inde."',
+      '"Prievidza je... tichšia. Ľudia tu nevedia čo sa deje pred ich nosom."',
+      '"To je buď výhoda alebo nevýhoda. Záleží pre koho."',
+      '',
+      '"Prečo sa pýtaš? Chceš si otvoriť bar?"',
+      'Malý úsmev. Prvý raz.',
+      '"Radím ti — nie. Nie tu. Nie teraz."',
+    ],
+    onEnter: function(){ gainXP(8); },
+    choices: [
+      { text:'[A] „Prečo nie teraz?"',              next:'loc_jantar_noc' },
+      { text:'[B] Priamo: „LAZARUS — poznáš?"',     next:'loc_jantar_konfrontacia' },
+    ]
+  },
+
+  loc_jantar_disk: {
+    name: 'Jantar // Kovový Disk',
+    art: '💿',
+    text: [
+      'Disk je veľký ako minca. Na povrchu gravíra — symbol, čo si nikdy predtým nevidel.',
+      'Nie runy. Nie logotyp. Niečo organické, ako keby nakreslené rastom.',
+      '',
+      'Keď ho stlačíš, krátko sa zahreje.',
+      '',
+      'Igor mal pravdu — Viktor tu niečo organizuje.',
+      '<i>// Získal si Rezonančný Disk. Questový predmet. //',
+    ],
+    onEnter: function(){ addItem('keycard'); gainXP(20); addLog('Disk získaný — pripomína keycard OMEGA.','ok'); showNotif('Predmet: Rezonančný Disk (≈ Keycard OMEGA)'); },
+    choices: [
+      { text:'[A] Konfrontovať Viktora',         next:'loc_jantar_konfrontacia' },
+      { text:'[B] Odísť diskrétne',              next:'start' },
+    ]
+  },
+
+  loc_jantar_dodavka: {
+    name: 'Jantar // Dodávka',
+    art: '🚚',
+    text: [
+      'Viktor sa neusmeje.',
+      'Pohár mu stuhne v ruke.',
+      '',
+      '"Zásobovacie vozidlo. Nápoje, ľad, servisný materiál."',
+      '"Štandardná logistika pre prevádzku tejto veľkosti."',
+      '',
+      'Pauza. Príliš dlhá.',
+      '"Odkiaľ vieš o dodávke?"',
+      '',
+      'Oči sa mu zúžia. Na moment — naozaj len na moment — reflexy svetiel v nich vyzerajú inak.',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-8); updateStats(); gainXP(15); },
+    choices: [
+      { text:'[A] Konfrontovať ho naplno: „LAZARUS."', next:'loc_jantar_konfrontacia' },
+      { text:'[B] Cúvnuť: „Len som bol zvedavý."',    next:'loc_jantar_unik' },
+    ]
+  },
+
+  loc_jantar_konfrontacia: {
+    name: 'Jantar // Konfrontácia',
+    art: '⚡',
+    text: [
+      '"LAZARUS."',
+      '',
+      'Viktor odloží pohár. Pomaly. Každý pohyb kontrolovaný.',
+      '"Toto slovo tu znie prvýkrát za dlhý čas."',
+      '',
+      '"Kto si?"',
+      '"Čo chceš?"',
+      '"Prečo by som ti mal povedať čokoľvek?"',
+      '',
+      'Traja ľudia pri iných stoloch sa nenápadne otočia.',
+      'Nečakajú na signál. Sú tam.',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-12); S.hp=Math.max(0,S.hp-10); updateStats(); gainXP(25); addLog('HP -10, SAN -12. Konfrontácia s Viktorom.','warn'); },
+    choices: [
+      { text:'[A] „Mám dôkazy. Reptilí DNA."',     next:'loc_jantar_unik',
+        cond:function(){ return hasItem('reptiz'); }, condFail:'Nemáš dôkazy na vyjednávanie.' },
+      { text:'[B] Utekáš smerom k východu',        next:'loc_jantar_unik' },
+      { text:'[C] Bojuješ',                        next:'loc_jantar_boj' },
+    ]
+  },
+
+  loc_jantar_noc: {
+    name: 'Jantar // Nočný Program',
+    art: '🌙',
+    text: [
+      '"Noc je na oddych," hovorí Viktor. "Alebo na prácu. Záleží od človeka."',
+      '',
+      '"Organizujem súkromné večery. Pre klientov, ktorých nevyberáme náhodne."',
+      '"Záujmy, kontakty, vzájomná dôvera."',
+      '',
+      '"Ty si tu prvýkrát." Nie otázka.',
+      '"Čo ťa sem priviedlo — hudba? Alebo si hľadáš kontakt?"',
+      '',
+      'Za jeho chrbtom sa otvorí dvierka v stene a rýchlo sa zavrú.',
+      'Stihneš zahliadnuť: schodisko dolu.',
+    ],
+    onEnter: function(){ gainXP(10); S.flags['jantar_schodisko']=true; },
+    choices: [
+      { text:'[A] „Hľadám informácie o LAZARUS."', next:'loc_jantar_konfrontacia' },
+      { text:'[B] Sledovať dvierka v stene',        next:'loc_jantar_zadne' },
+      { text:'[C] Odísť',                          next:'loc_namestie' },
+    ]
+  },
+
+  loc_jantar_pocuvat: {
+    name: 'Jantar // Odpočúvanie',
+    art: '👂',
+    text: [
+      'Miešaš sa do davu. Pohár v ruke, oči hore.',
+      '',
+      'Fragment rozhovoru: "...aktivácia sa posúva na štvrtú ráno..."',
+      'Iný hlas: "...frekvencia musí byť presná, inak efekt zlyhá..."',
+      '',
+      'Tretia žena, sama pri stole, si zapisuje čosi do mobilu.',
+      'Keď ťa zbadá, rýchlo vstane a odchádza.',
+      'Na stole zostane pohár a... malý kovový disk.',
+    ],
+    onEnter: function(){ gainXP(18); addLog('Odpočúval si Jantar. Stopa: aktivácia o 04:00.','ok'); S.flags['cas_aktivacie']=true; },
+    choices: [
+      { text:'[A] Zobrať kovový disk',           next:'loc_jantar_disk' },
+      { text:'[B] Ísť za Viktorom',              next:'loc_jantar_viktor' },
+    ]
+  },
+
+  loc_namestie_deje: {
+    name: 'Námestie // Rozhovor — Udalosti',
+    art: '🏛️',
+    text: [
+      '"Deje?" Marek sa krátko zasmeje — bez humoru.',
+      '"Traja ľudia zmizli za posledný týždeň. Polícia hovorí — sťahovali sa."',
+      '"Sťahovali sa," zopakuje, akoby slová samy sebe neverili.',
+      '',
+      '"Jedno viem: tí čo zmizli, všetci bývali pri Vtáčniku."',
+      '"A všetci mali zvedavé otázky na zasadnutiach mestskej rady."',
+      '',
+      'Pozrie na teba dlhšie ako je nutné.',
+      '"Dávaj si pozor na zvedavosť."',
+    ],
+    onEnter: function(){ gainXP(8); addLog('Informácie od Mareka. XP +8.', 'ok'); },
+    choices: [
+      { text:'[A] „Kto za tým stojí?"',                next:'loc_namestie_moc' },
+      { text:'[B] „Vtáčnik — čo vieš o jaskyniach?"', next:'loc_namestie_jaskyne' },
+      { text:'[C] Odísť',                              next:'loc_namestie' },
+    ]
+  },
+
+  loc_namestie_jaskyne: {
+    name: 'Námestie // Jaskyne — Varovanie',
+    art: '🦇',
+    text: [
+      '"Jaskyne?" Marek sa zastaví.',
+      '"Môj brat tam chodil ako mladý. Speleológia, hovoril."',
+      '"Pred rokom prestal. Keď som sa pýtal prečo —"',
+      '"— povedal, že v jednej chodbe je zvuk, čo nie je z tohto sveta."',
+      '"A že niektoré steny vyzerajú... inak. Ako keby tam niečo žilo."',
+      '',
+      '"Neopýtaj sa ho na to druhýkrát. Len sa pozrel na mňa a odišiel."',
+      '',
+      '<i>// Mentálna mapa jaskýň — vieš, že stredný koridor vedie hlbšie. //',
+    ],
+    onEnter: function(){ gainXP(8); S.flags['jaskyne_hint']=true; },
+    choices: [
+      { text:'[A] Ísť do jaskýň (potrebuješ baterku)', next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky sa nevrátiš.' },
+      { text:'[B] Zostať a pýtať sa ďalej',           next:'loc_namestie_moc' },
+    ]
+  },
+
+  loc_namestie_lazarus: {
+    name: 'Námestie // LAZARUS — Reakcia',
+    art: '⚠️',
+    text: [
+      'Mareka akoby udrel elektrický prúd. Noviny mu vypadnú z kabáta.',
+      '',
+      '"Kde si to počul?" Hlas kontrolovaný, ale ruky nie.',
+      '',
+      '"Toto slovo nehovor tu. Nie na námestí."',
+      'Zdvihne noviny. Schová ich znova.',
+      '',
+      '"Choď za Igorom do Miki baru. On ti povie viac ako ja."',
+      '"Ale najprv mu povedz, že ťa posiela Marek. Bez toho ani neotvorí ústa."',
+      '',
+      '<i>// Získal si kontaktný kód: „Od Mareka." //',
+    ],
+    onEnter: function(){ S.flags['marek_kod']=true; gainXP(15); addLog('Kontaktný kód získaný.','ok'); showNotif('Kód: „Od Mareka" — použi v Miki bare'); },
+    choices: [
+      { text:'[A] Ísť do Miki baru',  next:'loc_miki' },
+      { text:'[B] Odísť na operáciu', next:'start' },
+    ]
+  },
+
+  loc_namestie_moc: {
+    name: 'Námestie // Rozhovor — Moc',
+    art: '🏛️',
+    text: [
+      'Marek sa rozhliadne. Námestie je prázdne — no aj tak zníži hlas.',
+      '',
+      '"Oficiálne? Primátor Blaho. Mestské zastupiteľstvo."',
+      '"Neoficiálne?" Pauza. "Ľudia, čo nikdy neboli zvolení a nikdy neodstúpia."',
+      '',
+      '"Vidíš tamten dom na rohu? Pred mesiacom tam bývala rodina."',
+      '"Dnes tam parkujú čierne autá. Bez ŠPZ."',
+      '',
+      '"Niekedy si myslím, že ti poviem príliš veľa."',
+      '"A potom si pomyslím — čo by mi to pomohlo, keby som mlčal."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-5); updateStats(); addLog('SAN -5. Znepokojivé informácie.','warn'); gainXP(10); },
+    choices: [
+      { text:'[A] „Čo vieš o LAZARUS protokole?"',  next:'loc_namestie_lazarus' },
+      { text:'[B] Poďakovať a odísť',               next:'start' },
+      { text:'[C] Ísť do Miki baru',                next:'loc_miki' },
+    ]
+  },
+
+  loc_squash_fri: {
+    name: 'Squash // FRI',
+    art: '🎓',
+    text: [
+      '"FRI." Roman sa nadýchne.',
+      '"Dr. Oravec tam pracuje — to vie každý. Čo nevie každý:"',
+      '"má laboratórium na suteréne. Nie na fakulte. Pod ňou."',
+      '"Povolenie? Neoficiálne. Peniaze — zo súkromného grantu."',
+      '"Skontroloval som grantovú databázu. Neexistuje."',
+      '',
+      '"Robí so signálmi. Frekvenciami. Rezonanciou."',
+      '"A chodí do práce v noci, nie cez deň."',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['fri_lab']=true; addLog('Stopa: FRI suterénne laboratórium.','ok'); },
+    choices: [
+      { text:'[A] Ísť na FRI',              next:'loc_fri' },
+      { text:'[B] Ísť do jaskýň',           next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Potrebuješ baterku.' },
+    ]
+  },
+
+  loc_squash_info: {
+    name: 'Squash // Informácie',
+    art: '📰',
+    text: [
+      '"Informácie." Roman zloží noviny.',
+      '"Záleží čo hľadáš. Hovorím o udalostiach — nie o špekuláciách."',
+      '"Fakty: tri záhadné zmiznutia za mesiac. Polícia ich uzavrela za 48 hodín."',
+      '"Fakt: pri FRI pracujú ľudia, čo nie sú na zozname zamestnancov."',
+      '"Fakt: v utorok ráno bol Vtáčnik obkľúčený — bez verejného oznamu — na dve hodiny."',
+      '',
+      '"Špekulácie si nechávam pre seba."',
+      '"Ale fakty hovoria dosť, nie?"',
+    ],
+    onEnter: function(){ gainXP(15); addLog('Fakty od Romana.','ok'); },
+    choices: [
+      { text:'[A] „FRI — vieš viac?"',              next:'loc_squash_fri' },
+      { text:'[B] „Vtáčnik — čo sa tam stalo?"',    next:'loc_squash_vtacnik' },
+      { text:'[C] „Zmiznutí ľudia — ich mená?"',    next:'loc_squash_zmiznuty' },
+    ]
+  },
+
+  loc_squash_jest: {
+    name: 'Squash // Jedlo',
+    art: '🥣',
+    text: [
+      'Roman zavolá čašníčku. Bez menu. Vie čo objednáš.',
+      '"Kapustnica a chlieb. Najlepšia vec na myseľ."',
+      '',
+      '"V tejto práci," — a je jasné, že vie aká práca —',
+      '"sa ľudia zabudnú najesť. Potom robia chyby."',
+      '',
+      'Jedlý v tichu.',
+      '"Čo ťa sem priviedlo? Informácie alebo len hlad?"',
+    ],
+    onEnter: function(){ S.hp=Math.min(100,S.hp+15); S.san=Math.min(100,S.san+10); updateStats(); addLog('HP +15, SAN +10. Najedol si sa.','ok'); gainXP(5); },
+    choices: [
+      { text:'[A] „Oboje. Najprv informácie."', next:'loc_squash_info' },
+      { text:'[B] Len jesť a odísť',            next:'start' },
+    ]
+  },
+
+  loc_squash_vtacnik: {
+    name: 'Squash // Vtáčnik',
+    art: '🌄',
+    text: [
+      '"Vtáčnik." Roman si poklepe na stôl.',
+      '"Igor a ja sme videli svetlá. Spomínal ti to?"',
+      '"Modrá pulzácia. Každú noc medzi jednou a štvrtou."',
+      '',
+      '"Išiel som tam raz cez deň. Vstup do jaskýň — bol uzavretý."',
+      '"Nie reťazou. Kovovou doskou, zavarenou do skaly."',
+      '"Nová. Lesklá. Pritom tú jaskyňu som pred piatimi rokmi prechádzal voľne."',
+      '',
+      '"Niekto tam niečo zavaroval. Alebo v tom niečo."',
+    ],
+    onEnter: function(){ gainXP(15); addLog('Stopa: uzavretá jaskyňa pod Vtáčnikom.','ok'); S.flags['jaskyňa_uzavrena']=true; },
+    choices: [
+      { text:'[A] Ísť do jaskýň',       next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky nepôjdeš.' },
+      { text:'[B] Pýtať sa ďalej',      next:'loc_squash_fri' },
+    ]
+  },
+
+  loc_squash_zmiznuty: {
+    name: 'Squash // Zmiznutí',
+    art: '👤',
+    text: [
+      '"Mená?" Roman colí pohár.',
+      '"Jana Krížová — archivárka na mestskom úrade."',
+      '"Tibor Mach — elektrikár, pracoval na Vtáčniku."',
+      '"A Ľuboš Varga — novinár z lokálnych novín."',
+      '',
+      '"Všetci traja mali jedno spoločné."',
+      '"Každý z nich kontaktoval niekoho — nie políciu — o niečom čo videli."',
+      '"A každý zmizol do 48 hodín od toho kontaktu."',
+      '',
+      '"Koho kontaktovali?" Ticho. "To neviem."',
+      '"Ale som rád, že sa pýtaš ty, a nie oni mňa."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-8); updateStats(); gainXP(18); addLog('SAN -8. Vzorec miznutia.','warn'); },
+    choices: [
+      { text:'[A] Ísť do jaskýň',          next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky nepôjdeš.' },
+      { text:'[B] Ísť na operáciu',        next:'start' },
+    ]
+  },
+
+  loc_stanica_delta: {
+    name: 'Stanica // Agent Delta',
+    art: '⚠️',
+    text: [
+      '"Agent Delta?" Dušan si pozrie ruky.',
+      '"Neviem. Naozaj neviem."',
+      '"Ale — keď som dostal ten papier —"',
+      '"— bol som na nástupišti. Sám."',
+      '"A za päť minút zavolal niekto na stanicu."',
+      '"Na pevnú linku. Pýtal sa: \'Dostal ste balík?\'"',
+      '"Keď som povedal áno, zavesil."',
+      '"Hlas — bez prízvuku. Unavený."',
+      '"Hlas niekoho, kto robí niečo dlho a vie, že to musí skončiť."',
+      '',
+      '<i>// Agent Delta možno sám spolupracuje na zastavení LAZARUS. //',
+    ],
+    onEnter: function(){ gainXP(20); S.flags['delta_spojenec']=true; addLog('Agent Delta možno spojenec — zaslal zoznam.','ok'); },
+    choices: [
+      { text:'[A] Ísť za Druidom',                    next:'posta' },
+      { text:'[B] Ísť do Bánoviec',                   next:'banovce_cesta' },
+    ]
+  },
+
+  loc_stanica_dusal_meno: {
+    name: 'Stanica // Dušan — Jeho Meno',
+    art: '😰',
+    text: [
+      'Dlhé ticho.',
+      '"Nie." Hlasnejšie ako chcel.',
+      '"Nie som na tom zozname."',
+      '"Ešte."',
+      '',
+      '"Ale viem, že kto dostane takýto papier —"',
+      '"— je buď nasledujúci na rade."',
+      '"Alebo niekto chce, aby si o tom vedel."',
+      '"Neviem ktoré je horšie."',
+      '',
+      'Pozrie von oknom na prázdne nástupište.',
+      '"Ráno dám výpoveď. Presťahujem sa k bratovi do Trenčína."',
+      '"Dnes v noci — zostávam tu."',
+      '"Čo mám robiť — odísť? Kto by dal ráno semafór?"',
+    ],
+    onEnter: function(){ gainXP(12); S.san=Math.max(0,S.san-5); updateStats(); },
+    choices: [
+      { text:'[A] „Môžem vidieť zoznam?"',  next:'loc_stanica_zoznam_ukaz' },
+      { text:'[B] „Buď opatrný, Dušan."',  next:'loc_stanica_autobus' },
+    ]
+  },
+
+  loc_fri_sledovat: {
+    name: 'FRI // Sledovanie',
+    art: '🔭',
+    text: [
+      'Schovávam sa za auto. Pozorujem.',
+      '',
+      'Oravec pracuje. Monitory. Konzola. Ruky sa pohybujú rýchlo.',
+      '',
+      'O 02:17 vychádza von — fajčí, pozerá na oblohu.',
+      'Mobil. Hovorí — šepká. Len slabiky:',
+      '"...uzol sedem... frekvencia čistá... áno, o štvrtej..."',
+      '',
+      'Odhodí cigaretu a ide späť dnu.',
+    ],
+    onEnter: function(){ gainXP(15); S.flags['fri_cas']=true; addLog('Stopa: uzol 7, aktivácia o 04:00.','ok'); },
+    choices: [
+      { text:'[A] Vojsť cez okno suterénu', next:'loc_fri_suteren' },
+      { text:'[B] Ísť priamo za Druidom',   next:'posta' },
+    ]
+  },
+
+  loc_domov_odpocinok: {
+    name: 'Domov // Odpočinok',
+    art: '😴',
+    text: [
+      'Sadneš si. Zatvoríš oči.',
+      '',
+      'Eva ťa nepúšta spať — ale nechá ťa ticho.',
+      '',
+      'Pol hodiny. Dostatok na to, aby hlava fungovala.',
+      '"Vstávaj," hovorí nakoniec. "Ešte nie je deň."',
+    ],
+    onEnter: function(){ S.hp=Math.min(100,S.hp+20); S.san=Math.min(100,S.san+15); updateStats(); addLog('HP +20, SAN +15. Odpočinul si.','ok'); gainXP(5); },
+    choices: [
+      { text:'[A] Ísť späť na operáciu', next:'start' },
+      { text:'[B] Porozprávať sa s Evou', next:'loc_domov_rozpravat' },
+    ]
+  },
+
+  loc_domov_pomoc: {
+    name: 'Domov // Eva Pomáha',
+    art: '🤝',
+    text: [
+      '"Pomôcť." Eva vstane.',
+      '"Celé roky som čakala, že sa niekto opýta."',
+      '"Áno. Pomôžem."',
+      '',
+      'Prinesie krabičku spod postele.',
+      '"Otcov denník. Od posledného roka práce na Vtáčniku."',
+      '"Nikdy som ho nevedela dočítať. Ale ty áno."',
+      '',
+      'Denník obsahuje mapy, frekvencie, pozorovania.',
+      '<b>A koordináty bunkra — z roku 2014.</b>',
+      '<i>// Spis OMEGA — v inom formáte, ale stále platný. //',
+    ],
+    onEnter: function(){ addItem('spis'); gainXP(25); addLog('Evino spis — koordináty bunkra.','ok'); activateOp('op-lazarus'); showNotif('Eva ti dala: otcov denník = Spis OMEGA'); },
+    choices: [
+      { text:'[A] Ísť do bunkra',    next:'bunker',
+        cond:function(){ return hasItem('keycard'); }, condFail:'Potrebuješ keycard.' },
+      { text:'[B] Ísť do jaskýň',    next:'jaskyne_vstup',
+        cond:function(){ return hasItem('baterka'); }, condFail:'Bez baterky nepôjdeš.' },
+    ]
+  },
+
+  loc_domov_rozpravat: {
+    name: 'Domov // Eva — Rozhovor',
+    art: '🕯️',
+    text: [
+      'Porozprávaš. Ona počúva.',
+      '',
+      'Keď skončíš, dlho mlčí.',
+      '"LAZARUS." Výdychne.',
+      '"Vedela som, že to má meno."',
+      '"Môj otec pracoval pri Vtáčniku. Údržba. Pred desiatimi rokmi."',
+      '"Rok pred tým ako zomrel — hovoril o signáloch."',
+      '"O zvuku čo nik iný nepočul. Len on."',
+      '"Hovoril, že mu niečo vŕtalo do hlavy."',
+      '"Lekári povedali — stres."',
+      '"Zomrel na mozgovú príhodu o pol roka neskôr."',
+      '"Mal päťdesiatjeden."',
+    ],
+    onEnter: function(){ S.san=Math.max(0,S.san-10); updateStats(); gainXP(20); addLog('SAN -10. Evino svedectvo o otcovi.','warn'); S.flags['eva_otec']=true; },
+    choices: [
+      { text:'[A] „Pomôžeš mi to zastaviť?"',    next:'loc_domov_pomoc' },
+      { text:'[B] Ísť na operáciu s novými info', next:'start' },
+    ]
+  },
+
 }; // ← KONIEC SCENES databázy
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -12902,7 +14253,7 @@ function switchView(v) {
   if (v==='uni')    { document.getElementById('uni-overlay').classList.add('show'); renderTrainingView('uni'); }
   if (v==='gym')    { document.getElementById('gym-overlay').classList.add('show'); renderTrainingView('gym'); }
   if (v==='hq')     { document.getElementById('hq-overlay').classList.add('show'); openHQ(); }
-  if (v==='shop')   { switchInvPanelTab('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
+  if (v==='shop')   { openInvDrawer('shop'); setTimeout(function(){ Renderer.updateShop(); }, 0); }
 }
 
 function switchInvPanelTab(tab) {
@@ -12964,31 +14315,8 @@ function _renderInvPanelFish() {
 }
 
 function _renderInvPanelEquip() {
-  var el;
-  ['head','body','pants','weapon','special','feet'].forEach(function(slot) {
-    var id = S.equipped ? S.equipped[slot] : null;
-    var it = id ? (ITEMS[id]||{}) : null;
-    el = document.getElementById('eqslot2-'+slot);
-    if (el) el.textContent = it ? (it.icon||'✅') : '⬜';
-    el = document.getElementById('eqslot2-'+slot+'-name');
-    if (el) el.textContent = it ? it.name : '— prázdny slot —';
-    el = document.getElementById('eqrow2-'+slot);
-    if (el) el.style.color = id ? 'var(--green)' : '';
-  });
-  var bl = document.getElementById('equip-panel-bonuses-list');
-  if (bl) {
-    var bhtml = '';
-    if (S.equipped) { Object.keys(S.equipped).forEach(function(slot){ var id=S.equipped[slot]; if(!id) return; var b=EQUIP_BONUSES?EQUIP_BONUSES[id]:null; if(!b||!b.label) return; bhtml+='<div style="font-size:10px;color:var(--green);font-family:var(--font-mono);padding:2px 0">'+((ITEMS[id]||{}).icon||'⚙')+' '+(b.label||'')+'</div>'; }); }
-    bl.innerHTML = bhtml || '<div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">// žiadny výstroj //</div>';
-  }
-  var al = document.getElementById('equip-panel-available-list');
-  if (al && S.inventory) {
-    var ahtml = '';
-    S.inventory.forEach(function(id){ var it=ITEMS[id]; if(!it) return; var slot=ITEM_EQUIP_SLOT?ITEM_EQUIP_SLOT[id]:null; if(!slot) return; var equipped=S.equipped&&S.equipped[slot]===id; ahtml+='<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px;font-family:var(--font-body)">'+(it.icon||'📦')+' <span style="flex:1;color:var(--text)">'+(it.name||id)+'</span>'+(equipped?'<span style="color:var(--green);font-size:9px">NASADENÉ</span>':'<button onclick="equipItem(\''+id+'\')" style="font-size:9px;background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:2px 6px;cursor:pointer">Nasadiť</button>')+'</div>'; });
-    al.innerHTML = ahtml || '<div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">// žiadne vybavenie //</div>';
-  }
+  Renderer.updateEquip();
 }
-
 function _renderInvPanelShop() {
   var body = document.getElementById('inv-panel-shop-body'); if (!body) return;
   if (typeof SHOP_ITEMS === 'undefined') { body.innerHTML = '<div class="inv-empty">// obchod nedostupný //</div>'; return; }
@@ -19121,10 +20449,10 @@ var Settings = (function(){
     _syncUI();
   }
   function _applyTypewriter(mode) {
-    if (typeof Typewriter !== 'undefined') {
+    if (typeof Typewriter !== 'undefined' && typeof Typewriter.setDelay === 'function') {
       if (mode === 'fast') Typewriter.setDelay(18);
       else if (mode === 'slow') Typewriter.setDelay(55);
-      else Typewriter.setDelay(0); // instant
+      else Typewriter.setDelay(0);
     }
   }
 
@@ -19672,4 +21000,42 @@ var Typewriter = (function(){
 </script>
 
 </body>
-</html>
+</html><script>
+/* ═══════════════════════════════════════════════════════════════════
+   §36. ARENA LOADER — lazy načítanie arena.js pri prvom kliknutí
+═══════════════════════════════════════════════════════════════════ */
+(function(){
+  var _arenaLoaded  = false;
+  var _arenaLoading = false;
+
+  window.loadArena = function() {
+    if (_arenaLoaded && typeof ArenaSystem !== 'undefined') {
+      ArenaSystem.open(); return;
+    }
+    if (_arenaLoading) {
+      if (typeof showNotif === 'function') showNotif('⏳ Aréna sa načítava...');
+      return;
+    }
+    _arenaLoading = true;
+    var btn = document.getElementById('arena-tab-btn');
+    if (btn) { btn.textContent = '⏳ Načítavam...'; btn.disabled = true; }
+    var script = document.createElement('script');
+    script.src = 'arena.js';
+    script.onload = function() {
+      _arenaLoaded = true; _arenaLoading = false;
+      if (btn) { btn.textContent = '🥊 Aréna'; btn.disabled = false; }
+      if (typeof ArenaSystem !== 'undefined') {
+        ArenaSystem.open();
+        if (typeof addLog === 'function') addLog('Aréna modul načítaný.', 'info');
+      }
+    };
+    script.onerror = function() {
+      _arenaLoading = false;
+      if (btn) { btn.textContent = '🥊 Aréna'; btn.disabled = false; }
+      if (typeof showNotif === 'function') showNotif('⚠ arena.js nenájdený — musí byť v rovnakom adresári ako hra.');
+      if (typeof addLog === 'function') addLog('Arena loader: arena.js nenájdený.', 'err');
+    };
+    document.head.appendChild(script);
+  };
+})();
+</script>
