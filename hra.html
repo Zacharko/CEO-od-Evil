@@ -402,10 +402,20 @@ body::after {
   position: fixed; inset: 0; pointer-events: none; z-index: 8999;
   background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.7) 100%);
 }
-:::-webkit-scrollbar { width: 8px; height: 8px; }
-:::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); border-radius: 3px; }
-::-webkit-scrollbar-thumb { background: var(--green3); border-radius: 3px; border: 1px solid rgba(57,255,20,0.2); }
-::-webkit-scrollbar-thumb:hover { background: var(--green); box-shadow: 0 0 6px rgba(57,255,20,0.5); }
+/* ── GLOBAL SCROLLBARS — zelené, viditeľné ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-corner { background: var(--bg2); }
+::-webkit-scrollbar-thumb {
+  background: var(--green3);
+  border-radius: 0;
+  border: none;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(57,255,20,0.6);
+}
+* { scrollbar-width: thin; scrollbar-color: var(--green3) var(--bg2); }
 a { color: var(--green); text-decoration: none; }
 a:hover { color: #fff; }
 
@@ -1154,9 +1164,20 @@ a:hover { color: #fff; }
 #topbar-tabs {
   display: flex; gap: 0; flex: 1;
   overflow-x: auto; overflow-y: hidden; min-width: 0;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--green3) var(--bg2);
+  padding-bottom: 3px;  /* priestor pre scrollbar */
 }
-#topbar-tabs::-webkit-scrollbar { display: none; }
+#topbar-tabs::-webkit-scrollbar { display: block; height: 3px; }
+#topbar-tabs::-webkit-scrollbar-track { background: var(--bg2); }
+#topbar-tabs::-webkit-scrollbar-thumb {
+  background: var(--green3);
+  border-radius: 0;
+}
+#topbar-tabs::-webkit-scrollbar-thumb:hover {
+  background: var(--green);
+  box-shadow: 0 0 6px rgba(57,255,20,0.8);
+}
 .tab-btn {
   background: transparent; border: none; border-bottom: 2px solid transparent;
   color: #5a7a5a; font-family: var(--font-body);
@@ -2856,9 +2877,12 @@ a:hover { color: #fff; }
 #mobile-topbar-tabs-row {
   display: flex; overflow-x: auto; gap: 2px;
   padding: 4px 0; -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--green3) var(--bg2);
 }
-#mobile-topbar-tabs-row::-webkit-scrollbar { display: none; }
+#mobile-topbar-tabs-row::-webkit-scrollbar { display: block; height: 3px; }
+#mobile-topbar-tabs-row::-webkit-scrollbar-track { background: var(--bg2); }
+#mobile-topbar-tabs-row::-webkit-scrollbar-thumb { background: var(--green3); }
 .mtab-btn {
   flex-shrink: 0; background: transparent;
   border: none; border-bottom: 2px solid transparent;
@@ -4927,6 +4951,8 @@ body.low-power .minigame-overlay {
     <button class="sidenav-btn" data-view="hack" data-tip="Hacking" onclick="openHackView()">💻</button>
     <button class="sidenav-btn" data-tip="Mapa" onclick="CityMap.open()">⌖</button>
     <button class="sidenav-btn" data-tip="Frakcie" onclick="FactionsSystem.openWindow()">⚔</button>
+    <div class="sidenav-divider"></div>
+    <button class="sidenav-btn" data-view="arena" data-tip="Aréna" onclick="loadArena()">🥊</button>
   </div>
 
   <!-- LEFT PANEL -->
