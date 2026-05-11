@@ -1373,18 +1373,24 @@ a:hover { color: #fff; }
 .agent-pane.active { display:block; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 16px; }
 
 /* ── LEFT PANEL TEXTMAP ── */
-#left-textmap-body button {
+#left-textmap-body button,
+#mobile-left-panel-content #left-textmap-body button,
+.mobile-left-panel-content-map button {
   display:flex; align-items:center; gap:8px;
   width:100%; background:transparent; border:none;
   border-bottom:1px solid var(--border2);
-  padding:7px 12px; cursor:pointer; text-align:left;
+  padding:10px 14px; cursor:pointer; text-align:left;
   transition:background 0.08s; -webkit-tap-highlight-color:transparent;
+  font-size: 13px;
 }
-#left-textmap-body button:hover { background:rgba(57,255,20,0.06); }
-#left-textmap-body .ltm-section {
+#left-textmap-body button:hover,
+#mobile-left-panel-content #left-textmap-body button:hover { background:rgba(57,255,20,0.06); }
+#left-textmap-body .ltm-section,
+#mobile-left-panel-content .ltm-section {
   font-family:var(--font-hud);font-size:8px;letter-spacing:2px;
   color:var(--green3);padding:8px 12px 3px;
   border-bottom:1px solid var(--border2);text-transform:uppercase;opacity:0.8;
+  background: rgba(0,0,0,0.3);
 }
 #left-nav::before {
   content: '▶';
@@ -2017,11 +2023,26 @@ a:hover { color: #fff; }
   color: var(--green); text-transform: uppercase;
 }
 #inv-drawer-close {
-  background: transparent; border: none; color: var(--text-dim);
-  font-size: 16px; cursor: pointer; padding: 2px 6px;
-  transition: color 0.1s;
+  background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05));
+  border: 1px solid var(--red2);
+  color: var(--red2);
+  font-size: 18px;
+  font-weight: 700;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 2px;
+  text-shadow: 0 0 8px rgba(239,68,68,0.5);
+  box-shadow: 0 0 10px rgba(239,68,68,0.2);
+  flex-shrink: 0;
 }
-#inv-drawer-close:hover { color: var(--danger); }
+#inv-drawer-close:hover {
+  background: rgba(239,68,68,0.25);
+  box-shadow: 0 0 20px rgba(239,68,68,0.5);
+  transform: scale(1.08);
+  color: #ff6b6b;
+}
 #inv-drawer-tabs {
   display: flex; border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, #060b06, var(--bg));
@@ -2352,59 +2373,207 @@ a:hover { color: #fff; }
 .bj-result.lose { color: var(--red2); text-shadow: 0 0 16px rgba(231,76,60,0.5); }
 .bj-result.push { color: var(--gold); }
 .bj-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); margin: 16px 0; }
-/* Slots — vylepšené reels */
-.slots-reels {
-  display: flex; gap: 10px; justify-content: center;
-  margin: 22px 0;
-  padding: 16px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(20,12,4,0.4));
-  border: 1px solid var(--gold-dim);
-  border-radius: 6px;
-  box-shadow: inset 0 4px 16px rgba(0,0,0,0.7);
+/* ═══ SLOTS — REAL SPINNING REELS ═══ */
+.slots-machine-wrap {
+  position: relative;
+  margin: 18px 0 10px;
 }
-.slots-reel {
-  width: 88px; height: 88px;
-  background: linear-gradient(180deg, #0a0e0a 0%, #181a18 50%, #0a0e0a 100%);
+/* Ambient glow za strojom */
+.slots-machine-wrap::before {
+  content: '';
+  position: absolute; inset: -8px;
+  background: radial-gradient(ellipse at center, rgba(250,204,21,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 12px;
+}
+.slots-reels {
+  display: flex; gap: 0; justify-content: center;
+  padding: 0;
+  background: linear-gradient(180deg, #1a1208 0%, #0d0d0d 40%, #1a1208 100%);
   border: 2px solid var(--gold-dim);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 44px; border-radius: 6px;
-  transition: border-color 0.3s;
+  border-radius: 10px;
   box-shadow:
-    inset 0 4px 12px rgba(0,0,0,0.8),
-    0 2px 6px rgba(0,0,0,0.5);
+    inset 0 0 40px rgba(0,0,0,0.9),
+    0 4px 24px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(250,204,21,0.08);
+  overflow: hidden;
   position: relative;
 }
+/* Horná a dolná tienová páska (okno automatu) */
+.slots-reels::before,
+.slots-reels::after {
+  content: '';
+  position: absolute; left: 0; right: 0; height: 30px; z-index: 20; pointer-events: none;
+}
+.slots-reels::before {
+  top: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, transparent 100%);
+}
+.slots-reels::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.95) 0%, transparent 100%);
+}
+/* Páska uprostred — payline */
+.slots-payline-highlight {
+  position: absolute; left: 0; right: 0;
+  top: 50%; transform: translateY(-50%);
+  height: 76px; z-index: 15; pointer-events: none;
+  border-top: 1px solid rgba(250,204,21,0.5);
+  border-bottom: 1px solid rgba(250,204,21,0.5);
+  background: rgba(250,204,21,0.04);
+  box-shadow:
+    0 0 12px rgba(250,204,21,0.15),
+    inset 0 0 20px rgba(250,204,21,0.05);
+}
+.slots-payline-highlight::before,
+.slots-payline-highlight::after {
+  content: '▶';
+  position: absolute; top: 50%; transform: translateY(-50%);
+  color: var(--gold); font-size: 10px; opacity: 0.7;
+}
+.slots-payline-highlight::before { left: 6px; }
+.slots-payline-highlight::after  { right: 6px; content: '◀'; }
+
+/* Každý valec — obsahuje vnútornú pásiku symbolov */
+.slots-reel {
+  width: 90px;
+  height: 228px;    /* 3 symboly × 76px */
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(0,0,0,0.6);
+}
+.slots-reel:last-child { border-right: none; }
+
+/* Vnútorná páska symbolov — pohybuje sa hore */
+.slots-reel-strip {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  display: flex; flex-direction: column;
+  will-change: transform;
+}
+/* Jeden symbol v páske */
+.slots-reel-sym {
+  width: 90px; height: 76px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  flex-shrink: 0;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Jemný lesk na každom symbole */
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.03) 0%,
+    rgba(255,255,255,0) 40%,
+    rgba(0,0,0,0.1) 100%
+  );
+}
+/* Oddeľovač symbolov */
+.slots-reel-sym::after {
+  content: '';
+  position: absolute; bottom: 0; left: 8px; right: 8px; height: 1px;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Bokové lesky valca */
+.slots-reel::before,
 .slots-reel::after {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 50%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent);
-  pointer-events: none;
-  border-radius: 4px 4px 0 0;
+  position: absolute; top: 0; bottom: 0; width: 6px; z-index: 25; pointer-events: none;
 }
-.slots-reel.spinning {
-  border-color: var(--gold);
-  animation: slotSpin 0.12s ease-in-out infinite alternate;
-  box-shadow:
-    inset 0 4px 12px rgba(0,0,0,0.8),
-    0 0 16px rgba(250,204,21,0.4);
+.slots-reel::before { left: 0; background: linear-gradient(90deg, rgba(0,0,0,0.4), transparent); }
+.slots-reel::after  { right: 0; background: linear-gradient(270deg, rgba(0,0,0,0.4), transparent); }
+
+/* Stav točenia — žiariaci border */
+.slots-reel.is-spinning .slots-reel-strip {
+  /* animácia cez JS cubic-bezier */
 }
+
+/* Win efekt */
+.slots-reel.win-reel {
+  box-shadow: inset 0 0 20px rgba(250,204,21,0.3);
+}
+.slots-reel.win-reel .slots-reel-sym.payline-sym {
+  animation: symWinPop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes symWinPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); filter: drop-shadow(0 0 10px rgba(250,204,21,0.9)); }
+  100% { transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(250,204,21,0.6)); }
+}
+/* Jackpot — zlaté pulzy */
+.slots-reel.jackpot-reel .slots-reel-sym.payline-sym {
+  animation: symJackpot 0.4s ease-in-out infinite alternate;
+}
+@keyframes symJackpot {
+  from { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(250,204,21,0.8)); }
+  to   { transform: scale(1.2); filter: drop-shadow(0 0 20px rgba(250,204,21,1)); }
+}
+
+/* Machine housing — bok rámika */
+.slots-housing {
+  position: relative;
+  background: linear-gradient(180deg, #2a1c08 0%, #1a1208 50%, #2a1c08 100%);
+  border: 2px solid rgba(250,204,21,0.3);
+  border-top: none; border-bottom: none;
+  padding: 6px 12px 4px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.slots-housing-label {
+  font-family: var(--font-hud); font-size: 8px; color: rgba(250,204,21,0.5);
+  letter-spacing: 3px; text-transform: uppercase;
+}
+.slots-housing-lights {
+  display: flex; gap: 5px;
+}
+.slots-housing-light {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(250,204,21,0.3);
+  box-shadow: 0 0 4px rgba(250,204,21,0.3);
+  transition: all 0.3s;
+}
+.slots-housing-light.on {
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(250,204,21,0.9), 0 0 16px rgba(250,204,21,0.4);
+  animation: lightFlicker 1.5s ease-in-out infinite;
+}
+@keyframes lightFlicker {
+  0%,100% { opacity: 1; }
+  85%      { opacity: 1; }
+  87%      { opacity: 0.4; }
+  89%      { opacity: 1; }
+  93%      { opacity: 0.7; }
+  95%      { opacity: 1; }
+}
+
 .slots-btn-row { display:flex; gap:8px; margin-top:10px; }
 .slots-btn-row .slots-spin-btn { flex:2; }
-.slots-auto-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text); padding:10px 6px; border-radius:4px; font-size:12px; cursor:pointer; transition:all 0.2s; }
-.slots-auto-btn:hover { border-color:var(--green3); color:var(--green3); }
-.slots-auto-btn.auto-active { background:var(--danger); border-color:var(--danger); color:#fff; animation: autoPulse 1s ease-in-out infinite; }
-@keyframes autoPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
-@keyframes slotSpin { from { transform: scaleY(0.92); } to { transform: scaleY(1.08); } }
+.slots-auto-btn {
+  flex:1;
+  background: linear-gradient(180deg, rgba(57,255,20,0.06), rgba(57,255,20,0.02));
+  border: 1px solid var(--green3);
+  color: var(--green);
+  padding: 10px 6px;
+  font-family: var(--font-hud);
+  font-size: 11px; letter-spacing: 2px;
+  cursor: pointer; transition: all 0.2s;
+  text-transform: uppercase;
+}
+.slots-auto-btn:hover { background: rgba(57,255,20,0.12); box-shadow: 0 0 12px rgba(57,255,20,0.3); }
+.slots-auto-btn.auto-active {
+  background: linear-gradient(180deg, rgba(239,68,68,0.2), rgba(239,68,68,0.08));
+  border-color: var(--red2); color: var(--red2);
+  animation: autoPulse 1s ease-in-out infinite;
+  box-shadow: 0 0 16px rgba(239,68,68,0.35);
+}
+@keyframes autoPulse { 0%,100%{opacity:1; box-shadow: 0 0 16px rgba(239,68,68,0.35);} 50%{opacity:0.75; box-shadow: 0 0 8px rgba(239,68,68,0.2);} }
+
 .slots-reel.win-reel {
-  border-color: var(--gold);
-  box-shadow:
-    0 0 24px rgba(250,204,21,0.6),
-    inset 0 4px 12px rgba(0,0,0,0.8);
-  animation: winReelPulse 0.4s ease-in-out infinite alternate;
+  /* handled by JS + win-reel class */
 }
 @keyframes winReelPulse {
   from { transform: scale(1); }
-  to   { transform: scale(1.06); }
+  to   { transform: scale(1.04); }
 }
 .slots-payline {
   font-family: var(--font-mono); font-size: 10px; color: var(--text-dim);
@@ -2483,8 +2652,20 @@ a:hover { color: #fff; }
 /* ── BOATS ── */
 .fishing-clicker-wrap { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .clicker-title { font-family: var(--font-hud); font-size: 10px; color: var(--text-dim); letter-spacing: 3px; }
-.clicker-boat { font-size: 64px; cursor: pointer; transition: transform 0.1s; filter: drop-shadow(0 0 12px rgba(34,211,238,0.3)); user-select: none; -webkit-user-select: none; }
-.clicker-boat:active { transform: scale(0.92); }
+.clicker-boat {
+  font-size: 72px; cursor: pointer;
+  transition: transform 0.08s cubic-bezier(0.175,0.885,0.32,1.275), filter 0.08s ease;
+  filter: drop-shadow(0 0 12px rgba(34,211,238,0.3));
+  user-select: none; -webkit-user-select: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; justify-content: center;
+  width: 100px; height: 100px;
+}
+.clicker-boat:active, .clicker-boat.pressed {
+  transform: scale(0.86) rotate(-6deg);
+  filter: drop-shadow(0 0 24px rgba(57,255,20,0.8));
+}
 .clicker-stats { display: flex; gap: 24px; }
 .clicker-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .clicker-stat-val { font-family: var(--font-hud); font-size: 16px; color: var(--gold); font-weight: 700; }
@@ -2655,7 +2836,7 @@ a:hover { color: #fff; }
     display: grid !important;
     grid-template-columns: 42px 1fr 42px !important;
     grid-template-rows: 1fr !important;
-    height: calc(100dvh - 42px - 52px);
+    height: calc(100dvh - 42px - 52px - env(safe-area-inset-bottom, 0px));
     gap: 0;
     padding-top: 0;
     overflow: hidden;
@@ -2666,7 +2847,7 @@ a:hover { color: #fff; }
   #inv-panel { display: none !important; }
   #inv-panel-trigger { display: none !important; }
   #center-panel {
-    height: calc(100dvh - 42px - 52px);
+    height: calc(100dvh - 42px - 52px - env(safe-area-inset-bottom, 0px));
     flex: 1; border-right: none; border-left: none;
     overflow: hidden;
     grid-column: 2 !important;
@@ -2723,23 +2904,56 @@ a:hover { color: #fff; }
 
   /* ── CityMap na mobile — fullscreen bez topbar scrollu ── */
   #city-map-overlay {
-    z-index: 800 !important;
+    z-index: 9999 !important;
+    /* Prevent iOS rubber band scroll */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
   }
   .city-map-canvas {
     inset: 56px 0 72px 0 !important;
+    /* Allow pinch-zoom on SVG map */
+    touch-action: pan-x pan-y pinch-zoom;
+    overflow: auto;
+  }
+  .city-map-svg {
+    /* On mobile make map scrollable/bigger for small screens */
+    min-width: 900px;
+    min-height: 520px;
   }
   .city-map-title { font-size: 13px !important; letter-spacing: 3px !important; }
-  .city-map-close-btn { font-size: 11px !important; padding: 5px 10px !important; }
+  .city-map-close-btn {
+    font-size: 11px !important;
+    padding: 10px 16px !important;
+    min-height: 44px !important;
+    /* Full width on very small screens */
+    flex: 1;
+  }
+  .city-map-footer {
+    padding: 8px 12px !important;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 8px !important;
+  }
+  .city-map-stats { gap: 10px !important; font-size: 10px !important; }
   .city-loc-label { font-size: 9px !important; }
+  /* Tooltip on mobile — show above finger */
+  #city-tooltip {
+    font-size: 10px !important;
+    max-width: 180px !important;
+    padding: 6px 10px !important;
+    pointer-events: none !important;
+  }
 }
 
 /* ── MOBILE NAV ── */
 #mobile-nav {
   display: none;
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 790;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 800;
   background: linear-gradient(180deg, var(--bg) 0%, #040804 100%);
   border-top: 1px solid var(--border);
   height: 52px;
+  /* iOS safe area */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(52px + env(safe-area-inset-bottom, 0px));
 }
 .mobile-nav-btn {
   flex: 1; background: transparent; border: none; border-right: 1px solid var(--border2);
@@ -3152,6 +3366,189 @@ a:hover { color: #fff; }
 }
 .hw-dismiss-btn:hover { color:#fff; border-color:#fff; }
 
+
+
+/* ══════════════════════════════════════════════════════
+   MINIGAME HUB
+══════════════════════════════════════════════════════ */
+#minigame-hub-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: radial-gradient(ellipse at center, #0a0f0a 0%, #040804 100%);
+  display: none; flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overscroll-behavior: none;
+}
+#minigame-hub-overlay.show { display: flex; animation: mapFadeIn 0.3s ease; }
+
+.mgh-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: linear-gradient(180deg, rgba(5,8,5,0.97) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.mgh-title {
+  font-family: var(--font-hud); font-size: 14px; font-weight: 900;
+  color: var(--green); letter-spacing: 4px;
+  text-shadow: 0 0 12px rgba(57,255,20,0.4);
+}
+.mgh-sub {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-muted); letter-spacing: 2px; margin-top: 2px;
+}
+.mgh-close-btn {
+  background: rgba(239,68,68,0.15); border: 1px solid #ef4444;
+  color: #fca5a5; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 2px; padding: 8px 16px; min-height: 44px;
+  cursor: pointer; transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.mgh-close-btn:hover, .mgh-close-btn:active {
+  background: rgba(239,68,68,0.3); color: #fff;
+}
+
+/* TABS */
+.mgh-tabs {
+  display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2); flex-shrink: 0;
+  scrollbar-width: none; gap: 0;
+}
+.mgh-tabs::-webkit-scrollbar { display: none; }
+.mgh-tab {
+  flex-shrink: 0; background: transparent; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim); font-family: var(--font-body);
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  padding: 12px 16px; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  min-height: 44px;
+}
+.mgh-tab:hover { color: var(--green3); }
+.mgh-tab.active {
+  color: var(--green); border-bottom-color: var(--green);
+  background: rgba(57,255,20,0.06);
+}
+
+/* BODY */
+.mgh-body {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 0;
+}
+
+/* CLICKER SECTION inside hub */
+.mgh-clicker-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 20px 16px; gap: 20px;
+}
+.mgh-clicker-target {
+  position: relative;
+  width: 160px; height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none; -webkit-user-select: none;
+}
+.mgh-clicker-bg {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--green3);
+  background: radial-gradient(circle, rgba(57,255,20,0.08) 0%, rgba(57,255,20,0.02) 60%, transparent 100%);
+  transition: all 0.08s ease;
+  box-shadow: 0 0 20px rgba(57,255,20,0.15), inset 0 0 20px rgba(57,255,20,0.05);
+}
+.mgh-clicker-target:active .mgh-clicker-bg,
+.mgh-clicker-bg.pressed {
+  transform: scale(0.93);
+  border-color: var(--green);
+  box-shadow: 0 0 40px rgba(57,255,20,0.5), inset 0 0 30px rgba(57,255,20,0.15);
+  background: radial-gradient(circle, rgba(57,255,20,0.2) 0%, rgba(57,255,20,0.08) 60%, transparent 100%);
+}
+.mgh-clicker-emoji {
+  font-size: 72px; position: relative; z-index: 2;
+  transition: transform 0.08s ease;
+  filter: drop-shadow(0 0 8px rgba(34,211,238,0.4));
+}
+.mgh-clicker-target:active .mgh-clicker-emoji,
+.mgh-clicker-emoji.pressed {
+  transform: scale(0.88) rotate(-5deg);
+}
+/* Ripple ring on click */
+.mgh-clicker-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--green);
+  opacity: 0; pointer-events: none;
+  animation: mghRingPop 0.4s ease-out forwards;
+}
+@keyframes mghRingPop {
+  0%   { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.mgh-combo-bar {
+  width: 160px; height: 6px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 3px; overflow: hidden;
+}
+.mgh-combo-fill {
+  height: 100%; width: 0%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--green3), var(--green), var(--gold));
+  transition: width 0.15s ease, background 0.3s ease;
+  box-shadow: 0 0 8px currentColor;
+}
+.mgh-combo-label {
+  font-family: var(--font-hud); font-size: 12px; letter-spacing: 3px;
+  color: var(--gold); min-height: 18px; text-align: center;
+  text-shadow: 0 0 10px rgba(250,204,21,0.6);
+}
+
+.mgh-stats-row {
+  display: flex; gap: 24px; justify-content: center;
+}
+.mgh-stat {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.mgh-stat-val {
+  font-family: var(--font-hud); font-size: 18px; color: var(--gold); font-weight: 700;
+}
+.mgh-stat-label {
+  font-size: 9px; color: var(--text-muted); letter-spacing: 1px; text-align: center;
+}
+.mgh-clicker-hint {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  letter-spacing: 1px; text-align: center;
+}
+.mgh-fleet-section {
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.mgh-fleet-title {
+  font-family: var(--font-hud); font-size: 10px; color: var(--green3);
+  letter-spacing: 3px; margin-bottom: 10px;
+}
+
+/* LOCKED tab state */
+.mgh-locked-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 60px 20px; gap: 16px;
+}
+.mgh-locked-icon { font-size: 48px; opacity: 0.5; }
+.mgh-locked-text {
+  font-family: var(--font-mono); font-size: 12px; color: var(--text-dim);
+  letter-spacing: 1px; text-align: center; line-height: 1.8;
+}
+.mgh-launch-btn {
+  background: rgba(57,255,20,0.08); border: 1px solid var(--green3);
+  color: var(--green); font-family: var(--font-body); font-size: 12px;
+  font-weight: 700; letter-spacing: 3px; padding: 12px 32px;
+  min-height: 48px; cursor: pointer; transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.mgh-launch-btn:hover, .mgh-launch-btn:active {
+  background: rgba(57,255,20,0.16); box-shadow: 0 0 20px rgba(57,255,20,0.3);
+}
 
 /* ══ NEW SYSTEM CSS ══════════════════════════════════════════════════ */
 
@@ -4248,11 +4645,14 @@ body.low-power .minigame-overlay {
    Lokácie sú bunky na grid mesta — klik vedie do scény.
 ══════════════════════════════════════════════════════ */
 #city-map-overlay {
-  position: fixed; inset: 0; z-index: 750;
+  position: fixed; inset: 0; z-index: 9999;
   background:
     radial-gradient(ellipse at center, #0d1421 0%, #050810 100%);
   display: none;
   overflow: hidden;
+  /* iOS safe area */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-overflow-scrolling: touch;
 }
 #city-map-overlay.show { display: block; animation: mapFadeIn 0.5s ease; }
 @keyframes mapFadeIn {
@@ -4301,12 +4701,15 @@ body.low-power .minigame-overlay {
   color: #fca5a5;
   font-family: 'Share Tech Mono', monospace;
   font-size: 12px; letter-spacing: 2px;
-  padding: 8px 28px;
+  padding: 12px 28px;
+  min-height: 48px; /* iOS touch target minimum */
   cursor: pointer;
   transition: all 0.15s;
   text-shadow: 0 0 8px rgba(239,68,68,0.5);
   box-shadow: 0 0 12px rgba(239,68,68,0.2);
   animation: closePulse 3s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 @keyframes closePulse {
   0%,100% { box-shadow: 0 0 8px rgba(239,68,68,0.2); }
@@ -4321,8 +4724,12 @@ body.low-power .minigame-overlay {
 
 /* Map canvas container */
 .city-map-canvas {
-  position: absolute; inset: 60px 0 80px 0;
+  position: absolute;
+  top: 60px; left: 0; right: 0;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   display: flex; align-items: center; justify-content: center;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
 }
 .city-map-svg {
   width: 100%; height: 100%;
@@ -4387,9 +4794,11 @@ body.low-power .minigame-overlay {
 .city-map-footer {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 12px 22px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(0deg, rgba(5,8,16,0.97) 0%, transparent 100%);
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; z-index: 10;
+  flex-wrap: wrap;
 }
 .city-map-stats {
   display: flex; gap: 16px;
@@ -4584,6 +4993,129 @@ body.low-power .minigame-overlay {
   background:linear-gradient(90deg,var(--green3),var(--green));
   box-shadow:0 0 8px rgba(57,255,20,0.7);
   transition:width 0.25s linear;
+}
+
+/* ══════════════════════════════════════════════════════════
+   GLOBÁLNE CLOSE / ZAVRIEŤ BUTTONY — vždy červené, viditeľné
+   Pokrýva: casino, overlay, panel, mobile, fishing, minigames
+══════════════════════════════════════════════════════════ */
+
+/* Casino close */
+.casino-close {
+  background: linear-gradient(180deg, rgba(239,68,68,0.18), rgba(239,68,68,0.06)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  font-family: var(--font-body) !important;
+  font-size: 12px !important; font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  padding: 6px 16px !important;
+  cursor: pointer !important;
+  transition: all 0.15s !important;
+  text-shadow: 0 0 8px rgba(239,68,68,0.5) !important;
+  box-shadow: 0 0 12px rgba(239,68,68,0.2) !important;
+}
+.casino-close:hover {
+  background: rgba(239,68,68,0.3) !important;
+  box-shadow: 0 0 22px rgba(239,68,68,0.55) !important;
+  letter-spacing: 2px !important;
+}
+
+/* Mobile panel close button (✕ v rohu) */
+.mobile-panel-close-btn {
+  background: linear-gradient(180deg, rgba(239,68,68,0.18), rgba(239,68,68,0.06)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  width: 28px !important; height: 28px !important;
+  font-size: 14px !important; font-weight: 700 !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  cursor: pointer !important;
+  border-radius: 2px !important;
+  transition: all 0.15s !important;
+  text-shadow: 0 0 6px rgba(239,68,68,0.5) !important;
+  flex-shrink: 0 !important;
+}
+.mobile-panel-close-btn:hover, .mobile-panel-close-btn:active {
+  background: rgba(239,68,68,0.3) !important;
+  box-shadow: 0 0 16px rgba(239,68,68,0.5) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Generický mobile-panel-close (starý systém) */
+.mobile-panel-close {
+  width: 100% !important;
+  background: linear-gradient(180deg, rgba(239,68,68,0.12), rgba(239,68,68,0.04)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  font-family: var(--font-body) !important;
+  font-size: 12px !important; letter-spacing: 2px !important;
+  padding: 10px !important; cursor: pointer !important;
+  margin-bottom: 12px !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  transition: all 0.15s !important;
+}
+.mobile-panel-close:hover { background: rgba(239,68,68,0.22) !important; }
+
+/* MGH (minigame hub) close */
+.mgh-close-btn {
+  background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  font-weight: 700 !important; letter-spacing: 2px !important;
+  text-shadow: 0 0 8px rgba(239,68,68,0.4) !important;
+  box-shadow: 0 0 10px rgba(239,68,68,0.2) !important;
+  transition: all 0.15s !important;
+}
+.mgh-close-btn:hover, .mgh-close-btn:active {
+  background: rgba(239,68,68,0.25) !important;
+  box-shadow: 0 0 20px rgba(239,68,68,0.5) !important;
+}
+
+/* Fishing close */
+#fishing-close {
+  background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(239,68,68,0.4) !important;
+  transition: all 0.15s !important;
+}
+#fishing-close:hover { background: rgba(239,68,68,0.25) !important; }
+
+/* City map close */
+.city-map-close-btn {
+  background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(239,68,68,0.4) !important;
+  transition: all 0.15s !important;
+  letter-spacing: 2px !important;
+}
+.city-map-close-btn:hover { background: rgba(239,68,68,0.25) !important; }
+
+/* Factions, minigame close */
+.factions-close, .minigame-close, .faction-window-close {
+  background: linear-gradient(180deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05)) !important;
+  border: 1px solid var(--red2) !important;
+  color: #ff6b6b !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(239,68,68,0.4) !important;
+  transition: all 0.15s !important;
+}
+.factions-close:hover, .minigame-close:hover { background: rgba(239,68,68,0.25) !important; }
+
+/* Hack view zavrieť */
+.hack-tab-btn[onclick*="close"],
+button[onclick*="close"][style*="danger"] {
+  color: #ff6b6b !important;
+  border-color: var(--red2) !important;
+}
+
+/* Všetky inline ✕ close buttony v overlayoch (bez triedy) */
+button[onclick*="close"]:not(.bj-btn):not(.tab-btn):not(.inv-drawer-tab):not(.choice-btn),
+button[onclick*="Close"]:not(.bj-btn):not(.tab-btn):not(.inv-drawer-tab):not(.choice-btn) {
+  color: #ff6b6b !important;
 }
 
 </style>
@@ -4848,16 +5380,16 @@ body.low-power .minigame-overlay {
     <button id="inv-drawer-close" onclick="closeInvDrawer()">✕</button>
   </div>
   <div id="inv-drawer-tabs">
-    <button class="inv-drawer-tab active" onclick="switchDrawerTab('items')">🎒 Predmety</button>
-    <button class="inv-drawer-tab"        onclick="switchDrawerTab('equip')">⚔️ Výstroj</button>
+    <button class="inv-drawer-tab"        onclick="switchDrawerTab('items')">🎒 Predmety</button>
+    <button class="inv-drawer-tab active" onclick="switchDrawerTab('equip')">⚔️ Výstroj</button>
     <button class="inv-drawer-tab"        onclick="switchDrawerTab('fish')">🐟 Ryby</button>
     <button class="inv-drawer-tab"        onclick="switchDrawerTab('shop')">🛒 Obchod</button>
   </div>
   <div id="inv-drawer-body">
-    <div class="inv-drawer-pane active" id="inv-drawer-pane-items">
+    <div class="inv-drawer-pane" id="inv-drawer-pane-items">
       <div id="inv-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
     </div>
-    <div class="inv-drawer-pane" id="inv-drawer-pane-equip">
+    <div class="inv-drawer-pane active" id="inv-drawer-pane-equip">
       <!-- PAPERDOLL — obrázok vľavo, sloty vpravo -->
       <div class="paperdoll-wrap">
         <!-- Ľavý stĺpec slotov -->
@@ -5114,17 +5646,17 @@ body.low-power .minigame-overlay {
       </div>
     </div>
     <div id="inv-panel-tabs">
-      <button class="inv-ptab active" onclick="switchInvPanelTab('items')">🎒 Predmety</button>
-      <button class="inv-ptab"        onclick="switchInvPanelTab('equip')">⚔️ Výstroj</button>
+      <button class="inv-ptab"        onclick="switchInvPanelTab('items')">🎒 Predmety</button>
+      <button class="inv-ptab active" onclick="switchInvPanelTab('equip')">⚔️ Výstroj</button>
       <button class="inv-ptab"        onclick="switchInvPanelTab('fish')">🐟 Ryby</button>
       <button class="inv-ptab"        onclick="switchInvPanelTab('shop')">🛒 Obchod</button>
       <button class="inv-ptab"        onclick="switchInvPanelTab('log')" id="inv-ptab-log">📋 Log</button>
     </div>
     <div id="inv-panel-body">
-      <div class="inv-ppane active" id="inv-ppane-items">
+      <div class="inv-ppane" id="inv-ppane-items">
         <div id="inv-panel-items-body"><div class="inv-empty">// prázdny inventár //</div></div>
       </div>
-      <div class="inv-ppane" id="inv-ppane-equip">
+      <div class="inv-ppane active" id="inv-ppane-equip">
         <!-- PAPERDOLL — obrázok vľavo, sloty vpravo -->
         <div class="paperdoll-wrap">
           <!-- Ľavý stĺpec slotov -->
@@ -5457,7 +5989,7 @@ body.low-power .minigame-overlay {
   <button class="mobile-nav-btn" id="mnav-game" onclick="mobileShowGame()">⚡<span>Hra</span></button>
   <button class="mobile-nav-btn" id="mnav-inv" onclick="toggleInvDrawer()">🎒<span>Inv.</span></button>
   <button class="mobile-nav-btn" id="mnav-map" onclick="CityMap.open()">🗺<span>Mapa</span></button>
-  <button class="mobile-nav-btn" id="mnav-right" onclick="mobileMiniLog()">📋<span>Log</span></button>
+  <button class="mobile-nav-btn" id="mnav-minigames" onclick="MinigameHub.open()" style="-webkit-tap-highlight-color:transparent;touch-action:manipulation">🎮<span>Minihry</span></button>
 </div>
 
 <!-- MOBILE EXPANDED TOPBAR (toggle) -->
@@ -5499,6 +6031,28 @@ body.low-power .minigame-overlay {
 <div id="mobile-map-panel" class="mobile-overlay-panel"></div>
 <div id="mobile-inv-panel" class="mobile-overlay-panel"></div>
 <div id="mobile-log-panel" class="mobile-overlay-panel"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     MINIGAME HUB OVERLAY
+═══════════════════════════════════════════════════ -->
+<div id="minigame-hub-overlay">
+  <div class="mgh-header">
+    <div>
+      <div class="mgh-title">🎮 MINIHRY // HUB</div>
+      <div class="mgh-sub">// vyber minihru //</div>
+    </div>
+    <button class="mgh-close-btn" onclick="MinigameHub.close()">✕ ZAVRIEŤ</button>
+  </div>
+  <div class="mgh-tabs" id="mgh-tabs">
+    <button class="mgh-tab active" data-tab="clicker" onclick="MinigameHub.switchTab('clicker')">🎣 Clicker</button>
+    <button class="mgh-tab" data-tab="blackjack" onclick="MinigameHub.switchTab('blackjack')">🃏 Blackjack</button>
+    <button class="mgh-tab" data-tab="slots" onclick="MinigameHub.switchTab('slots')">🎰 Automaty</button>
+    <button class="mgh-tab" data-tab="streetdeal" onclick="MinigameHub.switchTab('streetdeal')">💊 Street Deal</button>
+    <button class="mgh-tab" data-tab="terminal" onclick="MinigameHub.switchTab('terminal')">💻 Terminal</button>
+    <button class="mgh-tab" data-tab="stocks" onclick="MinigameHub.switchTab('stocks')">📈 Akcie</button>
+  </div>
+  <div class="mgh-body" id="mgh-body"></div>
+</div>
 
 <!-- JOB SELECT -->
 <div id="job-overlay" class="hidden">
@@ -7359,7 +7913,8 @@ function openInvDrawer(tab) {
   drawer.classList.add('open');
   if (backdrop) backdrop.classList.add('show');
   if (btn) btn.classList.add('active');
-  if (tab) switchDrawerTab(tab);
+  // Default vždy na Výstroj ak nie je explicitný tab
+  switchDrawerTab(tab || 'equip');
 }
 
 function closeInvDrawer() {
@@ -8288,9 +8843,30 @@ function mobilePanel(name) {
     panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
     if (src) panel.appendChild(src.cloneNode(true));
   } else if (name === 'map') {
-    var src2 = document.getElementById('sec-map');
     panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
-    if (src2) panel.appendChild(src2.cloneNode(true));
+    var tmapSec2 = document.getElementById('sec-textmap');
+    var tmapBody2 = document.getElementById('left-textmap-body');
+    if (!tmapBody2 || !tmapBody2.innerHTML.trim()) {
+      if (typeof renderLeftTextMap === 'function') renderLeftTextMap();
+    }
+    if (tmapSec2) {
+      var mapCl = tmapSec2.cloneNode(true);
+      var mapClBody = mapCl.querySelector ? mapCl.querySelector('#left-textmap-body') : null;
+      if (mapClBody && typeof TEXT_MAP_LOCS !== 'undefined') {
+        var mHtml3 = '';
+        TEXT_MAP_LOCS.forEach(function(loc){
+          if (loc.section) { mHtml3 += '<div class="ltm-section">'+loc.section+'</div>'; return; }
+          var cur = (typeof S !== 'undefined' && S.scene === loc.scene);
+          mHtml3 += '<button onclick="goTo(\''+loc.scene+'\')" style="width:100%;display:flex;align-items:center;gap:8px;padding:12px 14px;background:'+(cur?'rgba(57,255,20,0.12)':'transparent')+';border:none;border-bottom:1px solid var(--border2);cursor:pointer;text-align:left">'+
+            '<span style="font-size:18px;width:24px;text-align:center">'+loc.icon+'</span>'+
+            '<span style="font-family:var(--font-body);font-size:13px;color:'+(cur?'var(--green)':'var(--text-bright)')+';flex:1">'+loc.name+'</span>'+
+            (cur?'<span style="font-family:var(--font-hud);font-size:9px;color:var(--green)">◆ TU</span>':'')+
+            '</button>';
+        });
+        mapClBody.innerHTML = mHtml3;
+      }
+      panel.appendChild(mapCl);
+    }
   } else if (name === 'inv') {
     panel.innerHTML = '<button class="mobile-panel-close" onclick="mobilePanel(null)">✕ Zavrieť</button>';
     var rp = document.getElementById('right-panel');
@@ -8310,7 +8886,7 @@ function mobilePanel(name) {
 ══════════════════════════════════════════════════════════════════ */
 var _mobilePanelState = {
   leftIdx: -1,   // -1 = zatvorený
-  rightIdx: -1,
+  rightIdx: 1,   // default: Výstroj (equip = index 1)
   topbarOpen: false
 };
 
@@ -8372,8 +8948,34 @@ function _mobileFillLeftPanel(key) {
     var src4 = document.getElementById('sec-ops');
     if (src4) content.appendChild(src4.cloneNode(true));
   } else if (key === 'map') {
-    var src5 = document.getElementById('sec-map');
-    if (src5) content.appendChild(src5.cloneNode(true));
+    // sec-map neexistuje — mapa lokácií je v sec-textmap
+    var tmapSection = document.getElementById('sec-textmap');
+    var tmapBody    = document.getElementById('left-textmap-body');
+    // Inicializuj textovú mapu ak ešte nie je
+    if (!tmapBody || tmapBody.innerHTML.trim() === '') {
+      if (typeof renderLeftTextMap === 'function') renderLeftTextMap();
+    }
+    content.innerHTML = '<div style="padding:8px 12px;font-family:var(--font-hud);font-size:9px;color:var(--green3);letter-spacing:2px;border-bottom:1px solid var(--border2);text-transform:uppercase;background:linear-gradient(90deg,rgba(57,255,20,0.07),transparent)">◆ MAPA LOKÁCIÍ // PRIEVIDZA 2077</div>';
+    if (tmapSection) {
+      var mapClone = tmapSection.cloneNode(true);
+      mapClone.style.cssText = 'display:block!important;padding:0;margin:0';
+      // Rerender lokácií do klonu
+      var clBody = mapClone.querySelector ? mapClone.querySelector('#left-textmap-body') : null;
+      if (clBody && typeof TEXT_MAP_LOCS !== 'undefined') {
+        var mHtml = '';
+        TEXT_MAP_LOCS.forEach(function(loc){
+          if (loc.section) { mHtml += '<div class="ltm-section">'+loc.section+'</div>'; return; }
+          var cur = (typeof S !== 'undefined' && S.scene === loc.scene);
+          mHtml += '<button onclick="goTo(\''+loc.scene+'\')" style="width:100%;display:flex;align-items:center;gap:8px;padding:11px 14px;background:'+(cur?'rgba(57,255,20,0.12)':'transparent')+';border:none;border-bottom:1px solid var(--border2);cursor:pointer;text-align:left">'+
+            '<span style="font-size:18px;width:24px;text-align:center;flex-shrink:0">'+loc.icon+'</span>'+
+            '<span style="font-family:var(--font-body);font-size:13px;color:'+(cur?'var(--green)':'var(--text-bright)')+';flex:1;letter-spacing:0.3px">'+loc.name+'</span>'+
+            (cur?'<span style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1px">◆ TU</span>':'')+
+            '</button>';
+        });
+        clBody.innerHTML = mHtml;
+      }
+      content.appendChild(mapClone);
+    }
   }
 }
 
@@ -9245,10 +9847,21 @@ function openBlackjack() {
    Auto-spin režim. Hookuje CasinoQuestTracker (laundry).
    Otvoriť: openSlots()
 ═══════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   §28-SLOTS  REAL SPINNING REEL ENGINE  (senior rewrite)
+   ─────────────────────────────────────────────────────────────────
+   • Každý valec má CSS strip s mnohými symbolmi
+   • JS posúva strip cez CSS transform s cubic-bezier ease-out
+   • Staggered stop: 0 → 1 → 2 (každý 420ms neskôr)
+   • Auto-spin: točí kým má hráč peniaze, normálna rýchlosť
+   • Výsledkové symboly sú vždy v strednom riadku (payline)
+═══════════════════════════════════════════════════════════════════ */
 var Slots = (function() {
   var SYMBOLS = ['🍒','🍋','🔔','⭐','💎','7️⃣','🍀','🎱'];
   var WEIGHTS  = [30,  25,  20,  12,   8,   3,   15,  10];
   var PAYOUTS  = {'💎':50,'7️⃣':30,'⭐':20,'🍀':15,'🔔':10,'🍋':6,'🍒':4,'🎱':8};
+  var SYM_H    = 76;   // px výška jedného symbolu v páske
+  var STRIP_SYMS = 40; // koľko symbolov má každá páska (opakovaná smyčka)
 
   function weightedRandom() {
     var total = WEIGHTS.reduce(function(a,b){return a+b;},0);
@@ -9257,60 +9870,143 @@ var Slots = (function() {
     return SYMBOLS[0];
   }
 
-  var spinning = false;
-  var autoInterval = null;
-  var currentBet = 10;
+  /* Zostroj pole symbolov pre pásku — koniec musí byť finalSym uprostred */
+  function buildStrip(finalSym) {
+    var arr = [];
+    for (var i = 0; i < STRIP_SYMS - 1; i++) {
+      arr.push(SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]);
+    }
+    arr.push(finalSym); // posledný = výsledný (bude zarovnaný na payline)
+    return arr;
+  }
 
-  // Reel ticker animation — cycles through random symbols rapidly
-  function animateReel(el, durationMs, finalSym, cb) {
-    var start = Date.now();
-    var speed = 60; // ms per frame
-    var t = setInterval(function(){
-      el.textContent = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
-      if (Date.now() - start >= durationMs - speed) {
-        clearInterval(t);
-        el.textContent = finalSym;
-        el.classList.remove('spinning');
-        if (cb) cb();
-      }
-    }, speed);
+  /* Vytvorí DOM pásku symbolov vnútri valca */
+  function buildReelDOM(stripEl, symbols) {
+    stripEl.innerHTML = '';
+    symbols.forEach(function(sym, idx) {
+      var div = document.createElement('div');
+      div.className = 'slots-reel-sym';
+      div.textContent = sym;
+      div.dataset.idx = idx;
+      stripEl.appendChild(div);
+    });
+  }
+
+  /* Vypočíta translateY tak, aby finalSym bol na payline (stred valca = SYM_H*1 od vrchu) */
+  function calcFinalTranslate(stripLen) {
+    // payline = index 1 zhora v okne (okno má 3 viditeľné = výška 228px, stred=76–152px)
+    // Chceme aby posledný symbol (index stripLen-1) bol v strede
+    // strip.top = -((stripLen - 2) * SYM_H)  → posledný sym vycentrovaný
+    return -((stripLen - 2) * SYM_H);
+  }
+
+  var spinning   = false;
+  var autoTimer  = null;  // setTimeout handle alebo null
+  var autoActive = false;
+  var currentBet = 10;
+  var reelData   = [{},{},{}]; // { strip: DOMel, symbols: [] }
+
+  /* Inicializuje valce pri otvorení (zavolá sa z openSlots) */
+  function initReels() {
+    for (var i = 0; i < 3; i++) {
+      var reelEl  = document.getElementById('reel'+i);
+      if (!reelEl) continue;
+      var stripEl = reelEl.querySelector('.slots-reel-strip');
+      if (!stripEl) continue;
+      var syms = buildStrip(SYMBOLS[i % SYMBOLS.length]);
+      buildReelDOM(stripEl, syms);
+      reelData[i] = { strip: stripEl, symbols: syms };
+      // Reštart pozícia — zobraz "resting" symbol v strede
+      var restY = calcFinalTranslate(syms.length);
+      stripEl.style.transition = 'none';
+      stripEl.style.transform  = 'translateY('+restY+'px)';
+    }
+    flashLights(false);
+  }
+
+  /* Roztočí jeden valec a zastav ho po durationMs s finalSym na payline */
+  function spinReel(idx, finalSym, durationMs, cb) {
+    var reelEl  = document.getElementById('reel'+idx);
+    if (!reelEl) { if(cb) cb(); return; }
+    var stripEl = reelEl.querySelector('.slots-reel-strip');
+    if (!stripEl) { if(cb) cb(); return; }
+
+    // Zostroj novú pásku s výsledným symbolom na konci
+    var syms = buildStrip(finalSym);
+    buildReelDOM(stripEl, syms);
+    reelData[idx] = { strip: stripEl, symbols: syms };
+
+    var finalY = calcFinalTranslate(syms.length);
+    // Začni od vrcholu (rýchly snap bez animácie)
+    stripEl.style.transition = 'none';
+    stripEl.style.transform  = 'translateY(0px)';
+
+    // Vynúti reflow
+    void stripEl.offsetHeight;
+
+    // Spusti plynulú animáciu dolu na finalY
+    // Použijeme cubic-bezier pre efekt "spomaľovania" — realistický štart rýchlo, koniec pomaly
+    stripEl.style.transition = 'transform '+durationMs+'ms cubic-bezier(0.12, 0.8, 0.3, 1.0)';
+    stripEl.style.transform  = 'translateY('+finalY+'px)';
+
+    reelEl.classList.add('is-spinning');
+
+    // Po dokončení — označíme stredný symbol ako payline-sym
+    setTimeout(function() {
+      reelEl.classList.remove('is-spinning');
+      // Nájdi stredný (výsledný) symbol
+      var symsEls = stripEl.querySelectorAll('.slots-reel-sym');
+      var midIdx  = syms.length - 2; // index viditeľného stredného symbolu
+      if (symsEls[midIdx]) symsEls[midIdx].classList.add('payline-sym');
+      if (cb) cb();
+    }, durationMs);
   }
 
   function doSpin() {
     if (spinning) return;
     if (S.money < currentBet) {
-      addLog('Nedostatok kreditov pre stávku.','warn');
+      addLog('Nedostatok kreditov — auto zastavené.','warn');
       _pub.stopAuto();
       return;
     }
+
+    spinning = true;
     S.money -= currentBet;
     Renderer.updateMoney();
-    spinning = true;
 
-    var reels = [
-      document.getElementById('reel0'),
-      document.getElementById('reel1'),
-      document.getElementById('reel2'),
-    ];
-    var result = document.getElementById('slots-result');
-    result.textContent = '⟳';
-    result.className = 'slots-result';
-    reels.forEach(function(r){ r.classList.add('spinning'); });
+    var result  = document.getElementById('slots-result');
+    if (result) { result.textContent = ''; result.className = 'slots-result'; }
 
-    var final = [weightedRandom(), weightedRandom(), weightedRandom()];
-    // Staggered stop: reel 0 stops first, then 1, then 2
+    // Skry predchádzajúce win efekty
+    for (var i = 0; i < 3; i++) {
+      var r = document.getElementById('reel'+i);
+      if (r) {
+        r.classList.remove('win-reel','jackpot-reel');
+        r.querySelectorAll('.payline-sym').forEach(function(el){ el.classList.remove('payline-sym'); });
+      }
+    }
+
+    flashLights(true);
+
+    var final   = [weightedRandom(), weightedRandom(), weightedRandom()];
     var stopped = 0;
-    var durations = [700, 1100, 1500];
-    reels.forEach(function(r, i){
-      animateReel(r, durations[i], final[i], function(){
-        stopped++;
-        if (stopped === 3) evaluate(final, reels, result);
-      });
-    });
+    // Staggered zastavenie: valec 0 sa zastaví o 900ms, 1 o 1320ms, 2 o 1740ms
+    var durations = [900, 1320, 1740];
+
+    for (var j = 0; j < 3; j++) {
+      (function(idx, dur) {
+        spinReel(idx, final[idx], dur, function() {
+          stopped++;
+          if (stopped === 3) evaluate(final);
+        });
+      })(j, durations[j]);
+    }
   }
 
-  function evaluate(final, reels, result) {
+  function evaluate(final) {
     spinning = false;
+    flashLights(false);
+
     var a = final[0], b2 = final[1], c2 = final[2];
     var payout = 0, msg = '', cls = 'lose';
 
@@ -9319,8 +10015,12 @@ var Slots = (function() {
       payout = currentBet * mult;
       msg = a==='💎' ? '💎💎💎 JACKPOT! +'+payout+'₿' : a+a+a+' TROJKA! +'+payout+'₿';
       cls = a==='💎' ? 'jackpot' : 'win';
-      reels.forEach(function(r){ r.classList.add('win-reel'); });
+      for (var i=0;i<3;i++){
+        var r=document.getElementById('reel'+i);
+        if(r) r.classList.add(a==='💎'?'jackpot-reel':'win-reel');
+      }
       gainXP(5);
+      flashLights(true);
     } else if (a===b2 || b2===c2 || a===c2) {
       var pairSym = (a===b2)?a:(b2===c2?b2:a);
       var pairMult = Math.max(1, Math.floor((PAYOUTS[pairSym]||4)/3));
@@ -9331,29 +10031,44 @@ var Slots = (function() {
       msg = 'Žiadna výhra. -'+currentBet+'₿';
       cls = 'lose';
     }
-    reels.forEach(function(r){ r.classList.remove('win-reel'); });
-    if (cls==='win'||cls==='jackpot') reels.forEach(function(r){ r.classList.add('win-reel'); });
 
     S.money = Math.max(0, S.money + payout);
     Renderer.updateMoney();
     if (payout > 0) addLog('Sloty: Výhra '+payout+'₿ | '+msg,'ok');
     else            addLog('Sloty: Prehral si '+currentBet+'₿','warn');
 
-    result.textContent = msg;
-    result.className = 'slots-result '+cls;
+    var result = document.getElementById('slots-result');
+    if (result) { result.textContent = msg; result.className = 'slots-result '+cls; }
     var bal = document.getElementById('slots-balance');
-    if(bal) bal.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+currentBet+'₿';
+    if (bal) bal.textContent = '💰 Zostatok: '+S.money+'₿  |  Stávka: '+currentBet+'₿';
 
-    // CEO laundry quest tracking
     try { if (typeof CasinoQuestTracker !== 'undefined') CasinoQuestTracker.onRound(currentBet, payout - currentBet); } catch(e){}
 
-    // if auto is running, schedule next spin
-    if (autoInterval === 'running') {
-      autoInterval = setTimeout(function(){ doSpin(); }, 400);
+    // Auto-spin: ak stále aktívny a má peniaze → ďalší spin po krátkom delay
+    if (autoActive) {
+      if (S.money >= currentBet) {
+        autoTimer = setTimeout(function(){ doSpin(); }, 500);
+      } else {
+        _pub.stopAuto();
+        addLog('Automaty: Míňajú peniaze — auto zastavené.','warn');
+      }
     }
   }
 
+  /* Blikajúce svetlá v housing-u */
+  function flashLights(on) {
+    document.querySelectorAll('.slots-housing-light').forEach(function(l, i){
+      if (on) {
+        setTimeout(function(){ l.classList.add('on'); }, i*120);
+      } else {
+        l.classList.remove('on');
+      }
+    });
+  }
+
   var _pub = {
+    init: function() { initReels(); },
+
     setBet: function(v) {
       currentBet = v;
       var b = document.getElementById('slots-balance');
@@ -9363,25 +10078,25 @@ var Slots = (function() {
       });
     },
 
-    spin: function() { doSpin(); },
+    spin: function() { if (!autoActive) doSpin(); },
 
     startAuto: function() {
-      if (autoInterval) return;
-      autoInterval = 'running';
+      if (autoActive) return;
+      autoActive = true;
       var btn = document.getElementById('slots-auto-btn');
-      if(btn){ btn.textContent='⏹ STOP AUTO'; btn.classList.add('auto-active'); }
+      if(btn){ btn.textContent='⏹ STOP'; btn.classList.add('auto-active'); }
       doSpin();
     },
 
     stopAuto: function() {
-      if (autoInterval && autoInterval !== 'running') clearTimeout(autoInterval);
-      autoInterval = null;
+      autoActive = false;
+      if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
       var btn = document.getElementById('slots-auto-btn');
       if(btn){ btn.textContent='🔁 AUTO'; btn.classList.remove('auto-active'); }
     },
 
     toggleAuto: function() {
-      if (autoInterval) _pub.stopAuto(); else _pub.startAuto();
+      if (autoActive) _pub.stopAuto(); else _pub.startAuto();
     }
   };
   return _pub;
@@ -9395,12 +10110,44 @@ function openSlots() {
     +'</div>'
     +'<div class="casino-body">'
       +'<div class="casino-balance" id="slots-balance">💰 Zostatok: '+S.money+'₿  |  Stávka: 10₿</div>'
-      +'<div class="slots-reels">'
-        +'<div class="slots-reel" id="reel0">🎰</div>'
-        +'<div class="slots-reel" id="reel1">🎰</div>'
-        +'<div class="slots-reel" id="reel2">🎰</div>'
+
+      /* Horný housing — svetlá */
+      +'<div class="slots-machine-wrap">'
+        +'<div class="slots-housing">'
+          +'<span class="slots-housing-label">★ LAZARUS ★</span>'
+          +'<div class="slots-housing-lights">'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+          +'</div>'
+          +'<span class="slots-housing-label">★ CASINO ★</span>'
+        +'</div>'
+
+        /* Valce */
+        +'<div class="slots-reels">'
+          +'<div class="slots-payline-highlight"></div>'
+          +'<div class="slots-reel" id="reel0"><div class="slots-reel-strip"></div></div>'
+          +'<div class="slots-reel" id="reel1"><div class="slots-reel-strip"></div></div>'
+          +'<div class="slots-reel" id="reel2"><div class="slots-reel-strip"></div></div>'
+        +'</div>'
+
+        /* Spodný housing */
+        +'<div class="slots-housing" style="border-top:none;border-bottom:2px solid rgba(250,204,21,0.3);">'
+          +'<span class="slots-housing-label">PAYLINE</span>'
+          +'<div class="slots-housing-lights">'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+            +'<div class="slots-housing-light"></div>'
+          +'</div>'
+          +'<span class="slots-housing-label">CENTER</span>'
+        +'</div>'
       +'</div>'
-      +'<div class="slots-payline">[ 🍒×4 | 🍋×6 | 🔔×10 | ⭐×20 | 🍀×15 | 7️⃣×30 | 💎×50 ]</div>'
+
+      +'<div class="slots-payline" style="margin-top:8px">[ 🍒×4 | 🍋×6 | 🔔×10 | ⭐×20 | 🍀×15 | 7️⃣×30 | 💎×50 ]</div>'
       +'<div id="slots-result" class="slots-result"></div>'
       +'<div class="bj-divider"></div>'
       +'<div class="bj-hand-label">// STÁVKA //</div>'
@@ -9410,7 +10157,23 @@ function openSlots() {
         +'<button class="slots-chip bj-bet-chip" data-v="50" onclick="Slots.setBet(50)">50₿</button>'
         +'<button class="slots-chip bj-bet-chip" data-v="100" onclick="Slots.setBet(100)">100₿</button>'
       +'</div>'
-      +'<div class="slots-btn-row">'        +'<button class="slots-spin-btn" id="slots-spin-btn" onclick="Slots.spin()">⚡ TOČIŤ ⚡</button>'        +'<button class="slots-auto-btn bj-btn" id="slots-auto-btn" onclick="Slots.toggleAuto()">🔁 AUTO</button>'      +'</div>'      +'<div class="slots-hint" style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:6px">[SPACE] = Točiť</div>'    +'</div>'  );  Slots.setBet(10);}
+      +'<div class="slots-btn-row">'
+        +'<button class="slots-spin-btn" id="slots-spin-btn" onclick="Slots.spin()">⚡ TOČIŤ ⚡</button>'
+        +'<button class="slots-auto-btn" id="slots-auto-btn" onclick="Slots.toggleAuto()">🔁 AUTO</button>'
+      +'</div>'
+      +'<div class="slots-hint" style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:8px">'
+        +'[SPACE] = Točiť &nbsp;|&nbsp; AUTO = točí kým sú peniaze'
+      +'</div>'
+    +'</div>'
+  );
+  Slots.setBet(10);
+  // Inicializuj valce po vykreslení DOM (rAF zaručí správne rozmery)
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      Slots.init();
+    });
+  });
+}
 
 
 function escH(s) {
@@ -11981,8 +12744,23 @@ var CityMap = (function() {
       '<div class="tt-desc">' + loc.desc + '</div>' +
       factionTxt;
     tt.style.borderColor = loc.color;
-    tt.style.left = (event.clientX + 14) + 'px';
-    tt.style.top  = (event.clientY + 14) + 'px';
+
+    // Use touch coordinates if available (iOS)
+    var clientX = event.clientX;
+    var clientY = event.clientY;
+    if (event.touches && event.touches.length > 0) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    }
+    // Position: above finger on mobile, beside cursor on desktop
+    var isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      tt.style.left = Math.min(clientX - 80, window.innerWidth - 200) + 'px';
+      tt.style.top  = Math.max(clientY - 100, 60) + 'px';
+    } else {
+      tt.style.left = (clientX + 14) + 'px';
+      tt.style.top  = (clientY + 14) + 'px';
+    }
     tt.classList.add('show');
   }
   function hideTooltip() {
@@ -11990,25 +12768,78 @@ var CityMap = (function() {
   }
 
   // ── Travel to location ───────────────────────────────
+  var _travelLock = false; // prevent double-fire on iOS (touchend + click)
   function travel(locId) {
+    if (_travelLock) return;
     var loc = _locById(locId);
     if (!loc) return;
+    _travelLock = true;
+    setTimeout(function(){ _travelLock = false; }, 600);
     if (typeof SFX !== 'undefined') SFX.navigate();
-    // Zatvori mapu a naviguj
-    close();
-    if (typeof goTo === 'function') goTo(loc.scene);
+    // On mobile show brief flash before closing
+    var svg = _dom.svg;
+    if (svg) {
+      var el = svg.querySelector('[data-id="' + locId + '"] .city-loc-rect');
+      if (el) {
+        var orig = el.getAttribute('fill');
+        el.setAttribute('fill', 'rgba(57,255,20,0.25)');
+        setTimeout(function(){ el && el.setAttribute('fill', orig); }, 180);
+      }
+    }
+    setTimeout(function(){
+      close();
+      if (typeof goTo === 'function') goTo(loc.scene);
+    }, 200);
+  }
+
+  // ── Attach touch events to SVG after render (iOS fix) ─
+  function _attachTouchEvents() {
+    var svg = _dom.svg; if (!svg) return;
+    svg.querySelectorAll('.city-loc').forEach(function(g) {
+      var locId = g.getAttribute('data-id');
+      // Remove existing listeners by cloning
+      var newG = g.cloneNode(true);
+      g.parentNode.replaceChild(newG, g);
+      // touchend — primary iOS trigger
+      newG.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        travel(locId);
+      }, { passive: false });
+      // click — fallback for non-touch
+      newG.addEventListener('click', function(e) {
+        e.stopPropagation();
+        travel(locId);
+      });
+      // touchstart hover effect
+      newG.addEventListener('touchstart', function(e) {
+        newG.style.filter = 'brightness(1.6) drop-shadow(0 0 14px currentColor)';
+      }, { passive: true });
+      newG.addEventListener('touchcancel', function() {
+        newG.style.filter = '';
+      });
+    });
   }
 
   function open() {
     _cacheDom();
     if (!_dom.overlay) return;
     _renderSvg();
+    _attachTouchEvents(); // iOS touch fix
     _updateStats();
     _dom.overlay.classList.add('show');
+    // Prevent body scroll while map is open (iOS)
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
     if (typeof SoundFX !== 'undefined') SoundFX.play('mapOpen');
   }
   function close() {
     if (_dom && _dom.overlay) _dom.overlay.classList.remove('show');
+    // Restore body scroll
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
     hideTooltip();
   }
 
@@ -12293,7 +13124,7 @@ var MobileNav = (function() {
   ];
 
   var _leftIdx  = 0;
-  var _rightIdx = 0;
+  var _rightIdx = 1; // default: Výstroj (equip)
   var _leftOpen  = false;
   var _rightOpen = false;
   var _closing = false;
@@ -12313,8 +13144,32 @@ var MobileNav = (function() {
         content = lp ? lp.innerHTML : '<div style="padding:12px;color:var(--text-dim)">// Štatistiky //</div>';
         break;
       case 'map':
-        var mp = _el('sec-map');
-        content = mp ? mp.innerHTML : '';
+        // sec-map neexistuje — použij sec-textmap (textová mapa lokácií)
+        var tmapB = _el('left-textmap-body');
+        if (!tmapB || tmapB.innerHTML.trim() === '') {
+          if (typeof renderLeftTextMap === 'function') renderLeftTextMap();
+        }
+        var tmapSec = _el('sec-textmap');
+        if (tmapSec) {
+          var cl = tmapSec.cloneNode(true);
+          var clB = cl.querySelector ? cl.querySelector('#left-textmap-body') : null;
+          if (clB && typeof TEXT_MAP_LOCS !== 'undefined') {
+            var mh = '';
+            TEXT_MAP_LOCS.forEach(function(loc){
+              if (loc.section) { mh += '<div class="ltm-section">'+loc.section+'</div>'; return; }
+              var cur = (typeof S !== 'undefined' && S.scene === loc.scene);
+              mh += '<button onclick="goTo(\''+loc.scene+'\')" style="width:100%;display:flex;align-items:center;gap:8px;padding:12px 14px;background:'+(cur?'rgba(57,255,20,0.12)':'transparent')+';border:none;border-bottom:1px solid var(--border2);cursor:pointer;text-align:left">'+
+                '<span style="font-size:18px;width:24px;text-align:center;flex-shrink:0">'+loc.icon+'</span>'+
+                '<span style="font-family:var(--font-body);font-size:13px;color:'+(cur?'var(--green)':'var(--text-bright)')+';flex:1">'+loc.name+'</span>'+
+                (cur?'<span style="font-family:var(--font-hud);font-size:9px;color:var(--green)">◆ TU</span>':'')+
+                '</button>';
+            });
+            clB.innerHTML = mh;
+          }
+          content = '<div style="font-family:var(--font-hud);font-size:9px;color:var(--green3);letter-spacing:2px;padding:8px 12px;border-bottom:1px solid var(--border2);background:linear-gradient(90deg,rgba(57,255,20,0.07),transparent);text-transform:uppercase">◆ MAPA LOKÁCIÍ</div>' + cl.innerHTML;
+        } else {
+          content = '<div style="padding:12px;color:var(--text-muted);font-size:11px">Mapa nedostupná</div>';
+        }
         break;
       case 'ops':
         var op = _el('sec-ops');
@@ -12733,19 +13588,29 @@ function mobileTopbarToggle() {
     '@media (max-width:768px) {',
     '  #casino-overlay { z-index: 9000 !important; padding-top: 38px; }',
     '  #casino-panel { max-height: calc(100dvh - 42px - 52px); overflow-y: auto; width: 96%; }',
+    '  /* Mobile slide panely — viditeľné */  ',
     '  .mobile-slide-panel { transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease; }',
-    '  .mobile-slide-panel.open { display: block !important; }',
+    '  .mobile-slide-panel.open { display: block !important; opacity: 1 !important; transform: translateX(0) !important; }',
+    '  /* Mobile left panel — opravená mapa lokácií */',
+    '  #mobile-left-panel-content .ltm-section {',
+    '    font-family: var(--font-hud); font-size: 8px; color: var(--green3);',
+    '    letter-spacing: 2px; padding: 6px 14px 4px; text-transform: uppercase;',
+    '    border-bottom: 1px solid var(--border2); background: rgba(0,0,0,0.3);',
+    '  }',
+    '  #mobile-left-panel-content button {',
+    '    -webkit-tap-highlight-color: transparent;',
+    '  }',
+    '  /* Slots na mobile — casino overlay nad všetkým */',
+    '  .slots-reels { min-height: 230px; }',
+    '  .slots-reel  { height: 228px !important; }',
+    '  .slots-machine-wrap { margin: 8px 0 6px; }',
     '  /* Bottom nav max 6 buttons */',
     '  #mobile-nav { display: none; height: 52px; overflow: hidden; }',
     '  @media (max-width: 768px) { #mobile-nav { display: flex; } }',
     '  #mobile-nav .mobile-nav-btn { flex: 1; min-width: 0; font-size: 8px; }',
     '  #mobile-nav .mobile-nav-btn span { font-size: 7px; letter-spacing: 0; }',
     '}',
-    /* Plynulejší slot transition pre slide panels */
-    '.mobile-slide-panel {',
-    '  will-change: transform, opacity;',
-    '  backface-visibility: hidden;',
-    '}',
+    '.mobile-slide-panel { will-change: transform, opacity; backface-visibility: hidden; }',
   ].join('\n');
   document.head.appendChild(style);
 })();
@@ -14004,6 +14869,336 @@ var Typewriter = (function(){
         window.saveGame = function(){ SFX.save(); _save(); };
       }
     }, 400);
+  });
+})();
+</script>
+
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   MINIGAME HUB — centrálny hub pre všetky minihry
+══════════════════════════════════════════════════════════════════ */
+var MinigameHub = (function() {
+  var _currentTab = 'clicker';
+  var _open = false;
+
+  // ── Tab definitions ──────────────────────────────────────────
+  var TABS = {
+    clicker: { label: '🎣 Clicker', render: _renderClicker },
+    blackjack: { label: '🃏 Blackjack', render: _renderBlackjack },
+    slots: { label: '🎰 Automaty', render: _renderSlots },
+    streetdeal: { label: '💊 Street Deal', render: _renderStreetDeal },
+    terminal: { label: '💻 Terminal', render: _renderTerminal },
+    stocks: { label: '📈 Akcie', render: _renderStocks }
+  };
+
+  function _el(id) { return document.getElementById(id); }
+
+  // ── Renders ──────────────────────────────────────────────────
+
+  function _renderClicker(body) {
+    // Build the satisfying big clicker UI
+    var owned = (typeof FLEET_BOATS !== 'undefined') ?
+      FLEET_BOATS.filter(function(b){ return typeof FLEET_STATE !== 'undefined' && FLEET_STATE[b.id] && FLEET_STATE[b.id].owned; }) : [];
+    var emoji = owned.length > 0 ? owned[owned.length-1].icon : '🎣';
+    var cpc = (typeof clickerPerClick !== 'undefined') ? clickerPerClick : 1;
+    var total = (typeof clickerFishCount !== 'undefined') ? clickerFishCount : 0;
+    var passive = (typeof S !== 'undefined' && S.income) ? (S.income.boats || 0) : 0;
+
+    body.innerHTML =
+      '<div class="mgh-clicker-wrap">' +
+        '<div class="mgh-clicker-target" id="mgh-clicker-btn">' +
+          '<div class="mgh-clicker-bg" id="mgh-clicker-bg"></div>' +
+          '<div class="mgh-clicker-emoji" id="mgh-clicker-emoji">' + emoji + '</div>' +
+        '</div>' +
+        '<div class="mgh-combo-bar"><div class="mgh-combo-fill" id="mgh-combo-fill"></div></div>' +
+        '<div class="mgh-combo-label" id="mgh-combo-label"></div>' +
+        '<div class="mgh-stats-row">' +
+          '<div class="mgh-stat"><span class="mgh-stat-val" id="mgh-cpc">+' + cpc + '₿</span><span class="mgh-stat-label">ZA KLIK</span></div>' +
+          '<div class="mgh-stat"><span class="mgh-stat-val" id="mgh-total">' + total.toLocaleString('sk') + '</span><span class="mgh-stat-label">KLIKOV</span></div>' +
+          '<div class="mgh-stat"><span class="mgh-stat-val" id="mgh-passive">' + passive.toLocaleString('sk') + '₿/s</span><span class="mgh-stat-label">FLOTILA/s</span></div>' +
+        '</div>' +
+        '<div class="mgh-clicker-hint">// DRŽE = auto • Rýchle kliky = 🔥 COMBO //</div>' +
+      '</div>' +
+      '<div class="mgh-fleet-section">' +
+        '<div class="mgh-fleet-title">⚓ FLOTILA — klikni na loď</div>' +
+        '<div id="mgh-fleet-mini"></div>' +
+      '</div>';
+
+    _bindClickerEvents();
+    _renderFleetMini();
+  }
+
+  function _renderFleetMini() {
+    var el = _el('mgh-fleet-mini'); if (!el) return;
+    if (typeof FLEET_BOATS === 'undefined') {
+      el.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:8px">// Flotila nie je dostupná //</div>';
+      return;
+    }
+    var html = '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
+    FLEET_BOATS.forEach(function(boat) {
+      var fs = (typeof FLEET_STATE !== 'undefined') ? (FLEET_STATE[boat.id] || {}) : {};
+      var owned = fs.owned;
+      var price = (typeof getBoatPrice === 'function') ? getBoatPrice(boat) : boat.baseCost;
+      var income = (typeof getBoatIncome === 'function') ? getBoatIncome(boat) : 0;
+      var canBuy = !owned && typeof S !== 'undefined' && S.money >= price;
+      html += '<div style="border:1px solid ' + (owned ? 'var(--green3)' : 'var(--border)') + ';background:' + (owned ? 'rgba(57,255,20,0.05)' : 'var(--bg2)') + ';padding:10px 12px;flex:1;min-width:120px;max-width:180px;">';
+      html += '<div style="font-size:28px;text-align:center;margin-bottom:4px">' + boat.icon + '</div>';
+      html += '<div style="font-family:var(--font-hud);font-size:9px;letter-spacing:2px;color:' + (owned ? 'var(--green)' : 'var(--text-dim)') + ';text-align:center;margin-bottom:4px">' + boat.name + '</div>';
+      if (owned) {
+        html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--gold);text-align:center">+' + income + '₿/s</div>';
+        html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--green3);text-align:center;margin-top:2px">+' + (boat.clickBonus||0) + '₿/klik</div>';
+      } else {
+        html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);text-align:center">₿' + price.toLocaleString('sk') + '</div>';
+        html += '<button onclick="MinigameHub._buyBoat('' + boat.id + '')" style="width:100%;margin-top:6px;background:' + (canBuy ? 'rgba(57,255,20,0.08)' : 'transparent') + ';border:1px solid ' + (canBuy ? 'var(--green3)' : 'var(--border2)') + ';color:' + (canBuy ? 'var(--green)' : 'var(--text-muted)') + ';font-family:var(--font-body);font-size:10px;letter-spacing:1px;padding:5px;cursor:' + (canBuy ? 'pointer' : 'not-allowed') + ';min-height:36px;touch-action:manipulation">' + (canBuy ? '[ KÚPIŤ ]' : '[ ₿' + price.toLocaleString('sk') + ' ]') + '</button>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
+  // ── Clicker touch/click events ───────────────────────────────
+  var _mghHoldInterval = null;
+  var _mghHoldActive = false;
+  var _mghCombo = 0, _mghLastClick = 0, _mghComboTimer = null;
+
+  function _bindClickerEvents() {
+    var btn = _el('mgh-clicker-btn'); if (!btn) return;
+    var bg = _el('mgh-clicker-bg');
+    var emojiEl = _el('mgh-clicker-emoji');
+
+    function doPress(cx, cy, fromHold) {
+      if (bg) bg.classList.add('pressed');
+      if (emojiEl) emojiEl.classList.add('pressed');
+      // Ring ripple
+      var ring = document.createElement('div');
+      ring.className = 'mgh-clicker-ring';
+      btn.appendChild(ring);
+      setTimeout(function(){ if(ring.parentNode) ring.parentNode.removeChild(ring); }, 420);
+      // Call existing fish logic
+      if (typeof _doOneFish === 'function') {
+        _doOneFish(cx, cy, fromHold);
+      }
+      _updateMghStats();
+    }
+
+    function doRelease() {
+      var bg = _el('mgh-clicker-bg');
+      var emojiEl = _el('mgh-clicker-emoji');
+      if (bg) bg.classList.remove('pressed');
+      if (emojiEl) emojiEl.classList.remove('pressed');
+      _mghHoldActive = false;
+      if (_mghHoldInterval) { clearInterval(_mghHoldInterval); _mghHoldInterval = null; }
+    }
+
+    // Touch events (primary on iPhone)
+    btn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      var t = e.touches[0];
+      _mghHoldActive = true;
+      doPress(t.clientX, t.clientY, false);
+      _mghHoldInterval = setInterval(function() {
+        if (!_mghHoldActive) { clearInterval(_mghHoldInterval); return; }
+        doPress(t.clientX, t.clientY, true);
+      }, 80);
+    }, { passive: false });
+
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      doRelease();
+    }, { passive: false });
+
+    btn.addEventListener('touchcancel', function() { doRelease(); });
+
+    // Mouse events (desktop fallback)
+    btn.addEventListener('mousedown', function(e) {
+      _mghHoldActive = true;
+      doPress(e.clientX, e.clientY, false);
+      _mghHoldInterval = setInterval(function() {
+        if (!_mghHoldActive) { clearInterval(_mghHoldInterval); return; }
+        doPress(e.clientX, e.clientY, true);
+      }, 80);
+    });
+    btn.addEventListener('mouseup', doRelease);
+    btn.addEventListener('mouseleave', doRelease);
+  }
+
+  function _updateMghStats() {
+    var cpc = _el('mgh-cpc'), total = _el('mgh-total'), passive = _el('mgh-passive');
+    var comboFill = _el('mgh-combo-fill'), comboLabel = _el('mgh-combo-label');
+    if (typeof clickerPerClick !== 'undefined') {
+      if (cpc) cpc.textContent = '+' + clickerPerClick + '₿';
+      if (total) total.textContent = (clickerFishCount||0).toLocaleString('sk');
+    }
+    if (typeof S !== 'undefined' && S.income) {
+      if (passive) passive.textContent = (S.income.boats||0).toLocaleString('sk') + '₿/s';
+    }
+    // Sync combo from main clicker state
+    var combo = (typeof _clickCombo !== 'undefined') ? _clickCombo : 0;
+    if (comboFill) {
+      var pct = Math.min(combo / 20 * 100, 100);
+      comboFill.style.width = pct + '%';
+    }
+    if (comboLabel) {
+      if (combo > 3) {
+        var mult = (1 + combo * 0.05).toFixed(1);
+        comboLabel.textContent = '🔥 COMBO x' + mult;
+      } else {
+        comboLabel.textContent = '';
+      }
+    }
+    // Update emoji
+    var owned = (typeof FLEET_BOATS !== 'undefined') ?
+      FLEET_BOATS.filter(function(b){ return typeof FLEET_STATE !== 'undefined' && FLEET_STATE[b.id] && FLEET_STATE[b.id].owned; }) : [];
+    var emojiEl = _el('mgh-clicker-emoji');
+    if (emojiEl && owned.length > 0) emojiEl.textContent = owned[owned.length-1].icon;
+  }
+
+  // Public boat buy from hub
+  function _buyBoat(boatId) {
+    if (typeof buyFleetBoat === 'function') {
+      buyFleetBoat(boatId);
+      setTimeout(function(){ _renderFleetMini(); _updateMghStats(); }, 100);
+    }
+  }
+
+  // ── Casino tabs ──────────────────────────────────────────────
+  function _renderBlackjack(body) {
+    body.innerHTML =
+      '<div class="mgh-locked-wrap">' +
+        '<div class="mgh-locked-icon">🃏</div>' +
+        '<div class="mgh-locked-text">Blackjack · Casino Jantár<br>Hraj v kasíne — risK vs odmena</div>' +
+        '<button class="mgh-launch-btn" onclick="MinigameHub.close();setTimeout(function(){openBlackjack();},200)">⚡ SPUSTIŤ BLACKJACK</button>' +
+      '</div>';
+  }
+
+  function _renderSlots(body) {
+    body.innerHTML =
+      '<div class="mgh-locked-wrap">' +
+        '<div class="mgh-locked-icon">🎰</div>' +
+        '<div class="mgh-locked-text">Automaty · Casino Jantár<br>Točiť valce — jednoduché, závislé</div>' +
+        '<button class="mgh-launch-btn" onclick="MinigameHub.close();setTimeout(function(){openSlots();},200)">⚡ SPUSTIŤ AUTOMATY</button>' +
+      '</div>';
+  }
+
+  function _renderStreetDeal(body) {
+    var available = typeof StreetDealMinigame !== 'undefined';
+    if (!available) {
+      body.innerHTML = '<div class="mgh-locked-wrap"><div class="mgh-locked-icon">🔒</div><div class="mgh-locked-text">Street Deal · Stokári frakcia<br>Potrebuješ joinúť Stokárov</div></div>';
+      return;
+    }
+    body.innerHTML =
+      '<div class="mgh-locked-wrap">' +
+        '<div class="mgh-locked-icon">💊</div>' +
+        '<div class="mgh-locked-text">Street Deal · Stokári<br>Timing minihra — trafíš zónu?</div>' +
+        '<button class="mgh-launch-btn" onclick="MinigameHub.close();setTimeout(function(){StreetDealMinigame.open();},200)">⚡ SPUSTIŤ STREET DEAL</button>' +
+      '</div>';
+  }
+
+  function _renderTerminal(body) {
+    var available = typeof TerminalOpsMinigame !== 'undefined';
+    if (!available) {
+      body.innerHTML = '<div class="mgh-locked-wrap"><div class="mgh-locked-icon">🔒</div><div class="mgh-locked-text">Terminal Ops · Hackeri frakcia<br>Potrebuješ joinúť Hackerov</div></div>';
+      return;
+    }
+    body.innerHTML =
+      '<div class="mgh-locked-wrap">' +
+        '<div class="mgh-locked-icon">💻</div>' +
+        '<div class="mgh-locked-text">Terminal Ops · Hackeri<br>Sequence puzzle — hackovanie systémov</div>' +
+        '<button class="mgh-launch-btn" onclick="MinigameHub.close();setTimeout(function(){TerminalOpsMinigame.open();},200)">⚡ SPUSTIŤ TERMINAL</button>' +
+      '</div>';
+  }
+
+  function _renderStocks(body) {
+    var available = typeof StocksMinigame !== 'undefined';
+    if (!available) {
+      body.innerHTML = '<div class="mgh-locked-wrap"><div class="mgh-locked-icon">🔒</div><div class="mgh-locked-text">Akcie · CEO frakcia<br>Potrebuješ joinúť CEO sieť</div></div>';
+      return;
+    }
+    body.innerHTML =
+      '<div class="mgh-locked-wrap">' +
+        '<div class="mgh-locked-icon">📈</div>' +
+        '<div class="mgh-locked-text">Akcie · CEO sieť<br>Long/short trading — hazard s trhom</div>' +
+        '<button class="mgh-launch-btn" onclick="MinigameHub.close();setTimeout(function(){StocksMinigame.open();},200)">⚡ SPUSTIŤ AKCIE</button>' +
+      '</div>';
+  }
+
+  // ── Public API ───────────────────────────────────────────────
+  function switchTab(tabId) {
+    _currentTab = tabId;
+    // Update tab active state
+    var tabs = document.querySelectorAll('.mgh-tab');
+    tabs.forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+    });
+    // Render body
+    var body = _el('mgh-body'); if (!body) return;
+    body.scrollTop = 0;
+    if (TABS[tabId]) TABS[tabId].render(body);
+    if (typeof SoundFX !== 'undefined') SoundFX.play('click');
+  }
+
+  function open() {
+    var overlay = _el('minigame-hub-overlay'); if (!overlay) return;
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    _open = true;
+    switchTab(_currentTab);
+    // Mark nav button active
+    var btn = _el('mnav-minigames');
+    if (btn) btn.classList.add('active');
+    if (typeof SoundFX !== 'undefined') SoundFX.play('mapOpen');
+  }
+
+  function close() {
+    var overlay = _el('minigame-hub-overlay'); if (!overlay) return;
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    _open = false;
+    var btn = _el('mnav-minigames');
+    if (btn) btn.classList.remove('active');
+    // Stop any hold intervals
+    _mghHoldActive = false;
+    if (_mghHoldInterval) { clearInterval(_mghHoldInterval); _mghHoldInterval = null; }
+  }
+
+  // ESC to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && _open) close();
+  });
+
+  return {
+    open: open,
+    close: close,
+    switchTab: switchTab,
+    _buyBoat: _buyBoat,
+    _updateMghStats: _updateMghStats
+  };
+})();
+
+/* ── PATCH _doOneFish to also update mgh stats ──────────── */
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      var orig = window._doOneFish;
+      if (typeof orig === 'function') {
+        window._doOneFish = function(cx, cy, fromHold) {
+          orig(cx, cy, fromHold);
+          // If hub is open on clicker tab, sync stats
+          var hub = document.getElementById('minigame-hub-overlay');
+          if (hub && hub.classList.contains('show')) {
+            if (typeof MinigameHub !== 'undefined' && typeof MinigameHub._updateMghStats === 'function') {
+              MinigameHub._updateMghStats();
+            }
+          }
+        };
+      }
+    }, 800);
   });
 })();
 </script>
